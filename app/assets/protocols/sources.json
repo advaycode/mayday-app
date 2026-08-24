@@ -1,0 +1,43 @@
+{
+  "$schema": "mayday.sources.v1",
+  "note": "Every protocol step must reference a source id in this file. Steps whose content could not be confirmed against a primary source this session carry verified:false on the step, and the corpus test fails the build for any Tier A step in that state.",
+  "sources": [
+    {
+      "id": "aha2025-highlights",
+      "kind": "primary",
+      "verified": true,
+      "title": "Highlights of the 2025 American Heart Association Guidelines for CPR and ECC",
+      "publisher": "American Heart Association",
+      "citation": "Del Rios M, Bartos JA, Panchal AR, et al. Part 1: executive summary: 2025 American Heart Association Guidelines for Cardiopulmonary Resuscitation and Emergency Cardiovascular Care. Circulation. 2025;152(suppl 2). Published October 2025.",
+      "url": "https://cpr.heartandstroke.ca/resource/GuidelinesHighlightsEN2025",
+      "retrieved": "2026-08-23",
+      "localCopy": "research/raw/_highlights2025.txt",
+      "confirmedVerbatim": true,
+      "comment": "Heart & Stroke Foundation of Canada co-branded edition of the AHA Highlights. Figures carry the AHA copyright line. Algorithm text quoted verbatim into the corpus. NOTE: this is a delta document — it states what CHANGED in 2025 and does NOT restate unchanged numeric targets such as compression rate and depth."
+    },
+    {
+      "id": "aha2025-part7",
+      "kind": "primary",
+      "verified": false,
+      "title": "Part 7: Adult Basic Life Support: 2025 American Heart Association Guidelines for CPR and ECC",
+      "publisher": "American Heart Association",
+      "citation": "Part 7: Adult Basic Life Support: 2025 American Heart Association Guidelines for Cardiopulmonary Resuscitation and Emergency Cardiovascular Care. Circulation. 2025;152(suppl 2). doi:10.1161/CIR.0000000000001369",
+      "url": "https://www.ahajournals.org/doi/10.1161/CIR.0000000000001369",
+      "retrieved": null,
+      "confirmedVerbatim": false,
+      "comment": "BLOCKED. ahajournals.org returns HTTP 403 to automated fetches and sits behind a Cloudflare challenge; cpr.heart.org also 403s. The numeric targets attributed to this source (compression rate 100-120/min, adult depth 5-6 cm / 2-2.4 in, 30:2 lay-rescuer ratio, 2-minute rescuer swap) are long-standing values carried forward from the 2020 Guidelines and are NOT listed among the 2025 changes in aha2025-highlights, which is good evidence they are unchanged. They still require confirmation against the primary PDF before this app is put in front of a real bystander. Obtain the PDF manually and set verified:true."
+    },
+    {
+      "id": "aha2025-newsroom",
+      "kind": "secondary",
+      "verified": true,
+      "title": "Updated CPR guidelines tackle choking response, opioid-related emergencies and a revised Chain of Survival",
+      "publisher": "American Heart Association Newsroom",
+      "citation": "American Heart Association Newsroom, October 2025.",
+      "url": "https://newsroom.heart.org/news/updated-cpr-guidelines-tackle-choking-response-opioid-related-emergencies-and-a-revised-chain-of-survival",
+      "retrieved": "2026-08-23",
+      "confirmedVerbatim": true,
+      "comment": "AHA's own plain-language release. Corroborates the choking changes independently of the Highlights PDF."
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+app/build/
+app/.dart_tool/
+app/.flutter-plugins-dependencies
+app/android/.gradle/
+app/ios/Pods/
+research/raw/*.pdf
+research/raw/*.html

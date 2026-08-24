@@ -1,0 +1,176 @@
+{
+  "$schema": "mayday.protocol.v1",
+  "id": "choking_adult",
+  "title": "Choking",
+  "subtitle": "Adult",
+  "tier": "A",
+  "ageBand": "adult",
+  "revision": "2025.1",
+  "guidelineYear": 2025,
+  "entryStepId": "scene_safe",
+  "summary": "Five back blows, then five abdominal thrusts, repeating. Follows the 2025 AHA adult FBAO algorithm, which reversed the previous abdominal-thrusts-first guidance.",
+  "steps": [
+    {
+      "id": "scene_safe",
+      "kind": "confirm",
+      "instruction": "IS IT SAFE?",
+      "detail": "Traffic. Fire. Wires. Water.",
+      "speech": "First. Is it safe where you are?",
+      "choices": [
+        { "label": "YES", "next": "check_severity" },
+        { "label": "NO", "next": "scene_unsafe" }
+      ],
+      "source": "aha2025-highlights",
+      "quote": "Verify scene safety.",
+      "verified": true
+    },
+    {
+      "id": "scene_unsafe",
+      "kind": "terminal",
+      "instruction": "GET CLEAR FIRST",
+      "detail": "You cannot help anyone if you are hurt. Move to safety, then call 911.",
+      "speech": "Get yourself clear first. You cannot help if you are hurt. Then call nine one one.",
+      "source": "aha2025-highlights",
+      "quote": "Verify scene safety.",
+      "verified": true
+    },
+    {
+      "id": "check_severity",
+      "kind": "confirm",
+      "instruction": "CAN THEY COUGH?",
+      "detail": "A strong cough means the airway is still partly open.",
+      "speech": "Can they cough, or speak? Look at them.",
+      "choices": [
+        { "label": "YES — COUGHING", "next": "encourage_cough" },
+        { "label": "NO — SILENT", "next": "delegate_call" }
+      ],
+      "source": "aha2025-highlights",
+      "quote": "Check for signs of severe FBAO: Weak or absence of cough / Unable to speak / Change in colour (cyanosis) / Altered mental status / Apnea",
+      "verified": true
+    },
+    {
+      "id": "encourage_cough",
+      "kind": "action",
+      "instruction": "LET THEM COUGH",
+      "detail": "Do not hit them. Do not reach into the mouth. Stay with them and watch.",
+      "speech": "Let them cough. Do not hit them. Do not reach into their mouth. Stay with them.",
+      "next": "recheck_severity",
+      "source": "aha2025-highlights",
+      "quote": "Encourage cough. Continue to check for signs of severe FBAO.",
+      "verified": true
+    },
+    {
+      "id": "recheck_severity",
+      "kind": "confirm",
+      "instruction": "STILL COUGHING?",
+      "detail": "Watch for the cough going quiet, lips turning blue, or them going limp.",
+      "speech": "Are they still coughing?",
+      "choices": [
+        { "label": "YES", "next": "encourage_cough" },
+        { "label": "NO — WORSE", "next": "delegate_call" }
+      ],
+      "source": "aha2025-highlights",
+      "quote": "Continue to check for signs of severe FBAO.",
+      "verified": true
+    },
+    {
+      "id": "delegate_call",
+      "kind": "delegate",
+      "instruction": "POINT AT SOMEONE",
+      "detail": "Say out loud: \"YOU — call 911 right now. Put it on speaker.\"",
+      "speech": "Point at one person. Say: you. Call nine one one, right now. Put it on speaker.",
+      "aloneLabel": "I'M ALONE",
+      "aloneNext": "call_alone",
+      "next": "back_blows",
+      "source": "aha2025-highlights",
+      "quote": "Activate emergency response system.",
+      "verified": true
+    },
+    {
+      "id": "call_alone",
+      "kind": "call911",
+      "instruction": "CALL 911 NOW",
+      "detail": "Speaker on. Put the phone down beside you and keep going.",
+      "speech": "Call nine one one. Put it on speaker, set the phone down, and keep going.",
+      "next": "back_blows",
+      "source": "aha2025-highlights",
+      "quote": "Activate emergency response system.",
+      "verified": true
+    },
+    {
+      "id": "back_blows",
+      "kind": "cycle",
+      "count": 5,
+      "instruction": "5 BACK BLOWS",
+      "detail": "Heel of your hand. Hard. Between the shoulder blades.",
+      "speech": "Five back blows. Heel of your hand. Hard. Between the shoulder blades.",
+      "next": "abdominal_thrusts",
+      "source": "aha2025-highlights",
+      "quote": "Start repeated cycles of 5 back blows (slaps), followed by 5 abdominal thrusts",
+      "verified": true
+    },
+    {
+      "id": "abdominal_thrusts",
+      "kind": "cycle",
+      "count": 5,
+      "instruction": "5 THRUSTS",
+      "detail": "Fist above the navel. Grab it with your other hand. Pull sharply in and up.",
+      "speech": "Five thrusts. Fist just above the navel. Pull sharply in and up.",
+      "next": "check_cleared",
+      "altLabel": "PREGNANT OR TOO LARGE",
+      "altNext": "chest_thrusts",
+      "source": "aha2025-highlights",
+      "quote": "5 back blows (slaps), followed by 5 abdominal thrusts",
+      "verified": true
+    },
+    {
+      "id": "chest_thrusts",
+      "kind": "cycle",
+      "count": 5,
+      "instruction": "5 CHEST THRUSTS",
+      "detail": "Fist on the breastbone. Pull straight back. Not on the belly.",
+      "speech": "Five chest thrusts instead. Fist on the breastbone. Pull straight back.",
+      "next": "check_cleared",
+      "source": "aha2025-highlights",
+      "quote": "For patients in the late stages of pregnancy, or when the rescuer is unable to encircle the patient's abdomen, 5 chest thrusts should be used instead.",
+      "verified": true
+    },
+    {
+      "id": "check_cleared",
+      "kind": "confirm",
+      "instruction": "ARE THEY AWAKE?",
+      "detail": "If the object came out and they are breathing, stop and stay with them.",
+      "speech": "Are they still awake?",
+      "choices": [
+        { "label": "AWAKE — STILL STUCK", "next": "back_blows" },
+        { "label": "OBJECT CAME OUT", "next": "cleared" },
+        { "label": "WENT LIMP", "next": "to_cpr" }
+      ],
+      "source": "aha2025-highlights",
+      "quote": "Repeat until object is expelled or the adult becomes unresponsive.",
+      "verified": true
+    },
+    {
+      "id": "cleared",
+      "kind": "terminal",
+      "instruction": "STAY WITH THEM",
+      "detail": "They still need to be seen by a doctor. Abdominal thrusts can injure organs. Watch their breathing until help arrives.",
+      "speech": "Good. Stay with them. They still need to see a doctor, even now. Keep watching their breathing.",
+      "source": "aha2025-highlights",
+      "quote": "If object is expelled, continue to monitor until advanced care arrives.",
+      "verified": true
+    },
+    {
+      "id": "to_cpr",
+      "kind": "gotoProtocol",
+      "instruction": "START CPR",
+      "detail": "Lower them to the floor. Begin compressions.",
+      "speech": "Lower them to the floor. We are starting C P R now.",
+      "targetProtocolId": "cpr_adult",
+      "targetStepId": "hand_position",
+      "source": "aha2025-highlights",
+      "quote": "Start CPR until advanced care arrives; refer to adult BLS algorithm. Start with compressions. Check for visible object in mouth before giving breaths.",
+      "verified": true
+    }
+  ]
+}

@@ -1,0 +1,919 @@
+PAGES 12
+=== PAGE 1 ===
+cpr.heart.org   1
+HigHligHts
+of the 2024 American Heart Association and 
+A
+merican Red Cross Guidelines for First Aid
+The American Heart Association thanks the following people for their contributions to the development of this publication: Eric 
+J. Lavonas, MD, MS; Elizabeth K. Hewett Brumberg, MD; Matthew J. Douma, MN, RN; Amber V. Hoover, MSN, RN; Mark Whelchel,
+DNP , ACNP-BC; and the AHA Guidelines Highlights Project T eam.
+© 2024 American Heart Association and the American National Red Cross.  KJ-1806   11/24
+Introduction
+These Highlights summarize the most significant new and 
+updated recommendations from the 2024 American Heart 
+Association and American Red Cross Guidelines for First Aid.
+1 
+They have been developed for first aid providers and instructors 
+to focus on the science and rationale for the recommendations 
+that will result in changes to first aid training and practice. 
+These Highlights focus on recommended actions that 
+have significantly changed from previous American Heart 
+Association (AHA)/American Red Cross (Red Cross) first aid 
+guidelines. Because this publication is a summary, it does not 
+reference the supporting published studies and does not list 
+Classes of Recommendation or Levels of Evidence for each 
+recommendation. For more detailed information and references, 
+please read the 2024 guidelines.
+1 
+T o create the 2024 AHA and Red Cross Guidelines for First Aid, 
+the writing group members first created and approved a list of 
+first aid topics, drawing on the scope of prior guidelines and new 
+topics that have gained prominence since the last complete first 
+aid guidelines were published in 2010.
+2 A population, intervention, 
+comparison, and outcome (PICO) question was created for each 
+topic. Evidence-based recommendations were created based on 
+Consensus on Science With T reatment Recommendations from 
+the International Liaison Committee on Resuscitation (ILCOR) and 
+structured evidence evaluations performed by the writing group. 
+The opioid overdose first aid recommendations are based on 
+guidelines provided by the AHA in 2023,
+3 which were reaffirmed 
+with additional new evidence and adapted for the first aid provider 
+and setting. The methods used by ILCOR to perform evidence 
+evaluation
+4 and by the AHA to evaluate evidence and translate 
+the results of evidence evaluations into first aid guidelines5 
+have been published in detail. The ILCOR evidence evaluation 
+process and the AHA and Red Cross guidelines development 
+process are governed by strict disclosure policies designed to 
+make relationships with industry and other conflicts of interest 
+fully transparent and to protect these processes from undue 
+influence.
+These guidelines supersede the comprehensive AHA/Red Cross 
+first aid guidelines published in 2010
+2 and the focused updates 
+published in 2015,6 2019,7 and 2020.8 They consist of 179 
+specific treatment recommendations, organized into 38 modular 
+knowledge chunks.
+9 Each recommendation in the guidelines is 
+categorized on the basis of the strength of the recommendation 
+and the level (certainty) of the supporting evidence. These 
+Highlights present the most significant additions and changes 
+contained in the 2024 first aid guidelines.
+
+=== PAGE 2 ===
+cpr.heart.org   2
+Topics Covered in the 2024 AHA/Red Cross Guidelines for First Aid
+Administration of oxygen
+Anaphylaxis
+Asthma
+Bee and wasp stings
+Care of thermal burns after cooling
+Chemical exposures to the eye
+Chemical exposures to the skin
+Chest pain
+Concussion
+Cooling of thermal burns
+Dental avulsion
+Epistaxis (nosebleed)
+Exertional dehydration
+Extremity bleeding not controlled by direct 
+pressure
+Fractures
+Frostbite
+Hyperthermia and heat stroke
+Hypoglycemia
+Hypothermia
+Jellyfish stings
+Open chest wounds
+Opioid overdose
+Poison ivy, poison oak, and poison sumac
+Positioning of the ill or injured person
+Positioning of the person in shock
+Presyncope
+Recognition of stroke (adults)
+Recognition of stroke (children)
+Seizures
+Severe external bleeding
+Snakebite
+Spider and scorpion envenomation
+Sprains and strains
+Superficial wounds
+Suspected foreign body in the eye
+Suspected spinal injury
+Tick bites
+Use of pulse oximetry
+First Aid
+First aid is defined as helping behaviors and initial care provided 
+for an acute illness or injury.6 First aid can be provided by anyone, 
+including the ill or injured person (self-care), nearby persons, and 
+trained rescuers with a duty to respond (eg, lifeguards). The scope 
+of first aid provided is based on the first aid provider’s level of 
+training, available equipment and resources, the overall scenario, 
+and need. First aid competencies, at every level of training, include 
+the following:
+• Recognizing, assessing, and prioritizing the need for first aid
+• Providing care by using appropriate knowledge, skills,  
+and behaviors
+• Recognizing limitations and seeking additional care  
+when needed
+These guidelines are intended to apply to the members of the 
+general public who provide first aid in common residential, 
+workplace, and recreational settings. In general, first aid care 
+begins when the first aid provider begins to assess and assist the 
+ill or injured person and continues until the condition no longer 
+requires urgent intervention, emergency medical service (EMS) 
+professionals arrive, or the person arrives at definitive health care. 
+First aid providers with additional training and duties (eg, lifeguards, 
+industrial safety team members, tactical response team members) 
+are expected to follow their specialized training and protocols.
+First Aid Training
+The teaching methodology of first aid is crucial. The Learn, See, 
+Practice, Prove, Do, Maintain framework proposed by Sawyer et 
+al
+10 begins with learning, ideally through multimedia resources, 
+followed by real-life demonstrations (seeing). These steps 
+represent a flipped classroom model, enhancing advanced 
+learning tasks in the presence of a teacher and peers. Deliberate 
+practicing combines appropriate training frequency, low-risk 
+practice environments, and direct observation for feedback. 
+Proving involves employing valid and reliable assessments to 
+ensure effective learning outcomes. Doing the work independently 
+and, importantly, maintaining first aid skill sets, requires 
+intermittent skill refreshers, termed spaced learning, to thwart 
+forgetting. No educational effort perfectly integrates all aspects 
+of the Learn, See, Practice, Prove, Do, Maintain framework, but 
+it serves as a comprehensive guide for educators planning first 
+aid training, covering content, teaching methods, and evaluation 
+strategies.
+=== PAGE 3 ===
+cpr.heart.org   3
+New First Aid Recommendations
+Opioid Overdose
+2024 (New): It is beneficial for first aid providers to receive 
+training in responding to opioid overdose, including the 
+provision of naloxone.   
+2024 (New): A first aid provider who encounters a person 
+with suspected opioid overdose who is unresponsive and 
+not breathing or not breathing normally should activate the 
+emergency response system, provide high-quality CPR 
+(compressions plus ventilation), and administer naloxone.
+Why: Opioid overdose is a major cause of preventable 
+death in the United States, Canada, and elsewhere. 
+Although it is currently addressed in adult and pediatric 
+basic and advanced life support training, prior first aid 
+recommendations did not include first aid for opioid 
+overdose. Naloxone reverses the effect of opioid overdose, 
+restoring consciousness and breathing and often preventing 
+cardiac arrest. Naloxone nasal spray is available in the United 
+States and Canada without a prescription. Numerous studies 
+show the benefit of naloxone administration by community 
+members, and rates of naloxone administration increase 
+when community members receive training. Adding opioid 
+overdose treatment, including naloxone administration, 
+to first aid training multiplies the number of community 
+members willing and able to perform this lifesaving skill 
+(Figure 1).
+Figure 1. AHA Opioid-Associated Emergency for Lay Responders Algorithm.
+ 
+
+=== PAGE 4 ===
+cpr.heart.org   4
+Recognition of Stroke in Children
+2024 (New): If pediatric stroke is suspected, EMS should 
+be activated, and the person should be transported to an 
+emergency department. 
+2024 (New): It is reasonable to consider stroke when common 
+pediatric symptoms are present in association with other 
+neurological signs and symptoms. 
+2024 (New): Adult stroke scores are not validated in the 
+pediatric population and should not solely be used to identify 
+the broad presentation of stroke in children.
+Why: While previous first aid guidelines have included 
+recognition of stroke in adults, approximately 40 000 children 
+worldwide experience stroke each year. The initial signs and 
+symptoms of stroke in children are often missed, resulting 
+in delayed diagnosis and potentially the missed opportunity 
+to intervene. Although pediatric stroke can present in similar 
+ways to adult stroke, it can also present in nonspecific ways 
+and mimic other childhood diseases (Table 1).
+Table 1. Common Signs and Symptoms of Stroke in Children
+Focal signs and symptoms
+• Hemiparesis 
+• Limb weakness 
+• Facial droop 
+• Altered sensation 
+• Visual disturbance 
+• Speech disturbance
+General signs and symptoms
+• Altered mental status
+• Seizure
+• Headache
+• Ataxia
+• Vertigo/dizziness
+• Nausea/vomiting
+Use of Pulse Oximetry in First Aid
+2024 (New): A physical examination and history should be 
+the primary assessment methods for first aid providers to 
+evaluate an ill or injured person. 
+2024 (New): It is reasonable for first aid providers to use pulse 
+oximetry results in the context of a complete assessment 
+and be aware of the limitations of pulse oximetry before 
+acting on any results.
+Why: The use of home pulse oximeters has become 
+widespread since the COVID-19 pandemic. However, these 
+machines may not always be accurate (see Table 2 for 
+device limitations). First aid providers are encouraged to use 
+their foundational assessment skills as the primary way to 
+evaluate an ill or injured person and avoid overreliance on 
+technology.
+Table 2. Limitations of Pulse Oximeters
+Patient factors
+• Chronic respiratory disease
+• Nail thickness and nail paint or polish
+• Heart rhythm and cardiac output
+• Skin thickness, perfusion, pigmentation, and temperature
+Device factors
+• Battery level/charge
+• Device condition, such as being dusty, dirty, or damaged
+• Size and orientation of light and sensor
+Device accuracy and calibration (Food and Drug Administration 
+categories): 
+1. Consumer product
+2. Home-use medical devices
+3. Medical device
+Environmental factors 
+• Extremes of temperature 
+• Movement or vibration, such as transportation 
+• Moisture and humidity 
+• Interference from direct external light sources, including 
+sunlight
+=== PAGE 5 ===
+cpr.heart.org   5
+Bee and Wasp Stings
+2024 (New): If a person experiences anaphylaxis due to a bee, 
+wasp, or hornet sting and an epinephrine autoinjector is 
+available, the person should self-administer the autoinjector. 
+2024 (New): A first aid provider should assist a person 
+experiencing anaphylaxis to use the auto-injector, if 
+assistance is required. 
+2024 (New): If a person experiences anaphylaxis due to a 
+bee, wasp, or hornet sting, the emergency response system 
+should be activated. 
+2024 (New): Stings to the eye should be evaluated by a trained 
+medical professional. 
+2024 (New): Removal of a stinger remaining in the skin, as soon 
+as possible, by plucking or scraping, can be beneficial. 
+2024 (New): Over-the-counter oral antihistamines can be used 
+to alleviate local itching. 
+2024 (New): Topical corticosteroids can be used to alleviate 
+local itching. 
+2024 (New): It is reasonable to wash the area of a bee, wasp, or 
+hornet sting with soap and water. 
+2024 (New): Administration of over-the-counter 
+acetaminophen and nonsteroidal anti-inflammatory agents 
+may be considered to alleviate local pain. 
+2024 (New): Administration of ice or cold packs may be 
+considered for local pain relief.
+Why: Bee and wasp stings are very common. While most 
+victims have only local effects such as pain, swelling, and 
+itching, anaphylaxis from bee and wasp stings results in 
+about 60 deaths per year in the United States. Responding 
+to both minor and life-threatening envenomation is an 
+important addition to first aid training.
+Tick Bites
+2024 (New): Tick bites occurring in regions with high 
+prevalence of Lyme disease should receive prompt 
+consultation with a health care professional within 72 hours 
+after removal of an engorged tick. 
+2024 (New): We recommend removal of a tick as soon as 
+possible. 
+2024 (New): To remove a tick, we recommend grasping the 
+head of the tick as close to the skin as possible with tweezers 
+or a commercial tick removal device and pulling upward with 
+steady, even pressure.
+Why: At least 48 000 people are diagnosed with tick-borne 
+illness in the United States annually, and more than 100 000 
+seek treatment in emergency departments for tick bite 
+exposure. The incidence of tick-borne illness and range 
+of the Ixodes tick are increasing. Early removal of the tick 
+(generally within 24-48 hours of attachment) can prevent 
+Lyme disease transmission, but the tick has to be removed 
+properly to successfully extract the tick mouth parts and 
+minimize the risk of infection (Figure 2).
+Figure 2. Tick removal.
+ 
+Reproduced from Centers for Disease Control and Prevention.11
+Spider Bites and Scorpion Stings
+2024 (New): Emergency services should be called if a person 
+bitten by a spider or stung by a scorpion develops symptoms 
+throughout the body, such as difficulty breathing, muscle 
+rigidity, dizziness, or confusion. 
+2024 (New): A person bitten by a spider or stung by a scorpion 
+should seek medical care if pain extends beyond the site of 
+the bite/sting, becomes severe, and is not controlled by over-
+the-counter pain medications; if an open wound develops; or 
+if the person experiences symptoms throughout the body. 
+2024 (New): Over-the-counter acetaminophen and 
+nonsteroidal anti-inflammatory agents can be used to 
+alleviate local pain from scorpion stings.
+2024 (New): If the skin is intact, topical lidocaine can be useful 
+to relieve local pain from scorpion stings.
+2024 (New): Ice can be useful for local pain relief from scorpion 
+stings.
+Why: Bites from black widow and related spiders (genus 
+Latrodectus, found throughout the United States [except 
+Alaska] and in southern Canada) cause severe crampy pain, 
+muscle rigidity, diaphoresis, and hypertension. Although 
+a rash is sometimes observed around the bite site, widow 
+spider bites do not cause local tissue injury. Bites from brown 
+recluse and related spiders (genus Loxosceles , found in the 
+southern half of the United States) cause painful ulcerated 
+wounds that progress over days to weeks, sometimes 
+associated with hemolysis and rhabdomyolysis. Bark 
+scorpion (Centruroides , found in the desert Southwest) 
+stings cause severe localized pain and muscle cramping that 
+may impair breathing in children. The effects of spider and 
+scorpion envenomation vary widely around the world. The 
+2024 guidelines equip the first aid provider to manage spider 
+bites and scorpion stings occurring in the United States and 
+Canada. Spiders and scorpions in other parts of the world 
+have different venom effects and may require different first 
+aid measures.
+=== PAGE 6 ===
+cpr.heart.org   6
+Poison Ivy, Poison Oak, and Poison Sumac
+2024 (New): As soon as exposure to poison ivy, oak, or sumac 
+is recognized, the exposed area should be washed with 
+soap and water or a commercially available decontamination 
+product. 
+2024 (New): Cool compresses may be considered for relief of 
+local symptoms from exposure to poison ivy, oak, or sumac. 
+2024 (New): Oatmeal baths may be considered for relief of 
+local symptoms from exposure to poison ivy, oak, or sumac. 
+2024 (New): The usefulness of over-the-counter topical 
+steroids to alleviate local symptoms from poison ivy, oak, or 
+sumac is uncertain. 
+2024 (New): The usefulness of over-the-counter 
+antihistamines to alleviate local symptoms from poison ivy, 
+oak, or sumac is uncertain.
+Why: Contact dermatitis from plants in the genus 
+Toxicodendron (formerly Rhus ) is common and results 
+in millions of visits to health care facilities each year. 
+Approximately 50% to 75% of individuals react to urushiol, 
+the allergic compound found in Toxicodendron leaves, 
+stems, and roots. Early skin decontamination can reduce the 
+extent and severity of symptoms. While the usefulness of 
+over-the-counter remedies is uncertain, it is reasonable to 
+try them for symptom relief.
+Suspected Foreign Body in the Eye
+2024 (New): A person who sustains a high-velocity eye 
+injury (such as injuries from grinding, nailing, or machinery), 
+penetrating eye injury from a sharp or metal object, irregular 
+pupil after trauma, eye bleeding after trauma, or loss of vision 
+after trauma should seek immediate medical attention. 
+2024 (New): A person who has persistent foreign-body 
+sensation in the eye should seek immediate medical 
+attention. 
+2024 (New): A person who develops a foreign-body sensation 
+in the eye associated with contact lens use should remove 
+the contact lens, discontinue contact lens use, and seek 
+medical attention. 
+2024 (New): A person with a foreign-body sensation in the eye 
+should not rub their eye. 
+2024 (New): Taping a hard plastic shield, paper cup, or plastic 
+cup over the eye can help prevent unintentional touching of 
+the eye.
+2024 (New): It is reasonable for a person with a foreign body in 
+the eye from a low-energy mechanism (eg, dust, dirt, other 
+object blown into the eye by wind; eyelash in the eye) to 
+attempt to remove the foreign body by allowing natural tears 
+to wash out the object or by irrigating the eye with tap water 
+or a commercial eye wash solution. 
+2024 (New): It is reasonable to take over-the-counter oral 
+acetaminophen or nonsteroidal anti-inflammatory drugs to 
+treat residual discomfort after ocular foreign-body removal.
+Why: Eye injuries are a common reason people seek 
+treatment in emergency departments. About half of these 
+presentations are due to ocular foreign bodies. A foreign-
+body sensation can be caused by a loose foreign body 
+(eg, an eyelash or piece of dust or sand), a foreign body 
+embedded on the surface of the cornea, a scratch on the 
+eye, ultraviolet radiation exposure, or a more dangerous 
+condition such as penetrating eye injury, chemical injury, or 
+infection. Ocular foreign bodies are a common workplace 
+injury. While many of these conditions require treatment by 
+a health care professional, low-energy foreign-body injuries 
+can often be safely managed in the first aid setting, and 
+foreign-body removal by natural tearing or gentle irrigation is 
+an important first aid skill.
+Nosebleed (Epistaxis)
+2024 (New): A person experiencing epistaxis should sit with 
+their head slightly forward with their nostrils pinched for 10 to 
+15 minutes. 
+2024 (New): A person experiencing epistaxis that does not 
+stop after 15 minutes of continuous manual pressure or who 
+becomes lightheaded from epistaxis should seek medical 
+attention.
+2024 (New): A person with epistaxis due to trauma should seek 
+medical attention if they experience signs of brain injury, 
+obvious nasal deformity, or signs of facial fracture. 
+2024 (New): It is reasonable for a person experiencing 
+epistaxis who is taking anticoagulant or antiplatelet 
+medication or who has a blood-clotting disorder to seek care 
+from a health care professional unless bleeding has stopped.
+2024 (New): The usefulness of cryotherapy (ice) for managing 
+epistaxis in the first aid setting is unknown.
+Why: Nosebleeds (epistaxis) may occur spontaneously or as a 
+result of trauma. They are a very common medical condition, 
+responsible for 1 in every 313 emergency department 
+visits in the United States. Most nosebleeds can be treated 
+by pinching and holding the front of the nose for 10 to 15 
+minutes, potentially avoiding the need for medical care. 
+However, a nosebleed can be a true medical emergency, 
+particularly in older adults and people taking anticoagulant or 
+antiplatelet medications.
+=== PAGE 7 ===
+cpr.heart.org   7
+First Aid Recommendations With Major Changes
+Recognition of Stroke in Adults
+2024 (New): If stroke is suspected, the EMS system should be 
+activated immediately. 
+2024 (New): The use of a stroke recognition scale, such as the 
+Face, Arms, Speech, Time (FAST) or Cincinnati Prehospital 
+Stroke Scale, is recommended to aid in the recognition of 
+acute stroke in adults. 
+2024 (New): It is reasonable for first aid providers to measure 
+capillary blood glucose in adults with suspected stroke if it is 
+available and does not delay activating EMS.
+Why: Stroke is a serious and time-sensitive medical 
+emergency affecting 800 000 people in the United States 
+annually. New data show that the FAST (Figure 3) and 
+Cincinnati Prehospital Stroke Scale can be accurately 
+performed by first aid providers and members of the 
+general public, particularly with coaching from EMS 
+telecommunicators.
+Figure 3. The AHA/American Stroke Association FAST stroke 
+recognition tool.
+ 
+© 2020 American Heart Association.
+Snake Bite
+2024 (Updated):  Emergency services should be activated for 
+any person bitten by a venomous or possibly venomous 
+snake.
+2024 (Updated):  It is reasonable to rest and immobilize the 
+bitten extremity and minimize exertion by the person who 
+was bitten if it does not delay access to emergency medical 
+care. 
+2024 (Updated):  It is reasonable to remove rings and other 
+constricting objects from the bitten extremity. 
+2024 (Updated):  Application of ice to a snakebite wound is of 
+unproven benefit and may be harmful in some situations. 
+2024 (Updated):  The use of suction to treat snake bites is 
+potentially harmful. 
+2024 (Updated):  The application of electric shock to treat 
+snake bites is potentially harmful. 
+2024 (Updated):  The use of tourniquets to treat snake bites is 
+potentially harmful. 
+2024 (Updated):  The use of pressure immobilization bandaging 
+to treat snake bites is potentially harmful.
+Why: Approximately 8000 to 10 000 people are treated for 
+snakebite in the United States each year. More than 95% of 
+venomous bites in North America are caused by crotaline 
+snakes (Crotalinae, also known as pit vipers ), specifically 
+rattlesnakes, copperheads, and cottonmouths. Venom from 
+crotaline snakes causes tissue injury and may also cause 
+low blood pressure, bleeding, and disorganized muscle 
+movements leading to paralysis. In the southern United 
+States, bites from coral snakes ( Elapidae) do not cause 
+tissue injury; coral snake venom is primarily neurotoxic and 
+can cause paralysis within minutes to hours. The definitive 
+treatment for snake envenomation is antivenom, which can 
+only be administered by a health care provider. Many first aid 
+treatments, including application of tourniquets, pressure 
+bandage immobilization, incision, suction, ice application or 
+immersion, and application of electrical current have been 
+advocated with known risks and unclear benefits. These 
+recommendations are specific to snakebites occurring in 
+the United States and Canada and involving snakes native to 
+these areas. Snakes in other parts of the world have different 
+venom effects and may require different first aid measures.
+=== PAGE 8 ===
+cpr.heart.org   8
+Use of Bronchodilators in Asthma
+2024 (Updated):  First aid providers should assist a person 
+with asthma who is having difficulty breathing with the 
+administration of their own prescribed bronchodilators, as 
+needed. 
+2024 (Updated):  It is reasonable to use either an inhaler with a 
+spacer or a nebulizer when assisting a person with asthma 
+to use their own inhaled bronchodilator medication, in 
+preference to using an inhaler alone. 
+2024 (Updated):  If a commercially available spacer is not 
+available, it is reasonable to use an improvised spacer when 
+assisting a person who is having an asthma attack to use 
+their own inhaled bronchodilator medication.
+Why: While previous first aid guidelines have included 
+recommendations to assist a person having an asthma 
+attack with use of their own bronchodilator medication, the 
+2024 guidelines strengthen the recommendations to use 
+spacers and include the use of improvised spacers (eg, from 
+a beverage bottle [Figure 4]) when a commercial spacer is not 
+available.
+Figure 4. Use of an improvised spacer with a metered dose inhaler.
+ Seizures
+2024 (Updated):  First aid providers should activate EMS for 
+individuals with first-time seizure; seizures lasting more 
+than 5 minutes; more than 1 seizure that occurs without 
+the person returning to baseline mental status in between; 
+seizures occurring in the water; seizures with traumatic 
+injuries, difficulty breathing, or choking; seizure in an 
+infant younger than 6 months of age; seizure in pregnant 
+individuals; or if the individual does not return to baseline 
+within 5 to 10 minutes once seizure activity has stopped 
+(Table 3). 
+2024 (Updated):  First aid providers should minimize the risk of 
+injury to the individual who is having a seizure by helping the 
+person to the ground, placing the person on their side in the 
+recovery position, and clearing the area around them. 
+2024 (Updated):  First aid providers should stay with the person 
+having a seizure. 
+2024 (Updated):  For children who have experienced a 
+febrile seizure, administration of antipyretics such as 
+acetaminophen, ibuprofen, or paracetamol is not effective for 
+stopping a seizure or preventing a subsequent febrile seizure. 
+2024 (Updated):  The person having the seizure should not be 
+restrained. 
+2024 (Updated):  Nothing should be put in the mouth and 
+no food, liquids, or oral medicines should be given to a 
+person who is experiencing a seizure or who has decreased 
+responsiveness after a seizure.
+Why: Seizures are a common medical condition. Almost 
+3 million US adults live with epilepsy, and febrile seizures 
+occur in 2% to 4% of children, most commonly between 6 
+months and 2 years of age. Although seizures are dramatic, 
+many seizures do not require treatment from a health care 
+professional. First aid providers can help by protecting the 
+person experiencing a seizure from injury and calling EMS in 
+appropriate situations. The 2024 guidelines include greatly 
+expanded recommendations for first aid for seizure.
+Table 3. Reasons to Activate the Emergency Response System  
+for Seizures
+• First-time seizure 
+• Seizure in an infant <6 months of age
+• Seizure lasting >5 minutes 
+• Seizure in a person who is pregnant
+• More than 1 seizure that occurs without return to baseline 
+mental status in between 
+• Person does not return to baseline within 5-10 minutes after 
+seizure has stopped 
+• Seizure with traumatic injuries 
+• Seizure with choking 
+• Seizure with difficulty breathing 
+• Seizure occurring in the water 
+Open Chest Wounds
+2024 (Updated):  An open chest wound is a medical emergency 
+requiring immediate activation of the emergency response 
+system.
+2024 (Updated):  If a dressing is placed, the first aid provider 
+should monitor the person for worsening of breathing/
+symptoms and loosen or remove the dressing if breathing 
+worsens.
+2024 (Updated):  In the first aid situation, it is reasonable to 
+leave an open chest wound exposed to ambient air, to place a 
+clean nonocclusive, dry dressing (eg, gauze dressing, part of 
+a tee shirt), or place a specialized dressing such as a vented 
+chest seal.
+Why: The 2024 guidelines provide expanded guidance for the 
+management of open chest wounds. The goal of sealing an 
+open chest wound is to increase air flow resistance through 
+the wound without causing a tension pneumothorax to 
+form. The guidelines review the literature about chest seals, 
+including animal studies and simulation studies.
+=== PAGE 9 ===
+cpr.heart.org   9
+Hypothermia
+2024 (Updated):  A person with signs and symptoms of 
+hypothermia (Table 4) should be protected from further 
+heat loss by moving from the cold environment to a warm 
+one, having saturated clothing removed, being allowed to 
+passively rewarm with blankets, and being actively rewarmed 
+if resources are available.
+2024 (Updated):  If a person with hypothermia cannot be 
+immediately moved from a cold environment to a warm one, 
+they should be protected from further heat loss by insulation 
+from the ground, covering of head and neck, and shielding 
+from heat loss by wind using a plastic or foil layer in addition 
+to a dry insulating layer.
+2024 (Updated):  When using rewarming devices of any kind, 
+the first aid provider should follow the manufacturer’s 
+instructions for the device used, place insulation between 
+the heat source and skin, and frequently monitor for burns 
+and pressure injury. 
+2024 (Updated):  If a person with hypothermia has a decreased 
+level of responsiveness such as unresponsiveness, inability 
+to remain awake, mumbling speech, confusion, or inability 
+to participate in removal of clothing or has pallor, cyanosis, 
+or frozen skin, the emergency response system should be 
+activated while the person is rewarmed by any available 
+method.
+2024 (Updated):  For patients experiencing cold stress or mild 
+hypothermia who are alert and can safely consume oral food 
+or fluids, it is recommended to provide high-calorie foods or 
+drinks.
+2024 (Updated):  If a person with hypothermia with a decreased 
+level of responsiveness is wearing damp (not saturated) 
+clothing such as polyester fleece and cannot be immediately 
+moved into a warm environment, active rewarming 
+through the damp clothing is reasonable to initiate with the 
+hypothermia wrap technique, using chemical heat blankets, 
+plastic or foil layers, and insulative blanket. 
+2024 (Updated):  It is not beneficial to use body-to-body 
+rewarming for active rewarming over other active rewarming 
+techniques such as chemical heat packs or forced air 
+systems.
+2024 (Updated):  It is not effective to treat a person with 
+hypothermia by using small glove or boot insert chemical 
+heat packs as the sole or primary means of rewarming.
+2024 (Updated):  Heat sources, rubbing, and massage 
+should not be applied to the extremities of a person with 
+hypothermia. 
+2024 (Updated):  It is potentially harmful to use a warm shower 
+or warm water immersion for rewarming a person with 
+hypothermia with a decreased level of responsiveness 
+(moderate to severe hypothermia) because of the risk of core 
+temperature after drop, hypotension, falls, and drowning.
+Why: Accidental hypothermia is an environmental emergency 
+that may be encountered in urban, rural, and austere settings. 
+In the United States, hypothermia is responsible for about 
+1300 deaths annually. There has been a great deal of study 
+about the most effective ways to prevent and manage 
+hypothermia, including studies comparing different methods 
+of rewarming. The 2024 guidelines draw from the wilderness 
+medicine and mountaineering literature to provide first aid 
+treatment recommendations that are more comprehensive 
+than those found in previous guidelines.
+Table 4. Hypothermia Signs, Symptoms, and Potential  
+Rewarming Strategies
+Hypothermia 
+level
+Signs and 
+symptoms
+Rewarming  
+strategies
+Cold stress 
+35-37 °C
+• Alert
+• Possibly 
+shivering
+Remove from cold 
+environment; protect from 
+further heat loss.
+Passive rewarming is 
+often adequate in healthy 
+people. 
+Mild 
+hypothermia 
+32-35 °C
+• Altered level of 
+responsiveness
+• Shivering
+Protect from harm, such 
+as falls. Passive and active 
+rewarming methods may 
+be used in tandem. 
+Seek additional care. 
+Moderate 
+hypothermia 
+28-32 °C
+• Decreased 
+level of 
+responsiveness
+• ± Shivering
+• ± Low heart rate
+• Pale, 
+nonblanching 
+exposed skin
+• Associated with 
+frozen tissue/
+frostbite
+Hypothermia 
+with decreased 
+responsiveness, such as 
+responding only to loud 
+voice or pain, is a medical 
+emergency.
+Employ all available 
+passive and active 
+rewarming methods, 
+handle the patient 
+gently, and activate the 
+emergency response 
+system. Severe 
+hypothermia 
+<28 °C
+Profound 
+hypothermia 
+<24 °C
+• Unresponsive, 
+may appear 
+lifeless
+• Cessation of 
+shivering
+• Slow heart rate 
+and breathing
+• High risk for 
+irregular heart 
+rhythm and 
+cardiac arrest
+=== PAGE 10 ===
+cpr.heart.org   10
+Frostbite
+2024 (Updated):  The preferred method for warming frostbitten 
+tissue is clean lukewarm water immersion at 37 to 40 °C (99-
+104 °F).
+2024 (Updated):  Frostbitten tissue should be rewarmed at the 
+earliest opportunity, as long as there is no risk of refreezing. 
+2024 (Updated):  If clean lukewarm water immersion is not 
+feasible, frostbitten tissue should be allowed to rewarm 
+spontaneously in warm room air or next to the person’s own 
+warm skin. 
+2024 (Updated):  A person with frostbite should seek prompt 
+medical attention.
+2024 (Updated):  Jewelry or other constricting materials should 
+be removed from a frostbitten extremity as soon as possible. 
+2024 (Updated):  A person with moderate to severe 
+hypothermia should receive core rewarming before frostbite 
+is treated.
+2024 (Updated):  If possible, a person should protect frostbitten 
+tissue from further injury and avoid walking on frozen feet 
+and toes.
+2024 (Updated):  For frozen and thawed tissue and between the 
+toes and fingers, bulky, clean, and dry gauze or sterile cotton 
+dressings should be applied. Circumferential dressings 
+should be wrapped loosely to allow for swelling without 
+placing pressure on the underlying tissue.
+2024 (Updated):  It may be reasonable to give ibuprofen to a 
+person with frostbite to prevent further tissue damage and to 
+treat pain. 
+2024 (Updated):  It is not recommended for first aid providers to 
+debride blisters associated with frostbite. 
+Why: Frostbite injury can permanently damage tissue and can 
+lead to digit or limb loss. Frostbite may occur in populated or 
+remote areas; because rewarming and refreezing worsens 
+injury, treatment of frostbite can vary depending on the 
+setting. The 2024 guidelines for frostbite first aid greatly 
+expand the detail in these recommendations.
+Oral Rehydration of Exertional Dehydration
+2024 (Updated):  In the absence of shock, confusion, or inability 
+to swallow, first aid providers should assist or encourage 
+individuals with exertional dehydration to orally rehydrate 
+with any available rehydration drink or potable water.
+2024 (Updated):  It is reasonable to choose 4% to 9% 
+carbohydrate-electrolyte drink over potable water, 0% to 
+3.9% carbohydrate-electrolyte drinks, coconut water, or low-
+fat cow’s milk, if each is readily available.
+Why: This was updated on the basis of new information 
+demonstrating that fluid from 4% to 9% carbohydrate-
+electrolyte drinks is generally retained better than other oral 
+rehydration options.
+Jellyfish Stings
+2024 (Updated):  A first aid provider should observe a person 
+with a jellyfish sting for systemic reaction and call emergency 
+services for difficulty breathing, signs of shock, or severe 
+pain. 
+2024 (Updated):  It is reasonable to remove any remaining 
+tentacles by lifting or pulling while avoiding manual contact. 
+Rinsing the affected area with seawater to remove the 
+tentacle is a reasonable alternative if mechanical removal is 
+not available. 
+2024 (Updated):  After removal of tentacles, it is reasonable to 
+use non-scalding hot water immersion/irrigation or to apply a 
+heat source to relieve pain. 
+2024 (Updated):  Topical lidocaine cream or gel may be 
+reasonable for pain control if hot water is not available.
+Why: Jellyfish stings occur in coastal areas worldwide and 
+involve animals from many different genera. Although studies 
+of first aid treatment for jellyfish sting vary widely, the overall 
+goal is to remove or deactivate nematocysts and decrease 
+pain. In this updated review, no consistently positive data 
+were found for the application of hot water, vinegar, baking 
+soda, urine/urea, meat tenderizer/papain, or other commonly 
+advocated first aid interventions. Mechanical removal of 
+tentacles (eg, using tweezers) is now first-line therapy. 
+Informed by a 2016 Red Cross scientific review
+12 and critical 
+review of more recent literature, the 2024 guidelines are 
+more narrow in their scope than previous guidelines, and 
+focus on nematocyst removal followed by interventions for 
+pain control.
+Care of Thermal Burns After Cooling
+2024 (Updated):  A person with a full-thickness burn or with a 
+partial-thickness burn that is larger than the person’s palm 
+or involves the person’s face, hands, feet, or genitals, should 
+promptly seek evaluation by a health care professional. 
+2024 (Updated):  For a person with evidence of smoke 
+inhalation injury, such as facial burns, difficulty breathing, 
+singed nasal hairs, or soot around the nose or mouth, EMS 
+should be activated. 
+2024 (Updated):  A person with thermal burns should promptly 
+remove all jewelry, belts, and other tight items from burned 
+areas. 
+2024 (Updated):  It is reasonable to give over-the-counter pain 
+medications for pain from thermal burns. 
+2024 (Updated):  After cooling, for small partial-thickness 
+burns being managed at home, it may be reasonable to apply 
+petrolatum, petrolatum-based antibiotic ointment, honey, 
+or aloe vera and a clean nonadherent dressing to open burn 
+wounds. 
+2024 (Updated):  After cooling, while awaiting evaluation by 
+a health care professional, it may be reasonable to loosely 
+cover a burn that has intact skin or an intact blister with a 
+clean cloth or nonadherent dry dressing.
+=== PAGE 11 ===
+cpr.heart.org   11
+Why: While the recommendations for initial thermal 
+burns are substantially unchanged since 2015, the 2024 
+recommendations incorporate best practices for the 
+treatment of minor burns, including the use of topical therapy 
+that creates a good environment for wound healing.
+Dental Avulsion
+2024 (Updated):  When a permanent tooth becomes avulsed 
+(knocked out), initial actions include removing visible debris 
+from the tooth by brief rinsing (less than 10 seconds), 
+taking care not to damage the tooth or attached tissue, and 
+attempting to replant the tooth in the socket. 
+2024 (Updated):  When a permanent tooth is avulsed, the 
+person should seek dental or medical care immediately. They 
+should bring the tooth if not successfully replanted. 
+2024 (Updated):  If an avulsed permanent tooth cannot be 
+immediately replanted, it can be beneficial to place the 
+tooth in Hanks Balanced Salt Solution, oral rehydration salt 
+solutions, propolis, or rice water, if preprepared, or to wrap 
+the tooth in cling film to prevent dehydration. 
+2024 (Updated):  If an avulsed permanent tooth cannot be 
+immediately replanted and the aforementioned solutions or 
+interventions are not available, storage of the tooth in cow’s 
+milk or saliva may be considered. 
+2024 (Updated):  If an avulsed permanent tooth cannot be 
+immediately replanted and none of the above storage 
+mediums are available, a probiotic, egg white, or almond milk 
+may be considered. 
+2024 (Updated):  An avulsed permanent tooth should not be 
+stored in tap water. 
+Why: Although the principles of tooth care and rapid 
+reimplantation are unchanged, the 2024 guidelines provide 
+a rank-ordered list of possible storage media (Table 5) to 
+preserve the cells in the periodontal ligaments, which are 
+essential for successful reimplantation.
+Table 5. Storage Media Options for an Avulsed Tooth
+First choice (highest rate of reimplantation success) 
+• Hanks Balanced Salt Solution
+• Oral rehydration salt solutions
+• Propolis solution (10%, 50%, or 100%) 
+• Rice water (preprepared)
+• Wrapping in cling film
+Second-line options
+• Cow’s milk (any fat content) 
+• The person’s saliva
+Third-line options
+• Another person’s saliva
+• Probiotic media (eg, probiotic yogurt, Lactobacillus  
+reuteri solution) 
+• Egg white
+• Almond milk
+References
+1. Hewett Brumberg EK, Douma MJ, Alibertis K; Charlton NP , Goldman MP , Harper-Kirksey K, Hawkins SC, Hoover A, Leichtle S, Kule A, McClure SF, Wang 
+GS, Whelchel M, White L, Lavonas EJ; on behalf of the American Heart Association and American Red Cross. 2024 American Heart Association and 
+American Red Cross guidelines for first aid. Circulation.  Published online November 14, 2024. doi: 10. 1 161/CIR.0000000000001281
+2. Markenson D, Ferguson JD, Chameides L, et al. Part 17: first aid: 2010 American Heart Association and American Red Cross Guidelines for First Aid. 
+Circulation. 2010;122(18)(suppl 3):S934-S946. doi:10.1161/CIRCUL ATIONAHA .110.971150
+3. Lavonas EJ, Akpunonu PD, Arens M; for the American Heart Association. 2023 American Heart Association focused update on the management of 
+patients with cardiac arrest or life-threatening toxicity due to poisoning: an update to the American Heart Association Guidelines for Cardiopulmonary 
+Resuscitation and Emergency Cardiovascular Care.  Circulation. 2023;148(16):e149-e184. doi:10. 1 161/CIR.0000000000001 161
+4. Morley PT, Atkins DL, Finn JC, et al. Evidence evaluation process and management of potential conflicts of interest: 2020 International Consensus on 
+Cardiopulmonary Resuscitation and Emergency Cardiovascular Care Science With Treatment Recommendations.  Circulation. 2020;142(16)(suppl 
+1):S28-S40. doi:10. 1 161/CIR.0000000000000891
+5. Magid DJ, Aziz K, Cheng A, et al. Part 2: evidence evaluation and guidelines development: 2020 American Heart Association 
+Guidelines for Cardiopulmonary Resuscitation and Emergency Cardiovascular Care.  Circulation. 2020;142(16)(suppl 2):S358-S365. 
+doi:10. 1 161/CIR.0000000000000898
+6. Singletary EM, Charlton NP , Epstein JL, et al. Part 15: first aid: 2015 American Heart Association and American Red Cross guidelines update for first aid. 
+Circulation. 2015;132(18)(suppl 2):S574-S589. doi:10. 1 161/cir.0000000000000269
+7. Charlton NP , Pellegrino JL, Kule A, et al. 2019 American Heart Association and American Red Cross focused update for first aid: presyncope: 
+an update to the American Heart Association and American Red Cross guidelines for first aid. Circulation.  2019;140(24):e931-e938. 
+doi:10. 1 161/cir.0000000000000730
+=== PAGE 12 ===
+cpr.heart.org   12
+8. Pellegrino JL, Charlton NP , Carlson JN, et al. 2020 American Heart Association and American Red Cross focused update for first aid. Circulation. 
+2020;142(17):e287-e303. doi:10. 1 161/cir.0000000000000900
+9. Levine GN, O’Gara PT, Beckman JA, et al. Recent innovations, modifications, and evolution of ACC/AHA clinical practice guidelines: an update for our 
+constituencies: a report of the American College of Cardiology/American Heart Association Task Force on Clinical Practice Guidelines.  Circulation. 
+2019;139(17):e879-e886. doi:10. 1 161/CIR.0000000000000651
+10. Sawyer T, White M, Zaveri P , et al. Learn, see, practice, prove, do, maintain: an evidence-based pedagogical framework for procedural skill training in 
+medicine. Acad Med. 2015;90(8):1025-1033. doi:10. 1097/ACM.0000000000000734
+11. Centers for Disease Control and Prevention. What to do after a tick bite. Accessed August 2, 2024 . https://www.cdc.gov/ticks/after-a-tick-bite/
+12. American Red Cross Scientific Advisory Council scientific review: jellyfish stings. Approved June 2016. Accessed January 7, 2023 . 
+https://www.redcross.org/content/dam/redcross/Health-Safety-Services/scientific-advisory-council/Scientific%20Advisory%20Council%20
+SCIENTIFIC%20REVIEW%20-%20Jellyfish%20Stings.pdf

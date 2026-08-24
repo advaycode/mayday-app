@@ -1,0 +1,2728 @@
+===== PAGE 1 =====
+OF THE 2025 AMERICAN HEART ASSOCIATION
+HIGHLIGHTS
+GUIDELINES FOR CPR AND ECC
+HEART AND STROKE FOUNDATION OF CANADA EDITION
+===== PAGE 2 =====
+Heart & Stroke Edition  1
+IntroductIon
+Heart & Stroke is the guidelines-setting body for Canada. It is one of the founding members of the International Liaison Committee 
+on Resuscitation (ILCOR), which reviews evidence and science relating to resuscitation. Heart & Stroke's job, as a member of ILCOR, 
+is to bring together and support Canadian subject matter experts who join experts from around the globe in this review process. 
+ILCOR's consensus on science culminates in recommendations published by member-Councils that guide resuscitation and 
+First Aid practice and training. Throughout this Heart & Stroke edition, areas localized for Canada are marked with an asterisk (*). 
+These sections differ from the original American Heart Association Highlights of the 2025 American Heart Association Guidelines 
+for Cardiopulmonary Resuscitation and Emergency Cardiovascular Care document to reflect Canadian systems of care, clinical 
+practices, and pharmacology. Heart &Stroke's content marked with the asterisk are not approved by American Heart Association.
+These Highlights summarize the key issues and changes in the 2025 AHA Guidelines for Cardiopulmonary Resuscitation (CPR) 
+and Emergency Cardiovascular Care  (ECC).1 The 2025 Guidelines are a comprehensive revision of the AHA’s guidelines for adult, 
+pediatric, and neonatal life support; resuscitation education science; systems of care; and resuscitation ethics topics. They have 
+been developed for resuscitation professionals, AHA instructors and Heart & Stroke Instructors* to focus on the resuscitation 
+science and guidelines recommendations that are most significant or controversial or those that will result in changes in 
+resuscitation training and practice. The rationale to support each of these recommendations is provided.
+Because this publication is a summary, it does not reference the supporting published studies and does not list Classes of 
+Recommendation or Levels of Evidence. For more detailed information and references, please read the 2025 Guidelines, including 
+the Executive Summary, published in Circulation  in October 2025, and the detailed summary of resuscitation science developed 
+by the International Liaison Committee on Resuscitation (ILCOR) in the 2025 ILCOR Consensus on Science With Treatment 
+Recommendations ,2 published simultaneously in Circulation  and Resuscitation  in October 2025. The methods used by ILCOR to 
+perform evidence evaluation and by the AHA to translate these evidence evaluations, as well as to evaluate topics not considered by 
+ILCOR, into resuscitation guidelines have been published in detail.
+The 2025 Guidelines use the most recent version of the AHA definitions for each Class of Recommendation and Level of 
+Evidence (Figure 1). Overall, 760 specific recommendations are made for adult, pediatric, and neonatal life support; resuscitation 
+education science; and systems of care. Of these recommendations, 233 are Class 1 recommendations and 451 are Class 2 
+recommendations (Figure 2). Additionally, 76 recommendations are Class 3, including 55 for evidence of no benefit and 21 for 
+evidence of harm. 
+© 2025 American Heart Association     
+1. Del Rios M, Bartos JA, Panchal AR, et al. Part 1: executive summary: 2025 American Heart Association Guidelines for Cardiopulmonary Resuscitation 
+and Emergency Cardiovascular Care.  Circulation. 2025;152(suppl 2):In press.
+2. International Liaison Committee on Resuscitation. 2025 ILCOR Consensus on Science With Treatment Recommendations.  Circulation. 
+2025;152(suppl 1):In press.
+The American Heart Association (AHA) thanks the following people for their contributions to the development of this publication:  
+Ian R. Drennan, ACP , PhD; Stephen M. Schexnayder, MD; Jason Bartos, MD, PhD; Marina Del Rios, MD; Melissa Mahgoub, PhD; 
+Ashish R. Panchal, MD, PhD; Amber J. Rodriguez, PhD; Julie Sell, MSN, RN; Comilla Sasson, MD, PhD; Jaylen Wright, PhD; and 
+the AHA Guidelines Highlights Project T eam. Heart & Stroke would like to thank the Canadian volunteers who participate as 
+members of the Writing Groups for their contribution and the impact their work has for Canada.
+Highlights of the 2025 American 
+Heart Association Guidelines for 
+Cardiopulmonary Resuscitation and 
+Emergency Cardiovascular Care
+Heart and Stroke Foundation  
+of Canada Edition
+2025 HIgHlIgHts
+===== PAGE 3 =====
+2 Heart & Stroke Edition
+Figure 1. Applying the ACC/AHA Class of Recommendation and Level of Evidence to Clinical Strategies, Interventions, Treatments, or 
+Diagnostic Testing in Patient Care* (Updated December 2024).
+CLASS (STRENGTH) OF RECOMMENDATION
+CLASS 1 (STRONG) Benefit >>> Risk
+Suggested phrases for writing recommendations:
+• Is recommended
+• Is indicated/useful/effective/beneficial
+• Should be performed/administered/other
+• Comparative-Effectiveness Phrases†:
+ – Treatment/strategy A is recommended/indicated in preference to 
+treatment B
+ – Treatment A should be chosen over treatment B 
+CLASS 2a (MODERATE) Benefit >> Risk
+Suggested phrases for writing recommendations:
+• Is reasonable
+• Can be useful/effective/beneficial
+• Comparative-Effectiveness Phrases†:
+ – Treatment/strategy A is probably recommended/indicated in preference 
+to treatment B
+ – It is reasonable to choose treatment A over treatment B
+CLASS 2b (WEAK) Benefit ≥ Risk
+Suggested phrases for writing recommendations:
+• May/might be reasonable
+• May/might be considered
+• Usefulness/effectiveness is unknown/unclear/uncertain or not well-
+established
+CLASS 3: No Benefit (MODERATE) Benefit = Risk 
+(Generally, LOE A or B use only)
+Suggested phrases for writing recommendations:
+• Is not recommended
+• Is not indicated/useful/effective/beneficial
+• Should not be performed/administered/other
+CLASS 3: Harm (STRONG) Risk > Benefit
+Suggested phrases for writing recommendations:
+• Potentially harmful
+• Causes harm
+• Associated with excess morbidity/mortality
+• Should not be performed/administered/other
+LEVEL (QUALITY) OF EVIDENCE‡
+LEVEL A
+• High-quality evidence‡ from more than 1 RCT
+• Meta-analyses of high-quality RCTs
+• One or more RCTs corroborated by high-quality registry studies
+LEVEL B-R (Randomized)
+• Moderate-quality evidence‡ from 1 or more RCTs
+• Meta-analyses of moderate-quality RCTs
+LEVEL B-NR (Nonrandomized)
+• Moderate-quality evidence‡ from 1 or more well-designed, well-executed 
+nonrandomized studies, observational studies, or registry studies
+• Meta-analyses of such studies
+LEVEL C-LD (Limited Data)
+• Randomized or nonrandomized observational or registry studies with 
+limitations of design or execution
+• Meta-analyses of such studies
+• Physiological or mechanistic studies in human subjects
+LEVEL C-EO (Expert Opinion)
+• Consensus of expert opinion based on clinical experience
+COR and LOE are determined independently (any COR may be paired with any LOE).
+A recommendation with LOE C does not imply that the recommendation is weak. Many 
+important clinical questions addressed in guidelines do not lend themselves to clinical trials. 
+Although RCTs are unavailable, there may be a very clear clinical consensus that a particular 
+test or therapy is useful or effective.
+* The outcome or result of the intervention should be specified (an improved clinical 
+outcome or increased diagnostic accuracy or incremental prognostic information).
+† For comparative-effectiveness recommendations (COR 1 and 2a; LOE A and B only), 
+studies that support the use of comparator verbs should involve direct comparisons of 
+the treatments or strategies being evaluated.
+‡ The method of assessing quality is evolving, including the application of standardized, 
+widely used, and preferably validated evidence grading tools; and for systematic 
+reviews, the incorporation of an Evidence Review Committee.
+COR indicates Class of Recommendation; EO, expert opinion; LD, limited data; LOE, Level of 
+Evidence; NR, nonrandomized; R, randomized; and RCT, randomized controlled trial.
+===== PAGE 4 =====
+Heart & Stroke Edition  3
+2025 Highlights
+Figure 2. Distribution of COR and LOE as percent of 760 total recommendations in the 2025 AHA Guidelines for CPR and ECC .*
+Abbreviations: COR, Class of Recommendation; EO, expert opinion; LD, limited data; LOE, Level of Evidence; NR, nonrandomized; R, randomized.
+*Results are percent of 760 recommendations in the areas of adult basic and advanced life support (ALS), pediatric basic and advanced life support, 
+neonatal life support, post–cardiac arrest care, resuscitation education science, special circumstances, and systems of care.
+About tHe recommendAtIons
+The fact that only 11 (1.4%) of these 760 recommendations are based on Level A evidence (at least 1 high-quality randomized 
+clinical trial [RCT], corroborated by a second high-quality trial or registry study) testifies to the ongoing challenges in perform -
+ing high-quality resuscitation research. A concerted national and international effort is needed to fund and otherwise support 
+resuscitation research.
+Both the ILCOR evidence-evaluation process and the AHA guidelines-development process are governed by strict 
+disclosure policies designed to make relationships with industry and other conflicts of interest fully transparent and to protect 
+these processes from undue influence. The AHA staff processed conflict-of-interest disclosures from all participants. All 
+guidelines writing group chairs and at least 50% of guidelines writing group members were required to be free of all conflicts 
+of interest, and all relevant relationships are disclosed in the respective guidelines publications.
+Classes of Recommendation
+ Levels of Evidence
+
+===== PAGE 5 =====
+4 Heart & Stroke Edition
+etHIcs
+Summary of Key Issues 
+and Major Changes 
+CPR and ECC are prevalent in high-
+stakes, unplanned situations. Health 
+care professionals and organizations 
+face challenging decisions at both indi-
+vidual and system levels. This chapter 
+provides an overview of ethical frame-
+works that identify the obligations 
+shared by health care professionals 
+and organizations and offer frameworks 
+through which difficult decisions can be 
+analyzed. Previous Guidelines focused 
+on ethical treatment recommendations 
+(for example, recommending specific di-
+agnostic tests to guide prognostication 
+after cardiac arrest) but did not provide 
+detailed discussion of the underlying 
+ethical principles or considerations. The 
+2025 Guidelines chapter on ethics
+• Provides narrative discussion focused 
+specifically on ethics, with sufficient 
+depth to allow readers to navigate the 
+issues most encountered in this domain
+• Multiple ethical frameworks, a 
+preponderance of scholarship and 
+expert consensus in this writing 
+group support the imperative that 
+HCPs and their organizations should 
+actively address inequities in social 
+determinants of health, thereby 
+eliminating resulting disparities 
+in cardiac arrest and emergency 
+cardiovascular care. 
+• Reviews the many complexities in 
+resuscitation, including the inability of 
+the patient to participate in decisions 
+and the challenges across the age 
+continuum from newborns to geriatric 
+patients, and considers the long-term 
+effects of CPR on patients, families, 
+and health care professionals alike
+The writing group performed a compre -
+hensive series of structured literature 
+reviews. All content in this chapter 
+is new compared with the content in 
+previous Guidelines, although the un -
+derlying ethical considerations are 
+largely consistent with those that 
+informed previous Guidelines.
+Foundational Ethical Principles
+Principlism is the predominant medical 
+ethical framework. It is a delibera -
+tive process centred on 4 coequal 
+moral principles: beneficence, non -
+maleficence, respect for autonomy, 
+and justice. Ethical questions can be 
+evaluated through the lens of each 
+principle, offering perspectives that 
+can be synthesized into a pluralis -
+tic approach. Beneficence guides 
+decisions that benefit patients. 
+Nonmaleficence is the ethical obliga -
+tion to not harm patients. Respect for 
+autonomy focuses on honoring individ -
+uals’ rights to make informed decisions 
+about their own care. Justice is 
+fairness, specifically the fair, equitable, 
+and appropriate treatment of people.
+Other ethical principles and 
+frameworks are also relevant, including 
+narrative ethics, crisis standards of 
+care, virtue ethics, and dignity. These 
+offer complementary perspectives; 
+often, a combination of frameworks and 
+principles can best address an ethical 
+conflict.
+Striving for Equitable Health and 
+Resuscitation
+The AHA’s goal of improving cardio -
+vascular health for all cannot be fully 
+realized until inequities that drive health 
+care outcome disparities are eliminated. 
+Heart & Stroke shares this commit -
+ment to eliminating health inequities 
+and improving cardiovascular health 
+for all.* Health inequities arise from 
+social determinants of health and are 
+both entirely preventable and deeply 
+rooted in societal structures. Failing to 
+acknowledge and address these dis -
+parities allows systemic inequities to 
+remain unchallenged and healthcare 
+disparities to persist. For this reason, 
+HCPs and their organizations should 
+actively address structural inequities in 
+social determinants of health, thereby 
+eliminating resulting disparities in 
+cardiac arrest and emergency cardio -
+vascular care.
+Ethical Decision-Making in 
+Resuscitation
+The need to make decisions to initiate 
+or withhold resuscitative efforts, and 
+whether to continue or terminate these 
+therapies after initiation, is common. 
+The default approach in many settings 
+is to initiate treatment. It is critical to 
+document an advanced care plan if a 
+patient wishes to forgo these interven -
+tions in case of an emergency. Portable 
+orders for life-sustaining treatment are 
+the best manner in which to do this. 
+When patients’ wishes are not docu -
+mented and they are unable to make 
+independent decisions, surrogates do 
+so on their behalf, using substituted 
+judgement.
+Shared decision-making is preferred 
+when choosing from more than 
+one medically reasonable option. 
+This requires that (1) health care 
+professionals ensure that a patient and/
+or surrogate understands the current 
+medical condition of the patient; (2) 
+health care professionals outline the 
+available medical options; (3) health 
+care professionals elicit the patient’s 
+goals, values, and preferences; (4) 
+health care professionals make a 
+recommendation aligned with the 
+patient’s goals and values; (5) health 
+care professionals support the patient 
+and/or surrogate in their choice.
+For adults in cardiac arrest, the default 
+approach is to initiate CPR, except when 
+this would pose a serious risk of physical 
+harm to the health care professional, 
+there are objective signs of irreversible 
+death, or there is an advanced directive 
+declining treatment. Accepting verbal 
+requests from family to withhold CPR 
+or informed nondissent is ethical under 
+some circumstances. After initiation, 
+predefined termination of resuscitation 
+rules can minimize medically ineffective 
+treatment and promote distributive 
+justice. Pediatric and neonatal patients 
+present unique ethical challenges for 
+health care professionals. Detailed 
+consideration of pediatric and neonatal 
+patients can be found in the respective 
+guidelines chapters.
+===== PAGE 6 =====
+Heart & Stroke Edition  5
+2025 Highlights
+In some circumstances, one or 
+more treatments may be of no realistic 
+benefit to a given patient. Health 
+care professionals are not ethically 
+obligated to provide these treatments 
+even when requested by surrogates. 
+This determination is challenging, 
+can be subjective, and may result in 
+conflict. To minimize the chance that 
+an individual health care professional’s 
+perspectives and biases influence 
+determinations of benefit and to 
+protect health care professionals from 
+moral distress, whenever possible 
+these determinations should rely on 
+an institutional committee or ethics 
+consultant and be made in accordance 
+with institutional policies.
+Other Ethical Topics
+Resuscitation research poses unique 
+challenges. In resuscitation scenarios, 
+patients with life-threatening emer -
+gencies often lack capacity, there are 
+narrow therapeutic windows for inter -
+vention, and emotional reactions of 
+surrogates preclude usual informed 
+consent. Ethical pathways for research 
+in these settings include exception 
+from informed consent, waiver of 
+informed consent, and prospective 
+informed consent. Institutional review 
+boards, not investigators, determine the 
+appropriate regulatory pathways. It is 
+unethical to bypass these requirements 
+for activities meeting recognized defini -
+tions of clinical research.
+ECC can have a lasting effect on 
+health care professionals’ physical and 
+mental well-being. The AHA believes 
+that health care professionals who 
+perform resuscitation efforts must be 
+protected from physical harm. Heart & 
+Stroke shares this priority, recognizing 
+the importance of safeguarding those 
+who respond to cardiac emergencies*. 
+Health care professionals also have 
+duties in their professional capacities 
+to provide treatment. Evidence-based 
+recommendations cannot fully address 
+every clinical scenario or circumstance. 
+When interpreting guidance in context, 
+health care professionals should be 
+mindful of their potential biases, be 
+deliberate in their approach to decision-
+making, and apply a systematic 
+approach to weighing the available 
+evidence. Moral distress can occur when 
+someone is providing CPR, particularly 
+when health care professionals perceive 
+attempts at CPR to be inappropriate. 
+Organizations should provide policies 
+and guidance for resuscitation and 
+help health care professionals resolve 
+disputes and address moral distress. 
+Managing these complex situations 
+should not fall on the individual alone.
+Patients who survive CPR often 
+experience lasting symptoms. 
+Health care organizations have a 
+responsibility to develop systems of 
+care to optimize these patients’ long-
+term health and well-being. Cardiac 
+arrest can also have lasting impacts 
+on laypersons. Although the primary 
+duty of health care professionals is to 
+the patient, ethical obligations extend 
+to supporting families, caregivers, and 
+others who surround the patient. For 
+families, presence during CPR can 
+reduce complicated grief and improve 
+psychological outcomes. Institutions 
+should develop policies that define 
+circumstances or considerations that 
+could preclude family presence and 
+should ensure adequate resources and 
+training to support the practice.
+Crisis standards of care amend the 
+standard of medical care in response 
+to a disaster event. Crisis standards 
+do not change or diminish health care 
+professionals’ duty to patients, whose 
+legal and ethical responsibilities are to 
+take the same action that a reasonable 
+health care professional would take 
+under similar circumstances. Ethical 
+norms of utilitarianism and fairness 
+inform the design and implementation of 
+crisis standards, which strive to provide 
+a just distribution of resources and 
+promote equitable health outcomes.
+Extracorporeal CPR (ECPR) is a 
+specific example of an advanced therapy 
+that can be used to treat highly selected 
+patients. Relevant ethical issues include 
+limited data to guide patient selection, 
+difficulty obtaining informed consent, 
+high cost and resource utilization with 
+associated questions of equitable 
+distribution, and the role of these 
+therapies in the possible transition from 
+unsuccessful resuscitation to possible 
+organ donation or withdrawal of life-
+sustaining therapies.
+Organ and tissue donation should be 
+considered in all postarrest patients 
+who progress to death by neurological 
+criteria or for whom withdrawal of 
+life-sustaining therapies is planned. 
+Decisions about end-of-life care should 
+be made for the patient’s benefit 
+before, and independently of, offering 
+the option of organ donation to the 
+patient or surrogate. Institutions should 
+develop processes to promote public 
+trust and avoid conflicts of interest.
+systems  
+of cAre
+Survival after cardiac arrest requires in -
+tegrated systems of people, protocols, 
+policies, and resources along with 
+ongoing data acquisition and review. 
+The systems of care guidelines follow 
+the unified cardiac arrest Chain of 
+Survival (Figure 3), beginning with 
+prevention and preparedness to re -
+suscitate, then proceeding with early 
+identification of cardiac arrest, then 
+effective resuscitation through to post–
+cardiac arrest care, survivorship, and 
+recovery. Optimizing outcomes after 
+cardiac arrest requires well-func -
+tioning systems of care both in- and 
+out-of-hospital as well as a commit -
+ment to gather and analyze data aimed 
+at quality improvement in every link of 
+the Chain of Survival. 
+Summary of Key Issues and 
+Major Changes
+• A single Chain of Survival is intended 
+to apply to adult and pediatric in-
+hospital cardiac arrest (IHCA) and 
+out-of-hospital cardiac arrest (OHCA). 
+In creating this singular chain, it is 
+acknowledged that before cardiac 
+arrest, prevention and preparedness 
+can both avoid the need for and 
+optimize resuscitation. 
+===== PAGE 7 =====
+6 Heart & Stroke Edition
+• Several recommendations have been 
+consolidated into a knowledge chunk 
+devoted to community initiatives 
+to improve lay rescuer response to 
+OHCA. Herein, the reader will find 
+recommendations on system-based 
+approaches intended to increase 
+community awareness of cardiac 
+arrest and the crucial role of lay 
+rescuer CPR and automated external 
+defibrillator use. 
+• Recommendations for pediatrics and 
+adults on the use of early warning 
+systems and rapid response or 
+medical emergency teams to prevent 
+IHCA have been combined, with an 
+additional recommendation about the 
+use of safety huddles to prevent IHCA. 
+• Policies to facilitate public access 
+to naloxone are now recommended 
+alongside public access to 
+defibrillation because both have the 
+potential to save lives.
+• T elecommunicators are now provided 
+with differing recommendations for 
+adult and child CPR instructions; 
+they are to guide lay rescuers to 
+use Hands-Only CPR for adults and 
+conventional CPR, including breaths, 
+for children. The No-No-Go framework 
+is reiterated as an effective method for 
+recognizing OHCA. 
+• Clinical debriefing recommendations 
+are reiterated, with a new 
+recommendation on incorporation 
+of immediate (hot) and delayed (cold) 
+debriefing following CPR events. 
+• New recommendations are 
+provided on in- and out-of-hospital 
+resuscitation team composition. 
+• Uncertainty remains on the timing of 
+transport of patients with ongoing 
+resuscitation and following return of 
+spontaneous circulation (ROSC). This 
+is addressed in several knowledge 
+chunks that cover on-scene 
+resuscitation (versus transport with 
+ongoing CPR), transport for ECPR, and 
+interfacility transfer to cardiac arrest 
+centres. The latter knowledge chunks 
+attempt to address important system 
+considerations within cardiac arrest 
+centres and ECPR centres. 
+• New recommendations on creating 
+a system of care to assure optimal 
+postresuscitation recovery for cardiac 
+arrest survivors are provided. 
+Major New and Updated 
+Recommendations 
+Prevention of IHCA
+2025 (New): Implementation of safety 
+huddles to improve situational aware -
+ness in scenarios involving high-risk 
+hospitalized patients and mitigate their 
+deterioration can be effective in reduc -
+ing cardiac arrest rates. 
+Why: Two mutlicentre, observational 
+quality-improvement projects imple -
+menting a cardiac arrest bundle that 
+includes safety huddles around high-
+risk patients reduced IHCA within the 
+pediatric cardiac and general intensive 
+care units.
+Public Access to Naloxone
+2025 (New): Public policies should allow 
+for possession, use, and immunity from 
+civil and criminal liability for good-
+faith administration of naloxone by lay 
+rescuers. 
+2025 (New): Naloxone distribution pro -
+grams can be beneficial to increase 
+naloxone availability among lay res -
+cuers and decrease mortality from 
+opioid-related overdose. 
+Why: Observational studies that ex -
+amined the impact of legislation that 
+makes naloxone more readily available 
+and protects lay rescuers from prose -
+cution for possession or good-faith use, 
+as well as programs aimed at distribut -
+ing naloxone within communities, are 
+generally associated with reductions in 
+mortality.
+Community Initiatives to Improve Lay 
+Rescuer Response to OHCA
+2025 (Updated):  Implementing a bundle 
+of community initiatives is a reasonable 
+strategy to improve lay rescuer re -
+sponse to OHCA. 
+DefibrillationHigh-Quality CPR Post–Cardiac 
+Arrest Care
+Advanced 
+Resuscitation
+Recovery and 
+Survivorship
+Recognition and 
+Emergency Activation
+Figure 3. Cardiac arrest Chain of Survival.
+===== PAGE 8 =====
+Heart & Stroke Edition  7
+2025 Highlights
+2025 (New): Increasing the availability of 
+instructor-led training in communities 
+can be effective to improve lay rescuer 
+response to OHCA. 
+2025 (New): Mass media campaigns may 
+be considered to promote learning of 
+CPR skills in all populations.
+2025 (New): It may be reasonable for 
+communities to implement policies that 
+require CPR certification in the general 
+public. 
+Why: Improving lay rescuer response 
+requires a multifaceted approach, and 
+existing evidence supports numerous 
+interventions as being effective.
+Clinical Debriefing 
+2025 (New): Incorporating immediate and 
+delayed debriefing is reasonable and 
+may identify different opportunities for 
+system improvement. 
+Why: Studies examining debriefing 
+use immediate and delayed methods, 
+although neither has been proved to be 
+superior and the use of both may offer 
+advantages.
+OHCA Team Composition 
+2025 (New): It can be beneficial to have 
+an advanced life support (ALS)–level  
+clinician present during the resuscita -
+tion of a person with suspected OHCA. 
+2025 (New): It is reasonable to ensure 
+that emergency medical services (EMS) 
+systems have a team size sufficient to 
+achieve discretely assigned roles within 
+the team. 
+Why: Studies demonstrate that opti -
+mizing OHCA resuscitation requires 
+a sufficient team size to execute vital 
+roles and sufficient training to provide 
+advanced management.
+In-Hospital Code Team Composition 
+2025 (New): In-hospital code teams 
+should comprise members with ALS 
+training. 
+2025 (New): Designated or dedicat -
+ed code teams with clearly defined 
+roles, diverse expertise, and adequate 
+training that incorporates simulation 
+can be beneficial in improving patient 
+outcomes following IHCA. 
+Why: Akin to OHCA teams, IHCA code 
+teams benefit from advanced training 
+and defined roles with simulation-based 
+training to support team members in 
+those roles.
+On-Scene OHCA Resuscitation 
+2025 (New): EMS systems should be 
+prepared to perform termination of 
+resuscitation on scene; this involves 
+EMS professionals receiving training on 
+death notification.
+2025 (New): Prioritizing on-scene resus -
+citation focused on achieving sustained 
+ROSC before initiation of transport for 
+most adults and children experiencing 
+OHCA can be beneficial in the absence 
+of special circumstances. 
+Why: Remaining on-scene for the 
+entire resuscitation will inevitably 
+result in many deaths, so training on 
+when to terminate efforts and how to 
+provide notification to family is crucial 
+to providing compassionate care and 
+avoiding burnout. Attempting to trans -
+port patients to the hospital while CPR 
+is ongoing compromises CPR quality 
+and can risk the safety of rescuers and 
+should be reserved for situations where 
+it is believed to significantly improve the 
+patient’s odds of survival.
+Extracorporeal Systems of Care 
+2025 (New): It is reasonable that centers 
+with ECPR programs develop and 
+frequently reassess patient selection 
+criteria to maximize cardiac arrest 
+survival, ensure equitable access, and 
+limit futility. 
+2025 (New): It is reasonable that clini -
+cians performing adult peripheral ECPR 
+cannulation be experienced in percuta -
+neous technique.
+2025 (New): A regionalized approach to 
+ECPR is reasonable to optimize out -
+comes and resource utilization.
+2025 (New): Rapid intra-arrest transport 
+for ECPR may be considered for limited, 
+highly selected adult OHCA patients.
+Why: ECPR is resource intensive and 
+requires specialized, highly trained 
+teams. These factors make regional -
+ization attractive, but the requirement 
+for intra-arrest transport in the setting 
+of OHCA and the resource intensity 
+require careful patient selection.
+Organ Donation 
+2025 (New): Institutions should develop 
+systems of care focused on facilitating 
+and evaluating organ donation after 
+cardiac arrest consistent with local 
+legal and regulatory requirements. 
+Why: Policies aimed at increasing 
+organ donation vary internationally 
+and are closely linked to the values and 
+culture of the nation where they are 
+implemented.
+Improving Cardiac Arrest Recovery
+2025 (New): The recovery and long-term 
+functional outcomes of cardiac arrest 
+survivors are likely to benefit from the 
+use of integrated systems that assess 
+patients before discharge, reassess 
+their needs after discharge, and 
+address these needs on an ongoing 
+basis during recovery.
+Why: Rehabilitation of cardiac arrest 
+survivors can improve long-term out -
+comes, but implementation requires 
+coordination of a multidisciplinary 
+team that spans providers both in- and 
+out-of-hospital.
+neonAtAl lIfe 
+support 
+There are about 4 million births in the 
+United States and Canada each year. 
+One of every 10 to 20 newborn infants 
+will need help transitioning from the  
+fluid-filled environment of the womb 
+to the air-filled room. It is essential that 
+===== PAGE 9 =====
+8 Heart & Stroke Edition
+every newborn infant requiring this 
+care has a health care professional 
+who is trained and equipped for the role 
+dedicated to facilitating that transition. 
+Summary of Key Issues and 
+Major Changes 
+• The newborn chain of care starts with 
+prenatal care and extends to recovery 
+and appropriate follow-up in the 
+postnatal period. 
+• Newborn resuscitation requires 
+anticipation and preparation by 
+health care professionals who train 
+individually and as teams. 
+• Most newborn infants can be 
+evaluated and monitored during 
+deferred cord clamping for 60 
+seconds or more and can maintain 
+skin-to-skin contact with a parent 
+after birth. 
+• Effective ventilation of the lungs is  
+the priority in newborn infants who 
+need resuscitation. 
+• Some new recommendations, such 
+as positioning for chest compression, 
+timing of pulse oximeter placement, 
+and ventilation corrective steps, 
+are practices that may already be 
+commonly performed but have 
+been added with review of the latest 
+evidence. 
+• Ventilation corrective steps, which 
+include use of an alternative airway 
+like a laryngeal mask or endotracheal 
+tube, may be required if the heart 
+rate does not rise with face-mask 
+ventilation. 
+Algorithms and Visual Aids 
+The Neonatal Resuscitation Algorithm 
+(Figure 4) has been updated to 
+emphasize the importance of umbilical 
+cord management at birth. The target 
+oxygen saturation table starts at 
+2 minutes because deferred cord 
+clamping for 60 seconds or more 
+means that oxygen saturation at 1 
+minute will not routinely be obtained. 
+Electrocardiography is recommended 
+before chest compressions. 
+Newborn outcomes are affected by 
+the overall context in which neonatal 
+resuscitation occurs, including the 
+systems of care before, during, and 
+after birth. The newborn chain of care 
+(Figure 5) provides a framework for 
+addressing essential elements of 
+the health care system to enhance 
+newborn health.
+Major New and Updated 
+Recommendations 
+Umbilical Cord Management 
+2025 (Updated):  For term newborn infants 
+who do not require immediate resus -
+citation, deferred cord clamping for 
+at least 60 seconds can be beneficial 
+when compared with immediate cord 
+clamping. 
+Why: Meta-analyses have shown that 
+hematologic indices and iron status in 
+infancy are improved with deferred cord 
+clamping. Recent studies that extend 
+deferral to 60 seconds compared with 
+early cord clamping have affirmed these 
+findings. 
+2025 (New): For nonvigorous term 
+newborn infants and late preterm 
+infants 35 weeks or more gestational 
+age, intact cord milking may be reason -
+able when compared with immediate 
+cord clamping. 
+Why: A large RCT of nonvigorous infants 
+35 to 42 weeks gestation reported that 
+intact umbilical cord milking com -
+pared with early cord clamping was 
+associated with decreases in rates of 
+cardiorespiratory support, moderate 
+to severe hypoxic ischemic enceph -
+alopathy, and use of therapeutic 
+hypothermia. 
+2025 (Updated):  For newborn infants born 
+at less than 37 weeks of gestation who 
+do not require immediate resuscitation, 
+deferred cord clamping for at least 60 
+seconds is recommended when com -
+pared with immediate cord clamping. 
+Why: Meta-analyses have shown that 
+preterm newborn infants who received 
+deferred cord clamping for 60 seconds 
+or more compared with immediate cord 
+clamping had reduction in mortality 
+compared with those who had immedi -
+ate cord clamping. 
+Ventilation and Continuous Positive 
+Airway Pressure 
+2025 (Updated):  For newborn infants, 
+initial peak inflation pressures of 20 to 
+30 cm H2O are reasonable, with ad -
+justment of peak inflation pressures to 
+provide effective ventilation. 
+Why: Observational studies in preterm 
+and term newborn infants have report -
+ed peak inflation pressures up to 30 
+cm H2O or more, corresponding to tidal 
+volumes that are considered adequate 
+for newborn ventilation. Pressures can 
+be adjusted as effective ventilation is 
+achieved. 
+2025 (Updated):  It is reasonable to 
+provide ventilation at a rate of 30 to 60/
+min in newborn infants. 
+Why: An observational study reported 
+that ventilation at a rate of 30 to 60/
+min resulted in delivered tidal volumes 
+between 5 mL/kg and 10 mL/kg. An 
+observational study of late preterm and 
+term newborns reported that an infla -
+tion rate of 30/min was associated with 
+the highest carbon dioxide clearance. 
+2025 (New): Video laryngoscopy can be 
+useful for newborn infants who require 
+endotracheal intubation. 
+Why: In a meta-analysis of 6 RCTs  
+involving intubations, video laryn -
+goscopy compared with traditional 
+laryngoscopy led to increased intuba -
+tion success. Traditional laryngoscopy 
+remains a reasonable method to 
+achieve endotracheal intubation. 
+2025 (New): It is reasonable to use a 
+laryngeal mask as an alternative to 
+endotracheal intubation for newborn 
+infants at 34 0/7 weeks or more gesta -
+tional age for whom ventilation via face 
+mask is unsuccessful. 
+===== PAGE 10 =====
+Heart & Stroke Edition  9
+2025 Highlights
+Figure 4. Neonatal Resuscitation Algorithm.
+Yes
+No
+Yes
+1 minute
+Yes
+Yes
+Yes
+No
+No
+Yes
+No
+No
+Target Oxygen Saturation Table
+  2 min 65%-70%
+  3 min 70%-75%
+  4 min 75%-80%
+  5 min 80%-85%
+ 10 min 85%-95%
+Term gestation? 
+Good tone? 
+Breathing or crying?
+Apnea or gasping?  
+HR <100/min?
+Laboured breathing or  
+persistent cyanosis?
+HR <100/min?
+Skin to skin with parent
+Routine care
+Maintain normal temperature
+Ongoing evaluation
+© 2025 American Heart Association and American Academy of Pediatrics
+Warm and maintain normal temperature
+Dry
+Position
+Stimulate and clear airway if needed
+Ventilate
+Pulse oximeter
+Consider cardiac monitor 
+Ventilation corrective steps 
+Consider intubation or laryngeal mask 
+Cardiac monitor
+Pulse oximeter
+Oxygen if needed
+Consider CPAP
+Postresuscitation care
+Communicate with family
+Intubate or laryngeal mask 
+Chest compressions
+Coordinate 3:1 with ventilation
+100% oxygen
+UVC or IO
+UVC or IO epinephrine every 3-5 minutes
+If HR remains <60/min:
+ • Consider hypovolemia
+ • Consider pneumothorax
+HR <60/min?
+HR <60/min?
+Birth
+Initiate cord management plan
+Antenatal counseling
+Equipment check
+===== PAGE 11 =====
+10 Heart & Stroke Edition
+Why: In 4 RCTs, there was no signif -
+icant difference in insertion time or 
+first attempt success when a laryngeal 
+mask (supraglottic airway) was used as 
+a secondary device instead of endo -
+tracheal intubation after face-mask 
+ventilation was unsuccessful. In 1 ob -
+servational study, the use of a laryngeal 
+mask instead of an endotracheal tube 
+was associated with decreased admis -
+sion to the neonatal intensive care unit. 
+2025 (New): It may be reasonable to use a 
+laryngeal mask as the primary interface 
+to administer ventilation instead of a 
+face mask for newborn infants born at 
+34 0/7 weeks or more gestational age. 
+Why: A meta-analysis of 6 RCTs found 
+that the use of a laryngeal mask, 
+compared with the use of a face mask, 
+decreased probability of failure to 
+improve with the assigned device and 
+the rate of endotracheal intubation.  
+Duration of ventilation and time until 
+heart rate reached greater than 100/min 
+were shorter with the laryngeal mask. 
+Oxygen 
+2025 (New): A pulse oximeter should be 
+placed as soon as possible for newborn 
+infants receiving respiratory support or 
+supplemental oxygen. 
+Why: Placement of a pulse oximeter 
+early in resuscitation results in earlier 
+reading of oxygen saturation for 
+guidance of therapy. In observational 
+studies, median time to obtain pulse 
+oximetry reading ranged from 238 to 
+260 seconds and was longer in preterm 
+infants compared with term infants. 
+2025 (Updated):  In preterm newborn 
+infants born at less than 32 weeks’ 
+gestational age receiving respiratory 
+support at birth, it may be reasonable to 
+begin with 30% to 100% oxygen. 
+Why: Analyses of available studies for 
+this population have led to conclusions 
+that conflict with those of a study-level 
+meta-analysis of 10 RCTs showing no 
+difference in short-term mortality when 
+initial oxygen concentration was low 
+compared with when it was high (with 
+low oxygen generally being considered 
+21%-30% and high oxygen 60%-100% 
+in these studies). A recent individual 
+patient data meta-analysis found that 
+high initial oxygen concentration of 
+90% to 100% was associated with 
+lower mortality when compared with 
+low initial oxygen concentration of 21% 
+to 30%. Oxygen concentration can be 
+titrated down as targets are achieved.
+Chest Compressions 
+2025 (New): It may be reasonable to 
+compress over the lower third of the 
+sternum, taking care to be above the 
+xiphoid process when providing chest 
+compressions to newborn infants. 
+Why: An autopsy study of infants and 
+young children found that providing 
+midsternum compressions was not 
+associated with liver rupture. Super -
+ficial tears of the liver capsule were 
+produced when compressions were 
+applied to the xiphoid process, and all 
+patients with simultaneous chest and 
+abdominal compressions or abdominal 
+compressions alone had liver rupture. 
+Chest radiograph studies identify that 
+the heart lies under the lower third of 
+the sternum in most infants. 
+2025 (New): It may be reasonable to 
+change compressors every 2 to 5 
+minutes when providing chest com -
+pressions to newborn infants and to 
+switch compressors while heart rate is 
+being assessed. 
+Why: High-quality chest compressions 
+encompass multiple factors, including 
+optimal compression-to-ventilation 
+ratio, adequate rate, adequate depth of 
+compression, and full recoil between 
+compressions. Neonatal mannequin 
+studies demonstrate that compression 
+quality can diminish by 2 to 5 minutes 
+when a single clinician performs 
+compressions. 
+pedIAtrIc  
+bAsIc lIfe 
+support 
+Every year in the United States, more 
+than 7000 OHCAs and approximate -
+ly 20 000 IHCAs occur in infants and 
+children. Of the estimated 60,000 
+OHCA that occur in Canada each year, 
+approximately 1 % (or 1 in 100) of these 
+occur among children under the age of 
+18.* Despite increases in survival and 
+Figure 5. Newborn chain of care.
+VentilationInitial Steps Postnatal CareAdvanced 
+Resuscitation RecoveryRecognition 
+and ActivationPrevention
+===== PAGE 12 =====
+Heart & Stroke Edition  11
+2025 Highlights
+comparatively good rates of favorable 
+neurologic outcome after pediatric 
+IHCA, survival rates from pediatric 
+OHCA remain poor, particularly in 
+infants. The Chain of Survival requires 
+coordinated efforts from medical pro -
+fessionals in a variety of disciplines 
+and, in the case of OHCA, from lay re -
+sponders, telecommunicators, and 
+emergency responders. 
+Summary of Key Issues 
+and Major Changes 
+• Cardiac arrest in infants and children 
+does not usually result from a primary 
+cardiac cause; rather, it is typically the 
+result of progressive respiratory failure 
+or shock. 
+• Given the secondary nature of 
+most pediatric cardiac arrest, early 
+recognition of the critically ill infant 
+or child by the caregiver, lay rescuer 
+CPR training, and prompt access 
+to emergency care are critical to 
+improving outcomes. 
+• High-quality CPR and early 
+defibrillation for shockable rhythms 
+together are the cornerstone of 
+treatment for pediatric cardiac arrest 
+and must be provided to all patients 
+for other therapies to be effective.
+Major New and Updated 
+Recommendations 
+Components of High-Quality CPR 
+2025 (New): For infants and children in 
+cardiac arrest, interruptions in CPR 
+should be minimized and pauses in 
+chest compressions should be less 
+than 10 seconds. 
+Why: Evidence from a multinational, 
+multi-institutional observational cohort 
+registry demonstrated that increased 
+frequency and duration of pauses in 
+CPR were significantly associated with 
+a lower probability of achieving ROSC. 
+Sequence of Resuscitation 
+2025 (Updated):  For infants, rescuers 
+should compress the sternum with the 
+heel of 1 hand or using the 2 thumb–  
+encircling hands technique. If the 
+rescuer cannot physically encircle the 
+chest, it is recommended to compress 
+the chest with the heel of 1 hand. 
+Why: Systematic reviews and meta-
+analyses from simulation studies 
+suggest that the 2 thumb–encircling 
+hands technique is the superior 
+technique for giving compressions 
+to infants when compared with the 
+2-finger technique, particularly 
+for achieving adequate depth. In a 
+multicentre prospective observational 
+registry study, the single-hand 
+technique resulted in greater 
+compression depth than the 2-thumb 
+technique in infants, with no difference 
+in chest compression rate between 
+hand positions. The 2-finger technique 
+was utilized rarely in this study, but 
+when used, no chest compression 
+segments were compliant with AHA 
+guidelines. Given this, the heel-of-1-
+hand or 2 thumb–encircling hands 
+technique is recommended for infants. 
+The long-used 2-finger technique for 
+infant CPR is no longer recommended.
+Foreign-Body Airway Obstruction 
+2025 (Updated):  For children with severe 
+foreign-body airway obstruction 
+(FBAO), repeated cycles of 5 back blows 
+alternated with 5 abdominal thrusts 
+should be performed until the object is 
+expelled or the child becomes unre -
+sponsive (see updated algorithm).
+Why: Many FBAOs are relieved by allow -
+ing the patient to cough or, if severe, by 
+lay rescuers using chest or abdominal 
+thrusts. A recent observational study 
+of adult and pediatric FBAOs suggests 
+improved clearance of a foreign body 
+with the use of back blows over ab -
+dominal thrusts. To create consistency 
+for instructional purposes, and in the 
+absence of inferiority from pediatric 
+data, management of severe FBAO in 
+children now starts with a series of back 
+blows instead of abdominal thrusts. Re -
+peated cycles of 5 back blows followed 
+by 5 abdominal thrusts are performed 
+until the obstruction is cleared or the 
+child becomes unresponsive. 
+2025 (Updated):  For infants with severe 
+FBAO, repeated cycles of 5 back 
+blows alternating with 5 chest thrusts 
+should be performed until the object 
+is expelled or the infant becomes 
+unresponsive.
+Why: Abdominal thrusts are not recom -
+mended for infants, given the potential 
+to cause abdominal organ injury. The 
+heel-of-1-hand technique for chest 
+thrusts is now recommended for infants 
+with severe FBAO. While the heel-of-
+1-hand technique for chest thrusts 
+resembles chest compressions that are 
+used as part of CPR, there is no focus 
+on the other components of high-  
+quality CPR chest compressions (e.g., 
+rate, recoil), so the term chest compres -
+sion is not used.
+Adult bAsIc 
+lIfe support
+OHCA and IHCA impact hundreds 
+of thousands of persons annually in 
+the United States. In Canada, Heart 
+& Stroke acknowledges that cardiac 
+arrest remains a leading cause of 
+death, affecting tens of thousands of 
+individuals each year*. There is signif -
+icant variation in rates of lay rescuer 
+CPR, public automated external de -
+fibrillator use, EMS response times, 
+and survival to discharge among geo -
+graphic regions. Survival for adults after 
+OHCA and IHCA decreased during the 
+COVID-19 pandemic. 
+Summary of Key Issues and 
+Major Changes 
+• Early high-quality CPR and prompt 
+defibrillation are the most important 
+interventions associated with 
+improved outcomes in adult  
+cardiac arrest. 
+===== PAGE 13 =====
+12 Heart & Stroke Edition
+• For an adult with head and neck 
+trauma, if the airway cannot be 
+opened with a jaw thrust and airway 
+adjunct insertion, rescuers should 
+open the airway using a head  
+tilt–chin lift. 
+• For adult cardiac arrest, rescuers 
+should perform chest compressions 
+with the patient on a firm surface 
+and with the patient’s torso at 
+approximately the level of the 
+rescuer’s knees. 
+• When providing ventilation for an 
+adult patient with respiratory arrest, 
+it is reasonable for the health care 
+professional to give 1 ventilation every 
+6 seconds, or 10 breaths/min, with 
+each ventilation creating visible  
+chest rise. 
+• CPR for adults with obesity who are in 
+cardiac arrest should be provided in 
+the same way as for patients without 
+obesity. 
+• The routine use of mechanical CPR 
+devices is not recommended for adult 
+cardiac arrest. 
+• For adults with severe FBAO, repeated 
+cycles of 5 back blows (slaps) followed 
+by 5 abdominal thrusts should be 
+performed until the object is expelled 
+or the person becomes unresponsive. 
+Algorithms and Visual Aids 
+The Health Care Professional Basic Life 
+Support (BLS) Algorithm was updated 
+to illustrate the role of opioid antag -
+onists (e.g., naloxone) for suspected 
+opioid overdose during respiratory 
+and cardiac arrest. A simplified visual 
+aid for lay rescuers emphasizes early 
+activation of the EMS system and 
+obtaining an automated external de -
+fibrillator in addition to initiation of chest 
+compressions. 
+A new algorithm for the management 
+of adult FBAO (Figure 6) was added 
+to show the approach of using back 
+blows as the initial manoeuvre, followed 
+by abdominal thrusts. For patients 
+with severe obstruction, the rescuer 
+is directed to activate the emergency 
+response system because once the 
+person becomes unconscious, they 
+can rapidly progress to cardiac arrest.
+Major New and Updated 
+Recommendations 
+Airway Management
+2025 (Updated):  For an adult with head 
+and neck trauma, if the airway cannot 
+be opened with a jaw thrust and airway 
+adjunct insertion, trained rescuers 
+should open the airway using a head 
+tilt–chin lift. 
+Why: It is a priority to open a trauma 
+patient’s airway. While a jaw thrust is 
+preferred in the setting of head and 
+neck trauma, emphasis for trauma 
+patients is placed on the importance 
+of a patent airway for oxygenation and 
+ventilation. 
+Ventilation
+2025 (Updated):  When ventilating an adult 
+patient in cardiac arrest, it is reasonable 
+to give enough tidal volume to produce 
+visible chest rise. 
+2025 (Updated):  When providing breaths 
+to adult patients in cardiac arrest, 
+rescuers should avoid hypoventilation 
+(too few breaths or too little volume) or 
+hyperventilation (too many breaths or 
+too large a volume). 
+Why: Recent studies have shown that 
+rescuers often fail to deliver ventilation 
+in accordance with guidelines. In these 
+studies, CPR with both effective ven -
+tilation and chest compressions was 
+associated with improved outcomes. 
+Compression-to-Ventilation Ratio 
+2025 (Updated): It is reasonable for lay 
+rescuers and health care professionals 
+to perform CPR with cycles of 30 com-
+pressions followed by 2 breaths before 
+placement of an advanced airway (e.g., 
+supraglottic airway or endotracheal tube). 
+Why: The majority of studies report no 
+difference in patient outcomes between 
+interrupted CPR with ventilation pauses 
+and continuous chest compressions. 
+However, recent evidence has shown 
+that ventilation is often not adequate; 
+the use of CPR with cycles of 30  
+compressions followed by 2 breaths—
+as opposed to continuous chest 
+compressions—allows the rescuer to 
+monitor for chest rise and, therefore, to 
+check for adequate ventilation. 
+Defibrillation Pads 
+2025 (New): When placing pads for de -
+fibrillation for an adult in cardiac arrest, 
+it might be reasonable to adjust the 
+position of a bra instead of removing it.
+Why: Women experience significantly 
+lower rates of public-access defibril -
+lation compared with men. The need 
+to apply pads or paddles directly to 
+the bare chest may be a contributing 
+factor. The option to adjust rather than 
+remove a bra could mitigate factors like 
+a rescuer’s discomfort with exposing a 
+woman’s chest. 
+CPR for Adults With Obesity 
+2025 (New): CPR for adults with obesity 
+who are in cardiac arrest should be 
+provided using the same techniques as 
+for patients without obesity. 
+Why: A 2024 ILCOR scoping review 
+included 34 observational studies eval -
+uating cardiac arrest in adult patients 
+with obesity and found no evidence to 
+support changes from standard CPR. 
+Alternative Techniques for CPR 
+2025 (Updated):  The routine use of 
+mechanical CPR devices is not recom -
+mended for adult cardiac arrest. 
+2025 (New): In adult cardiac arrest, the 
+use of mechanical CPR devices may be 
+considered in specific settings where 
+the delivery of high-quality manual 
+compressions may be challenging or 
+dangerous for the health care profes -
+sionals as long as they strictly limit 
+===== PAGE 14 =====
+Heart & Stroke Edition  13
+2025 Highlights
+interruptions in CPR during deployment 
+and removal of the device. 
+Why: Numerous RCTs have demon -
+strated no difference in patient survival 
+between manual CPR and mechanical 
+CPR. There may be specific circum -
+stances, however, in which the use of 
+mechanical CPR devices may provide 
+logistical or safety advantages. These 
+situations are not represented in 
+current clinical trials.
+Foreign-Body Airway Obstruction 
+2025 (Updated):  For adults with severe 
+FBAO, repeated cycles of 5 back blows 
+(slaps) followed by 5 abdominal thrusts 
+should be performed until the object 
+is expelled or the person becomes 
+unresponsive. 
+Why: Studies of adults with FBAO showed 
+that back blows were associated with 
+improved rates of FBAO relief and fewer 
+injuries compared with abdominal thrusts. 
+The recommendation for alternating sets 
+of 5 back blows and 5 abdominal thrusts 
+is based on the value of consistency with 
+existing infant and pediatric guidelines 
+that use this approach. 
+pedIAtrIc  
+AdvAnced 
+lIfe support
+Given the poor outcomes previously 
+noted for pediatric OHCA, significant 
+opportunity to improve resuscitation 
+remains in all phases of care. Growing 
+research in pediatric resuscitation 
+through both in- and out-of-hospital  
+resuscitation networks is making 
+major contributions toward advancing 
+knowledge and has resulted in several 
+changes in the 2025 Guidelines.
+Figure 6. Adult FBAO Algorithm*.
+Verify scene safety.
+Activate emergency 
+response system.
+Check for signs of severe FBAO
+ • Weak or absence of cough
+ • Unable to speak
+ • Change in colour (cyanosis)
+ • Altered mental status
+ • Apnea
+Absent • Encourage cough.
+ • Continue to check for 
+signs of severe FBAO.
+Present
+No
+Is the adult  
+responsive?
+Yes
+Start repeated cycles of
+ • 5 back blows (slaps), followed by
+ • 5 abdominal thrusts*
+ • Repeat until object is expelled or the 
+adult becomes unresponsive.
+ • If object is expelled, continue to 
+monitor until advanced care arrives.
+Start CPR until advanced care 
+arrives; refer to  
+adult BLS algorithm.
+ • Start with compressions.
+ • Check for visible object in 
+mouth before giving breaths.
+*For patients in the late stages of pregnancy, or when the rescuer is unable to encircle 
+the patient’s abdomen, 5 chest thrusts should be used instead.
+© 2025 American Heart Association
+===== PAGE 15 =====
+14 Heart & Stroke Edition
+• This chapter includes updates about 
+medications used during cardiac 
+arrest, including changes in class 
+of recommendation for several 
+medications.
+• New recommendations are provided 
+as a result of the growing monitoring 
+data available to drive best practice 
+after cardiac arrest.
+• For the first time, the guidelines 
+include information on the complex 
+task of predicting neurologic 
+outcome after cardiac arrest 
+(neuroprognostication), both for 
+favorable and unfavorable outcomes.
+Major New and Updated 
+Recommendations 
+Drug Administration During  
+Cardiac Arrest 
+2025 (Updated):  For infants and children 
+in cardiac arrest with initial non -
+shockable rhythm, it is reasonable to 
+administer the initial dose of epineph -
+rine as early as possible. 
+Why: A recent systematic review of 
+7 observational studies identified 
+that shorter time to administration of 
+epinephrine in OHCA and IHCA was 
+associated with increased rates of 
+favorable outcome. Time to first dose 
+of epinephrine less than 3 minutes was 
+associated with highest rates of favor -
+able outcome, although there was no 
+direct comparison across time to first 
+epinephrine dose intervals (e.g., <5 min, 
+<10 min). 
+Measuring Physiology During CPR 
+2025 (Updated):  For infants and children 
+with invasive airways in place during 
+CPR, end-tidal carbon dioxide (ETCO 2) 
+monitoring may be considered to 
+monitor CPR quality. 
+2025 (New): A specific ETCO 2 cutoff 
+value alone should not be used as an 
+indication to end resuscitative efforts in 
+infants and children. 
+Why: Monitoring exhaled carbon dioxide 
+levels among patients receiving CPR 
+with an invasive airway is important 
+because ETCO 2 reflects native cardiac 
+output and ventilation efficacy as well 
+as feedback on CPR quality. In a recent 
+prospective multicentre study that eval -
+uated average ETCO 2 during the first 10 
+minutes of in-hospital CPR in children, 
+ETCO2 values 20 mm Hg or greater 
+during CPR were associated with in -
+creased odds of ROSC and survival to 
+discharge as well as higher intra-arrest 
+blood pressures. There was no asso -
+ciation with CPR quality metrics, such 
+as chest compression rate and depth. 
+However, when rescuers are consider -
+ing termination of resuscitative efforts, 
+it is vital that they avoid using a specific 
+ETCO2 cutoff value alone because 
+survival has been noted in patients with 
+average ETCO2 less than 20 mm Hg. 
+2025 (New): For infants and children 
+with continuous invasive arterial blood 
+pressure monitoring in place during 
+CPR, it may be reasonable for health 
+care professionals to target a diastolic 
+blood pressure of 25 mm Hg or greater 
+in infants and 30 mm Hg or greater in 
+children 1 year of age or older. 
+Why: A new study shows that among 
+pediatric patients receiving CPR with 
+an invasive arterial line in place, rates 
+of survival with favorable neurologic 
+outcome were improved if the diastolic 
+blood pressure was at least 25 mm Hg 
+in infants and at least 30 mm Hg in 
+children. 
+Treatment of Supraventricular 
+Tachycardia With a Pulse 
+2025 (Updated): For infants and children 
+with supraventricular tachycardia and 
+cardiopulmonary compromise unrespon-
+sive to vagal manoeuvres, adenosine, 
+and electrical synchronized cardiover-
+sion and for whom expert consultation 
+is not available, it may be reasonable to 
+consider intravenous (IV) procainamide, 
+amiodarone, or sotalol. Note: IV Sotalol is 
+not available in Canada.*
+Why: Procainamide and amiodarone are 
+moderately eff ective treatments for 
+adenosine-resistant supraventricular 
+tachycardia , although adverse effects 
+may occur with both therapies. Sotalol 
+was approved for the treatment of 
+supraventricular tachycardia in 2009, 
+with several studies demonstrating 
+effectiveness in acute conversion of 
+supraventricular tachycardia when it 
+is administered under the guidance of 
+pediatric electrophysiologists in acute 
+care settings and reporting minimal 
+adverse events. While sotalol was 
+approved in 2009 for the treatment 
+of supraventricular tachycardia in the 
+United States, it was not approved 
+by Health Canada based on studies 
+conducted outside of Canada nor is it 
+available in Canada for this indication.*
+Post–Cardiac Arrest Management 
+2025 (Updated):  After cardiac arrest in 
+infants and children, it is recommended 
+to maintain systolic and mean arterial 
+blood pressure greater than the 10 th 
+percentile for age. 
+Why: Because blood pressure is often 
+labile in the post–cardiac arrest period, 
+recognition of hypotension (less than 
+fifth percentile for age and sex) is 
+important. Hypotension is common fol -
+lowing return of circulation from cardiac 
+arrest, occurring in 25% to 50% of 
+infants and children. Two observational 
+studies associated systolic blood pres -
+sure below the fifth percentile for age 
+in the first 12 hours following cardiac 
+arrest with decreased rates of survival 
+to discharge. In addition, a secondary 
+analysis of the ICU-Resuscitation trial 
+of pediatric IHCA found higher rates of 
+survival to hospital discharge as well 
+as survival to hospital discharge with 
+favorable neurologic outcome when 
+blood pressure targets were above a 
+threshold of systolic blood pressure 
+greater than the 10th percentile for age 
+and diastolic blood pressure greater 
+than 50th percentile for age during the 
+first 6 hours post–cardiac arrest. 
+===== PAGE 16 =====
+Heart & Stroke Edition  15
+2025 Highlights
+Prognostication Following  
+Cardiac Arrest 
+2025 (Updated): It is recommended that 
+health care professionals consider mul-
+tiple modalities when they are predicting 
+neurological outcomes (favorable or 
+unfavorable after resuscitation from 
+cardiac arrest in infants and children). 
+2025 (New): The usefulness of cough 
+or gag reflexes or response to pain 
+to support a favorable or unfavorable 
+neurological prognosis at any time 
+point after cardiac arrest in infants and 
+children is not well established. 
+2025 (New): When interpreted in the 
+context of other prognostic criteria, it is 
+reasonable to use electroencephalog -
+raphy (EEG) up to 72 hours after cardiac 
+arrest in infants and children to support 
+a favorable or unfavorable neurological 
+prognosis. 
+Why: Two systematic reviews evaluated 
+the association of neurological examina-
+tion, biomarkers, EEG, and neurological 
+imaging modalities with favorable and 
+unfavorable outcomes after resuscita-
+tion from pediatric cardiac arrest. None 
+of these modalities were assessed in 
+isolation, and none met prespecified ac-
+curacy to be used as a lone prognostic 
+criterion at any time point; thus, despite 
+recommendations around individual 
+tests, none should be used in isolation 
+to predict outcome. Electroencepha-
+lography is a modality that may be used 
+in conjunction with other tests based 
+on numerous studies to prognosticate 
+outcome. However, data are lacking 
+to support the use of a cough or gag 
+reflex to predict favorable or unfavorable 
+outcome. Clinicians should consider 
+multiple modalities when assessing the 
+neurological prognosis of survivors after 
+cardiac arrest. 
+Post–Cardiac Arrest Recovery  
+and Survivorship 
+2025 (Updated):  It is reasonable that 
+infants and children who survive 
+cardiac arrest be evaluated for physi -
+cal, cognitive, and emotional needs to 
+guide follow-up care within the first year 
+following cardiac arrest. 
+Why: There is growing recognition that 
+recovery from cardiac arrest continues 
+long after initial hospitalization. Survi -
+vors may require ongoing integrated 
+medical, rehabilitative, caregiver, and 
+community support in the months to 
+years after their cardiac arrest. A recent 
+AHA scientific statement highlights the 
+importance of supporting patients and 
+families during this time to achieve the 
+best possible long-term outcome. 
+Adult  
+AdvAnced 
+lIfe support
+Survival to hospital discharge after 
+EMS-treated OHCA remains low, at 
+approximately 10%, while survival to 
+hospital discharge rates for IHCA are 
+around 24%. Among those who survive 
+to discharge, approximately 85% have 
+favorable neurological outcome. In 
+Canada, survival from EMS-treated OHCA 
+is similarly low, with most communities 
+reporting fewer than 1 in 10 patients 
+surviving to hospital discharge. While 
+IHCA survival rates in the U.S. benefit 
+from large national registries, comparable 
+Canadian data are more limited. Among 
+OHCA survivors in Canada, recent 
+studies show that approximately 80.5% 
+have favorable neurological outcomes.* 
+Immediate high-quality CPR and timely 
+defibrillation are the cornerstones of 
+effective resuscitation. However, ALS 
+interventions, including advanced airway 
+management, pharmacologic therapies, 
+and coordinated postresuscitation 
+care in both prehospital and in-hospital 
+settings remain essential for improving 
+patient outcomes. 
+Summary of Key Issues 
+and Major Changes 
+• Arrhythmias (such as tachycardias) 
+can be both the cause of and a 
+manifestation of clinical instability. 
+Evaluating the proximal cause of that 
+instability will direct professionals to the 
+most judicious use of these guidelines. 
+• Higher first-shock energy settings 
+(≥200 J) are preferable to lower 
+settings for cardioversion of atrial 
+fibrillation (AF) and atrial flutter.
+• In addition to updates to 
+double sequential defibrillation 
+recommendations, recommendations 
+for vector change defibrillation were 
+added based on new literature. 
+Algorithms and Visual Aids 
+The Termination of Resuscitation 
+Algorithm was updated to include BLS 
+and universal termination of resuscita -
+tion rules. An updated algorithm for the 
+management of bradycardia in adults 
+with a pulse has been added. 
+Major New and Updated 
+Recommendations 
+Vector Change and Double  
+Sequential Defibrillation
+2025 (New): The usefulness of vector 
+change defibrillation for adults in 
+cardiac arrest with persisting ventric -
+ular fibrillation/pulseless ventricular 
+tachycardia after 3 or more consecutive 
+shocks has not been established. 
+2025 (Updated):  The usefulness of double 
+sequential defibrillation for adults in 
+cardiac arrest with persisting ventric -
+ular fibrillation/pulseless ventricular 
+tachycardia after 3 or more consecutive 
+shocks has not been established. 
+Why: A 2023 ILCOR International 
+Consensus on CPR and ECC Science 
+With Treatment Recommendations 
+identified a single small RCT supporting 
+the use of vector change defibrillation 
+and double sequential defibrillation for 
+refractory ventricular fibrillation. There 
+are a number of outstanding questions 
+about the impact of these interventions 
+that require further investigation. 
+===== PAGE 17 =====
+16 Heart & Stroke Edition
+Initial Vascular Access
+2025 (Updated): It is recommended that 
+health care professionals first attempt 
+establishing IV access for drug adminis-
+tration in adult patients in cardiac arrest. 
+2025 (Updated):  Intraosseous (IO) access 
+is reasonable if initial attempts at IV 
+access are unsuccessful or not feasible 
+for adult patients in cardiac arrest.
+Why: A 2025 ILCOR systematic review 
+and meta-analysis, including data from 
+3 recent large RCTs, found that the use 
+of IO access compared with IV access 
+did not result in a statistically signifi -
+cant improvement in outcomes. This 
+systematic review noted lower odds of 
+achieving sustained ROSC for the IO 
+route compared with the IV route. 
+Vasopressor Medications 
+2025 (Updated):  In consideration of 
+timing, for adult patients in cardiac 
+arrest with a shockable rhythm, it is rea -
+sonable to administer epinephrine after 
+initial defibrillation attempts have failed. 
+Why: The literature supports prioritizing 
+rapid defibrillation and administering 
+epinephrine after initial attempts with 
+CPR and defibrillation are not success -
+ful in patients with shockable rhythms. 
+2025 (Updated):  Vasopressin alone 
+or vasopressin in combination with 
+epinephrine offers no advantage as 
+a substitute for epinephrine for adult 
+patients in cardiac arrest. 
+Why: Multiple systematic reviews and 
+meta-analyses of RCTs and observa -
+tional studies have found no difference 
+in survival outcomes when compar -
+ing vasopressin alone or vasopressin 
+combined with epinephrine versus 
+epinephrine alone. 
+Nonvasopressor Medications
+2025 (New): For adults in cardiac arrest, 
+the use of β-blockers, bretylium, pro -
+cainamide, or sotalol for ventricular 
+fibrillation/pulseless ventricular tachy -
+cardia unresponsive to defibrillation is 
+of uncertain benefit. 
+Why: No new evidence emerged from a 
+2025 ILCOR evidence update about the 
+use of other parenteral antiarrhythmic 
+agents in cardiac arrest. These include 
+bretylium tosylate (which was recent -
+ly reintroduced to the United States 
+market with no new evidence on its 
+effectiveness or safety). 
+Adjuncts to CPR
+2025 (New): Head-up CPR in adults with 
+cardiac arrest is not recommended 
+except in the setting of clinical trials. 
+Why: A recent ILCOR systematic review 
+identified no RCTs and only 3 obser-
+vational studies, each with significant 
+methodological limitations, identifying 
+very low certainty of evidence down -
+graded for serious risk of bias for the 
+outcome of survival to discharge and 
+survival to discharge with favorable neu -
+rological outcome and noting that future 
+work is needed to evaluate this adjunct. 
+Termination of Resuscitation Measures 
+2025 (Updated):  In a tiered EMS system 
+with both ALS and BLS professionals, it 
+is reasonable to use the universal ter -
+mination of resuscitation rule for adult 
+patients with OHCA. 
+Why: The universal termination of re -
+suscitation rule, which uses the same 
+criteria as the BLS rule (i.e., arrest not 
+witnessed by EMS professionals; no 
+shock delivered; no ROSC), has been 
+prospectively validated specifically in 
+combined BLS/ALS, or tiered response, 
+EMS agencies. 
+Wide-Complex Tachycardia
+2025 (Updated):  Synchronized cardio -
+version is recommended for acute 
+treatment of adult patients with hemo -
+dynamically unstable wide-complex 
+tachycardia. 
+Why: In hemodynamically unstable 
+patients with wide-complex tachy -
+cardia, it is critical to promptly restore 
+sinus rhythm. Synchronized cardiover -
+sion has a high rate of termination of 
+wide-complex tachycardia. 
+2025 (Updated):  Synchronized cardio -
+version is recommended for acute 
+treatment of adult patients with he -
+modynamically stable wide-complex 
+tachycardia when vagal manoeuvres 
+and pharmacological therapy is ineffec -
+tive or contraindicated. 
+Why: In stable patients with wide-  
+complex tachycardia, vagal manoeu -
+vres or adenosine may be attempted; 
+however, if the patient remains in 
+wide-complex tachycardia following 
+these therapies, synchronized cardio -
+version is recommended to restore 
+sinus rhythm. 
+Atrial Fibrillation or Flutter With Rapid 
+Ventricular Response 
+2025 (Updated):  For synchronized 
+cardioversion of AF in adults using 
+any currently US-approved biphasic 
+waveform defibrillator, an initial energy 
+setting of at least 200 J is reasonable 
+and incremented in the event of shock 
+failure, depending on the biphasic 
+defibrillator used. In Canada, all defibril -
+lators --including automated external 
+defibrillators (AEDs) --must be listed 
+on Health Canada's Medical Devices 
+Active Licence Listing (MDALL) before 
+they can be legally sold or imported.*
+Why: Recent randomized trials together 
+with a network meta-analysis involv -
+ing more than 3000 AF patients found 
+that 200-J shocks achieved greater 
+than 90% cumulative cardioversion 
+success across all 3 biphasic platforms 
+currently available in the United States. 
+Low-energy monophasic shocks were 
+significantly more likely to provoke 
+ventricular fibrillation when cardiovert -
+ing AF and AF when cardioverting atrial 
+flutter than a 200-J or greater setting. 
+2025 (New): The usefulness of double 
+synchronized cardioversion of AF in 
+adults as an initial treatment strategy is 
+uncertain. 
+Why: On the basis of currently available 
+data and given the high success of 
+optimal synchronized cardioversion using 
+biphasic waveforms, the incremental 
+benefit from double synchronized cardio-
+version appears modest. 
+===== PAGE 18 =====
+Heart & Stroke Edition  17
+2025 Highlights
+2025 (Updated):  For synchronized cardio -
+version of atrial flutter in adults, an initial 
+energy setting of 200 J may be reason -
+able and incremented in the event of 
+shock failure, depending on the bipha -
+sic defibrillator used. 
+Why: Recent studies support the 
+likelihood of greater efficacy, effi -
+ciency, and simplicity, without safety 
+concerns, when a starting energy of 
+200 J with any currently US-marketed 
+biphasic defibrillator is used for flutter 
+cardioversion and incremented in the 
+event of shock failure, depending on 
+the defibrillator’s features. In Canada, 
+all defibrillators --including automated 
+external defibrillators (AEDs) --must 
+be listed on Health Canada's Medical 
+Devices Active Licence Listing (MDALL) 
+before they can be legally sold or 
+imported.*
+Initial Management of Bradycardia
+2025 (New): In adult patients with per -
+sistent hemodynamically unstable 
+bradycardia refractory to medical 
+therapy, temporary transvenous pacing 
+is reasonable to increase heart rate and 
+improve symptoms. 
+Why: When the heart rate does not 
+improve with medications and shock 
+persists, transvenous pacing can 
+improve the heart rate and symp -
+toms until more definitive treatment 
+(correction of underlying cause or 
+permanent pacemaker placement) can 
+be implemented. 
+post–cArdIAc 
+Arrest cAre
+Post–cardiac arrest care focuses on 
+reducing neurological sequelae and 
+organ dysfunction while identifying and 
+addressing any reversible cause of the 
+cardiac arrest. Neuroprognostication  
+is a key component of post–cardiac 
+arrest care to ensure appropriate uti -
+lization of resources, withdrawal of 
+life-sustaining therapy, and optimization 
+of patient outcomes. The Adult Post–
+Cardiac Arrest Care Algorithm (Figure 
+7) has been updated to reflect new 
+science in this area.
+Summary of Key Issues 
+and Major Changes 
+• The section on neuroprognostication 
+was updated to include predictors of 
+favorable outcome, and neurofilament 
+light chain was added as a serum 
+biomarker.
+• It is reasonable that temperature 
+control be maintained for at least 36 
+hours in adult patients who remain 
+unresponsive to verbal commands 
+after ROSC. 
+• Hypotension should be avoided in 
+adults after ROSC by maintaining a 
+minimum mean arterial pressure (MAP) 
+of at least 65 mm Hg, though there is 
+insufficient evidence to recommend 
+a specific vasopressor to treat low 
+blood pressure in adult patients after 
+cardiac arrest. 
+• New recommendations for cardiac 
+arrest survivors and their caregivers 
+focus on structured assessment 
+and treatment/referral for emotional 
+distress after medical stabilization and 
+before hospital discharge.
+Major New and Updated 
+Recommendations 
+Blood Pressure in Adults After  
+Cardiac Arrest 
+2025 (Updated):  Hypotension should  
+be avoided in adults after ROSC by 
+maintaining a minimum MAP of at least 
+65 mm Hg. 
+Why: Four randomized trials com -
+pared lower to higher MAP targets 
+after OHCA. These studies did not 
+demonstrate better overall survival 
+or favorable neurologic outcome with 
+higher MAP. 
+Diagnostic Studies for Adults After 
+Cardiac Arrest 
+2025 (New): It may be reasonable to 
+perform head-to-pelvis computed 
+tomography (CT) for adult patients after 
+ROSC to investigate the etiology of 
+cardiac arrest and complications from 
+resuscitation. 
+2025 (New): It may be reasonable to 
+perform echocardiography or point-
+of-care cardiac ultrasound for adult 
+patients after ROSC to identify clini -
+cally significant diagnoses requiring 
+intervention. 
+Why: Echocardiography, point-of-care 
+cardiac ultrasound, and CT imaging are 
+used in postarrest patients to identify 
+clinically significant diagnoses requiring 
+intervention. 
+Temperature Control for Adults After  
+Cardiac Arrest 
+2025 (Updated):  It is reasonable that 
+temperature control be maintained for 
+at least 36 hours in adult patients who 
+remain unresponsive to verbal com -
+mands after ROSC. 
+Why: Temperature control includes 
+hypothermic temperature control 
+(32-34 °C) and normothermic or fe -
+ver-prevention temperature control 
+(36-37.5 °C). Recognizing evolution of 
+evidence and definitions with respect to 
+temperature control, 36 hours of total 
+temperature control is the shortest 
+recommended duration. 
+Percutaneous Coronary Intervention for 
+Adults After Cardiac Arrest 
+2025 (Updated):  Coronary angiography is 
+recommended before hospital dis -
+charge in adult cardiac arrest survivors 
+with suspected cardiac etiology, 
+particularly in the presence of an initial 
+shockable rhythm, unexplained left 
+ventricular systolic dysfunction, or evi -
+dence of severe myocardial ischemia. 
+===== PAGE 19 =====
+18 Heart & Stroke Edition
+Figure 7. Adult Post–Cardiac Arrest Care Algorithm*.
+ROSC obtained
+Early diagnostic testing
+Obtain 12-lead ECG.
+Consider diagnostic imaging 
+(CT and/or ultrasound).
+Assess patient off sedation and 
+neuromuscular blockade, if able.
+Manage airway
+Assess airway.
+Place or exchange an advanced airway device,  
+as necessary.
+Confirm correct airway placement.
+Manage oxygenation and ventilation
+Maintain 100% Fio2 until Spo2 (or Pao2) can be 
+measured reliably.
+Spo2 target 90%-98% (Pao2 60-105 mm Hg)
+Pco2 target 35-45 mm Hg 
+Manage hemodynamics
+Target MAP ≥65 mm Hg
+Ongoing critical careOngoing critical care
+EEG
+Coronary angiography  
+when appropriate
+Coronary angiography  
+when appropriate
+Appropriately timed, 
+multimodal prognostication
+Deliberate strategy for 
+temperature control
+Follows 
+commands?
+© 2025 American Heart Association
+Initial Stabilization After ROSC
+Resuscitation is ongoing during the post-
+ROSC phase, and many of these activities 
+can occur concurrently.
+Manage airway: Assess and consider 
+placement or exchange of an advanced 
+airway device (usually endotracheal tube 
+or supraglottic device). Confirm correct 
+placement of an advanced airway. This 
+generally includes the use of waveform 
+capnography or capnometry.
+Manage oxygenation and ventilation: 
+Titrate Fio2 for Spo2 90%-98% (or Pao2  
+60-105 mm Hg). Adjust minute ventilation 
+to target Pco2 35-45 mm Hg in the 
+absence of severe acidemia.
+Manage hemodynamics: Initiate 
+or adjust vasopressors and/or fluid 
+resuscitation as necessary for goal MAP 
+≥65 mm Hg.
+Early diagnostic testing: Obtain 12-lead 
+ECG to assess for ischemia or arrhythmia. 
+Consider CT head, chest, abdomen, and/
+or pelvis to determine cause of arrest 
+or assess for injuries sustained during 
+resuscitation. Point-of-care ultrasound 
+or echocardiography may be reasonable 
+to identify clinically significant diagnoses 
+requiring intervention.
+Continued Management
+Treat arrest etiologies and 
+complications.
+Consider emergency cardiac 
+intervention: 
+ • Persistent ST-segment elevation 
+present
+ • Cardiogenic shock
+ • Recurrent or refractory ventricular 
+arrhythmias
+ • Severe myocardial ischemia
+Temperature control: If patient is not 
+following commands off sedation and 
+neuromuscular blockade or is unable to 
+assess, initiate a deliberate strategy of 
+temperature control with goal 32 °C-37.5 °C 
+as soon as possible.
+Evaluate for seizure: Evaluate for clinical 
+seizure and obtain EEG to evaluate 
+for seizure in patients not following 
+commands.
+Prognostication: Multimodal approach 
+with delayed impressions (≥72 hours from 
+ROSC or achieving normothermia). 
+Ongoing critical care includes the 
+following:
+ • Target Pao2 60-105 mm Hg, Pco2 35-45
+mm Hg (unless severe acidemia); avoid 
+hypoglycemia (glucose <70 mg/dL) and 
+hyperglycemia (glucose >180 mg/dL); 
+target MAP ≥65 mm Hg.
+ • Consider antibiotics.
+Treat arrest etiologies and complications.
+Consider emergency coronary angiography  
+and/or mechanical circulatory support.
+Initial 
+stabilization 
+after ROSC
+Continued 
+management YesNo or 
+unsure
+Note:  The clinical targets shown in this algorithm are not localized to Canadian SI units. This localization will be reflected in Heart & Stroke educational materials. For example, target 
+glucose levels in Canada aim to avoid hypoglycemia (<3.9 mmol/L [<70 mg/dL]) and hyperglycemia (>10.0 mmol/L [>180 mg/dL]).
+===== PAGE 20 =====
+Heart & Stroke Edition  19
+2025 Highlights
+Why: Coronary artery disease is com -
+monly identified in patients after OHCA. 
+Identifying and treating unstable coro -
+nary artery disease has been shown to 
+improve outcomes. 
+Temporary Mechanical Circulatory 
+Support for Adults After Cardiac Arrest 
+2025 (New): In highly selected adult pa -
+tients with refractory cardiogenic shock 
+after cardiac arrest and ROSC, tempo -
+rary mechanical circulatory support 
+may be considered. 
+Why: Cardiogenic shock commonly 
+occurs as either a cause or conse -
+quence of cardiac arrest. Temporary 
+mechanical circulatory devices can 
+provide hemodynamic stabilization in 
+refractory cardiogenic shock. 
+Diagnosis and Management of 
+Myoclonus in Adults After Cardiac 
+Arrest 
+2025 (New): Treatment to suppress 
+myoclonus without an EEG correlate is 
+not recommended in adult survivors of 
+cardiac arrest. 
+Why: There is no evidence implicating 
+myoclonus without an EEG correlate in 
+the pathogenesis of secondary brain 
+injury after cardiac arrest. Thus, the risk 
+of side effects outweighs the unknown 
+benefit of suppressing myoclonus 
+without an EEG correlate on patient 
+outcomes.
+Neuroprognostication 
+2025 (New): When evaluated with other 
+prognostic tests, it may be reasonable 
+to consider a continuous EEG back -
+ground without discharges within 72 
+hours after cardiac arrest to support 
+the prognosis of favorable neurological 
+outcome in adult patients who remain 
+comatose after ROSC. 
+Why: The section on neuroprognostica -
+tion was updated to include predictors 
+of favorable outcome. A 2022 system -
+atic review from ILCOR investigated 
+prediction of favorable outcome. 
+Recovery and Survivorship After 
+Cardiac Arrest 
+2025 (Updated):  It is recommended that 
+cardiac arrest survivors and their care -
+givers have structured assessment and 
+treatment of or referral for emotional 
+distress after medical stabilization and 
+before hospital discharge. 
+Why: Approximately one fourth of 
+cardiac arrest survivors and their care -
+givers experience emotional distress. 
+Studies in survivor-caregiver pairs and 
+in survivors showed improvements in 
+emotional distress in those receiving a 
+psychosocial intervention. 
+cArdIAc  
+Arrest due  
+to specIAl 
+cIrcumstAnces
+Several special circumstances may 
+warrant additional treatment beyond 
+standard BLS and ALS care. These rec -
+ommendations are intended to cover 
+the management of both pediatrics and 
+adults in life-threatening conditions, 
+including cardiac arrest. 
+Summary of Key Issues and 
+Major Changes
+• While extracorporeal life support 
+(ECLS) is not available in every setting, 
+adults and children in cardiac arrest 
+or a periarrest state with a potentially 
+reversible etiology are being 
+supported with ECLS devices, such as 
+venoarterial extracorporeal membrane 
+oxygenation.
+• Chest compressions, bag-mask 
+ventilation, defibrillation, suctioning, 
+and endotracheal intubation should 
+be considered aerosol-generating 
+procedures, which pose a risk of 
+infection to resuscitation team 
+members.
+• Management of cardiac arrest during 
+pregnancy is a complex clinical 
+scenario that requires resuscitation 
+strategies that accommodate for the 
+physiological changes of pregnancy.
+• An opioid antagonist (e.g., naloxone) 
+should be given to people with 
+respiratory arrest from suspected 
+opioid overdose. T rained rescuers, lay 
+rescuers, and members of the general 
+public can all administer naloxone.
+Major New and Updated 
+Recommendations 
+Life-Threatening Asthma Exacerbation
+2025 (New): It may be reasonable to 
+use ECLS for adults and children with 
+life-threatening asthma refractory to 
+standard therapies. 
+2025 (New): Treatment with volatile 
+anesthetics for adults and children with 
+life-threatening asthma refractory to 
+standard therapies may be considered. 
+Why: Asthma can cause cardiac arrest 
+from lower airway obstruction that leads 
+to hypoxemia, hypercarbia, respiratory 
+acidosis, and increased intrathoracic 
+pressure, which leads to decreased 
+cardiac output. Adult and pediatric 
+observational studies of ECLS or vol-
+atile anesthetics demonstrate survival 
+rates between 83.5% and 100%. Either 
+venovenous or venoarterial extracor-
+poreal membrane oxygenation can be 
+considered depending on the needs of 
+the particular patient. 
+Life-Threatening Hyperkalemia 
+2025 (Updated):  The effectiveness of IV 
+calcium administration for adults and 
+children in cardiac arrest from suspect -
+ed hyperkalemia is not well established. 
+Why: For adults and children in cardiac 
+arrest from suspected hyperkalemia, 
+human evidence of improved surviv -
+al or favorable neurological status 
+following IV calcium administration is 
+limited. Initiating IV calcium must be 
+===== PAGE 21 =====
+20 Heart & Stroke Edition
+carefully weighed against the poten -
+tial for detracting from time-sensitive, 
+guideline-directed resuscitative inter -
+ventions, including high-quality CPR, 
+defibrillation of shockable rhythms, and 
+administration of epinephrine. 
+Life-Threatening Hypothermia 
+2025 (New): It is reasonable to use 
+prognostication scores to guide the 
+decision for initiating ECLS rewarming 
+for adults and children in hypothermic 
+cardiac arrest. 
+2025 (New): It may be reasonable to 
+rewarm adults and children with severe 
+environmental hypothermia (core 
+temperature, <28 °C [84 °F]) and not in 
+cardiac arrest using ECLS. 
+Why: Severe environmental hypother -
+mia (core temperature, <30 °C [86 °F]) 
+can cause cardiac arrest as well as 
+findings that mimic death. Reduced 
+metabolic rate and oxygen con -
+sumption increase the likelihood of 
+neurologically intact survival. Studies 
+show improved survival in hypothermic 
+cardiac arrest when ECLS is provided 
+compared with when conventional 
+CPR is provided. Rewarming adults and 
+children not in cardiac arrest with ECLS 
+can be faster but risks complications 
+related to its use. The HOPE probability 
+score and ICE survival score are better 
+validated for predicting survival after 
+hypothermic cardiac arrest com -
+pared with other prognostic factors in 
+isolation.
+Life-Threatening Hyperthermia 
+2025 (New): It is reasonable to choose 
+immersion in ice water (1-5 °C [33.8-41 °F]) 
+over other cooling methods in adults 
+and children with life-threatening 
+hyperthermia. 
+2025 (New): It is reasonable to cool 
+adults and children with life-threatening 
+hyperthermia as rapidly as possible 
+with a decrease of at least 0.15 °C/min 
+(0.27 °F/min). 
+Why: Cardiac arrest from life-  
+threatening hyperthermia (>40 °C 
+[104 °F]) may be preventable by rapid 
+cooling. A systematic review of human 
+clinical and observational studies found 
+cooling by ice water immersion to be 
+most efficient and most likely to achieve 
+the optimal cooling rate of at least 
+0.15 °C/min (0.27 °F/min) compared 
+with other strategies. These recom -
+mendations apply to environmental 
+hyperthermia as well as hyperthermia 
+associated with sympathomimetic and 
+cocaine poisoning. 
+Left Ventricular Assist Devices 
+2025 (New): In unresponsive adults and 
+children with durable left ventricular 
+assist devices (LVADs) and impaired 
+perfusion, chest compressions should 
+be performed. 
+2025 (New): In unresponsive adults and 
+children with durable LVADs and im -
+paired perfusion, it may be reasonable 
+to start chest compressions immedi -
+ately while simultaneously assessing 
+for device-related reversible causes. 
+Why: The absence of a palpable pulse 
+can make confirming cardiac arrest in 
+adults and children with an LVAD difficult. 
+Perfusion is assessed using skin colour, 
+skin temperature, capillary refill, MAP, 
+and partial pressure of end-tidal carbon 
+dioxide, and if perfusion is impaired, 
+cardiac arrest is likely. Outcomes of 
+cardiac arrest with and without CPR in 
+this population are difficult to assess due 
+to bias in these studies, but the potential 
+benefit of CPR outweighs the theoretical 
+risk of device dislodgment. Treatment 
+should prioritize CPR while simulta -
+neously attempting to restore LVAD 
+function if a second rescuer is available. 
+The LVAD algorithm (Figure 8) details the 
+treatment steps. 
+Cardiac Arrest During Pregnancy 
+2025 (Updated):  Preparation for resusci -
+tative delivery for a pregnant patient in 
+cardiac arrest should begin at the rec -
+ognition of cardiac arrest, with the goal 
+to complete delivery by 5 minutes. 
+2025 (New): It is reasonable to use ECPR 
+in pregnant or peripartum patients in 
+cardiac arrest not responsive to stan -
+dard resuscitation. 
+2025 (New): A massive transfusion proto -
+col with a balanced transfusion strategy 
+should be used for peripartum patients 
+with suspected life-threatening amniot -
+ic fluid embolism. 
+Why: In addition to team planning, 
+manual left lateral uterine displace -
+ment, and standard resuscitation, 
+resuscitative delivery (replacing the 
+term perimortem caesarean delivery) 
+should be completed by 5 minutes to 
+improve outcomes for the pregnant 
+patient. Studies for ECPR reported 
+survival rates between 55% and 75% 
+for pregnant patients. Amniotic fluid 
+embolism in peripartum patients can 
+lead to cardiac arrest and is charac -
+terized by hemodynamic compromise, 
+respiratory distress, and disseminated 
+intravascular coagulation with resul -
+tant hemorrhage. A balanced massive 
+transfusion strategy for red blood 
+cells, plasma, and platelets equivalent 
+reduces the risk of death. The Cardiac 
+Arrest in Pregnancy Algorithm details 
+the treatment steps.
+ Toxicology: Opioid Overdose 
+Please note that the term used in the 
+American Heart Association (AHA) 
+Guidelines in reference to an event 
+where too many opioids are used 
+remains overdose. However, in Canada, 
+the terms opioid toxicity and poison -
+ing are also used as alternative terms 
+to ensure that conversations about 
+substance use are supportive and 
+non-stigmatizing.*
+2025 (New): For lay and trained rescuers, 
+opioid antagonist administration may 
+be reasonable for adults and children 
+in cardiac arrest with suspected opioid 
+overdose, provided that opioid antag -
+onist (e.g., naloxone) administration 
+does not interfere with the delivery 
+of standard resuscitation, including 
+high-quality CPR with breaths. 
+===== PAGE 22 =====
+Heart & Stroke Edition  21
+2025 Highlights
+2025 (New): Adults and children who are 
+treated for opioid overdose should receive 
+an opioid antagonist (e.g., naloxone) and 
+instruction on how to use it at the time of 
+discharge from a health care setting. 
+Why: Opioid antagonists restore pro -
+tective airway reflexes and reverse 
+respiratory arrest from opioid overdose 
+in adults and children and should be ad -
+ministered whenever opioid overdose 
+is suspected. No clinical trials have 
+evaluated the role of opioid antagonists 
+in adults or children with cardiac arrest. 
+The efficacy of naloxone administration 
+in animal studies and adult observation -
+al studies for undifferentiated cardiac 
+arrest or cardiac arrest with suspected 
+opioid overdose is conflicting. However, 
+there is no known harm from adminis -
+tering naloxone to a person in cardiac 
+arrest, provided that opioid antagonist 
+administration does not interfere with 
+standard resuscitation. People who 
+survive an opioid overdose are at high 
+risk of a subsequent overdose. In addi -
+tion to brief psychosocial interventions 
+and referral to evidence-based treat -
+ment programs, providing “take-home” 
+or “leave-behind” doses of opioid 
+antagonists with teaching may prevent 
+future fatal overdoses.
+educAtIon 
+scIence
+Education and training science and 
+the technology to support training 
+continues to evolve, and a comprehen-
+sive review of the literature resulted 
+in several new and important updates 
+that impact training both health care 
+professionals and lay rescuers. Among 
+the most significant updates are recom-
+mendations on feedback devices during 
+training, disparities in CPR education, the 
+use of virtual reality (VR), and lay rescuer 
+training for opioid overdose. 
+Figure 8. Adult and Pediatric Durable LVAD Algorithm*.
+Assessing Perfusion
+Adequate perfusion* if any of the 
+following present:
+ • Normal skin colour and 
+temperature
+ • Normal capillary refill
+ • MAP >50 mm Hg (if noninvasive
+BP cuff nonfunctional, use 
+doppler or arterial line, if 
+available)
+ • PETCO 2 >20 mm Hg 
+*Patients may not have palpable pulse
+Non-LVAD Causes of 
+Unresponsiveness
+ • Dysrhythmia
+ • Hemorrhage/hypovolemia
+ • Hypoglycemia
+ • Hypoxia
+ • Overdose
+ • Right ventricular failure
+ • Sepsis
+ • Stroke
+Assess and Attempt to Restart 
+LVAD Function
+ • Look/listen for alarms
+ • Listen for LVAD hum
+ • Driveline connected?
+ • Power source connected?
+ • Need to replace system 
+controller?
+© 2025 American Heart Association
+Unresponsive adults and children 
+with a durable LVAD
+ • Assist ventilation, if necessary
+ • Assess perfusion
+Do not perform 
+external chest 
+compressions
+• Assess and treat
+non-LVAD causes of 
+unresponsiveness
+Transport
+Contact VAD centre
+ • Continue to 
+monitor perfusion
+Monitor perfusion
+NoYes
+Perform external chest 
+compressions
+• Assess LVAD
+function, if second
+rescuer available
+• Assess and treat
+non-LVAD causes for
+unresponsiveness
+Adequate perfusion?
+Continue BLS/ALS
+===== PAGE 23 =====
+22 Heart & Stroke Edition
+• T echnology continues to change the 
+educational landscape, and health 
+care market forces have driven 
+implementation of new strategies to 
+reduce costs.
+• The growing body of education science 
+has led to different recommendations 
+in technology and techniques for 
+teaching cognitive information and 
+learning psychomotor skills as well as 
+for different audiences (health care 
+professionals and lay rescuers).
+• Improved patient outcomes remain 
+lacking for most life support training 
+innovations, yet they remain the 
+ultimate goal of training.
+Use of Feedback Devices During CPR 
+Training
+2025 (Updated):  Feedback devices are 
+recommended for use during CPR train -
+ing for health care professionals. 
+2025 (Updated):  Feedback devices are 
+recommended for use during CPR train -
+ing for lay rescuers.
+Why: A meta-analysis of several new 
+RCTs conducted with health care 
+professionals demonstrated that CPR 
+feedback devices had a moderate to 
+large effect on all CPR quality metrics. 
+Three RCTs conducted with lay res -
+cuers demonstrated that feedback 
+devices were effective in increasing 
+mean CPR quality metrics. 
+Rapid-Cycle Deliberate Practice 
+2025 (New): It may be reasonable to 
+incorporate rapid-cycle deliberate 
+practice as part of BLS or ALS training 
+for health care professionals. 
+Why: Rapid-cycle deliberate practice 
+is a simulation-based training method 
+that incorporates within-event debrief -
+ing. Studies have found that rapid-cycle 
+deliberate practice results in improved 
+performance of multiple CPR skills and 
+improved workload scores.
+Teamwork and Leadership Training
+2025 (Updated):  It is recommended that 
+life support training for health care pro -
+fessionals includes a specific emphasis 
+on teamwork competencies.
+Why: Twelve of 14 RCTs reviewed 
+reported superior performance after 
+specific teamwork training in outcomes 
+related to communication, leadership 
+behavior, nontechnical skills, workload 
+management, and overall teamwork at 
+course completion.
+Gamified Learning
+2025 (New): It may be reasonable to 
+use gamified learning elements as a 
+component of resuscitation training for 
+health care professionals.
+2025 (New): It may be reasonable to 
+use gamified learning elements as a 
+component of CPR instruction for lay 
+rescuers.
+Why: Because the evidence for gamified 
+learning as well as virtual and augment -
+ed reality is growing, recommendations 
+for these techniques were separated 
+and a specific recommendation for 
+augmented reality was added. Gamified 
+learning is associated with improved 
+CPR knowledge, skill performance, and 
+self-confidence in lay rescuers and 
+health care professionals; however, the 
+current evidence to support gamified 
+learning is weak.
+Virtual Reality and Augmented Reality
+2025 (New): It may be reasonable to use 
+VR to support knowledge acquisition in 
+BLS and ALS training for lay rescuers 
+and health care professionals.
+2025 (New): The use of augmented reality 
+to provide real-time CPR feedback may 
+be considered for BLS training of lay 
+rescuers and health care professionals.
+2025 (New): Virtual reality should not be 
+used to teach CPR skills in lay rescuers 
+and health care professionals.
+Why: Thirteen studies explored the use 
+of VR for life support knowledge training 
+in health care professionals, with mixed 
+results about knowledge acquisition 
+compared with traditional training. Impor-
+tantly, new data show a difference in the 
+usefulness of VR to support knowledge 
+acquisition versus skills training, leading 
+to opposing recommendations for these 
+2 domains. Several studies looked at 
+quantitatively measured CPR skill pa-
+rameters (e.g., depth, rate) and found that 
+VR-based training was either inferior to 
+or no different from other forms of CPR 
+training for these outcomes.
+Opioid Overdose Training for  
+Lay Rescuers
+2025 (Updated):  It is recommended that 
+lay rescuers receive education on rec -
+ognition and initial treatment steps for 
+people who have an opioid-associated 
+OHCA.
+2025 (Updated):  The optimal training 
+method for lay rescuers in recognizing 
+and intervening in opioid overdose has 
+not been established.
+Why: Three recent systematic reviews 
+of over 140 studies summarized the 
+impact of lay rescuer training in opioid 
+overdose recognition and treatment 
+and found that this training increased 
+knowledge, improved willingness to 
+respond, and increased likelihood of 
+naloxone use.
+Disparities in Education
+2025 (Updated):  It is recommended 
+to focus and tailor lay rescuer CPR 
+training to specific racial and ethnic 
+populations as well as neighborhoods 
+with high densities of these popu -
+lations and incorporate awareness 
+efforts in these areas.
+2025 (Updated):  It is recommended to 
+address barriers to performing lay 
+rescuer CPR on women through edu -
+cational training and public awareness 
+efforts.
+===== PAGE 24 =====
+Heart & Stroke Edition  23
+2025 Highlights
+2025 (Updated):  It is recommended to 
+focus on low socioeconomic status 
+populations and neighborhoods for lay 
+rescuer CPR training and awareness 
+efforts. 
+2025 (Updated):  It is reasonable to 
+address barriers to linguistically 
+isolated communities by increasing 
+availability and access to CPR training 
+materials in diverse languages.
+2025 (Updated):  It is reasonable to con -
+sider cost-effective methods for CPR 
+training and to promote safe access 
+to CPR training for low socioeconomic 
+status populations and settings. 
+Why: There are known disparities due 
+to social factors in both patients who 
+receive CPR outside the hospital and 
+availability of CPR training. Focusing on 
+specific populations for CPR education 
+and modifying education to address 
+differences could eliminate disparities 
+in CPR training and lay rescuer CPR, 
+potentially enhancing cardiac arrest 
+outcomes in these populations. Spe -
+cific recommendations have been 
+made for training in low-income neigh -
+borhoods and linguistically isolated 
+communities and for cost-effective CPR 
+training methods in these populations.
+CPR Training in School Children
+2025 (New): It is recommended to start 
+CPR training in children younger than 12 
+years of age to increase willingness and 
+self-confidence in later years.
+Why: Evidence shows that starting 
+to introduce younger children to the 
+concepts of emergency calls and the 
+need for CPR and automated external 
+defibrillators earlier improves socializa -
+tion of timely lay rescuer response and 
+its importance.
+Alternative Objects for Chest 
+Compression Training in Lay Rescuers
+2025 (New): The usefulness of alternative 
+objects to train lay rescuers in chest 
+compressions, when compared with a 
+mannequin, is not well established.
+Why: Preliminary data about the feasi -
+bility of the use of common household 
+objects (e.g., pillows, toilet paper rolls, 
+foam blocks) to train and practice chest 
+compressions have recently been 
+described. Seven studies were identi -
+fied in which learners used alternative 
+objects to practice chest compres -
+sions, with mixed results. As such, the 
+evidence is not yet strong enough to 
+make a recommendation.
+Scripted Debriefing
+2025 (New): It may be reasonable for an 
+instructor to use a debriefing script 
+during resuscitation education.
+Why: Scripted debriefing involves the 
+creation of a written plan for debriefing 
+learners during and/or following life 
+support training. Standardized debrief -
+ing helps to maintain consistency in the 
+delivery of debriefings across training 
+centres and resuscitation programs. 
+Six studies with varying outcomes were 
+identified.
+Use of Cognitive Aids
+2025 (New): It may be reasonable for 
+health care professionals to use cogni -
+tive aids during resuscitation. 
+2025 (New): It is not recommended for lay 
+rescuers to use cognitive aids during 
+resuscitation.
+Why: Cognitive aids are resources that 
+provide prompts aimed at encouraging 
+recall of information and increasing 
+the likelihood of correct performance 
+and behaviors. Published simulation 
+data suggest that cognitive aid use by 
+health care professionals may improve 
+resuscitation performance. In lay res -
+cuers, cognitive aid use was associated 
+with significant delays in starting CPR, 
+leading to a recommendation against 
+their use for lay rescuers.  
+===== PAGE 25 =====
+For more information on Heart & Stroke 
+lifesaving courses and programs, contact us: 
+877-473-033  |   rsc@heartandstroke.ca
+cpr.heartandstroke.ca
+To view purchase options, visit: 
+cpr.heartandstroke.ca (click on the “SHOP” link)
+10/25 Produced in Canada
+2300 Yonge Street, Suite 1200, Box 2414
+Toronto, Ontario, M4P 1E4
+www.heartandstroke.ca
+© Heart and Stroke Foundation of Canada, 2023  |  ™ The heart and / Icon on its own and the heart and /  
+Icon followed by another icon or words are trademarks of the Heart and Stroke Foundation of Canada.

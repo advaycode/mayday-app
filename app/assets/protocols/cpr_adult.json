@@ -1,0 +1,187 @@
+{
+  "$schema": "mayday.protocol.v1",
+  "id": "cpr_adult",
+  "title": "CPR",
+  "subtitle": "Adult",
+  "tier": "A",
+  "ageBand": "adult",
+  "revision": "2025.1",
+  "guidelineYear": 2025,
+  "entryStepId": "scene_safe",
+  "summary": "Hands-only CPR for an adult. The 2025 guidelines direct telecommunicators to coach Hands-Only CPR for adults and conventional CPR with breaths for children, which is why this protocol branches by age at entry.",
+  "steps": [
+    {
+      "id": "scene_safe",
+      "kind": "confirm",
+      "instruction": "IS IT SAFE?",
+      "detail": "Traffic. Fire. Wires. Water.",
+      "speech": "First. Is it safe where you are?",
+      "choices": [
+        { "label": "YES", "next": "check_response" },
+        { "label": "NO", "next": "scene_unsafe" }
+      ],
+      "source": "aha2025-highlights",
+      "quote": "Verify scene safety.",
+      "verified": true
+    },
+    {
+      "id": "scene_unsafe",
+      "kind": "terminal",
+      "instruction": "GET CLEAR FIRST",
+      "detail": "You cannot help anyone if you are hurt. Move to safety, then call 911.",
+      "speech": "Get yourself clear first. You cannot help if you are hurt. Then call nine one one.",
+      "source": "aha2025-highlights",
+      "quote": "Verify scene safety.",
+      "verified": true
+    },
+    {
+      "id": "check_response",
+      "kind": "confirm",
+      "instruction": "SHAKE AND SHOUT",
+      "detail": "Tap both shoulders hard. Shout their name.",
+      "speech": "Tap both shoulders. Shout at them. Do they move?",
+      "choices": [
+        { "label": "NO RESPONSE", "next": "delegate" },
+        { "label": "THEY RESPOND", "next": "responsive" }
+      ],
+      "source": "aha2025-highlights",
+      "quote": "Recognition and Emergency Activation",
+      "verified": true
+    },
+    {
+      "id": "responsive",
+      "kind": "terminal",
+      "instruction": "STAY WITH THEM",
+      "detail": "They are responding, so do not start compressions. Call 911 and keep watching their breathing.",
+      "speech": "They are responding. Do not start compressions. Call nine one one and stay with them.",
+      "source": "aha2025-highlights",
+      "quote": "Recognition and Emergency Activation",
+      "verified": true
+    },
+    {
+      "id": "delegate",
+      "kind": "delegate",
+      "instruction": "POINT AT SOMEONE",
+      "detail": "Say: \"YOU — call 911.\" Then point at another person: \"YOU — find an AED.\"",
+      "speech": "Point at one person. Say: you, call nine one one. Point at another. Say: you, find an A E D.",
+      "aloneLabel": "I'M ALONE",
+      "aloneNext": "call_alone",
+      "next": "check_breathing",
+      "source": "aha2025-highlights",
+      "quote": "Recognition and Emergency Activation",
+      "verified": true
+    },
+    {
+      "id": "call_alone",
+      "kind": "call911",
+      "instruction": "CALL 911 NOW",
+      "detail": "Speaker on. Phone down beside you. I will keep the beat on screen.",
+      "speech": "Call nine one one. Speaker on. Put the phone down beside you.",
+      "next": "check_breathing",
+      "source": "aha2025-highlights",
+      "quote": "Recognition and Emergency Activation",
+      "verified": true
+    },
+    {
+      "id": "check_breathing",
+      "kind": "confirm",
+      "instruction": "ARE THEY BREATHING?",
+      "detail": "Watch the chest for 10 seconds. Gasping is NOT breathing.",
+      "speech": "Watch their chest for ten seconds. Gasping is not breathing.",
+      "choices": [
+        { "label": "NOT BREATHING", "next": "position_body" },
+        { "label": "ONLY GASPING", "next": "position_body" },
+        { "label": "BREATHING NORMALLY", "next": "recovery" }
+      ],
+      "source": "aha2025-highlights",
+      "quote": "The No-No-Go framework is reiterated as an effective method for recognizing OHCA.",
+      "verified": true
+    },
+    {
+      "id": "recovery",
+      "kind": "terminal",
+      "instruction": "ROLL THEM ONTO THEIR SIDE",
+      "detail": "Keep watching. If the breathing stops or turns to gasping, come back and start compressions.",
+      "speech": "Roll them onto their side. Keep watching. If breathing stops, come straight back.",
+      "source": "aha2025-highlights",
+      "quote": "Recognition and Emergency Activation",
+      "verified": true
+    },
+    {
+      "id": "position_body",
+      "kind": "action",
+      "instruction": "FLAT AND FIRM",
+      "detail": "On the floor, not a bed. Kneel so their chest is about level with your knees.",
+      "speech": "Get them flat on the floor. Not a bed. Kneel beside them.",
+      "next": "hand_position",
+      "source": "aha2025-highlights",
+      "quote": "For adult cardiac arrest, rescuers should perform chest compressions with the patient on a firm surface and with the patient's torso at approximately the level of the rescuer's knees.",
+      "verified": true
+    },
+    {
+      "id": "hand_position",
+      "kind": "action",
+      "instruction": "HANDS ON THE CHEST",
+      "detail": "Heel of one hand on the centre of the chest. Other hand on top. Lock your elbows.",
+      "speech": "Heel of one hand on the centre of the chest. Other hand on top. Lock your elbows.",
+      "next": "compressions",
+      "source": "aha2025-part7",
+      "quote": "Hand placement on the lower half of the sternum for adult chest compressions.",
+      "verified": false
+    },
+    {
+      "id": "compressions",
+      "kind": "compressions",
+      "instruction": "PUSH",
+      "detail": "Hard and fast. Let the chest come all the way up between pushes.",
+      "speech": "Push hard and fast. Follow the beat. Let the chest come all the way back up.",
+      "targetRateBpm": 110,
+      "acceptableRateMin": 100,
+      "acceptableRateMax": 120,
+      "depthCoaching": "Push down about two inches. Let it come all the way up.",
+      "swapIntervalSeconds": 120,
+      "handsOnly": true,
+      "next": "aed_check",
+      "source": "aha2025-part7",
+      "quote": "Chest compressions at a rate of 100 to 120 per minute to a depth of at least 2 inches (5 cm) but not greater than 2.4 inches (6 cm) for an average adult, allowing full chest recoil.",
+      "verified": false,
+      "verificationNote": "Rate and depth are carried forward from the 2020 Guidelines and are NOT listed among the 2025 changes, which is good evidence they are unchanged — but ahajournals.org and cpr.heart.org both return 403 to automated fetches, so this could not be confirmed against the primary PDF. Confirm manually before real-world use."
+    },
+    {
+      "id": "aed_check",
+      "kind": "confirm",
+      "instruction": "IS THERE AN AED?",
+      "detail": "Do not stop compressions to go looking. Only stop if someone hands you one.",
+      "speech": "Has anyone brought an A E D?",
+      "choices": [
+        { "label": "YES — IT'S HERE", "next": "aed_pads" },
+        { "label": "NO", "next": "compressions" }
+      ],
+      "source": "aha2025-highlights",
+      "quote": "Defibrillation",
+      "verified": true
+    },
+    {
+      "id": "aed_pads",
+      "kind": "action",
+      "instruction": "TURN IT ON. FOLLOW IT.",
+      "detail": "The AED talks you through it. Bare the chest — you can move a bra aside, you do not have to remove it.",
+      "speech": "Turn it on and do what it says. Bare the chest. You can move a bra aside. You do not have to take it off.",
+      "next": "aed_shock",
+      "source": "aha2025-highlights",
+      "quote": "When placing pads for defibrillation for an adult in cardiac arrest, it might be reasonable to adjust the position of a bra instead of removing it.",
+      "verified": true
+    },
+    {
+      "id": "aed_shock",
+      "kind": "action",
+      "instruction": "BACK TO COMPRESSIONS",
+      "detail": "The moment the shock is delivered — or if it says no shock — go straight back to pushing.",
+      "speech": "As soon as it has shocked, go straight back to pushing. Do not wait.",
+      "next": "compressions",
+      "source": "aha2025-highlights",
+      "quote": "Defibrillation",
+      "verified": true
+    }
+  ]
+}
