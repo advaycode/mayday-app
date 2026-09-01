@@ -1,0 +1,466 @@
+{
+  "$schema": "mayday.lexicon.v1",
+  "revision": "2025.1",
+  "note": "Vocabulary for the offline assistant. This file contains NO medical instruction — it only maps the words a panicking bystander actually says onto the concepts the cited corpus is indexed under. Medical content lives in the packs, each entry carrying its own source and quote.",
+  "contractions": {
+    "cant": "can not",
+    "cannot": "can not",
+    "couldnt": "could not",
+    "didnt": "did not",
+    "doesnt": "does not",
+    "dont": "do not",
+    "hasnt": "has not",
+    "hes": "he is",
+    "hows": "how is",
+    "im": "i am",
+    "isnt": "is not",
+    "its": "it is",
+    "ive": "i have",
+    "shes": "she is",
+    "shouldnt": "should not",
+    "thats": "that is",
+    "theres": "there is",
+    "theyre": "they are",
+    "theyve": "they have",
+    "wasnt": "was not",
+    "whats": "what is",
+    "wont": "will not",
+    "wouldnt": "would not",
+    "youre": "you are"
+  },
+  "negations": [
+    "not",
+    "no",
+    "never",
+    "without"
+  ],
+  "stopwords": [
+    "a",
+    "an",
+    "and",
+    "are",
+    "as",
+    "at",
+    "be",
+    "been",
+    "being",
+    "but",
+    "by",
+    "can",
+    "could",
+    "did",
+    "do",
+    "does",
+    "for",
+    "from",
+    "get",
+    "got",
+    "had",
+    "has",
+    "have",
+    "he",
+    "her",
+    "here",
+    "him",
+    "his",
+    "how",
+    "i",
+    "if",
+    "in",
+    "into",
+    "is",
+    "it",
+    "its",
+    "just",
+    "like",
+    "me",
+    "much",
+    "my",
+    "of",
+    "okay",
+    "on",
+    "or",
+    "our",
+    "please",
+    "really",
+    "she",
+    "should",
+    "so",
+    "some",
+    "still",
+    "than",
+    "that",
+    "the",
+    "their",
+    "them",
+    "then",
+    "there",
+    "these",
+    "they",
+    "this",
+    "to",
+    "uh",
+    "um",
+    "up",
+    "us",
+    "was",
+    "we",
+    "were",
+    "what",
+    "when",
+    "where",
+    "which",
+    "who",
+    "will",
+    "with",
+    "would"
+  ],
+  "numberWords": {
+    "one": "1",
+    "two": "2",
+    "three": "3",
+    "four": "4",
+    "five": "5",
+    "six": "6",
+    "seven": "7",
+    "eight": "8",
+    "nine": "9",
+    "ten": "10",
+    "thirty": "30",
+    "hundred": "100"
+  },
+  "synonyms": {
+    "911": [
+      "nine one one",
+      "9 1 1",
+      "emergency services",
+      "ambulance",
+      "paramedics",
+      "emts",
+      "ems"
+    ],
+    "aed": [
+      "defibrillator",
+      "defib",
+      "shock box",
+      "a e d"
+    ],
+    "cpr": [
+      "c p r",
+      "chest compressions",
+      "resuscitation"
+    ],
+    "breathing": [
+      "breath",
+      "breaths",
+      "breathe",
+      "breathes",
+      "breathin",
+      "respiration",
+      "air"
+    ],
+    "unresponsive": [
+      "unconscious",
+      "passed out",
+      "blacked out",
+      "out cold",
+      "will not wake up",
+      "not waking up",
+      "not responsive",
+      "non responsive",
+      "collapsed",
+      "limp",
+      "gone limp"
+    ],
+    "gasping": [
+      "agonal",
+      "gulping",
+      "snoring noise",
+      "fish breathing"
+    ],
+    "choking": [
+      "choke",
+      "food stuck",
+      "something stuck",
+      "went down the wrong way",
+      "obstructed airway"
+    ],
+    "chest": [
+      "sternum",
+      "breastbone",
+      "rib cage"
+    ],
+    "abdomen": [
+      "stomach",
+      "belly",
+      "tummy",
+      "gut"
+    ],
+    "infant": [
+      "baby",
+      "newborn"
+    ],
+    "child": [
+      "kid",
+      "toddler",
+      "little boy",
+      "little girl"
+    ],
+    "pregnant": [
+      "expecting",
+      "with child"
+    ],
+    "bleeding": [
+      "blood",
+      "bleed",
+      "haemorrhage",
+      "hemorrhage"
+    ],
+    "seizure": [
+      "fitting",
+      "convulsing",
+      "convulsion",
+      "epileptic"
+    ],
+    "anaphylaxis": [
+      "allergic reaction",
+      "epipen",
+      "epi pen",
+      "peanut allergy",
+      "bee sting"
+    ],
+    "overdose": [
+      "od",
+      "narcan",
+      "naloxone",
+      "fentanyl",
+      "opioid",
+      "heroin"
+    ],
+    "stroke": [
+      "face drooping",
+      "slurred speech",
+      "one side weak"
+    ],
+    "drowning": [
+      "drowned",
+      "pulled from the water",
+      "under water"
+    ],
+    "notbreathing": [
+      "not breathing",
+      "stopped breathing",
+      "has stopped breathing",
+      "no longer breathing",
+      "quit breathing",
+      "not breathing at all",
+      "heart stopped",
+      "heart has stopped",
+      "no pulse",
+      "no heartbeat",
+      "no heart beat",
+      "pulseless"
+    ],
+    "cantbreathe": [
+      "can not breathe",
+      "cannot breathe",
+      "not able to breathe",
+      "unable to breathe",
+      "struggling to breathe",
+      "fighting for breath",
+      "can not get air"
+    ]
+  },
+  "concepts": [
+    {
+      "id": "cardiac_arrest",
+      "protocolId": "cpr_adult",
+      "phrases": [
+        "not breathing",
+        "stopped breathing",
+        "no pulse",
+        "no heartbeat",
+        "heart stopped",
+        "not breathing and unresponsive",
+        "gasping",
+        "unresponsive and not breathing",
+        "cardiac arrest",
+        "needs cpr",
+        "start cpr",
+        "do cpr",
+        "how do i do cpr"
+      ]
+    },
+    {
+      "id": "choking",
+      "protocolId": "choking_adult",
+      "phrases": [
+        "choking",
+        "cantbreathe",
+        "something stuck in their throat",
+        "food stuck",
+        "grabbing their throat",
+        "went down the wrong way",
+        "heimlich",
+        "back blows",
+        "abdominal thrusts"
+      ]
+    },
+    {
+      "id": "aed",
+      "protocolId": "cpr_adult",
+      "phrases": [
+        "aed",
+        "defibrillator",
+        "shock them",
+        "pads on the chest"
+      ]
+    }
+  ],
+  "redFlags": [
+    {
+      "id": "rf_not_breathing",
+      "protocolId": "cpr_adult",
+      "phrases": [
+        "not breathing",
+        "stopped breathing",
+        "no pulse",
+        "heart stopped",
+        "no heartbeat"
+      ]
+    },
+    {
+      "id": "rf_gasping",
+      "protocolId": "cpr_adult",
+      "phrases": [
+        "gasping",
+        "agonal",
+        "gulping for air"
+      ]
+    },
+    {
+      "id": "rf_severe_choking",
+      "protocolId": "choking_adult",
+      "phrases": [
+        "choking and can not breathe",
+        "can not cough",
+        "turning blue",
+        "going blue",
+        "silent choking"
+      ]
+    },
+    {
+      "id": "rf_choking",
+      "protocolId": "choking_adult",
+      "phrases": [
+        "choking",
+        "cantbreathe"
+      ]
+    }
+  ],
+  "outOfScope": [
+    {
+      "id": "oos_infant",
+      "phrases": [
+        "baby",
+        "infant",
+        "newborn",
+        "my baby"
+      ]
+    },
+    {
+      "id": "oos_child",
+      "phrases": [
+        "child",
+        "kid",
+        "toddler",
+        "my son",
+        "my daughter"
+      ]
+    },
+    {
+      "id": "oos_bleeding",
+      "phrases": [
+        "bleeding",
+        "blood everywhere",
+        "deep cut",
+        "stab wound",
+        "gunshot"
+      ]
+    },
+    {
+      "id": "oos_seizure",
+      "phrases": [
+        "seizure",
+        "fitting",
+        "convulsing",
+        "shaking on the floor"
+      ]
+    },
+    {
+      "id": "oos_anaphylaxis",
+      "phrases": [
+        "allergic reaction",
+        "anaphylaxis",
+        "epipen",
+        "throat closing up",
+        "bee sting"
+      ]
+    },
+    {
+      "id": "oos_overdose",
+      "phrases": [
+        "overdose",
+        "naloxone",
+        "narcan",
+        "took something",
+        "fentanyl"
+      ]
+    },
+    {
+      "id": "oos_stroke",
+      "phrases": [
+        "stroke",
+        "face drooping",
+        "slurred speech",
+        "one side has gone weak"
+      ]
+    },
+    {
+      "id": "oos_heart_attack",
+      "phrases": [
+        "heart attack",
+        "chest pain",
+        "crushing pain in their chest",
+        "pain down their arm"
+      ]
+    },
+    {
+      "id": "oos_drowning",
+      "phrases": [
+        "drowning",
+        "pulled them out of the water",
+        "under water"
+      ]
+    },
+    {
+      "id": "oos_burn",
+      "phrases": [
+        "burn",
+        "burned",
+        "scalded",
+        "on fire"
+      ]
+    },
+    {
+      "id": "oos_head_injury",
+      "phrases": [
+        "head injury",
+        "hit their head",
+        "broken neck",
+        "spinal",
+        "fell off"
+      ]
+    }
+  ]
+}

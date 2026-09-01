@@ -1,5 +1,5 @@
 name: mayday
-description: "A new Flutter project."
+description: "Offline, voice-first coaching for an untrained bystander in a medical emergency."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -36,6 +36,8 @@ dependencies:
   cupertino_icons: ^1.0.8
   sensors_plus: ^7.1.0
   url_launcher: ^6.3.2
+  speech_to_text: ^7.4.0
+  flutter_tts: ^4.2.5
 
 dev_dependencies:
   flutter_test:
@@ -61,6 +63,7 @@ flutter:
 
   assets:
     - assets/protocols/
+    - assets/knowledge/
     - assets/fonts/OFL.txt
 
   fonts:

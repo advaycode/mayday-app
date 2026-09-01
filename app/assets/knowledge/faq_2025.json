@@ -1,0 +1,626 @@
+{
+  "$schema": "mayday.knowledge.pack.v1",
+  "id": "faq_2025",
+  "title": "Bystander questions — 2025 guidelines",
+  "revision": "2025.1",
+  "note": "Answer cards for the offline assistant. RULE: every card that makes a clinical claim carries a source id from assets/protocols/sources.json and the text that claim rests on. quoteKind is 'verbatim' when the quote was transcribed character-for-character from the source; a 'paraphrase' card MUST be verified:false, and a test enforces that. Cards of kind coverageGap and meta make no clinical claim at all — they say what Mayday does not know and hand the caller to a dispatcher.",
+  "cards": [
+    {
+      "id": "cpr_not_breathing",
+      "kind": "route",
+      "protocolId": "cpr_adult",
+      "ask": [
+        "they are not breathing",
+        "he is not breathing",
+        "she stopped breathing",
+        "not breathing",
+        "there is no pulse",
+        "their heart has stopped",
+        "they collapsed and are not breathing",
+        "unresponsive and not breathing",
+        "i think they are in cardiac arrest",
+        "how do i do cpr",
+        "they are unresponsive",
+        "they collapsed and are not responsive",
+        "they will not wake up",
+        "they are not moving",
+        "they are limp and not breathing"
+      ],
+      "display": "Start CPR. Get someone to call 911, then push hard and fast in the centre of the chest.",
+      "speech": "Start C P R. Point at someone and tell them to call nine one one. Then push hard and fast in the centre of the chest. I will count the beat for you.",
+      "source": "aha2025-highlights",
+      "quote": "The No-No-Go framework is reiterated as an effective method for recognizing OHCA.",
+      "quoteKind": "verbatim",
+      "verified": true,
+      "tags": [
+        "cpr",
+        "cardiac_arrest",
+        "start"
+      ]
+    },
+    {
+      "id": "cpr_gasping",
+      "kind": "answer",
+      "protocolId": "cpr_adult",
+      "protocolStepId": "check_breathing",
+      "ask": [
+        "they are gasping",
+        "is gasping breathing",
+        "they are making a snoring noise",
+        "they are gulping for air",
+        "is agonal breathing normal",
+        "they took a breath should i stop"
+      ],
+      "display": "Gasping is not breathing. Treat it as cardiac arrest and keep going.",
+      "speech": "Gasping is not breathing. Treat this as cardiac arrest. Keep pushing.",
+      "source": "aha2025-highlights",
+      "quote": "The No-No-Go framework is reiterated as an effective method for recognizing OHCA.",
+      "quoteKind": "verbatim",
+      "verified": true,
+      "tags": [
+        "cpr",
+        "cardiac_arrest",
+        "recognition"
+      ]
+    },
+    {
+      "id": "cpr_rate",
+      "kind": "answer",
+      "protocolId": "cpr_adult",
+      "protocolStepId": "compressions",
+      "ask": [
+        "how fast should i push",
+        "what rate should i be doing",
+        "how many compressions a minute",
+        "how deep do i push",
+        "how hard do i push",
+        "am i pushing hard enough"
+      ],
+      "display": "100 to 120 pushes a minute, about 5 to 6 cm deep, letting the chest come all the way back up. Follow the beat — Mayday measures your rate and will not pretend to measure your depth.",
+      "speech": "A hundred to a hundred and twenty pushes a minute. Follow the beat. Push down about two inches and let the chest come all the way back up.",
+      "source": "aha2025-part7",
+      "quote": "Chest compressions at a rate of 100 to 120 per minute to a depth of at least 2 inches (5 cm) but not greater than 2.4 inches (6 cm) for an average adult, allowing full chest recoil.",
+      "quoteKind": "verbatim",
+      "verified": false,
+      "verificationNote": "The primary PDF is behind a Cloudflare challenge that refuses automated fetches. These are long-standing values carried forward from 2020 and are not listed among the 2025 changes, but they have not yet been read off the primary document.",
+      "tags": [
+        "cpr",
+        "rate",
+        "depth"
+      ]
+    },
+    {
+      "id": "cpr_hand_position",
+      "kind": "answer",
+      "protocolId": "cpr_adult",
+      "protocolStepId": "hand_position",
+      "ask": [
+        "where do i put my hands",
+        "what is the hand position",
+        "where exactly do i push",
+        "which part of the chest"
+      ],
+      "display": "Heel of one hand on the centre of the chest, on the lower half of the breastbone. Other hand on top. Lock your elbows.",
+      "speech": "Heel of one hand on the centre of the chest. Other hand on top. Lock your elbows.",
+      "source": "aha2025-part7",
+      "quote": "Hand placement on the lower half of the sternum for adult chest compressions.",
+      "quoteKind": "verbatim",
+      "verified": false,
+      "verificationNote": "Same blocked primary source as the compression rate. Confirm before relying on it.",
+      "tags": [
+        "cpr",
+        "technique"
+      ]
+    },
+    {
+      "id": "cpr_surface",
+      "kind": "answer",
+      "protocolId": "cpr_adult",
+      "protocolStepId": "position_body",
+      "ask": [
+        "they are on a bed",
+        "can i do cpr on a couch",
+        "should i move them to the floor",
+        "does the surface matter",
+        "they are in a chair"
+      ],
+      "display": "Get them onto the floor. Compressions into a mattress or a sofa do not reach the heart.",
+      "speech": "Get them flat on the floor. Not a bed. Kneel beside them.",
+      "source": "aha2025-highlights",
+      "quote": "For adult cardiac arrest, rescuers should perform chest compressions with the patient on a firm surface and with the patient's torso at approximately the level of the rescuer's knees.",
+      "quoteKind": "verbatim",
+      "verified": true,
+      "tags": [
+        "cpr",
+        "technique"
+      ]
+    },
+    {
+      "id": "cpr_breaths",
+      "kind": "answer",
+      "protocolId": "cpr_adult",
+      "ask": [
+        "do i do mouth to mouth",
+        "do i give breaths",
+        "should i do rescue breaths",
+        "is it hands only",
+        "do i have to put my mouth on theirs"
+      ],
+      "display": "For an adult, hands-only is what a dispatcher will coach: no breaths, just keep pushing. Children are different and need breaths — Mayday does not cover children yet.",
+      "speech": "For an adult, hands only. No breaths. Just keep pushing.",
+      "source": "aha2025-highlights",
+      "quote": "Telecommunicator CPR: Hands-Only CPR for adults; conventional CPR with breaths for children.",
+      "quoteKind": "paraphrase",
+      "verified": false,
+      "verificationNote": "PARAPHRASE, not a transcription. The 2025 Highlights split telecommunicator CPR by age; the exact wording has not been transcribed from the primary document. Confirm before relying on it.",
+      "tags": [
+        "cpr",
+        "breaths"
+      ]
+    },
+    {
+      "id": "cpr_stop",
+      "kind": "answer",
+      "protocolId": "cpr_adult",
+      "ask": [
+        "when do i stop",
+        "can i stop now",
+        "how long do i keep going",
+        "i am too tired",
+        "my arms are giving out",
+        "someone else wants to take over"
+      ],
+      "display": "Keep going until they wake up or until EMS takes over. If anyone else can push, swap about every 2 minutes — Mayday will prompt you.",
+      "speech": "Keep going until they wake up, or until the paramedics take over. If someone else can push, swap over. I will tell you when.",
+      "source": "aha2025-part7",
+      "quote": "Rescuers should switch compressors approximately every 2 minutes to avoid a decline in compression quality from fatigue.",
+      "quoteKind": "paraphrase",
+      "verified": false,
+      "verificationNote": "PARAPHRASE of the long-standing 2-minute rescuer-swap guidance. Same blocked primary source. Confirm before relying on it.",
+      "tags": [
+        "cpr",
+        "fatigue",
+        "swap"
+      ]
+    },
+    {
+      "id": "aed_use",
+      "kind": "answer",
+      "protocolId": "cpr_adult",
+      "protocolStepId": "aed_pads",
+      "ask": [
+        "there is an aed",
+        "how do i use a defibrillator",
+        "should i go and get the aed",
+        "someone brought a defibrillator",
+        "do i need to know how to use it"
+      ],
+      "display": "Turn it on and do exactly what it says — it talks you through it. Do not stop compressions to go looking for one; only stop if somebody hands it to you.",
+      "speech": "Turn it on and do what it says. It talks you through it. Do not stop pushing to go and look for one.",
+      "source": "aha2025-highlights",
+      "quote": "Defibrillation",
+      "quoteKind": "verbatim",
+      "verified": true,
+      "tags": [
+        "aed"
+      ]
+    },
+    {
+      "id": "aed_bra",
+      "kind": "answer",
+      "protocolId": "cpr_adult",
+      "protocolStepId": "aed_pads",
+      "ask": [
+        "she is wearing a bra",
+        "do i have to take her bra off",
+        "aed on a woman",
+        "there is an underwire",
+        "do i undress them"
+      ],
+      "display": "Bare the chest, but you can move a bra aside rather than remove it. This was made explicit in 2025 because women are defibrillated far less often than men.",
+      "speech": "Bare the chest. You can move a bra aside. You do not have to take it off.",
+      "source": "aha2025-highlights",
+      "quote": "When placing pads for defibrillation for an adult in cardiac arrest, it might be reasonable to adjust the position of a bra instead of removing it.",
+      "quoteKind": "verbatim",
+      "verified": true,
+      "tags": [
+        "aed",
+        "2025_change"
+      ]
+    },
+    {
+      "id": "choking_sequence",
+      "kind": "route",
+      "protocolId": "choking_adult",
+      "ask": [
+        "they are choking",
+        "something is stuck in their throat",
+        "food is stuck",
+        "they are grabbing their throat",
+        "it went down the wrong way",
+        "what do i do for choking",
+        "do i do the heimlich",
+        "they cannot breathe",
+        "he cannot breathe",
+        "she cannot breathe"
+      ],
+      "display": "Five back blows between the shoulder blades, then five abdominal thrusts. Repeat until it clears. Back blows first is the 2025 change — most apps still say thrusts first.",
+      "speech": "Five back blows between the shoulder blades. Then five thrusts. Keep repeating until it comes out.",
+      "source": "aha2025-highlights",
+      "quote": "Start repeated cycles of 5 back blows (slaps), followed by 5 abdominal thrusts",
+      "quoteKind": "verbatim",
+      "verified": true,
+      "tags": [
+        "choking",
+        "2025_change",
+        "start"
+      ]
+    },
+    {
+      "id": "choking_can_cough",
+      "kind": "answer",
+      "protocolId": "choking_adult",
+      "protocolStepId": "encourage_cough",
+      "ask": [
+        "they can still cough",
+        "should i hit them if they can cough",
+        "they are coughing hard",
+        "they can talk",
+        "do i still do back blows if they can cough"
+      ],
+      "display": "A strong cough means the airway is still partly open. Do not hit them, do not reach into the mouth. Stay with them and watch for the cough going quiet.",
+      "speech": "Let them cough. Do not hit them. Do not reach into their mouth. Stay with them and watch.",
+      "source": "aha2025-highlights",
+      "quote": "Encourage cough. Continue to check for signs of severe FBAO.",
+      "quoteKind": "verbatim",
+      "verified": true,
+      "tags": [
+        "choking",
+        "severity"
+      ]
+    },
+    {
+      "id": "choking_severity_signs",
+      "kind": "answer",
+      "protocolId": "choking_adult",
+      "protocolStepId": "check_severity",
+      "ask": [
+        "how do i know if it is serious",
+        "how bad is it",
+        "what are the signs of severe choking",
+        "they have gone quiet",
+        "their lips are blue"
+      ],
+      "display": "Severe means: weak or no cough, cannot speak, colour changing, going vague, or no breathing at all. Any of those and you start back blows now.",
+      "speech": "If they cannot cough, cannot speak, are changing colour, or are going limp, this is severe. Start back blows now.",
+      "source": "aha2025-highlights",
+      "quote": "Check for signs of severe FBAO: Weak or absence of cough / Unable to speak / Change in colour (cyanosis) / Altered mental status / Apnea",
+      "quoteKind": "verbatim",
+      "verified": true,
+      "tags": [
+        "choking",
+        "severity"
+      ]
+    },
+    {
+      "id": "choking_pregnant",
+      "kind": "answer",
+      "protocolId": "choking_adult",
+      "protocolStepId": "chest_thrusts",
+      "ask": [
+        "she is pregnant",
+        "i cannot get my arms around them",
+        "they are too big to reach around",
+        "where do i put my fist if she is pregnant"
+      ],
+      "display": "Use five chest thrusts instead of abdominal thrusts — fist on the breastbone, pull straight back.",
+      "speech": "Use chest thrusts instead. Fist on the breastbone. Pull straight back. Not on the belly.",
+      "source": "aha2025-highlights",
+      "quote": "For patients in the late stages of pregnancy, or when the rescuer is unable to encircle the patient's abdomen, 5 chest thrusts should be used instead.",
+      "quoteKind": "verbatim",
+      "verified": true,
+      "tags": [
+        "choking",
+        "technique"
+      ]
+    },
+    {
+      "id": "choking_collapsed",
+      "kind": "answer",
+      "protocolId": "choking_adult",
+      "protocolStepId": "to_cpr",
+      "ask": [
+        "they have gone unconscious",
+        "they passed out while choking",
+        "they collapsed and something is still stuck",
+        "what if they stop being awake"
+      ],
+      "display": "Lower them to the floor and start CPR. Check the mouth for anything you can see before any breath.",
+      "speech": "Lower them to the floor. We are starting C P R now.",
+      "source": "aha2025-highlights",
+      "quote": "Start CPR until advanced care arrives; refer to adult BLS algorithm. Start with compressions. Check for visible object in mouth before giving breaths.",
+      "quoteKind": "verbatim",
+      "verified": true,
+      "tags": [
+        "choking",
+        "cpr",
+        "deterioration"
+      ]
+    },
+    {
+      "id": "choking_after",
+      "kind": "answer",
+      "protocolId": "choking_adult",
+      "protocolStepId": "cleared",
+      "ask": [
+        "it came out are they okay",
+        "do they still need a doctor",
+        "it is clear now what next",
+        "they are breathing again"
+      ],
+      "display": "Stay with them and keep watching their breathing. They still need to be seen by a doctor — abdominal thrusts can injure organs.",
+      "speech": "Good. Stay with them. They still need to see a doctor, even now. Keep watching their breathing.",
+      "source": "aha2025-highlights",
+      "quote": "If object is expelled, continue to monitor until advanced care arrives.",
+      "quoteKind": "verbatim",
+      "verified": true,
+      "tags": [
+        "choking",
+        "aftercare"
+      ]
+    },
+    {
+      "id": "who_calls_911",
+      "kind": "answer",
+      "ask": [
+        "should i call 911 first",
+        "who calls 911",
+        "do i call before i start",
+        "how do i get help coming"
+      ],
+      "display": "Point at one person and say it to them by description: YOU in the blue coat — call 911, put it on speaker. Naming somebody is what turns a crowd into help.",
+      "speech": "Point at one person. Say: you. Call nine one one and put it on speaker.",
+      "source": "aha2025-highlights",
+      "quote": "Recognition and Emergency Activation",
+      "quoteKind": "verbatim",
+      "verified": true,
+      "tags": [
+        "911",
+        "delegation"
+      ]
+    },
+    {
+      "id": "alone",
+      "kind": "answer",
+      "ask": [
+        "i am on my own",
+        "there is nobody else here",
+        "no one else is around",
+        "i am alone",
+        "there is no one to help"
+      ],
+      "display": "Call 911 yourself, speaker on, phone on the floor beside you — then keep going. While you are on the call the phone cannot hear you, so Mayday switches to the big on-screen step and tap-to-advance.",
+      "speech": "Call nine one one yourself. Speaker on. Put the phone down beside you and keep going. While you are on the call I cannot hear you, so tap the screen for the next step.",
+      "source": "aha2025-highlights",
+      "quote": "Activate emergency response system.",
+      "quoteKind": "verbatim",
+      "verified": true,
+      "tags": [
+        "911",
+        "alone",
+        "mic"
+      ]
+    },
+    {
+      "id": "scene_safety",
+      "kind": "answer",
+      "ask": [
+        "is it safe to go in",
+        "there is traffic",
+        "there are wires down",
+        "should i move them out of the road",
+        "is it safe"
+      ],
+      "display": "Check the scene before you touch anyone. Traffic, fire, wires, water. You cannot help anyone if you become the second patient.",
+      "speech": "Check it is safe first. Traffic. Fire. Wires. Water. You cannot help if you are hurt.",
+      "source": "aha2025-highlights",
+      "quote": "Verify scene safety.",
+      "quoteKind": "verbatim",
+      "verified": true,
+      "tags": [
+        "scene",
+        "safety"
+      ]
+    },
+    {
+      "id": "gap_child_or_infant",
+      "kind": "coverageGap",
+      "ask": [
+        "it is a baby",
+        "my baby is not breathing",
+        "it is a child",
+        "cpr on a toddler",
+        "how do i do cpr on a kid",
+        "my son is choking",
+        "my daughter is choking",
+        "infant cpr"
+      ],
+      "display": "This build only covers adults. Call 911 now and let the dispatcher coach you — the technique for a child or an infant is genuinely different, and the 2025 guidelines changed it. Do not copy the adult steps.",
+      "speech": "This version only covers adults. Call nine one one now. The dispatcher will talk you through it. Do not copy the adult steps for a child.",
+      "quoteKind": "none",
+      "verified": true,
+      "tags": [
+        "coverage",
+        "age"
+      ]
+    },
+    {
+      "id": "gap_bleeding",
+      "kind": "coverageGap",
+      "ask": [
+        "they are bleeding badly",
+        "there is blood everywhere",
+        "deep cut",
+        "stab wound",
+        "gunshot wound",
+        "i cannot stop the bleeding"
+      ],
+      "display": "Severe bleeding is not in this build yet. Call 911 now — the dispatcher will talk you through pressure and packing.",
+      "speech": "Severe bleeding is not in this version yet. Call nine one one now. The dispatcher will talk you through it.",
+      "quoteKind": "none",
+      "verified": true,
+      "tags": [
+        "coverage"
+      ]
+    },
+    {
+      "id": "gap_anaphylaxis",
+      "kind": "coverageGap",
+      "ask": [
+        "allergic reaction",
+        "their throat is closing up",
+        "where do i use an epipen",
+        "anaphylaxis",
+        "bee sting reaction"
+      ],
+      "display": "Anaphylaxis is not in this build yet. Call 911 now. If they have their own adrenaline auto-injector, tell the dispatcher — they will direct you.",
+      "speech": "Allergic reactions are not in this version yet. Call nine one one now and tell them what is happening.",
+      "quoteKind": "none",
+      "verified": true,
+      "tags": [
+        "coverage"
+      ]
+    },
+    {
+      "id": "gap_overdose",
+      "kind": "coverageGap",
+      "ask": [
+        "they have overdosed",
+        "i think it is fentanyl",
+        "do i give narcan",
+        "naloxone",
+        "they took something and stopped breathing"
+      ],
+      "display": "Opioid emergencies are not in this build yet. Call 911 now. If they are not breathing at all, say exactly that — an opioid arrest needs breaths, not hands-only, and the dispatcher will coach it.",
+      "speech": "Overdose is not in this version yet. Call nine one one now and tell them they are not breathing.",
+      "quoteKind": "none",
+      "verified": true,
+      "tags": [
+        "coverage"
+      ]
+    },
+    {
+      "id": "gap_seizure",
+      "kind": "coverageGap",
+      "ask": [
+        "they are having a seizure",
+        "they are convulsing",
+        "they are fitting",
+        "shaking on the floor"
+      ],
+      "display": "Seizures are not in this build yet. Call 911 now and let the dispatcher coach you.",
+      "speech": "Seizures are not in this version yet. Call nine one one now.",
+      "quoteKind": "none",
+      "verified": true,
+      "tags": [
+        "coverage"
+      ]
+    },
+    {
+      "id": "gap_stroke_or_heart_attack",
+      "kind": "coverageGap",
+      "ask": [
+        "i think it is a stroke",
+        "their face is drooping",
+        "their speech is slurred",
+        "i think it is a heart attack",
+        "crushing chest pain",
+        "pain down their arm"
+      ],
+      "display": "Stroke and heart attack are not in this build yet. Call 911 now — for both of these, how fast the ambulance is called is the thing that matters most.",
+      "speech": "That is not in this version yet. Call nine one one right now. Getting the ambulance moving is the most important thing.",
+      "quoteKind": "none",
+      "verified": true,
+      "tags": [
+        "coverage"
+      ]
+    },
+    {
+      "id": "gap_other",
+      "kind": "coverageGap",
+      "ask": [
+        "drowning",
+        "they were pulled out of the water",
+        "they are burned",
+        "they hit their head",
+        "broken bone",
+        "they fell a long way"
+      ],
+      "display": "That is not in this build yet. Call 911 now and describe exactly what you can see.",
+      "speech": "That is not in this version yet. Call nine one one and describe what you can see.",
+      "quoteKind": "none",
+      "verified": true,
+      "tags": [
+        "coverage"
+      ]
+    },
+    {
+      "id": "meta_capabilities",
+      "kind": "meta",
+      "ask": [
+        "what can you do",
+        "what do you know",
+        "what can you help with",
+        "what is this app",
+        "how does this work"
+      ],
+      "display": "I coach adult CPR and adult choking, out loud, with no signal and no account. Ask me anything about either and I will answer from the 2025 guidelines and show you the line I got it from. Anything I do not cover, I will say so and tell you to call 911.",
+      "speech": "I can coach you through adult C P R and adult choking. Ask me anything about either one. If I do not know something, I will tell you to call nine one one instead of guessing.",
+      "quoteKind": "none",
+      "verified": true,
+      "tags": [
+        "meta"
+      ]
+    },
+    {
+      "id": "meta_trust",
+      "kind": "meta",
+      "ask": [
+        "are you a doctor",
+        "is this real advice",
+        "how do you know this",
+        "where does this come from",
+        "can i trust this",
+        "are you an ai",
+        "are you a real doctor",
+        "is this medical advice",
+        "who wrote this"
+      ],
+      "display": "No. Every line comes from the 2025 American Heart Association guidelines and every screen shows you the exact text it came from. Nothing here is written by a language model. It is not a substitute for training or for a dispatcher.",
+      "speech": "No, I am not a doctor. Everything I say comes from the twenty twenty five guidelines, and the screen shows you the exact line it came from. Call nine one one as well.",
+      "quoteKind": "none",
+      "verified": true,
+      "tags": [
+        "meta",
+        "disclosure"
+      ]
+    },
+    {
+      "id": "meta_offline",
+      "kind": "meta",
+      "ask": [
+        "does this work without signal",
+        "do i need internet",
+        "will this work in a basement",
+        "is it offline"
+      ],
+      "display": "Yes. Everything — the protocols, the voice, the search — runs on the phone. There is no network call anywhere in the app.",
+      "speech": "Yes. Everything runs on the phone. It works with no signal at all.",
+      "quoteKind": "none",
+      "verified": true,
+      "tags": [
+        "meta"
+      ]
+    }
+  ]
+}

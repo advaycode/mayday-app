@@ -1,22 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../../ai/mayday_ai.dart';
 import '../../data/protocol_repository.dart';
 import '../../design/tokens.dart';
 import '../../domain/protocol.dart';
+import '../assistant/assistant_screen.dart';
 import '../incident/incident_screen.dart';
 
 /// Cold start to actionable. One target, most of the screen, no onboarding,
 /// no account, no splash. Everything else on this screen is small and quiet.
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key, required this.repository});
+  const HomeScreen({super.key, required this.repository, this.ai});
 
   final ProtocolRepository repository;
+
+  /// Null when the assistant failed to load. The emergency button still works;
+  /// only the "ask me anything" row disappears.
+  final MaydayAi? ai;
 
   void _start(BuildContext context, Protocol protocol) {
     HapticFeedback.heavyImpact();
     Navigator.of(context).push(MaterialPageRoute(
-      builder: (_) => IncidentScreen(repository: repository, protocol: protocol),
+      builder: (_) =>
+          IncidentScreen(repository: repository, protocol: protocol, ai: ai),
+    ));
+  }
+
+  void _ask(BuildContext context) {
+    final ai = this.ai;
+    if (ai == null) return;
+    HapticFeedback.selectionClick();
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (_) => AssistantScreen(repository: repository, ai: ai),
     ));
   }
 
@@ -61,6 +77,13 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
 
+            const SizedBox(height: MSpace.gutter),
+            if (ai != null)
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: MSpace.gutter),
+                child: _AskRow(onTap: () => _ask(context)),
+              ),
             const SizedBox(height: MSpace.gutter),
             Padding(
               padding:
@@ -240,6 +263,52 @@ class _Disclaimer extends StatelessWidget {
         'substitute for professional medical care or formal training, and it '
         'does not diagnose. In an emergency, call 911 first.',
         style: MType.citation,
+      ),
+    );
+  }
+}
+
+/// The second way in. Small, quiet, and beside the emergency button rather than
+/// competing with it — you should never have to describe an emergency to
+/// something before it will help you, but being able to is what makes the app
+/// useful to someone who does not yet know what they are looking at.
+class _AskRow extends StatelessWidget {
+  const _AskRow({required this.onTap});
+
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      button: true,
+      label: 'Ask Mayday. Describe what you can see and get an answer out loud.',
+      child: GestureDetector(
+        onTap: onTap,
+        behavior: HitTestBehavior.opaque,
+        child: Container(
+          constraints: const BoxConstraints(minHeight: MSpace.minTarget),
+          padding: const EdgeInsets.symmetric(
+              horizontal: MSpace.gap, vertical: MSpace.gap),
+          decoration: BoxDecoration(
+            borderRadius: MSpace.border,
+            border: Border.all(color: MColor.rule),
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('ASK MAYDAY', style: MType.button),
+                    Text('SAY WHAT YOU CAN SEE · WORKS OFFLINE',
+                        style: MType.label),
+                  ],
+                ),
+              ),
+              const Icon(Icons.mic_none, color: MColor.textDim, size: 26),
+            ],
+          ),
+        ),
       ),
     );
   }

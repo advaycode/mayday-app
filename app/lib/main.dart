@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'src/ai/mayday_ai.dart';
 import 'src/data/protocol_repository.dart';
 import 'src/design/tokens.dart';
+import 'src/features/assistant/assistant_screen.dart';
 import 'src/features/home/home_screen.dart';
 import 'src/features/incident/incident_screen.dart';
 
@@ -22,13 +24,24 @@ Future<void> main() async {
   // is never gated on I/O. It is a few hundred KB of bundled JSON.
   final repository = await ProtocolRepository.load();
 
-  runApp(MaydayApp(repository: repository));
+  // The assistant is built before the first frame too, for the same reason:
+  // asking a question must never wait on I/O. It is a few hundred KB of JSON
+  // and one indexing pass, and it is allowed to fail — the app runs without it.
+  MaydayAi? ai;
+  try {
+    ai = await MaydayAi.load(repository: repository);
+  } catch (error) {
+    debugPrint('[Mayday] assistant unavailable: $error');
+  }
+
+  runApp(MaydayApp(repository: repository, ai: ai));
 }
 
 class MaydayApp extends StatelessWidget {
-  const MaydayApp({super.key, required this.repository});
+  const MaydayApp({super.key, required this.repository, this.ai});
 
   final ProtocolRepository repository;
+  final MaydayAi? ai;
 
   @override
   Widget build(BuildContext context) {
@@ -64,15 +77,21 @@ class MaydayApp extends StatelessWidget {
   /// define is supplied, so it cannot affect a normal build.
   Widget _startScreen() {
     const startProtocol = String.fromEnvironment('START_PROTOCOL');
-    if (startProtocol.isEmpty) return HomeScreen(repository: repository);
+    if (const bool.fromEnvironment('START_ASSISTANT') && ai != null) {
+      return AssistantScreen(repository: repository, ai: ai!);
+    }
+    if (startProtocol.isEmpty) {
+      return HomeScreen(repository: repository, ai: ai);
+    }
 
     final protocol = repository.byId(startProtocol);
-    if (protocol == null) return HomeScreen(repository: repository);
+    if (protocol == null) return HomeScreen(repository: repository, ai: ai);
 
     const startStep = String.fromEnvironment('START_STEP');
     return IncidentScreen(
       repository: repository,
       protocol: protocol,
+      ai: ai,
       startStepId: startStep.isEmpty ? null : startStep,
     );
   }

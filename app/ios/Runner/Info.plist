@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Mayday listens so you can keep both hands on the person you are helping. Speech is recognised on this device and never leaves it.</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>Mayday turns what you say into a command or a question so it can coach you hands-free. Recognition runs on this device.</string>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>

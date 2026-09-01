@@ -1,4 +1,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Voice input. Note what is NOT here: android.permission.INTERNET.
+         Mayday claims to work with no signal and to keep an incident on the
+         phone, and the absence of this permission is what makes that claim
+         checkable rather than a promise. Speech recognition is requested
+         on-device only (see lib/src/ai/platform_speech.dart); a listen that
+         cannot be served locally fails rather than quietly going to a server. -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+
+    <!-- The call-state read in MainActivity uses AudioManager.getMode(), which
+         needs no permission. READ_PHONE_STATE is deliberately not requested. -->
+
     <application
         android:label="mayday"
         android:name="${applicationName}"
@@ -40,6 +52,20 @@
         <intent>
             <action android:name="android.intent.action.PROCESS_TEXT"/>
             <data android:mimeType="text/plain"/>
+        </intent>
+        <!-- Package visibility for the system speech recogniser and the
+             text-to-speech engine. Without these, Android 11+ hides both
+             services and the assistant is silently unavailable. -->
+        <intent>
+            <action android:name="android.speech.RecognitionService"/>
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.TTS_SERVICE"/>
+        </intent>
+        <!-- The 911 hand-off opens the system dialer. -->
+        <intent>
+            <action android:name="android.intent.action.DIAL"/>
+            <data android:scheme="tel"/>
         </intent>
     </queries>
 </manifest>

@@ -21,6 +21,21 @@ const _tierAPath = <String>[
   'lib/src/cpr/compression_rate_detector.dart',
 ];
 
+/// The assistant's own reasoning path.
+///
+/// The advisor is retrieval over a bundled, cited corpus — no weights, no
+/// runtime, no network. That is a load-bearing claim (it is why an answer is
+/// instant, works in a basement, and can be reviewed by a clinician), so it is
+/// held by the same test that holds Tier A rather than by good intentions.
+const _assistantPath = <String>[
+  'lib/src/ai/advisor.dart',
+  'lib/src/ai/retriever.dart',
+  'lib/src/ai/knowledge.dart',
+  'lib/src/ai/lexicon.dart',
+  'lib/src/ai/text.dart',
+  'lib/src/ai/commands.dart',
+];
+
 /// Package prefixes that must never appear on the Tier A path.
 const _forbiddenImports = <String>[
   'flutter_gemma',
@@ -88,6 +103,54 @@ void main() {
       }
 
       expect(violations, isEmpty, reason: violations.join('\n'));
+    });
+
+    test('the engine does not depend on the assistant at all', () {
+      // Voice is bolted on beside the incident, never underneath it. If the
+      // engine ever imports the AI layer, the touch path has stopped being
+      // independent and "it still works with no microphone" stops being true.
+      final engine =
+          File('lib/src/engine/incident_engine.dart').readAsStringSync();
+      expect(engine.contains("import '../ai/"), isFalse);
+      expect(engine.contains('ai/voice_session'), isFalse);
+    });
+  });
+
+  group('assistant determinism', () {
+    test('no inference runtime or network client on the advisor path', () {
+      final violations = <String>[];
+
+      for (final path in _assistantPath) {
+        final file = File(path);
+        expect(file.existsSync(), isTrue, reason: 'missing $path');
+
+        for (final line in file.readAsLinesSync()) {
+          final trimmed = line.trim();
+          if (!trimmed.startsWith('import ') &&
+              !trimmed.startsWith('export ')) {
+            continue;
+          }
+          for (final forbidden in _forbiddenImports) {
+            if (trimmed.contains(forbidden)) violations.add('$path: $trimmed');
+          }
+        }
+      }
+
+      expect(violations, isEmpty,
+          reason: 'The assistant answers from a bundled, cited corpus. It must '
+              'not acquire a model or a network client:\n'
+              '${violations.join('\n')}');
+    });
+
+    test('the only file that may touch a model is the router', () {
+      // llm_router.dart is where an on-device model would be plugged in, and
+      // it is an interface plus an allowlist validator - deliberately, so that
+      // a model can never do more than name a protocol that already exists.
+      final router = File('lib/src/ai/llm_router.dart').readAsStringSync();
+      for (final forbidden in _forbiddenImports) {
+        expect(router.contains("import '$forbidden"), isFalse,
+            reason: 'the router must stay an interface, not import $forbidden');
+      }
     });
   });
 }

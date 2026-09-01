@@ -26,6 +26,8 @@ The 2026 Congressional App Challenge rules require two things this file covers.
 |---|---|---|---|---|
 | `sensors_plus` | 7.1.0 | BSD-3-Clause | Accelerometer stream feeding compression-rate detection | Verified publisher (fluttercommunity.dev), actively maintained, and exposes `userAccelerometerEventStream` so gravity is removed by the platform rather than by us |
 | `url_launcher` | latest | BSD-3-Clause | Hands 911 to the system dialer | First-party Flutter team package |
+| `speech_to_text` | 7.4.0 | BSD-3-Clause | Microphone input for the assistant | The only maintained Flutter binding to the platform recognisers, and the only one that exposes on-device-only recognition — which Mayday requires, so a listen fails rather than going to a server |
+| `flutter_tts` | 4.2.5 | MIT | Speaks instructions and answers | Wraps the OS text-to-speech engine, so the voice is already installed, works offline, and matches the accessibility voice the user has already chosen |
 | `cupertino_icons` | 1.0.8 | MIT | Default Flutter scaffold dependency | Ships with `flutter create` |
 
 ## Fonts
@@ -59,6 +61,13 @@ from a tutorial or another app. The parts worth pointing at:
 - `lib/src/data/protocol_repository.dart` — corpus loading plus graph validation (dangling edges,
   unreachable steps, per-kind structural rules).
 - `test/tier_a_safety_test.dart` — enforces the no-model-in-the-loop architectural invariant.
+- `lib/src/ai/` — the assistant. A normaliser with negation folded into the token and negation
+  scoping stopped at clause boundaries; an Okapi BM25 index over the cited corpus; a router that
+  vetoes on coverage gaps before it escalates on red flags; a command grammar tight enough that a
+  question can never advance the protocol; and a voice session that announces losing the microphone
+  instead of going quietly deaf. Explained in full in `docs/ASSISTANT.md`.
+- `android/.../MainActivity.kt` — a permission-free `AudioManager.getMode()` read, because Android
+  will hand a recording app digital silence during a call rather than an error.
 
 ## AI disclosure
 
@@ -79,6 +88,23 @@ Two things this project did *not* get from AI, and they are the parts that matte
 2. **The correctness gates.** The test suite, the citation-per-step requirement, and the
    unverified-content debt register exist because shipping medical instructions demands them.
 
-No AI runs inside the app. Tier A protocols execute as a deterministic state machine with no
-model in the loop — enforced by `test/tier_a_safety_test.dart`, which fails the build if an
-inference runtime or network client ever appears on that code path.
+### The assistant in the app is not a language model
+
+Mayday has an AI feature — you talk to it and it answers — and it contains **no language model and
+no network call**. It is Okapi BM25 retrieval over a bundled corpus of authored, cited answer
+cards. The assistant *selects* an answer; it never writes one, and
+`test/advisor_test.dart` fails the build if a sentence it speaks cannot be traced to
+`assets/knowledge/faq_2025.json` or to a protocol step. The complete set of things this app can say
+out loud is a JSON file you can read in ten minutes.
+
+That is a deliberate engineering position rather than a shortcut, and `docs/ASSISTANT.md` argues
+it: retrieval can cite its source, can be reviewed by a clinician, can be thresholded into an
+honest *"I don't know — call 911"*, runs in microseconds offline, and cannot invent a technique for
+an infant. One narrow job is reserved for an on-device model — turning a rambling sentence into a
+protocol id — and `lib/src/ai/llm_router.dart` is where it would plug in: an interface, disabled by
+default, whose output is validated against an allowlist of protocols the corpus actually defines
+and dropped on any miss.
+
+Tier A protocols execute as a deterministic state machine with no model in the loop — enforced by
+`test/tier_a_safety_test.dart`, which fails the build if an inference runtime or network client
+ever appears on that code path, or on the advisor's.

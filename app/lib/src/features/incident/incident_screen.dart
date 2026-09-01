@@ -1,6 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../../ai/commands.dart';
+import '../../ai/mayday_ai.dart';
+import '../../ai/speech.dart';
+import '../../ai/voice_session.dart';
 import '../../data/protocol_repository.dart';
 import '../../design/tokens.dart';
 import '../../domain/protocol.dart';
@@ -8,6 +14,7 @@ import '../../engine/incident_engine.dart';
 import '../../services/emergency_call.dart';
 import 'compression_coach.dart';
 import 'handoff_screen.dart';
+import 'incident_voice.dart';
 
 /// Runs one incident. One instruction on screen at a time, one action, no nav
 /// bar, no tabs, no back button — nothing to get lost in.
@@ -17,10 +24,20 @@ class IncidentScreen extends StatefulWidget {
     required this.repository,
     required this.protocol,
     this.startStepId,
+    this.ai,
+    this.session,
   });
 
   final ProtocolRepository repository;
   final Protocol protocol;
+
+  /// The assistant. Null means run the incident with no voice at all — which
+  /// must remain a complete, usable experience, because during a 911 call the
+  /// platform takes the microphone away whether we like it or not.
+  final MaydayAi? ai;
+
+  /// Injected in tests and in the screenshot build.
+  final VoiceSession? session;
 
   /// Optional deep-link entry point, used only by the screenshot/demo define.
   final String? startStepId;
@@ -34,6 +51,10 @@ class _IncidentScreenState extends State<IncidentScreen> {
   final EmergencyCall _dialer = EmergencyCall();
   String? _toast;
 
+  VoiceSession? _voice;
+  IncidentVoiceController? _coach;
+  bool _ownsVoice = false;
+
   @override
   void initState() {
     super.initState();
@@ -42,6 +63,34 @@ class _IncidentScreenState extends State<IncidentScreen> {
       protocol: widget.protocol,
       startStepId: widget.startStepId,
     )..addListener(_onEngineChanged);
+    _startVoice();
+  }
+
+  /// Voice is bolted on beside the incident, never underneath it. Everything
+  /// below fails soft: no assistant, no microphone, no text-to-speech engine —
+  /// the protocol still runs, unchanged, on touch.
+  void _startVoice() {
+    final ai = widget.ai;
+    if (ai == null && widget.session == null) return;
+
+    final session = widget.session ?? ai!.newSession();
+    _ownsVoice = widget.session == null;
+    _voice = session..addListener(_onEngineChanged);
+
+    final grammar =
+        ai?.grammar ?? CommandGrammar(session.advisor.lexicon.normalizer);
+    _coach = IncidentVoiceController(
+      session: session,
+      engine: _engine,
+      grammar: grammar,
+      actions: IncidentVoiceActions(
+        next: _advance,
+        alone: _engine.takeAloneBranch,
+        call: () => unawaited(_placeCall()),
+        timeline: _openHandoff,
+      ),
+    );
+    unawaited(_coach!.start());
   }
 
   void _onEngineChanged() {
@@ -50,10 +99,24 @@ class _IncidentScreenState extends State<IncidentScreen> {
 
   @override
   void dispose() {
+    _coach?.dispose();
+    _voice?.removeListener(_onEngineChanged);
+    if (_ownsVoice) _voice?.dispose();
     _engine
       ..removeListener(_onEngineChanged)
       ..dispose();
     super.dispose();
+  }
+
+  Future<void> _toggleMic() async {
+    final session = _voice;
+    if (session == null) return;
+    HapticFeedback.selectionClick();
+    if (session.state == VoiceState.listening) {
+      await session.stopListening();
+    } else {
+      await session.startListening();
+    }
   }
 
   void _advance() {
@@ -97,6 +160,8 @@ class _IncidentScreenState extends State<IncidentScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               _TopStrip(engine: _engine, onExit: _confirmExit, onHandoff: _openHandoff),
+              if (_voice case final voice?)
+                _VoiceStrip(session: voice, onMic: _toggleMic),
               if (_toast != null) _Toast(text: _toast!),
               Expanded(child: _buildBody(step)),
               _CitationStrip(engine: _engine),
@@ -570,6 +635,64 @@ class _CitationStrip extends StatelessWidget {
               ),
             ),
             Text('SOURCE', style: MType.label),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// A thin band showing whether the phone can hear, what it just heard, and what
+/// it answered. Small on purpose: the instruction is the screen, and the voice
+/// layer must never compete with it for attention.
+class _VoiceStrip extends StatelessWidget {
+  const _VoiceStrip({required this.session, required this.onMic});
+
+  final VoiceSession session;
+  final VoidCallback onMic;
+
+  @override
+  Widget build(BuildContext context) {
+    final listening = session.state == VoiceState.listening;
+    final heard = session.partial.isNotEmpty
+        ? session.partial
+        : session.latest?.display;
+
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: onMic,
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(
+            horizontal: MSpace.gutter, vertical: MSpace.tight),
+        decoration: const BoxDecoration(
+          color: MColor.surface,
+          border: Border(bottom: BorderSide(color: MColor.rule)),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 8,
+              height: 8,
+              margin: const EdgeInsets.only(right: MSpace.tight),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: listening
+                    ? MColor.signal
+                    : (session.mic.canListen ? MColor.textFaint : MColor.warn),
+              ),
+            ),
+            Expanded(
+              child: Text(
+                heard ?? (listening ? 'Listening — say "next" or ask me anything' : session.mic.label),
+                style: MType.citation.copyWith(
+                  color: session.mic.canListen ? MColor.textDim : MColor.warn,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            Text(listening ? 'STOP' : 'TALK', style: MType.label),
           ],
         ),
       ),

@@ -1,0 +1,8 @@
+{
+  "$schema": "mayday.knowledge.index.v1",
+  "packRevision": "2025.1",
+  "lexicon": "lexicon",
+  "packs": [
+    "faq_2025"
+  ]
+}
