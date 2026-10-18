@@ -1,0 +1,136 @@
+                                                          Cardiac Arrest Registry to
+                                                          Enhance Survival (CARES)
+
+                                                                   Benefits of CARES Participation
+
+PERFORMANCE                                                  ACCESS TO                                          EMS REGISTRY                                              FACILITATING
+IMPROVEMENT                                               INFORMATION                                          CONTRIBUTION                                              VITAL RESEARCH
+
+ CARES helps communities                                    Joining CARES grants      Contribute to one of the largest EMS                                               CARES' comprehensive data
+measure and enhance their                                 access to crucial data for      registries worldwide, including                                                 supports crucial research,
+cardiac arrest survival rates.                            enhancing performance                                                                                            advancing cardiac arrest
+                                                                                       patient outcome information from                                                  treatment and saving lives.
+                                                               and saving lives.                         hospitals.
+
+                                                                                                                                     CARES Coverage
+
+137,119
+ NON-TRAUMATIC, WORKED OHCAS WERE
+ REPORTED TO CARES IN 2024.
+
+  As of January 2025, CARES covers a catchment area of more than
+  186 million, including 37 statewide registries and 43 community
+  sites. More than 2,600 EMS agencies and over 2,200 hospitals
+  participate nationwide.
+
+  For further information, please refer to the CARES
+  homepage and explore our 2024 Annual Report.
+
+2024 Data Highlights
+
+NON-TRAUMATIC ETIOLOGY                                    6.4 MINUTES                                                                FEMALE                                                  MALE
+        SURVIVAL RATES
+                                                               MEDIAN EMS                                                                68                                                    65
+Utstein Bystander         37.6%                             RESPONSE TIME                                      MEDIAN AGE              41.7%                                                 41.6%
+               Utstein  33.4%                                                                                  BCPR                    43.9%                                                 46.2%
+                                                                                                               PUBLIC BCPR             10.0%                                                 13.4%
+Bystander Witnessed     16.0%                                                                                  PUBLIC AED USE
+
+        Overall 10.5%
+Unwitnessed 4.5%
+
+12.6%                                                     41.7% OF PATIENTS                                    OVERALL SURVIVAL       9.7%                                                     11.0%
+                                                                                 RECEIVED                      RISK ADJUSTED         11.34%                                                   10.19%
+ OF PATIENTS                                                                     BYSTANDER CPR                 OVERALL SURVIVAL       41.8%                                                    58.2%
+ WHO ARRESTED                                                                                                  PEDIATRIC CASES
+ IN PUBLIC HAD                                               *Rate excludes events that occurred in a medical                        Overall Cases                                           63.2%
+ A BYSTANDER                                                      location and/or were witnessed by a 911        36.8%                                                                              Male
+ APPLIED AED                                                                          Responder
+                                                                                                                     Female
+*Rate excludes events that occurred in a private setting
+        and/or were witnessed by a 911 Responder
+
+WHO WITNESSED THE ARREST                                  LOCATION OF ARREST                                   NON-TRAUMATIC ETIOLOGY                                    NON-TRAUMATIC ETIOLOGY
+                                                                                                                                ADULTS                                                  PEDIATRIC
+     911                Unwitnessed
+Responder                   50.2%                         Public        Residential                            Respiratory/Asphyxia                                       Drowning/                 Respiratory/
+                                                          Setting         Setting                              Drug Overdose 9.1%                                        Submersion                     Asphyxia
+   12.3%                                                  18.0%            71.3%                                                                                                                               39.2
+                                                                                                                             5.3%                                                  8.5%
+
+Bystander                                                 Nursing                                              Exsanguination/                                           Drug Overdose
+  37.5%                                                    Home                                                    Hemorrhage                                                          4.3%
+                                                           10.7%                                                               0.7%
+                                                                                                                                                                                  SIDS
+                                                                                                                    Other            Presumed Cardiac Etiology                   2.5%                     Presumed
+                                                                                                                      0.6%                                        83.8%                                      Cardiac
+                                                                                                                                                                                   Other                     Etiology
+                                                                                                               Drowning                                                              1.5%                      43.9%
+                                                                                                                      0.5%
+
+More information is available at https://mycares.net                                  @CARESRegistry                                 Cardiac Arrest Registry to Enhance Survival (CARES)
+                Cardiac Arrest Registry to
+                 Enhance Survival (CARES)
+
+CARES CASE DEFINITION
+
+An out-of-hospital cardiac arrest (OHCA) not caused by a traumatic event, where 911 responders
+attempt to resuscitate the person using CPR or a defibrillator. This includes patients who receive an
+AED (automated external defibrillator) shock by a bystander before the 911 responders arrive.
+
+                BYSTANDER
+
+                      A person who is not part of the 911 response team and does not respond to the emergency in an
+                      official capacity.
+
+ 911 RESPONDER
+
+  Emergency personnel who respond to a 911 call in an official capacity (i.e. First Responder or
+  transport EMS).
+
+BYSTANDER CPR RATE
+
+The percentage of people who received CPR from a bystander after experiencing an out-of-hospital
+cardiac arrest that was not caused by a traumatic event. This rate excludes events that occurred in a
+medical location and/or were witnessed by a 911 Responder.
+
+PUBLIC BYSTANDER AED RATE
+
+The percentage of people who had an AED applied by a bystander following their arrest in a public
+location. This rate excludes events that occurred in a private setting and/or were witnessed by a 911
+Responder.
+
+Survival Rates
+
+OVERALL SURVIVAL
+
+     The percentage of people who survived among all CARES cases.
+
+RISK-ADJUSTED SURVIVAL
+
+     Risk-adjusted survival is a survival rate modified to account for various factors that may influence the outcome. This
+     includes age, race/ethnicity, etiology of arrest, witnessed status, location of arrest, initial OHCA rhythm, bystander
+     CPR, and whether the arrest was a 9-1-1 witnessed OHCA.
+
+BYSTANDER WITNESSED SURVIVAL
+
+     The percentage of people who survived among the subset of CARES cases that were witnessed by a bystander.
+
+UNWITNESSED SURVIVAL
+
+     The percentage of people who survived among the subset of CARES cases that were unwitnessed.
+
+UTSTEIN SURVIVAL
+
+     The percentage of people who survived among the subset of CARES cases that were both witnessed by a bystander
+     and presented with a shockable rhythm.
+
+UTSTEIN BYSTANDER SURVIVAL
+
+     The percentage of people who survived among the subset of CARES cases that were witnessed by a bystander,
+     presented with a shockable rhythm, and received some bystander intervention (CPR and/or AED application).
+
+CARES DATA DICTIONARY  2024 CARES ANNUAL REPORT                       WATCH CARES: A LIFE SAVING MISSION
+
+More information is available at https://mycares.net  @CARESRegistry  Cardiac Arrest Registry to Enhance Survival (CARES)
+

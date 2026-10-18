@@ -1,0 +1,334 @@
+{
+  "$schema": "mayday.protocol.v2",
+  "id": "cpr_adult",
+  "version": "2025.3.0",
+  "title": "CPR",
+  "short": "CPR",
+  "ageGroup": "adult",
+  "icon": "heartbeat",
+  "care": "ems_stay",
+  "entry": "responsive",
+  "interrupts": [
+    {
+      "intent": "aed_here",
+      "goto": "aed_on"
+    },
+    {
+      "intent": "vomiting",
+      "goto": "vomit"
+    },
+    {
+      "intent": "breathing",
+      "goto": "@recovery_position",
+      "onlyFrom": [
+        "compressions"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "id": "responsive",
+      "kind": "ask",
+      "slot": "conscious",
+      "text": "Do they respond?",
+      "sub": "Tap both shoulders. Shout.",
+      "say": [
+        "Tap both shoulders hard and shout.",
+        "Do they respond?"
+      ],
+      "visual": "tap-shout",
+      "choices": [
+        {
+          "id": "no",
+          "label": "No",
+          "value": "false",
+          "next": "breathing",
+          "intents": [
+            "no",
+            "unresponsive"
+          ]
+        },
+        {
+          "id": "yes",
+          "label": "Yes",
+          "value": "true",
+          "next": "responsive_end",
+          "intents": [
+            "yes",
+            "responsive"
+          ]
+        }
+      ],
+      "source": "aha2025-highlights",
+      "quote": "Recognition and Emergency Activation",
+      "verified": true
+    },
+    {
+      "id": "breathing",
+      "kind": "ask",
+      "slot": "breathing",
+      "text": "Breathing normally?",
+      "sub": "Gasping is not breathing.",
+      "say": [
+        "Watch their chest.",
+        "Gasping is not breathing.",
+        "Are they breathing normally?"
+      ],
+      "visual": "check-breathing",
+      "choices": [
+        {
+          "id": "no",
+          "label": "No or gasping",
+          "value": "abnormal",
+          "next": "send_aed",
+          "intents": [
+            "no",
+            "not_breathing"
+          ]
+        },
+        {
+          "id": "yes",
+          "label": "Yes",
+          "value": "normal",
+          "next": "@recovery_position",
+          "intents": [
+            "yes",
+            "breathing"
+          ]
+        }
+      ],
+      "source": "aha2025-highlights",
+      "quote": "The No-No-Go framework is reiterated as an effective method for recognizing OHCA.",
+      "verified": true
+    },
+    {
+      "id": "send_aed",
+      "kind": "ask",
+      "slot": "others_present",
+      "text": "Send for an AED",
+      "sub": "Point at one person.",
+      "say": [
+        "Point at one person.",
+        "Say: you, bring the A E D."
+      ],
+      "visual": "point",
+      "timeoutS": 8,
+      "timeoutNext": "position",
+      "choices": [
+        {
+          "id": "sent",
+          "label": "Someone went",
+          "value": "true",
+          "next": "position",
+          "intents": [
+            "next",
+            "yes"
+          ]
+        },
+        {
+          "id": "alone",
+          "label": "I'm alone",
+          "value": "false",
+          "next": "position",
+          "intents": [
+            "alone",
+            "no"
+          ]
+        }
+      ],
+      "source": "aha2025-highlights",
+      "quote": "A simplified visual aid for lay rescuers emphasizes early activation of the EMS system and obtaining an automated external defibrillator in addition to initiation of chest compressions.",
+      "verified": true
+    },
+    {
+      "id": "position",
+      "kind": "do",
+      "text": "Flat on the floor",
+      "sub": "On their back. Kneel at the chest.",
+      "say": [
+        "Lay them flat on their back, on the floor.",
+        "Kneel beside their chest."
+      ],
+      "visual": "position",
+      "next": "hands",
+      "source": "aha2025-highlights",
+      "quote": "For adult cardiac arrest, rescuers should perform chest compressions with the patient on a firm surface and with the patient's torso at approximately the level of the rescuer's knees.",
+      "verified": true
+    },
+    {
+      "id": "hands",
+      "kind": "do",
+      "text": "Hands on the chest",
+      "sub": "Center of the chest. Arms straight.",
+      "say": [
+        "Heel of one hand on the center of the chest.",
+        "Other hand on top. Arms straight."
+      ],
+      "visual": "hands-adult",
+      "next": "breaths_q",
+      "source": "aha2025-part7",
+      "quote": null,
+      "verified": false,
+      "note": "Not yet quoted. Confirm the 2025 Part 7 hand-position sentence (heel of one hand, center of the chest / lower half of the sternum) in a browser."
+    },
+    {
+      "id": "breaths_q",
+      "kind": "ask",
+      "slot": "rescue_breaths",
+      "text": "Trained in rescue breaths?",
+      "sub": "If not, hands only works.",
+      "say": [
+        "Are you trained and willing to give breaths?",
+        "If not, hands only."
+      ],
+      "timeoutS": 6,
+      "timeoutNext": "compressions",
+      "choices": [
+        {
+          "id": "yes",
+          "label": "Yes",
+          "value": "true",
+          "next": "compressions",
+          "intents": [
+            "yes"
+          ]
+        },
+        {
+          "id": "no",
+          "label": "Hands only",
+          "value": "false",
+          "next": "compressions",
+          "intents": [
+            "no"
+          ]
+        }
+      ],
+      "source": "aha2025-highlights",
+      "quote": "It is reasonable for lay rescuers and health care professionals to perform CPR with cycles of 30 compressions followed by 2 breaths before placement of an advanced airway. [...] Telecommunicators [...] are to guide lay rescuers to use Hands-Only CPR for adults.",
+      "verified": true
+    },
+    {
+      "id": "compressions",
+      "kind": "cpr",
+      "text": "Push hard and fast",
+      "sub": "About 2 inches. Let it come back up.",
+      "say": [
+        "Push hard and fast. Follow the beat."
+      ],
+      "resumeSay": [
+        "Back to compressions. Now."
+      ],
+      "visual": "hands-adult",
+      "ratio": "fromSlot",
+      "depthSay": "Push about two inches deep.",
+      "reminders": [
+        "Push hard. Push fast.",
+        "Has anyone found an A E D?",
+        "Center of the chest.",
+        "Let the chest come all the way up.",
+        "Good. Keep going."
+      ],
+      "breathsSay": [
+        "Two breaths.",
+        "Tilt the head. Lift the chin.",
+        "Pinch the nose. Breathe.",
+        "Breathe."
+      ],
+      "swapEveryS": 120,
+      "aedNext": "aed_on",
+      "source": "aha2025-part7",
+      "quote": "During manual CPR, rescuers should perform chest compressions to a depth of at least 2 inches, or 5 cm, for an average adult while avoiding excessive chest compression depths (greater than 2.4 inches, or 6cm). [...] rescuers perform chest compressions at a rate of 100 to 120/min.",
+      "verified": true
+    },
+    {
+      "id": "aed_on",
+      "kind": "do",
+      "text": "Turn the AED on",
+      "sub": "Then do what it says.",
+      "say": [
+        "Keep pushing while someone opens it.",
+        "Turn it on. Follow its voice."
+      ],
+      "visual": "aed",
+      "next": "aed_pads",
+      "log": "AED arrived",
+      "source": "aha2025-highlights",
+      "quote": "Early high-quality CPR and prompt defibrillation are the most important interventions associated with improved outcomes in adult cardiac arrest.",
+      "verified": true
+    },
+    {
+      "id": "aed_pads",
+      "kind": "do",
+      "text": "Pads on bare skin",
+      "sub": "A bra can be moved aside.",
+      "say": [
+        "Bare the chest. Pads where the pictures show.",
+        "You can move a bra aside. No need to remove it."
+      ],
+      "visual": "aed-pads",
+      "next": "aed_clear",
+      "source": "aha2025-highlights",
+      "quote": "When placing pads for defibrillation for an adult in cardiac arrest, it might be reasonable to adjust the position of a bra instead of removing it.",
+      "verified": true
+    },
+    {
+      "id": "aed_clear",
+      "kind": "do",
+      "text": "Hands off",
+      "sub": "While it analyzes or shocks.",
+      "say": [
+        "Hands off while it analyzes.",
+        "If it says shock, everyone stand clear."
+      ],
+      "visual": "aed",
+      "next": "compressions",
+      "action": "Shock done or none",
+      "source": "aha2025-part7",
+      "quote": null,
+      "verified": false,
+      "note": "Not yet quoted. Confirm the 2025 Part 7 AED sequence (follow prompts, no one touching during analysis/shock, resume compressions immediately) in a browser."
+    },
+    {
+      "id": "vomit",
+      "kind": "do",
+      "text": "Roll them to the side",
+      "sub": "Let it drain. Then back.",
+      "say": [
+        "Roll them onto their side to drain it.",
+        "Wipe the mouth. Roll back. Keep pushing."
+      ],
+      "visual": "recovery",
+      "next": "compressions",
+      "log": "Vomiting, cleared",
+      "source": "medlineplus-unconscious",
+      "quote": null,
+      "verified": false,
+      "note": "MedlinePlus says to roll the whole body to the side if the person vomits; the fetch tool paraphrased it, so the exact sentence still needs copying from the page."
+    },
+    {
+      "id": "responsive_end",
+      "kind": "end",
+      "text": "Stay with them",
+      "sub": "Watch their breathing.",
+      "say": [
+        "They're responding. Don't start compressions.",
+        "Stay with them. Watch their breathing."
+      ],
+      "visual": "check-breathing",
+      "choices": [
+        {
+          "id": "stopped",
+          "label": "Stopped breathing",
+          "next": "breathing",
+          "intents": [
+            "not_breathing",
+            "unresponsive"
+          ]
+        }
+      ],
+      "source": "medlineplus-unconscious",
+      "quote": "Check the person's airway, breathing, and pulse frequently. If necessary, begin CPR.",
+      "verified": true
+    }
+  ]
+}

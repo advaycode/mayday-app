@@ -1,0 +1,170 @@
+{
+  "$schema": "mayday.protocol.v2",
+  "id": "bleeding",
+  "version": "2025.3.0",
+  "title": "Severe bleeding",
+  "short": "Bleeding",
+  "ageGroup": "any",
+  "icon": "drop",
+  "care": "trauma_stay",
+  "entry": "where",
+  "interrupts": [
+    { "intent": "unresponsive", "goto": "@cpr_{age_group}#breathing" },
+    { "intent": "not_breathing", "goto": "@cpr_{age_group}#position" }
+  ],
+  "steps": [
+    {
+      "id": "where",
+      "kind": "ask",
+      "slot": "wound_site",
+      "text": "Where is it bleeding?",
+      "sub": "Open clothing to see the wound.",
+      "say": ["Open the clothing. Find where the blood comes from.", "Is it an arm or leg?"],
+      "visual": "find-wound",
+      "choices": [
+        { "id": "limb", "label": "Arm or leg", "value": "limb", "next": "tq_q", "intents": ["limb"] },
+        { "id": "junction", "label": "Neck, armpit, groin", "value": "junctional", "next": "pack", "intents": ["junctional"] },
+        { "id": "torso", "label": "Chest or belly", "value": "torso", "next": "torso", "intents": ["torso"] }
+      ],
+      "source": "acs-stop-the-bleed",
+      "quote": "Find where the victim is bleeding from. Open or remove the clothing so you can see the wound.",
+      "verified": true
+    },
+    {
+      "id": "tq_q",
+      "kind": "ask",
+      "slot": "has_tourniquet",
+      "text": "Have a tourniquet?",
+      "sub": "A real one, from a kit.",
+      "say": ["Do you have a real tourniquet?"],
+      "visual": "tourniquet",
+      "timeoutS": 6,
+      "timeoutNext": "pressure",
+      "choices": [
+        { "id": "yes", "label": "Yes", "value": "true", "next": "tourniquet", "intents": ["yes"] },
+        { "id": "no", "label": "No", "value": "false", "next": "pressure", "intents": ["no"] }
+      ],
+      "source": "acs-stop-the-bleed",
+      "quote": "Apply immediately if life-threatening bleeding is seen from an arm or a leg.",
+      "verified": true
+    },
+    {
+      "id": "tourniquet",
+      "kind": "do",
+      "text": "High and tight",
+      "sub": "2 to 3 inches above. Not on a joint.",
+      "say": ["Two to three inches above the wound.", "Not on the knee or elbow.", "Tighten until the bleeding stops. It will hurt."],
+      "visual": "tourniquet",
+      "next": "tq_time",
+      "action": "Bleeding stopped",
+      "alts": [
+        { "id": "still", "label": "Still bleeding", "next": "tq_second", "intents": ["still_bleeding"] }
+      ],
+      "source": "acs-stop-the-bleed",
+      "quote": "Place 2 to 3 inches above the bleeding wound (higher on the arm or leg). BUT... DO NOT apply directly over the knee or elbow joints. [...] Tighten the tourniquet until bleeding stops",
+      "verified": true
+    },
+    {
+      "id": "tq_second",
+      "kind": "do",
+      "text": "Add a second one",
+      "sub": "Just above the first.",
+      "say": ["Put a second tourniquet just above the first.", "Tighten it the same way."],
+      "visual": "tourniquet",
+      "next": "tq_time",
+      "action": "Bleeding stopped",
+      "source": "acs-stop-the-bleed",
+      "quote": "If the bleeding is not stopped with one tourniquet and it is as tight as you can get it, place a second one, if available, just above the first and tighten as before",
+      "verified": true
+    },
+    {
+      "id": "tq_time",
+      "kind": "end",
+      "text": "Never loosen it",
+      "sub": "Time noted for paramedics.",
+      "say": ["I've noted the time.", "Never loosen it. Only paramedics take it off."],
+      "visual": "tourniquet",
+      "log": "Tourniquet applied",
+      "choices": [
+        { "id": "still", "label": "Bleeding again", "next": "tq_second", "intents": ["still_bleeding"] }
+      ],
+      "source": "acs-stop-the-bleed",
+      "quote": "Note the time the tourniquet was applied. [...] Periodically loosening the tourniquet to allow blood flow to the injured extremity. Causes unacceptable additional blood loss--DO NOT LOOSEN",
+      "verified": true
+    },
+    {
+      "id": "pressure",
+      "kind": "hold",
+      "text": "Press hard",
+      "sub": "Both hands, straight down. Don't let go.",
+      "say": ["Cover the wound with cloth.", "Push down with both hands, as hard as you can.", "Don't lift to look."],
+      "visual": "pressure",
+      "remindEveryS": 30,
+      "reminders": ["Keep pressing. Don't let up.", "Don't lift to check. Keep the pressure on."],
+      "choices": [
+        { "id": "deep", "label": "Soaking through", "next": "pack", "intents": ["still_bleeding"] }
+      ],
+      "log": "Direct pressure started",
+      "source": "acs-stop-the-bleed",
+      "quote": "Apply continuous pressure with both hands directly on top of the bleeding wound. Push down as hard as you can. Hold pressure until relieved by medical responders. Don't release pressure to check the wound.",
+      "verified": true
+    },
+    {
+      "id": "pack",
+      "kind": "do",
+      "text": "Pack the wound",
+      "sub": "Stuff cloth deep in. Then press.",
+      "say": ["Stuff gauze or clean cloth deep into the wound.", "Pack it tight. Then press hard with both hands."],
+      "visual": "pack",
+      "next": "pack_hold",
+      "action": "Packed",
+      "source": "acs-stop-the-bleed",
+      "quote": "Pack the wound: Hemostatic dressing, OR Gauze roll, OR Clean cloth. Stuff right into the wound and directly onto the bleeding site. [...] Quickly apply and hold pressure directly on the packed wound until relieved by medical responders.",
+      "verified": true
+    },
+    {
+      "id": "pack_hold",
+      "kind": "hold",
+      "text": "Press on the packing",
+      "sub": "Hard, both hands, until help arrives.",
+      "say": ["Now press down hard on the packing.", "Hold it until paramedics take over."],
+      "visual": "pressure",
+      "remindEveryS": 30,
+      "reminders": ["Keep pressing. Don't let up."],
+      "choices": [
+        { "id": "more", "label": "Still soaking", "next": "pack_more", "intents": ["still_bleeding"] }
+      ],
+      "source": "acs-stop-the-bleed",
+      "quote": "Quickly apply and hold pressure directly on the packed wound until relieved by medical responders.",
+      "verified": true
+    },
+    {
+      "id": "pack_more",
+      "kind": "do",
+      "text": "Pack more on top",
+      "sub": "Then press harder.",
+      "say": ["Pack more cloth on top of the first.", "Then press even harder."],
+      "visual": "pack",
+      "next": "pack_hold",
+      "action": "Packed",
+      "source": "acs-stop-the-bleed",
+      "quote": "If initial packing and direct pressure fail to stop the bleeding, pack a second gauze on top of the first and reapply pressure using increased force.",
+      "verified": true
+    },
+    {
+      "id": "torso",
+      "kind": "hold",
+      "text": "Press and wait",
+      "sub": "Tell 911: chest or belly wound.",
+      "say": ["Press on any wound you can see.", "Tell 911 the wound is in the chest or belly."],
+      "visual": "pressure",
+      "remindEveryS": 45,
+      "reminders": ["Keep pressing. Help is coming."],
+      "choices": [],
+      "log": "Torso wound, possible internal bleeding",
+      "source": "acs-stop-the-bleed",
+      "quote": "This bleeding CANNOT be stopped outside the hospital. These victims need rapid transport to a trauma center. Identify these patients to EMS providers when they arrive.",
+      "verified": true
+    }
+  ]
+}

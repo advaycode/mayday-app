@@ -1,0 +1,8 @@
+{
+  "intakeCases": 47,
+  "protocolAccuracy": 1,
+  "slotAccuracy": 1,
+  "inProtocolCases": 24,
+  "intentAccuracy": 1,
+  "failures": []
+}

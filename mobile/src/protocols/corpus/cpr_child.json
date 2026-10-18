@@ -1,0 +1,336 @@
+{
+  "$schema": "mayday.protocol.v2",
+  "id": "cpr_child",
+  "version": "2025.3.0",
+  "title": "CPR",
+  "short": "CPR",
+  "ageGroup": "child",
+  "icon": "heartbeat",
+  "care": "ems_stay",
+  "entry": "responsive",
+  "interrupts": [
+    {
+      "intent": "aed_here",
+      "goto": "aed_on"
+    },
+    {
+      "intent": "vomiting",
+      "goto": "vomit"
+    },
+    {
+      "intent": "breathing",
+      "goto": "@recovery_position",
+      "onlyFrom": [
+        "compressions"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "id": "responsive",
+      "kind": "ask",
+      "slot": "conscious",
+      "text": "Do they respond?",
+      "sub": "Tap the shoulders. Shout.",
+      "say": [
+        "Tap their shoulders and shout.",
+        "Do they respond?"
+      ],
+      "visual": "tap-shout",
+      "choices": [
+        {
+          "id": "no",
+          "label": "No",
+          "value": "false",
+          "next": "breathing",
+          "intents": [
+            "no",
+            "unresponsive"
+          ]
+        },
+        {
+          "id": "yes",
+          "label": "Yes",
+          "value": "true",
+          "next": "responsive_end",
+          "intents": [
+            "yes",
+            "responsive"
+          ]
+        }
+      ],
+      "source": "aha2025-highlights",
+      "quote": "Recognition and Emergency Activation",
+      "verified": true
+    },
+    {
+      "id": "breathing",
+      "kind": "ask",
+      "slot": "breathing",
+      "text": "Breathing normally?",
+      "sub": "Gasping is not breathing.",
+      "say": [
+        "Watch their chest.",
+        "Gasping is not breathing.",
+        "Are they breathing normally?"
+      ],
+      "visual": "check-breathing",
+      "choices": [
+        {
+          "id": "no",
+          "label": "No or gasping",
+          "value": "abnormal",
+          "next": "send_aed",
+          "intents": [
+            "no",
+            "not_breathing"
+          ]
+        },
+        {
+          "id": "yes",
+          "label": "Yes",
+          "value": "normal",
+          "next": "@recovery_position",
+          "intents": [
+            "yes",
+            "breathing"
+          ]
+        }
+      ],
+      "source": "aha2025-highlights",
+      "quote": "The No-No-Go framework is reiterated as an effective method for recognizing OHCA.",
+      "verified": true
+    },
+    {
+      "id": "send_aed",
+      "kind": "ask",
+      "slot": "others_present",
+      "text": "Send for an AED",
+      "sub": "Point at one person.",
+      "say": [
+        "Point at one person.",
+        "Say: you, bring the A E D."
+      ],
+      "visual": "point",
+      "timeoutS": 8,
+      "timeoutNext": "position",
+      "choices": [
+        {
+          "id": "sent",
+          "label": "Someone went",
+          "value": "true",
+          "next": "position",
+          "intents": [
+            "next",
+            "yes"
+          ]
+        },
+        {
+          "id": "alone",
+          "label": "I'm alone",
+          "value": "false",
+          "next": "position",
+          "intents": [
+            "alone",
+            "no"
+          ]
+        }
+      ],
+      "source": "aha2025-highlights",
+      "quote": "A simplified visual aid for lay rescuers emphasizes early activation of the EMS system and obtaining an automated external defibrillator in addition to initiation of chest compressions.",
+      "verified": true
+    },
+    {
+      "id": "position",
+      "kind": "do",
+      "text": "Flat on a firm surface",
+      "sub": "On their back.",
+      "say": [
+        "Lay them flat on their back, on something firm."
+      ],
+      "visual": "position",
+      "next": "hands",
+      "source": "aha2025-peds",
+      "quote": null,
+      "verified": false,
+      "note": "Firm-surface positioning is in the 2025 adult text; confirm the pediatric wording."
+    },
+    {
+      "id": "hands",
+      "kind": "do",
+      "text": "One or two hands",
+      "sub": "Center of the chest.",
+      "say": [
+        "One or two hands on the center of the chest.",
+        "Use what it takes to push deep enough."
+      ],
+      "visual": "hands-child",
+      "next": "breaths_q",
+      "source": "aha2025-peds",
+      "quote": null,
+      "verified": false,
+      "note": "Child compressions with one or two hands: long-standing AHA teaching, not yet confirmed against the 2025 text."
+    },
+    {
+      "id": "breaths_q",
+      "kind": "ask",
+      "slot": "rescue_breaths",
+      "text": "Can you give breaths?",
+      "sub": "Children need breaths if you can.",
+      "say": [
+        "Children need breaths if you can.",
+        "Can you give rescue breaths?"
+      ],
+      "timeoutS": 6,
+      "timeoutNext": "compressions",
+      "choices": [
+        {
+          "id": "yes",
+          "label": "Yes",
+          "value": "true",
+          "next": "compressions",
+          "intents": [
+            "yes"
+          ]
+        },
+        {
+          "id": "no",
+          "label": "Hands only",
+          "value": "false",
+          "next": "compressions",
+          "intents": [
+            "no"
+          ]
+        }
+      ],
+      "source": "aha2025-highlights",
+      "quote": "they are to guide lay rescuers to use Hands-Only CPR for adults and conventional CPR, including breaths, for children.",
+      "verified": true
+    },
+    {
+      "id": "compressions",
+      "kind": "cpr",
+      "text": "Push hard and fast",
+      "sub": "A third of the chest depth.",
+      "say": [
+        "Push hard and fast. Follow the beat."
+      ],
+      "resumeSay": [
+        "Back to compressions. Now."
+      ],
+      "visual": "hands-child",
+      "ratio": "fromSlot",
+      "depthSay": "Push about one third of the chest depth.",
+      "reminders": [
+        "Push hard. Push fast.",
+        "Has anyone found an A E D?",
+        "Center of the chest.",
+        "Let the chest come all the way up.",
+        "Good. Keep going."
+      ],
+      "breathsSay": [
+        "Two breaths.",
+        "Tilt the head. Lift the chin.",
+        "Pinch the nose. Breathe.",
+        "Breathe."
+      ],
+      "swapEveryS": 120,
+      "aedNext": "aed_on",
+      "source": "aha2025-peds",
+      "quote": null,
+      "verified": false,
+      "note": "Rate 100 to 120 per minute is confirmed for adults (aha2025-part7). Child depth (about one third of the chest, about 2 inches) and the 30:2 lay ratio for children still need confirming against the 2025 pediatric text."
+    },
+    {
+      "id": "aed_on",
+      "kind": "do",
+      "text": "Turn the AED on",
+      "sub": "Child pads if it has them.",
+      "say": [
+        "Keep pushing while someone opens it.",
+        "Turn it on. Follow its voice."
+      ],
+      "visual": "aed",
+      "next": "aed_pads",
+      "log": "AED arrived",
+      "source": "aha2025-peds",
+      "quote": null,
+      "verified": false,
+      "note": "Pediatric pads or attenuator preference; confirm the 2025 pediatric wording."
+    },
+    {
+      "id": "aed_pads",
+      "kind": "do",
+      "text": "Pads on bare skin",
+      "sub": "Where the pictures show.",
+      "say": [
+        "Bare the chest. Pads where the pictures show."
+      ],
+      "visual": "aed-pads",
+      "next": "aed_clear",
+      "source": "aha2025-peds",
+      "quote": null,
+      "verified": false,
+      "note": "Pediatric pad placement; confirm the 2025 pediatric wording."
+    },
+    {
+      "id": "aed_clear",
+      "kind": "do",
+      "text": "Hands off",
+      "sub": "While it analyzes or shocks.",
+      "say": [
+        "Hands off while it analyzes.",
+        "If it says shock, everyone stand clear."
+      ],
+      "visual": "aed",
+      "next": "compressions",
+      "action": "Shock done or none",
+      "source": "aha2025-part7",
+      "quote": null,
+      "verified": false,
+      "note": "Standard AED sequence; the 2025 sentence has not been read first-hand."
+    },
+    {
+      "id": "vomit",
+      "kind": "do",
+      "text": "Roll them to the side",
+      "sub": "Let it drain. Then back.",
+      "say": [
+        "Roll them onto their side to drain it.",
+        "Wipe the mouth. Roll back. Keep pushing."
+      ],
+      "visual": "recovery",
+      "next": "compressions",
+      "log": "Vomiting, cleared",
+      "source": "medlineplus-unconscious",
+      "quote": null,
+      "verified": false,
+      "note": "MedlinePlus says to roll the whole body to the side if the person vomits; copy the exact sentence from the page."
+    },
+    {
+      "id": "responsive_end",
+      "kind": "end",
+      "text": "Stay with them",
+      "sub": "Watch their breathing.",
+      "say": [
+        "They're responding. Don't start compressions.",
+        "Stay with them. Watch their breathing."
+      ],
+      "visual": "check-breathing",
+      "choices": [
+        {
+          "id": "stopped",
+          "label": "Stopped breathing",
+          "next": "breathing",
+          "intents": [
+            "not_breathing",
+            "unresponsive"
+          ]
+        }
+      ],
+      "source": "medlineplus-unconscious",
+      "quote": "Check the person's airway, breathing, and pulse frequently. If necessary, begin CPR.",
+      "verified": true
+    }
+  ]
+}

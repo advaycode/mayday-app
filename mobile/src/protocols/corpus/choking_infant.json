@@ -1,0 +1,167 @@
+{
+  "$schema": "mayday.protocol.v2",
+  "id": "choking_infant",
+  "version": "2025.3.0",
+  "title": "Infant choking",
+  "short": "Choking",
+  "ageGroup": "infant",
+  "icon": "baby",
+  "care": "ems_stay",
+  "entry": "severe",
+  "interrupts": [
+    {
+      "intent": "unresponsive",
+      "goto": "@cpr_infant#position"
+    },
+    {
+      "intent": "object_out",
+      "goto": "out_end"
+    }
+  ],
+  "steps": [
+    {
+      "id": "severe",
+      "kind": "ask",
+      "slot": "severe_fbao",
+      "text": "Can the baby cry?",
+      "say": [
+        "Can the baby cry, or cough?"
+      ],
+      "visual": "choking-sign",
+      "choices": [
+        {
+          "id": "no",
+          "label": "No",
+          "value": "true",
+          "next": "back_blows",
+          "intents": [
+            "no",
+            "not_breathing",
+            "choking"
+          ]
+        },
+        {
+          "id": "yes",
+          "label": "Yes, coughing",
+          "value": "false",
+          "next": "cough_end",
+          "intents": [
+            "yes",
+            "coughing"
+          ]
+        }
+      ],
+      "source": "aha2025-highlights",
+      "quote": "Check for signs of severe FBAO: Weak or absence of cough / Unable to speak / Change in colour (cyanosis) / Altered mental status / Apnea",
+      "verified": true,
+      "sub": "Or cough?"
+    },
+    {
+      "id": "back_blows",
+      "kind": "do",
+      "text": "5 back blows",
+      "sub": "Face down on your forearm. Head low.",
+      "say": [
+        "Baby face down along your forearm.",
+        "Hold the jaw. Head lower than the chest.",
+        "Five firm blows between the shoulder blades."
+      ],
+      "visual": "infant-back-blows",
+      "next": "chest_thrusts",
+      "action": "Five done",
+      "alts": [
+        {
+          "id": "out",
+          "label": "It came out",
+          "next": "out_end",
+          "intents": [
+            "object_out"
+          ]
+        }
+      ],
+      "source": "aha2025-highlights",
+      "quote": "For infants with severe FBAO, repeated cycles of 5 back blows alternating with 5 chest thrusts should be performed until the object is expelled or the infant becomes unresponsive.",
+      "verified": true,
+      "note": "The count and order are confirmed. The forearm, jaw and head-low positioning is standard infant teaching that should also be confirmed against the 2025 pediatric text."
+    },
+    {
+      "id": "chest_thrusts",
+      "kind": "do",
+      "text": "5 chest thrusts",
+      "sub": "Face up. Heel of one hand.",
+      "say": [
+        "Turn the baby face up, head low.",
+        "Heel of one hand, center of the chest.",
+        "Five firm chest thrusts."
+      ],
+      "visual": "infant-chest-thrusts",
+      "next": "back_blows",
+      "action": "Five done",
+      "alts": [
+        {
+          "id": "out",
+          "label": "It came out",
+          "next": "out_end",
+          "intents": [
+            "object_out"
+          ]
+        }
+      ],
+      "source": "aha2025-highlights",
+      "quote": "Abdominal thrusts are not recommended for infants, given the potential to cause abdominal organ injury. The heel-of-1-hand technique for chest thrusts is now recommended for infants with severe FBAO.",
+      "verified": true
+    },
+    {
+      "id": "cough_end",
+      "kind": "end",
+      "text": "Let the baby cough",
+      "sub": "Stay close.",
+      "say": [
+        "Let the baby keep coughing.",
+        "If it gets weak or silent, tell me."
+      ],
+      "visual": "choking-sign",
+      "choices": [
+        {
+          "id": "worse",
+          "label": "Weak or silent",
+          "next": "back_blows",
+          "intents": [
+            "worse",
+            "not_breathing",
+            "choking"
+          ]
+        }
+      ],
+      "source": "aha2025-highlights",
+      "quote": "Encourage cough. Continue to check for signs of severe FBAO.",
+      "verified": true
+    },
+    {
+      "id": "out_end",
+      "kind": "end",
+      "text": "Stay with the baby",
+      "sub": "Watch the breathing.",
+      "say": [
+        "Good. Stay with the baby.",
+        "Watch the breathing until help arrives."
+      ],
+      "visual": "check-breathing",
+      "log": "Object expelled",
+      "choices": [
+        {
+          "id": "limp",
+          "label": "Baby went limp",
+          "next": "@cpr_infant#position",
+          "intents": [
+            "unresponsive",
+            "not_breathing"
+          ]
+        }
+      ],
+      "source": "aha2025-highlights",
+      "quote": "If object is expelled, continue to monitor until advanced care arrives.",
+      "verified": true
+    }
+  ]
+}

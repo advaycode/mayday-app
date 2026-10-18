@@ -1,0 +1,403 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.4 2390de5a",
+  "osm3s": {
+    "timestamp_osm_base": "2026-10-18T19:03:21Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 1034474766,
+  "lat": 28.1441266,
+  "lon": -82.3129040,
+  "tags": {
+    "amenity": "doctors",
+    "name": "Night Owl Pediatric Urgent Care",
+    "source": "survey"
+  }
+},
+{
+  "type": "node",
+  "id": 1921826074,
+  "lat": 27.9166880,
+  "lon": -82.7265660,
+  "tags": {
+    "addr:city": "Clearwater",
+    "addr:country": "US",
+    "addr:housenumber": "2650",
+    "addr:postcode": "33760",
+    "addr:state": "FL",
+    "addr:street": "Roosevelt Boulevard",
+    "amenity": "clinic",
+    "healthcare": "clinic",
+    "name": "AFC Urgent Care Clearwater",
+    "operator": "AFC Urgent Care",
+    "operator:type": "private",
+    "operator:wikidata": "Q110552174",
+    "urgent_care": "yes",
+    "website": "https://www.afcurgentcare.com/clearwater/"
+  }
+},
+{
+  "type": "node",
+  "id": 2851326037,
+  "lat": 27.8396768,
+  "lon": -82.7653717,
+  "tags": {
+    "amenity": "clinic",
+    "healthcare": "clinic",
+    "name": "Statone Urgent Care Center"
+  }
+},
+{
+  "type": "node",
+  "id": 3708426835,
+  "lat": 27.8396295,
+  "lon": -82.7427293,
+  "tags": {
+    "amenity": "clinic",
+    "healthcare": "clinic",
+    "name": "SandBay Primary and Urgent Care"
+  }
+},
+{
+  "type": "node",
+  "id": 6611038472,
+  "lat": 27.8346427,
+  "lon": -82.3280941,
+  "tags": {
+    "addr:city": "Riverview",
+    "addr:housenumber": "11406",
+    "addr:postcode": "33569",
+    "addr:state": "FL",
+    "addr:street": "US 301",
+    "amenity": "clinic",
+    "contact:website": "https://www.fasttrackurgentcare.com/",
+    "healthcare": "clinic",
+    "healthcare:speciality": "clinic",
+    "name": "Fast Track Urgent Care Center",
+    "opening_hours": "Mo-Su 08:00-20:00",
+    "phone": "+1-813-925-1903",
+    "website": "https://www.fasttrackurgentcare.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 7006964185,
+  "lat": 27.7787086,
+  "lon": -82.7145104,
+  "tags": {
+    "amenity": "clinic",
+    "healthcare": "clinic",
+    "name": "AFC Urgent Care"
+  }
+},
+{
+  "type": "node",
+  "id": 8295702490,
+  "lat": 28.0076392,
+  "lon": -81.9076873,
+  "tags": {
+    "addr:city": "Lakeland",
+    "addr:housenumber": "3305",
+    "addr:postcode": "33803",
+    "addr:state": "FL",
+    "addr:street": "Bartow Road",
+    "amenity": "clinic",
+    "healthcare": "clinic",
+    "healthcare:speciality": "general",
+    "name": "Sunshine Urgent Care"
+  }
+},
+{
+  "type": "node",
+  "id": 8485988075,
+  "lat": 28.1919480,
+  "lon": -82.6362985,
+  "tags": {
+    "amenity": "clinic",
+    "healthcare": "clinic",
+    "name": "Suncoast Urgent Care"
+  }
+},
+{
+  "type": "node",
+  "id": 9707774417,
+  "lat": 28.2293944,
+  "lon": -82.7323203,
+  "tags": {
+    "amenity": "clinic",
+    "healthcare": "clinic",
+    "name": "BayCare Urgent Care"
+  }
+},
+{
+  "type": "node",
+  "id": 10197366636,
+  "lat": 28.1952425,
+  "lon": -82.5916389,
+  "tags": {
+    "amenity": "clinic",
+    "healthcare": "clinic",
+    "name": "TGH Urgent Care"
+  }
+},
+{
+  "type": "node",
+  "id": 11630804924,
+  "lat": 28.1957200,
+  "lon": -82.7392523,
+  "tags": {
+    "amenity": "clinic",
+    "healthcare": "clinic",
+    "name": "AFC Urgent Care Holiday",
+    "operator": "AFC Urgent Care",
+    "operator:type": "private",
+    "operator:wikidata": "Q110552174",
+    "urgent_care": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 13274233807,
+  "lat": 28.5328726,
+  "lon": -82.5232825,
+  "tags": {
+    "addr:city": "Brooksville",
+    "addr:housenumber": "12220",
+    "addr:postcode": "34613",
+    "addr:state": "FL",
+    "addr:street": "Cortez Boulevard",
+    "amenity": "clinic",
+    "building": "office",
+    "contact:phone": "+1 352 556 5216",
+    "description": "Urgent Care Clinic Entrance",
+    "entrance": "main",
+    "healthcare": "clinic",
+    "healthcare:speciality": "urgent",
+    "name": "Care One of Florida Urgent Care",
+    "smoking": "no",
+    "source": "survey;Bing;https://www.careoneofflorida.com/locations/brooksville/",
+    "website": "https://www.careoneofflorida.com/locations/brooksville/",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 13446942002,
+  "lat": 27.7913627,
+  "lon": -82.7279338,
+  "tags": {
+    "amenity": "clinic",
+    "healthcare": "clinic",
+    "name": "AFC Urgent Care"
+  }
+},
+{
+  "type": "node",
+  "id": 14053152343,
+  "lat": 27.9324022,
+  "lon": -82.5062117,
+  "tags": {
+    "addr:city": "Tampa",
+    "addr:housenumber": "1155",
+    "addr:postcode": "33629",
+    "addr:state": "FL",
+    "addr:street": "South Dale Mabry Highway",
+    "amenity": "clinic",
+    "healthcare": "clinic",
+    "name": "BayCare Urgent Care",
+    "phone": "+1-813-609-3666",
+    "website": "https://baycare.org/locations/b/baycare-urgent-care-south-tampa"
+  }
+},
+{
+  "type": "node",
+  "id": 14060256917,
+  "lat": 27.9437235,
+  "lon": -82.4492110,
+  "tags": {
+    "addr:city": "Tampa",
+    "addr:housenumber": "564",
+    "addr:postcode": "33602",
+    "addr:state": "FL",
+    "addr:street": "Channelside Drive",
+    "amenity": "clinic",
+    "healthcare": "clinic",
+    "name": "TGH Urgent Care",
+    "opening_hours": "Mo-Su 08:00-20:00",
+    "phone": "+1-813-925-1903",
+    "website": "https://www.fasttrackurgentcare.com/locations-and-hours/downtown-on-water-street-tampa/"
+  }
+},
+{
+  "type": "way",
+  "id": 172598205,
+  "center": {
+    "lat": 28.0051331,
+    "lon": -82.5990283
+  },
+  "tags": {
+    "amenity": "clinic",
+    "building": "yes",
+    "healthcare": "clinic",
+    "name": "TLC Urgent Care Center"
+  }
+},
+{
+  "type": "way",
+  "id": 192516445,
+  "center": {
+    "lat": 27.8086621,
+    "lon": -82.7003936
+  },
+  "tags": {
+    "addr:housenumber": "4040",
+    "amenity": "doctors",
+    "building": "yes",
+    "healthcare": "doctor",
+    "height": "11.47",
+    "name": "Your Kid's Urgent Care"
+  }
+},
+{
+  "type": "way",
+  "id": 230876613,
+  "center": {
+    "lat": 27.9572583,
+    "lon": -82.7456263
+  },
+  "tags": {
+    "addr:city": "Clearwater",
+    "addr:country": "US",
+    "addr:postcode": "33764",
+    "addr:state": "FL",
+    "addr:street": "Belcher Road",
+    "amenity": "hospital",
+    "building": "yes",
+    "healthcare": "hospital",
+    "height": "8.32",
+    "name": "BayCare Urgent Care"
+  }
+},
+{
+  "type": "way",
+  "id": 237310002,
+  "center": {
+    "lat": 27.7358268,
+    "lon": -82.7469100
+  },
+  "tags": {
+    "addr:city": "Saint Pete Beach",
+    "addr:housenumber": "6455",
+    "addr:postcode": "33706",
+    "addr:state": "FL",
+    "addr:street": "Gulf Boulevard",
+    "amenity": "clinic",
+    "building": "yes",
+    "building:levels": "1",
+    "healthcare": "clinic",
+    "name": "BayCare Urgent Care"
+  }
+},
+{
+  "type": "way",
+  "id": 493347126,
+  "center": {
+    "lat": 27.7862083,
+    "lon": -82.7281406
+  },
+  "tags": {
+    "addr:city": "Saint Petersburg",
+    "addr:housenumber": "1599",
+    "addr:postcode": "33710",
+    "addr:street": "66th Street North",
+    "amenity": "clinic",
+    "building": "yes",
+    "healthcare": "clinic",
+    "name": "BayCare Urgent Care (Tyrone)"
+  }
+},
+{
+  "type": "way",
+  "id": 734831737,
+  "center": {
+    "lat": 28.0428334,
+    "lon": -82.7085342
+  },
+  "tags": {
+    "amenity": "clinic",
+    "building": "yes",
+    "healthcare": "clinic",
+    "name": "BayCare Urgent Care (Countryside)"
+  }
+},
+{
+  "type": "way",
+  "id": 832398779,
+  "center": {
+    "lat": 28.3317692,
+    "lon": -82.6682018
+  },
+  "tags": {
+    "amenity": "clinic",
+    "building": "yes",
+    "healthcare": "clinic",
+    "name": "MedExpress Urgent Care",
+    "operator": "MedExpress",
+    "operator:wikidata": "Q102183820"
+  }
+},
+{
+  "type": "way",
+  "id": 1046332239,
+  "center": {
+    "lat": 28.1911744,
+    "lon": -82.6299999
+  },
+  "tags": {
+    "amenity": "clinic",
+    "building": "yes",
+    "healthcare": "clinic",
+    "name": "BayCare Urgent Care"
+  }
+},
+{
+  "type": "way",
+  "id": 1547657305,
+  "center": {
+    "lat": 27.8417306,
+    "lon": -82.7947023
+  },
+  "tags": {
+    "amenity": "clinic",
+    "healthcare": "clinic",
+    "name": "AFC Urgent Care",
+    "operator": "AFC Urgent Care",
+    "operator:type": "private",
+    "operator:wikidata": "Q110552174",
+    "urgent_care": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "relation",
+  "id": 10297711,
+  "center": {
+    "lat": 27.8019647,
+    "lon": -82.7279648
+  },
+  "tags": {
+    "amenity": "clinic",
+    "building": "yes",
+    "healthcare": "clinic",
+    "name": "TGH Urgent Care",
+    "opening_hours": "Mo-Fr 08:00-20:00",
+    "type": "multipolygon"
+  }
+}
+
+  ]
+}

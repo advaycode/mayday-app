@@ -1,0 +1,242 @@
+{
+  "$schema": "mayday.protocol.v2",
+  "id": "cpr_infant",
+  "version": "2025.3.0",
+  "title": "Infant CPR",
+  "short": "CPR",
+  "ageGroup": "infant",
+  "icon": "baby",
+  "care": "ems_stay",
+  "entry": "responsive",
+  "interrupts": [
+    {
+      "intent": "aed_here",
+      "goto": "aed_on"
+    },
+    {
+      "intent": "breathing",
+      "goto": "@recovery_position",
+      "onlyFrom": [
+        "compressions"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "id": "responsive",
+      "kind": "ask",
+      "slot": "conscious",
+      "text": "Does the baby respond?",
+      "sub": "Tap the foot. Call out.",
+      "say": [
+        "Tap the bottom of the foot. Call out loud.",
+        "Does the baby respond?"
+      ],
+      "visual": "tap-infant",
+      "choices": [
+        {
+          "id": "no",
+          "label": "No",
+          "value": "false",
+          "next": "breathing",
+          "intents": [
+            "no",
+            "unresponsive"
+          ]
+        },
+        {
+          "id": "yes",
+          "label": "Yes",
+          "value": "true",
+          "next": "responsive_end",
+          "intents": [
+            "yes",
+            "responsive"
+          ]
+        }
+      ],
+      "source": "aha2025-peds",
+      "quote": null,
+      "verified": false,
+      "note": "Infant responsiveness check (tap the foot): long-standing teaching, confirm against the 2025 pediatric text."
+    },
+    {
+      "id": "breathing",
+      "kind": "ask",
+      "slot": "breathing",
+      "text": "Breathing normally?",
+      "sub": "Gasping is not breathing.",
+      "say": [
+        "Watch the chest and belly.",
+        "Gasping is not breathing.",
+        "Is the baby breathing normally?"
+      ],
+      "visual": "check-breathing",
+      "choices": [
+        {
+          "id": "no",
+          "label": "No or gasping",
+          "value": "abnormal",
+          "next": "position",
+          "intents": [
+            "no",
+            "not_breathing"
+          ]
+        },
+        {
+          "id": "yes",
+          "label": "Yes",
+          "value": "normal",
+          "next": "responsive_end",
+          "intents": [
+            "yes",
+            "breathing"
+          ]
+        }
+      ],
+      "source": "aha2025-highlights",
+      "quote": "The No-No-Go framework is reiterated as an effective method for recognizing OHCA.",
+      "verified": true
+    },
+    {
+      "id": "position",
+      "kind": "do",
+      "text": "On a firm, flat surface",
+      "sub": "A table or the floor.",
+      "say": [
+        "Lay the baby on its back on something firm."
+      ],
+      "visual": "position-infant",
+      "next": "hands",
+      "source": "aha2025-peds",
+      "quote": null,
+      "verified": false,
+      "note": "Confirm the 2025 pediatric wording for surface."
+    },
+    {
+      "id": "hands",
+      "kind": "do",
+      "text": "Two thumbs or one hand",
+      "sub": "Thumbs on the center of the chest.",
+      "say": [
+        "Wrap your hands around the chest.",
+        "Two thumbs on the center of the chest.",
+        "Or use the heel of one hand."
+      ],
+      "visual": "hands-infant",
+      "next": "breaths_q",
+      "source": "aha2025-highlights",
+      "quote": "For infants, rescuers should compress the sternum with the heel of 1 hand or using the 2 thumb-encircling hands technique. If the rescuer cannot physically encircle the chest, it is recommended to compress the chest with the heel of 1 hand.",
+      "verified": true
+    },
+    {
+      "id": "breaths_q",
+      "kind": "ask",
+      "slot": "rescue_breaths",
+      "text": "Can you give breaths?",
+      "sub": "Babies need breaths if you can.",
+      "say": [
+        "Babies need breaths if you can.",
+        "Can you give rescue breaths?"
+      ],
+      "timeoutS": 6,
+      "timeoutNext": "compressions",
+      "choices": [
+        {
+          "id": "yes",
+          "label": "Yes",
+          "value": "true",
+          "next": "compressions",
+          "intents": [
+            "yes"
+          ]
+        },
+        {
+          "id": "no",
+          "label": "Hands only",
+          "value": "false",
+          "next": "compressions",
+          "intents": [
+            "no"
+          ]
+        }
+      ],
+      "source": "aha2025-highlights",
+      "quote": "they are to guide lay rescuers to use Hands-Only CPR for adults and conventional CPR, including breaths, for children.",
+      "verified": true
+    },
+    {
+      "id": "compressions",
+      "kind": "cpr",
+      "text": "Push fast",
+      "sub": "A third of the chest depth.",
+      "say": [
+        "Push fast. Follow the beat."
+      ],
+      "resumeSay": [
+        "Back to compressions. Now."
+      ],
+      "visual": "hands-infant",
+      "ratio": "fromSlot",
+      "depthSay": "Push about one third of the chest depth.",
+      "reminders": [
+        "Push fast.",
+        "Has anyone found an A E D?",
+        "Let the chest come all the way up."
+      ],
+      "breathsSay": [
+        "Two small breaths.",
+        "Cover the mouth and nose. Gentle puff.",
+        "Puff."
+      ],
+      "swapEveryS": 120,
+      "aedNext": "aed_on",
+      "source": "aha2025-peds",
+      "quote": null,
+      "verified": false,
+      "note": "Infant depth (one third of the chest, about 1.5 inches), mouth-and-nose breaths and the lay ratio need confirming against the 2025 pediatric text. The technique itself (thumbs or heel of one hand, never two fingers) is confirmed in the hands step."
+    },
+    {
+      "id": "aed_on",
+      "kind": "do",
+      "text": "Turn the AED on",
+      "sub": "Infant or child pads if it has them.",
+      "say": [
+        "Keep pushing while someone opens it.",
+        "Turn it on. Follow its voice."
+      ],
+      "visual": "aed",
+      "next": "compressions",
+      "log": "AED arrived",
+      "source": "aha2025-peds",
+      "quote": null,
+      "verified": false,
+      "note": "Infant AED use and pad choice; confirm the 2025 pediatric wording."
+    },
+    {
+      "id": "responsive_end",
+      "kind": "end",
+      "text": "Stay with the baby",
+      "sub": "Watch the breathing.",
+      "say": [
+        "Stay with the baby. Watch the breathing.",
+        "If it stops, tell me."
+      ],
+      "visual": "check-breathing",
+      "choices": [
+        {
+          "id": "stopped",
+          "label": "Stopped breathing",
+          "next": "breathing",
+          "intents": [
+            "not_breathing",
+            "unresponsive"
+          ]
+        }
+      ],
+      "source": "medlineplus-unconscious",
+      "quote": "Check the person's airway, breathing, and pulse frequently. If necessary, begin CPR.",
+      "verified": true
+    }
+  ]
+}

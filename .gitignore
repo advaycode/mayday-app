@@ -5,3 +5,12 @@ app/android/.gradle/
 app/ios/Pods/
 research/raw/*.pdf
 research/raw/*.html
+
+# Expo app
+mobile/node_modules/
+mobile/dist/
+mobile/.expo/
+research/data/*.pdf
+proxy/node_modules/
+proxy/.dev.vars
+proxy/.wrangler/

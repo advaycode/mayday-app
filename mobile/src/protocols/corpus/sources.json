@@ -1,0 +1,104 @@
+{
+  "$schema": "mayday.sources.v2",
+  "note": "Every protocol step names one source id from this file and carries a quote from it. `method` records how the text was actually obtained, so a reviewer can see which quotes were read first-hand and which came through a search index because the publisher blocks automated access.",
+  "sources": [
+    {
+      "id": "aha2025-highlights",
+      "title": "Highlights of the 2025 American Heart Association Guidelines for CPR and ECC",
+      "publisher": "American Heart Association (Heart & Stroke Foundation of Canada co-branded edition)",
+      "citation": "Del Rios M, Bartos JA, Panchal AR, et al. Part 1: Executive Summary: 2025 American Heart Association Guidelines for Cardiopulmonary Resuscitation and Emergency Cardiovascular Care. Circulation. 2025;152(suppl 2).",
+      "url": "https://cpr.heartandstroke.ca/resource/GuidelinesHighlightsEN2025",
+      "retrieved": "2026-08-23",
+      "method": "local-copy",
+      "localCopy": "research/raw/_highlights2025.txt"
+    },
+    {
+      "id": "aha2025-part7",
+      "title": "Part 7: Adult Basic Life Support. 2025 AHA Guidelines for CPR and ECC",
+      "publisher": "American Heart Association",
+      "citation": "Part 7: Adult Basic Life Support: 2025 American Heart Association Guidelines for Cardiopulmonary Resuscitation and Emergency Cardiovascular Care. Circulation. 2025;152(suppl 2):S448-S478. doi:10.1161/CIR.0000000000001369",
+      "url": "https://cpr.heart.org/en/resuscitation-science/cpr-and-ecc-guidelines/adult-basic-life-support",
+      "retrieved": "2026-10-18",
+      "method": "search-excerpt",
+      "note": "cpr.heart.org and ahajournals.org return HTTP 403 to automated fetches. The rate and depth sentences were read from the search index's copy of the AHA's own Part 7 page. A person must open the page in a browser and confirm before release."
+    },
+    {
+      "id": "aha2025-peds",
+      "title": "Part 8 (Pediatric Basic Life Support). 2025 AHA and AAP Guidelines for CPR and ECC",
+      "publisher": "American Heart Association and American Academy of Pediatrics",
+      "citation": "2025 American Heart Association and American Academy of Pediatrics Guidelines for Cardiopulmonary Resuscitation and Emergency Cardiovascular Care: Pediatric Basic Life Support. Circulation. 2025;152(suppl 2).",
+      "url": "https://cpr.heart.org/en/resuscitation-science/cpr-and-ecc-guidelines",
+      "retrieved": null,
+      "method": "not-retrieved",
+      "note": "Blocked (403). Child and infant depth figures and infant positioning details are long-standing AHA teaching but have NOT been confirmed against the 2025 text. Every step citing this source is verified:false and listed in docs/MEDICAL_SOURCES.md for the CPR-certified reviewer."
+    },
+    {
+      "id": "aha-arc-2024-fa",
+      "title": "Highlights of the 2024 American Heart Association and American Red Cross Guidelines for First Aid",
+      "publisher": "American Heart Association and American Red Cross",
+      "citation": "2024 American Heart Association and American Red Cross Guidelines for First Aid. Circulation. 2024. doi:10.1161/CIR.0000000000001281",
+      "url": "https://cpr.heart.org/en/resuscitation-science/first-aid-guidelines",
+      "retrieved": "2026-08-23",
+      "method": "local-copy",
+      "localCopy": "research/raw/aha2024fa.pdf"
+    },
+    {
+      "id": "arc-burn-cooling",
+      "title": "Scientific Advisory Council Advisory: Burn Cooling",
+      "publisher": "American Red Cross Scientific Advisory Council",
+      "citation": "American Red Cross Scientific Advisory Council. Burn Cooling. Advisory, approved 2019.",
+      "url": "https://www.redcross.org/content/dam/redcross/docs/Burn%20Cooling%E2%80%94ADVISORY.pdf",
+      "retrieved": "2026-10-18",
+      "method": "search-excerpt",
+      "note": "redcross.org returns 403 to automated fetches; the guideline sentences were read from the search index's copy."
+    },
+    {
+      "id": "acs-stop-the-bleed",
+      "title": "Bleeding Control Basic, instructor presentation notes (STOP THE BLEED)",
+      "publisher": "American College of Surgeons",
+      "citation": "American College of Surgeons. Bleeding Control Basic v1.0 course and STOP THE BLEED Course v2.0.",
+      "url": "https://www.stopthebleed.org/training/",
+      "retrieved": "2026-08-23",
+      "method": "direct-fetch",
+      "localCopy": "research/raw/protocol-bleeding.md"
+    },
+    {
+      "id": "medlineplus-burns",
+      "title": "Burns",
+      "publisher": "MedlinePlus, U.S. National Library of Medicine (NIH)",
+      "citation": "MedlinePlus Medical Encyclopedia: Burns. National Library of Medicine.",
+      "url": "https://medlineplus.gov/ency/article/000030.htm",
+      "retrieved": "2026-10-18",
+      "method": "direct-fetch"
+    },
+    {
+      "id": "medlineplus-unconscious",
+      "title": "Unconsciousness: first aid",
+      "publisher": "MedlinePlus, U.S. National Library of Medicine (NIH)",
+      "citation": "MedlinePlus Medical Encyclopedia: Unconsciousness - first aid. National Library of Medicine.",
+      "url": "https://medlineplus.gov/ency/article/000022.htm",
+      "retrieved": "2026-10-18",
+      "method": "direct-fetch"
+    },
+    {
+      "id": "medlineplus-stroke",
+      "title": "Stroke",
+      "publisher": "MedlinePlus, U.S. National Library of Medicine (NIH)",
+      "citation": "MedlinePlus Medical Encyclopedia: Stroke. National Library of Medicine.",
+      "url": "https://medlineplus.gov/ency/article/000726.htm",
+      "retrieved": "2026-10-18",
+      "method": "direct-fetch"
+    },
+    {
+      "id": "ohsu-narcan",
+      "title": "How to use Narcan nasal spray",
+      "publisher": "OHSU Hospital (Oregon Health & Science University)",
+      "citation": "OHSU Emergency Care. How to use Narcan nasal spray: instructions on how to treat an opioid overdose. 2024.",
+      "url": "https://www.ohsu.edu/sites/default/files/2024-04/How-to-use-Narcan-nasal-spray.pdf",
+      "retrieved": "2026-10-18",
+      "method": "direct-fetch",
+      "localCopy": "research/data/ohsu_narcan_ifu.txt",
+      "note": "Device steps for the nasal spray. The decision to give naloxone comes from aha-arc-2024-fa and aha2025-highlights."
+    }
+  ]
+}

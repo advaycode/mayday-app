@@ -1,0 +1,153 @@
+{
+  "$schema": "mayday.protocol.v2",
+  "id": "opioid_overdose",
+  "version": "2025.3.0",
+  "title": "Overdose",
+  "short": "Overdose",
+  "ageGroup": "any",
+  "icon": "pill",
+  "care": "ems_stay",
+  "entry": "responsive",
+  "interrupts": [
+    { "intent": "not_breathing", "goto": "naloxone_q" }
+  ],
+  "steps": [
+    {
+      "id": "responsive",
+      "kind": "ask",
+      "slot": "conscious",
+      "text": "Can you wake them?",
+      "sub": "Shout their name. Shake them.",
+      "say": ["Shout their name. Shake their shoulders.", "Can you wake them?"],
+      "visual": "tap-shout",
+      "choices": [
+        { "id": "no", "label": "No", "value": "false", "next": "breathing", "intents": ["no", "unresponsive"] },
+        { "id": "yes", "label": "Yes", "value": "true", "next": "awake_end", "intents": ["yes", "responsive"] }
+      ],
+      "source": "ohsu-narcan",
+      "quote": "Check for signs of an opioid overdose. Slow, weak or no breathing / Falling asleep or can't wake up / Gurgling sounds in throat / Very small pupils / Cold, clammy skin / Discolored skin (especially lips and fingernails)",
+      "verified": true
+    },
+    {
+      "id": "breathing",
+      "kind": "ask",
+      "slot": "breathing",
+      "text": "Breathing normally?",
+      "sub": "Slow, gurgling, or gasping is not normal.",
+      "say": ["Watch their chest.", "Is the breathing normal?"],
+      "visual": "check-breathing",
+      "choices": [
+        { "id": "no", "label": "No", "value": "abnormal", "next": "naloxone_q", "intents": ["no", "not_breathing"] },
+        { "id": "yes", "label": "Yes", "value": "normal", "next": "naloxone_q", "intents": ["yes", "breathing"] }
+      ],
+      "source": "aha-arc-2024-fa",
+      "quote": "A first aid provider who encounters a person with suspected opioid overdose who is unresponsive and not breathing or not breathing normally should activate the emergency response system, provide high-quality CPR (compressions plus ventilation), and administer naloxone.",
+      "verified": true
+    },
+    {
+      "id": "naloxone_q",
+      "kind": "ask",
+      "slot": "has_naloxone",
+      "text": "Have Narcan?",
+      "sub": "Naloxone nasal spray.",
+      "say": ["Do you have Narcan? Naloxone spray?"],
+      "visual": "nasal-spray",
+      "timeoutS": 6,
+      "timeoutNext": "no_naloxone",
+      "choices": [
+        { "id": "yes", "label": "Yes", "value": "true", "next": "spray", "intents": ["yes"] },
+        { "id": "no", "label": "No", "value": "false", "next": "no_naloxone", "intents": ["no"] }
+      ],
+      "source": "aha2025-highlights",
+      "quote": "An opioid antagonist (e.g., naloxone) should be given to people with respiratory arrest from suspected opioid overdose. Trained rescuers, lay rescuers, and members of the general public can all administer naloxone.",
+      "verified": true
+    },
+    {
+      "id": "spray",
+      "kind": "do",
+      "text": "Spray in one nostril",
+      "sub": "Head back. Push the plunger firmly.",
+      "say": ["Lay them on their back. Tilt the head back.", "Tip in one nostril. Push the plunger firmly.", "Don't test spray it."],
+      "visual": "nasal-spray",
+      "next": "after_spray",
+      "action": "Sprayed",
+      "log": "Naloxone given",
+      "source": "ohsu-narcan",
+      "quote": "Lay the person on their back. Tilt their head back. [...] Do NOT test spray the Narcan. They need the full dose. Put the tip of the nozzle in 1 nostril. Push the plunger firmly to give the entire dose.",
+      "verified": true
+    },
+    {
+      "id": "after_spray",
+      "kind": "ask",
+      "text": "Breathing normally now?",
+      "say": ["Is the breathing normal now?"],
+      "visual": "check-breathing",
+      "choices": [
+        { "id": "no", "label": "No", "next": "@cpr_{age_group}#position", "intents": ["no", "not_breathing"] },
+        { "id": "yes", "label": "Yes", "next": "roll_watch", "intents": ["yes", "breathing"] }
+      ],
+      "source": "aha-arc-2024-fa",
+      "quote": "A first aid provider who encounters a person with suspected opioid overdose who is unresponsive and not breathing or not breathing normally should activate the emergency response system, provide high-quality CPR (compressions plus ventilation), and administer naloxone.",
+      "verified": true
+    },
+    {
+      "id": "roll_watch",
+      "kind": "timer",
+      "seconds": 150,
+      "text": "Roll them on their side",
+      "sub": "Watch. Second dose if no change.",
+      "say": ["Roll them onto their side. Top knee bent.", "Watch for two to three minutes."],
+      "doneSay": ["Still not waking up? Give a second dose.", "New spray. Other nostril."],
+      "visual": "recovery",
+      "next": "second_dose",
+      "action": "They woke up",
+      "actionNext": "awake_end",
+      "source": "ohsu-narcan",
+      "quote": "Roll the person on their side. Bend their top knee to keep them from rolling on their stomach. [...] Watch to see if they wake up or start breathing normally. If they don't within 2-3 minutes, give a 2nd dose in the other nostril.",
+      "verified": true
+    },
+    {
+      "id": "second_dose",
+      "kind": "do",
+      "text": "Second dose",
+      "sub": "New spray, other nostril.",
+      "say": ["Use a new spray, in the other nostril."],
+      "visual": "nasal-spray",
+      "next": "roll_watch",
+      "action": "Sprayed",
+      "log": "Naloxone second dose",
+      "source": "ohsu-narcan",
+      "quote": "You will need a new nasal spray for the 2nd dose.",
+      "verified": true
+    },
+    {
+      "id": "no_naloxone",
+      "kind": "ask",
+      "text": "Breathing normally?",
+      "say": ["No naloxone. Is the breathing normal?"],
+      "visual": "check-breathing",
+      "choices": [
+        { "id": "no", "label": "No", "next": "@cpr_{age_group}#position", "intents": ["no", "not_breathing"] },
+        { "id": "yes", "label": "Yes", "next": "@recovery_position", "intents": ["yes", "breathing"] }
+      ],
+      "source": "aha-arc-2024-fa",
+      "quote": "A first aid provider who encounters a person with suspected opioid overdose who is unresponsive and not breathing or not breathing normally should activate the emergency response system, provide high-quality CPR (compressions plus ventilation), and administer naloxone.",
+      "verified": true
+    },
+    {
+      "id": "awake_end",
+      "kind": "end",
+      "text": "Stay with them",
+      "sub": "It can wear off. Wait for EMS.",
+      "say": ["Stay with them until help arrives.", "If they get sleepy again, tell me."],
+      "visual": "check-breathing",
+      "choices": [
+        { "id": "worse", "label": "Hard to wake again", "next": "breathing", "intents": ["unresponsive", "not_breathing"] }
+      ],
+      "source": "ohsu-narcan",
+      "quote": "If they still don't respond and you have more Narcan, you can keep giving new doses every 2-3 minutes in a different nostril each time. Do this until they wake up or emergency help arrives.",
+      "verified": true,
+      "note": "\"It can wear off\" is a common teaching point not stated in this source; reviewer to confirm or remove."
+    }
+  ]
+}

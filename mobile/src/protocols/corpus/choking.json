@@ -1,0 +1,112 @@
+{
+  "$schema": "mayday.protocol.v2",
+  "id": "choking",
+  "version": "2025.3.0",
+  "title": "Choking",
+  "short": "Choking",
+  "ageGroup": "adult",
+  "appliesTo": ["adult", "child"],
+  "icon": "wind",
+  "care": "ems_stay",
+  "entry": "severe",
+  "interrupts": [
+    { "intent": "unresponsive", "goto": "@cpr_{age_group}#position" },
+    { "intent": "object_out", "goto": "out_end" }
+  ],
+  "steps": [
+    {
+      "id": "severe",
+      "kind": "ask",
+      "slot": "severe_fbao",
+      "text": "Can they cough or speak?",
+      "sub": "A strong cough means let them cough.",
+      "say": ["Can they cough hard, or speak?"],
+      "visual": "choking-sign",
+      "choices": [
+        { "id": "no", "label": "No, can't breathe", "value": "true", "next": "back_blows", "intents": ["no", "not_breathing", "choking"] },
+        { "id": "yes", "label": "Coughing hard", "value": "false", "next": "cough_end", "intents": ["yes", "coughing"] }
+      ],
+      "source": "aha2025-highlights",
+      "quote": "Check for signs of severe FBAO: Weak or absence of cough / Unable to speak / Change in colour (cyanosis) / Altered mental status / Apnea",
+      "verified": true
+    },
+    {
+      "id": "back_blows",
+      "kind": "do",
+      "text": "5 back blows",
+      "sub": "Lean them forward. Between the shoulder blades.",
+      "say": ["Lean them forward.", "Five hard blows between the shoulder blades."],
+      "visual": "back-blows",
+      "next": "abd_thrusts",
+      "action": "Five done",
+      "alts": [
+        { "id": "out", "label": "It came out", "next": "out_end", "intents": ["object_out"] }
+      ],
+      "source": "aha2025-highlights",
+      "quote": "Start repeated cycles of 5 back blows (slaps), followed by 5 abdominal thrusts. Repeat until object is expelled or the adult becomes unresponsive.",
+      "verified": true
+    },
+    {
+      "id": "abd_thrusts",
+      "kind": "do",
+      "text": "5 belly thrusts",
+      "sub": "Fist above the belly button. In and up.",
+      "say": ["Stand behind them. Fist above the belly button.", "Grab your fist. Pull in and up, five times."],
+      "visual": "abdominal-thrusts",
+      "next": "back_blows",
+      "action": "Five done",
+      "alts": [
+        { "id": "out", "label": "It came out", "next": "out_end", "intents": ["object_out"] },
+        { "id": "pregnant", "label": "Pregnant or too big", "next": "chest_thrusts", "intents": ["pregnant"] }
+      ],
+      "source": "aha2025-highlights",
+      "quote": "For children with severe foreign-body airway obstruction (FBAO), repeated cycles of 5 back blows alternated with 5 abdominal thrusts should be performed until the object is expelled or the child becomes unresponsive.",
+      "verified": true
+    },
+    {
+      "id": "chest_thrusts",
+      "kind": "do",
+      "text": "5 chest thrusts",
+      "sub": "Instead of belly thrusts.",
+      "say": ["Use chest thrusts instead.", "Five, then back blows again."],
+      "visual": "chest-thrusts",
+      "next": "back_blows",
+      "action": "Five done",
+      "alts": [
+        { "id": "out", "label": "It came out", "next": "out_end", "intents": ["object_out"] }
+      ],
+      "source": "aha2025-highlights",
+      "quote": "For patients in the late stages of pregnancy, or when the rescuer is unable to encircle the patient's abdomen, 5 chest thrusts should be used instead.",
+      "verified": true
+    },
+    {
+      "id": "cough_end",
+      "kind": "end",
+      "text": "Let them cough",
+      "sub": "Stay close.",
+      "say": ["Let them keep coughing.", "If the cough gets weak, tell me."],
+      "visual": "choking-sign",
+      "choices": [
+        { "id": "worse", "label": "Cough got weak", "next": "back_blows", "intents": ["worse", "not_breathing", "choking"] }
+      ],
+      "source": "aha2025-highlights",
+      "quote": "Encourage cough. Continue to check for signs of severe FBAO.",
+      "verified": true
+    },
+    {
+      "id": "out_end",
+      "kind": "end",
+      "text": "Stay with them",
+      "sub": "Watch their breathing.",
+      "say": ["Good. Stay with them.", "Watch their breathing until help arrives."],
+      "visual": "check-breathing",
+      "log": "Object expelled",
+      "choices": [
+        { "id": "collapsed", "label": "They collapsed", "next": "@cpr_{age_group}#position", "intents": ["unresponsive", "not_breathing"] }
+      ],
+      "source": "aha2025-highlights",
+      "quote": "If object is expelled, continue to monitor until advanced care arrives.",
+      "verified": true
+    }
+  ]
+}

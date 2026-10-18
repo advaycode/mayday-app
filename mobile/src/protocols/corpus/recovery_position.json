@@ -1,0 +1,76 @@
+{
+  "$schema": "mayday.protocol.v2",
+  "id": "recovery_position",
+  "version": "2025.3.0",
+  "title": "Recovery position",
+  "short": "Recovery",
+  "ageGroup": "any",
+  "icon": "person",
+  "care": "ems_stay",
+  "entry": "spine",
+  "interrupts": [
+    { "intent": "not_breathing", "goto": "@cpr_{age_group}#position" }
+  ],
+  "steps": [
+    {
+      "id": "spine",
+      "kind": "ask",
+      "slot": "spine_injury",
+      "text": "Could the neck be hurt?",
+      "sub": "A fall, a crash, a dive.",
+      "say": ["Could they have hurt their neck or back?"],
+      "visual": "spine",
+      "timeoutS": 8,
+      "timeoutNext": "roll",
+      "choices": [
+        { "id": "yes", "label": "Maybe", "value": "true", "next": "stay_put", "intents": ["yes"] },
+        { "id": "no", "label": "No", "value": "false", "next": "roll", "intents": ["no"] }
+      ],
+      "source": "medlineplus-unconscious",
+      "quote": "If you suspect a spinal injury, leave the person where you found them (as long as breathing continues).",
+      "verified": true
+    },
+    {
+      "id": "roll",
+      "kind": "do",
+      "text": "Roll onto their side",
+      "sub": "Top leg bent. Head tilted back.",
+      "say": ["Roll them toward you, onto their side.", "Bend the top leg. Tilt the head back."],
+      "visual": "recovery",
+      "next": "watch",
+      "log": "Recovery position",
+      "source": "medlineplus-unconscious",
+      "quote": "carefully roll the person toward you onto their side. Bend the top leg so both hip and knee are at right angles. Gently tilt their head back to keep the airway open.",
+      "verified": true
+    },
+    {
+      "id": "stay_put",
+      "kind": "end",
+      "text": "Don't move them",
+      "sub": "Watch their breathing.",
+      "say": ["Don't move them.", "Watch their breathing. If it stops, tell me."],
+      "visual": "check-breathing",
+      "choices": [
+        { "id": "stopped", "label": "Stopped breathing", "next": "@cpr_{age_group}#position", "intents": ["not_breathing"] },
+        { "id": "vomit", "label": "Vomiting", "next": "roll", "intents": ["vomiting"] }
+      ],
+      "source": "medlineplus-unconscious",
+      "quote": "If you suspect a spinal injury, leave the person where you found them (as long as breathing continues).",
+      "verified": true
+    },
+    {
+      "id": "watch",
+      "kind": "end",
+      "text": "Watch their breathing",
+      "sub": "If it stops, start CPR.",
+      "say": ["Stay with them. Watch their breathing.", "If it stops or turns to gasping, tell me."],
+      "visual": "check-breathing",
+      "choices": [
+        { "id": "stopped", "label": "Stopped breathing", "next": "@cpr_{age_group}#position", "intents": ["not_breathing"] }
+      ],
+      "source": "medlineplus-unconscious",
+      "quote": "Check the person's airway, breathing, and pulse frequently. If necessary, begin CPR.",
+      "verified": true
+    }
+  ]
+}

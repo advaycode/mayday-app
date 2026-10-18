@@ -1,0 +1,139 @@
+{
+  "$schema": "mayday.protocol.v2",
+  "id": "burns",
+  "version": "2025.3.0",
+  "title": "Burns",
+  "short": "Burn",
+  "ageGroup": "any",
+  "icon": "fire",
+  "care": "by_severity",
+  "entry": "stop",
+  "interrupts": [
+    {
+      "intent": "unresponsive",
+      "goto": "@cpr_{age_group}#breathing"
+    }
+  ],
+  "steps": [
+    {
+      "id": "stop",
+      "kind": "do",
+      "text": "Away from the heat",
+      "sub": "If clothes are on fire: stop, drop, roll.",
+      "say": [
+        "Get them away from the heat.",
+        "If clothes are burning: stop, drop, and roll."
+      ],
+      "visual": "stop-drop-roll",
+      "next": "severity",
+      "source": "medlineplus-burns",
+      "quote": "Wrap the person in thick material; such as a wool or cotton coat, rug, or blanket.",
+      "verified": true,
+      "note": "MedlinePlus pairs this with stop, drop and roll for burning clothing."
+    },
+    {
+      "id": "severity",
+      "kind": "ask",
+      "slot": "burn_severity",
+      "text": "Is it a bad burn?",
+      "sub": "Bigger than their palm. Face, hands, feet, groin. Or smoke breathed in.",
+      "say": [
+        "Is it bigger than their palm?",
+        "Or on the face, hands, feet, or groin?"
+      ],
+      "visual": "burn-size",
+      "choices": [
+        {
+          "id": "major",
+          "label": "Yes",
+          "value": "major",
+          "next": "major",
+          "intents": [
+            "yes",
+            "major"
+          ]
+        },
+        {
+          "id": "minor",
+          "label": "No, small",
+          "value": "minor",
+          "next": "jewelry",
+          "intents": [
+            "no",
+            "minor"
+          ]
+        }
+      ],
+      "source": "aha-arc-2024-fa",
+      "quote": "A person with a full-thickness burn or with a partial-thickness burn that is larger than the person's palm or involves the person's face, hands, feet, or genitals, should promptly seek evaluation by a health care professional.",
+      "verified": true
+    },
+    {
+      "id": "major",
+      "kind": "do",
+      "text": "This needs 911",
+      "sub": "Smoke, chemicals, or electricity too.",
+      "say": [
+        "This burn needs emergency care.",
+        "Make sure 911 is called."
+      ],
+      "visual": "burn-size",
+      "next": "jewelry",
+      "log": "Major burn",
+      "source": "aha-arc-2024-fa",
+      "quote": "For a person with evidence of smoke inhalation injury, such as facial burns, difficulty breathing, singed nasal hairs, or soot around the nose or mouth, EMS should be activated.",
+      "verified": true
+    },
+    {
+      "id": "jewelry",
+      "kind": "do",
+      "text": "Rings and tight things off",
+      "sub": "Before it swells.",
+      "say": [
+        "Take off rings, watches, and belts near the burn.",
+        "Do it before it swells."
+      ],
+      "visual": "jewelry",
+      "next": "cool",
+      "source": "aha-arc-2024-fa",
+      "quote": "A person with thermal burns should promptly remove all jewelry, belts, and other tight items from burned areas.",
+      "verified": true
+    },
+    {
+      "id": "cool",
+      "kind": "timer",
+      "seconds": 600,
+      "text": "Cool running water",
+      "sub": "At least 10 minutes. Never ice.",
+      "say": [
+        "Run cool water over the burn.",
+        "At least ten minutes. Never ice."
+      ],
+      "doneSay": [
+        "Ten minutes. Twenty is even better, if you can."
+      ],
+      "visual": "cool-water",
+      "next": "cover",
+      "action": "Done cooling",
+      "source": "arc-burn-cooling",
+      "quote": "Begin immediate cooling of thermal burns, preferably with cool running water applied to the burn for a minimum of 10 minutes, ideally 20 minutes. [...] Do not use ice to cool a burn, including an ice pack or bag, due to a risk of worsening the injury.",
+      "verified": true,
+      "note": "MedlinePlus advises against putting a SEVERE burn in cold water (shock risk), while the Red Cross advisory recommends cool running water for all thermal burns and warns against cooling beyond 40 minutes. We follow the Red Cross (running water, not immersion) and flag this for the medical reviewer."
+    },
+    {
+      "id": "cover",
+      "kind": "end",
+      "text": "Cover it loosely",
+      "sub": "Clean cloth. Don't pop blisters.",
+      "say": [
+        "Cover it loosely with a clean cloth.",
+        "Don't pop blisters. No butter or ice."
+      ],
+      "visual": "cover",
+      "choices": [],
+      "source": "aha-arc-2024-fa",
+      "quote": "After cooling, while awaiting evaluation by a health care professional, it may be reasonable to loosely cover a burn that has intact skin or an intact blister with a clean cloth or nonadherent dry dressing.",
+      "verified": true
+    }
+  ]
+}

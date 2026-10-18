@@ -1,0 +1,15 @@
+{
+  "simulatedSeconds": 600,
+  "bpm": 110,
+  "beats": 1100,
+  "timerTicks": 10850,
+  "timerJitterMs": "25 + 0..60",
+  "audioClockScheduler": {
+    "maxErrorMs": 1.1368683772161603e-10,
+    "endDriftMs": 0
+  },
+  "naiveSetTimeout": {
+    "endDriftMs": 2248,
+    "equivalentBpmAtEnd": 109.59
+  }
+}

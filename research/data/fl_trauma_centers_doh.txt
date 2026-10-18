@@ -1,0 +1,78 @@
+                             FLORIDA TRAUMA CENTERS
+
+                                         Updated July 23, 2026
+
+Trauma Center                                   Level                 County
+                                                                      Bay
+Ascension Sacred Heart Bay                      Level II              Escambia
+                                                                      Escambia
+Ascension Sacred Heart Pensacola                Level I               Broward
+                                                                      Broward
+Baptist Hospital                                Level II              Palm Beach
+                                                                      Lee
+Broward Health Medical Center                   Level I               Volusia
+                                                                      Miami-Dade
+Broward Health North                            Level II              Pasco
+                                                                      Manatee
+Delray Medical Center                           Level I               Okaloosa
+                                                                      Miami-Dade
+Gulf Coast Medical Center                       Level II              Seminole
+                                                                      St. Lucie
+Halifax Health Medical Center of Daytona Beach  Level II              Duval
+                                                                      Marion
+HCA Florida Aventura Hospital                   Level II              Clay
+                                                                      Osceola
+HCA Florida Bayonet Point Hospital              Level II              Brevard
+                                                                      Miami-Dade
+HCA Florida Blake Hospital                      Level II              Miami-Dade
+                                                                      Pinellas
+HCA Florida Fort Walton-Destin Hospital         Level II              Polk
+                                                                      Broward
+HCA Florida Kendall Hospital                    Level I               Miami-Dade
+                                                                      Pinellas
+HCA Florida Lake Monroe Hospital                Level II              Orange
+                                                                      Sarasota
+HCA Florida Lawnwood Hospital                   Level II              Hillsborough
+                                                                      Palm Beach
+HCA Florida Memorial Hospital                   Level II              Leon
+                                                                      Hillsborough
+HCA Florida Ocala Hospital                      Level II              Duval
+                                                                      Alachua
+HCA Florida Orange Park Hospital                Level II              Duval
+
+HCA Florida Osceola Hospital                    Level II
+
+Holmes Regional Medical Center                  Level II
+
+Jackson Memorial Hospital                       Level I
+
+Jackson South Medical Center                    Level II
+
+Johns Hopkins All Children's Hospital           Pediatric
+
+Lakeland Regional Health Medical Center         Level I
+
+Memorial Regional Hospital                      Level I
+
+Nicklaus Children's Hospital                    Pediatric
+
+Orlando Health Bayfront Hospital                Level II
+
+Orlando Health Orlando Regional Medical Center  Level I
+
+Sarasota Memorial Hospital                      Level II
+
+St. Joseph's Hospital                           Level II / Pediatric
+
+St. Mary's Medical Center                       Level I
+
+Tallahassee Memorial Hospital                   Level II
+
+Tampa General Hospital                          Level I
+
+UF Health Jacksonville                          Level I
+
+UF Health Shands Hospital                       Level I
+
+Wolfson Children's Hospital                     Pediatric
+

@@ -1,0 +1,106 @@
+{
+  "$schema": "mayday.protocol.v2",
+  "id": "stroke",
+  "version": "2025.3.0",
+  "title": "Stroke check",
+  "short": "Stroke",
+  "ageGroup": "adult",
+  "icon": "brain",
+  "care": "stroke_stay",
+  "entry": "face",
+  "interrupts": [
+    { "intent": "unresponsive", "goto": "@cpr_adult#breathing" }
+  ],
+  "steps": [
+    {
+      "id": "face",
+      "kind": "ask",
+      "slot": "fast_face",
+      "text": "Ask them to smile",
+      "sub": "Does one side droop?",
+      "say": ["Ask them to smile.", "Does one side of the face droop?"],
+      "visual": "fast-face",
+      "choices": [
+        { "id": "droop", "label": "One side droops", "value": "true", "next": "time", "intents": ["yes"] },
+        { "id": "even", "label": "Even", "value": "false", "next": "arms", "intents": ["no"] }
+      ],
+      "source": "medlineplus-stroke",
+      "quote": "FACE: Ask the person to smile. Check if one side of the face droops.",
+      "verified": true
+    },
+    {
+      "id": "arms",
+      "kind": "ask",
+      "slot": "fast_arms",
+      "text": "Raise both arms",
+      "sub": "Does one drift down?",
+      "say": ["Ask them to raise both arms.", "Does one drift down?"],
+      "visual": "fast-arms",
+      "choices": [
+        { "id": "drift", "label": "One drifts", "value": "true", "next": "time", "intents": ["yes"] },
+        { "id": "level", "label": "Both stay up", "value": "false", "next": "speech", "intents": ["no"] }
+      ],
+      "source": "medlineplus-stroke",
+      "quote": "ARMS: Ask the person to raise both arms. See if one arm drifts downward.",
+      "verified": true
+    },
+    {
+      "id": "speech",
+      "kind": "ask",
+      "slot": "fast_speech",
+      "text": "Repeat a short sentence",
+      "sub": "Slurred or wrong?",
+      "say": ["Ask them to repeat a simple sentence.", "Is it slurred or wrong?"],
+      "visual": "fast-speech",
+      "choices": [
+        { "id": "slurred", "label": "Slurred or wrong", "value": "true", "next": "time", "intents": ["yes"] },
+        { "id": "clear", "label": "Clear", "value": "false", "next": "no_signs", "intents": ["no"] }
+      ],
+      "source": "medlineplus-stroke",
+      "quote": "SPEECH: Ask the person to repeat a simple sentence. Check if words are slurred and if the sentence is repeated correctly.",
+      "verified": true
+    },
+    {
+      "id": "time",
+      "kind": "do",
+      "text": "Call 911 now",
+      "sub": "Tell them when this started.",
+      "say": ["This could be a stroke. Minutes matter.", "Tell 911 when they last seemed normal."],
+      "visual": "fast-time",
+      "next": "wait",
+      "log": "Stroke signs present",
+      "source": "aha-arc-2024-fa",
+      "quote": "If stroke is suspected, the EMS system should be activated immediately.",
+      "verified": true
+    },
+    {
+      "id": "wait",
+      "kind": "end",
+      "text": "Stay with them",
+      "sub": "Don't drive them. Wait for EMS.",
+      "say": ["Stay with them. Don't drive them yourself.", "If they stop responding, tell me."],
+      "visual": "check-breathing",
+      "choices": [
+        { "id": "collapsed", "label": "Stopped responding", "next": "@cpr_adult#breathing", "intents": ["unresponsive", "not_breathing"] }
+      ],
+      "source": "medlineplus-stroke",
+      "quote": "TIME: If a person shows any of these symptoms, time is essential. Call 911 or the local emergency number.",
+      "verified": true,
+      "note": "\"Don't drive them yourself\" is our routing advice (EMS can pre-alert a stroke center); it is not a guideline sentence. Reviewer: confirm you are comfortable with it."
+    },
+    {
+      "id": "no_signs",
+      "kind": "end",
+      "text": "No FAST signs",
+      "sub": "Still call 911 if something is sudden or wrong.",
+      "say": ["No clear stroke signs right now.", "If anything is sudden or wrong, call 911."],
+      "visual": "fast-face",
+      "choices": [
+        { "id": "recheck", "label": "Check again", "next": "face", "intents": ["repeat"] }
+      ],
+      "source": "aha-arc-2024-fa",
+      "quote": "The use of a stroke recognition scale, such as the Face, Arms, Speech, Time (FAST) or Cincinnati Prehospital Stroke Scale, is recommended to aid in the recognition of acute stroke in adults.",
+      "verified": true
+    }
+  ]
+}
