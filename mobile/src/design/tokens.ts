@@ -25,9 +25,9 @@ export const color = {
 
   // Text. Contrast ratios measured against `canvas` (calm) and `void`
   // (emergency); see design/SYSTEM.md for the numbers.
-  ink: '#F2EFE8', // 16.9:1 on canvas, 18.9:1 on void
-  inkMuted: '#A8A39A', // 7.6:1 on canvas
-  inkFaint: '#7E7A72', // 4.6:1 on canvas, use for large or non-essential text only
+  ink: '#F2EFE8', // 16.4:1 on canvas, 17.8:1 on void (WCAG AAA)
+  inkMuted: '#A8A39A', // 7.5:1 on canvas (AAA)
+  inkFaint: '#88847C', // 5.1:1 on canvas, 4.7:1 on raised (AA): captions and metadata only
 
   hairline: 'rgba(242, 239, 232, 0.10)',
   hairlineStrong: 'rgba(242, 239, 232, 0.18)',
@@ -39,7 +39,7 @@ export const color = {
   // Signal red: emergency actions only.
   signal: '#D7261E',
   signalPressed: '#B81E17',
-  onSignal: '#FFF6F2', // 5.2:1 on signal
+  onSignal: '#FFF6F2', // 4.7:1 on signal: AAA for large text, and every label on red is large
 } as const;
 
 /** 4pt base grid. Anything not on this scale is a bug. */

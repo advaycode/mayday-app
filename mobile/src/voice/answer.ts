@@ -1,73 +1,106 @@
-import { protocols, sources, type Step } from '@/protocols';
+import { sources } from '@/protocols';
 
+import data from './answers.json';
 import { normalizeUtterance } from './router';
 
 /**
  * Offline answers to open questions ("should I move him?", "how deep do I
- * push?"). We search the protocol corpus, the same cited steps the app
- * already speaks, and if one clearly answers the question we say that step
- * again, with its source. If nothing clearly matches, we do not improvise:
- * we tell the rescuer to keep going and ask the dispatcher.
+ * push?").
  *
- * Retrieval here is simple keyword overlap weighted by how rare each word is
- * (a small TF-IDF). The online path (proxy /ask) can rephrase an answer with
- * Claude, but only from passages this function retrieved.
+ * We match the question against hand-written answer cards (answers.json):
+ * each card lists the ways people ask it, a short spoken answer, and its
+ * source. Words are weighted by how rare they are across all the cards
+ * (IDF), so "bra" counts for much more than "take", and "take her bra off"
+ * can't match "take the tourniquet off". A card only applies inside the
+ * protocols it names, so "how deep" gets the child answer during child CPR.
+ *
+ * If nothing clearly matches, we do not improvise. We say "Keep doing
+ * compressions. Tell the dispatcher that." The online path (proxy /ask) can
+ * rephrase, but only from the cards this file selects.
  */
 
+export type Card = {
+  id: string;
+  protocols: string[];
+  ask: string[];
+  say: string[];
+  source: string;
+  quote: string | null;
+  verified: boolean;
+  note?: string;
+};
+
+export const cards = data.cards as Card[];
+
 const STOP = new Set(
-  'a an the i you he she they it is are was be do does did should can could would will to of in on at for with my his her their this that and or if what how when where why which who me we us them now just so not no yes'.split(' '),
+  'a an the i you he she they it is are was be do does did should can could would will to of in on at for with my his her their this that and or if what how when where why which who me we us them now just so not no yes him have has had there here off up about any some get go ok okay'.split(' '),
 );
 
-type Doc = { protocolId: string; step: Step; terms: Map<string, number> };
+function stem(w: string) {
+  return w.replace(/(ing|ed|es|s)$/, '') || w;
+}
 
-function terms(text: string): string[] {
+export function terms(text: string): string[] {
   return normalizeUtterance(text)
     .split(' ')
-    .filter((w) => w.length > 2 && !STOP.has(w))
-    .map((w) => w.replace(/(ing|ed|es|s)$/, ''));
+    .filter((w) => w.length > 1 && !STOP.has(w))
+    .map(stem);
 }
 
-const docs: Doc[] = Object.values(protocols).flatMap((p) =>
-  p.steps.map((step) => {
-    const text = [step.text, step.sub ?? '', ...step.say, step.quote ?? ''].join(' ');
-    const counts = new Map<string, number>();
-    for (const t of terms(text)) counts.set(t, (counts.get(t) ?? 0) + 1);
-    return { protocolId: p.id, step, terms: counts };
-  }),
-);
-
+// How rare each word is across every way of asking every card.
 const df = new Map<string, number>();
-for (const d of docs) for (const t of d.terms.keys()) df.set(t, (df.get(t) ?? 0) + 1);
-const idf = (t: string) => Math.log(1 + docs.length / (1 + (df.get(t) ?? 0)));
+const phrases = cards.flatMap((c) => c.ask.map((a) => new Set(terms(a))));
+for (const p of phrases) for (const t of p) df.set(t, (df.get(t) ?? 0) + 1);
+const idf = (t: string) => Math.log(1 + phrases.length / (1 + (df.get(t) ?? 0)));
+
+/**
+ * How well a question matches one way of asking a card, 0 to 1. Mostly: how
+ * much of the card's phrasing (weighted by rarity) appears in the question.
+ * A little: how much of the question the card explains. So extra words in a
+ * real question ("is it safe to go near the car") cost little, but a single
+ * shared common word ("take") is never enough.
+ */
+function similarity(q: Set<string>, a: Set<string>): number {
+  let shared = 0;
+  let inA = 0;
+  let inQ = 0;
+  for (const t of a) {
+    inA += idf(t);
+    if (q.has(t)) shared += idf(t);
+  }
+  for (const t of q) inQ += idf(t);
+  if (!inA || !inQ) return 0;
+  return 0.7 * (shared / inA) + 0.3 * (shared / inQ);
+}
+
+const inScope = (card: Card, protocolId: string | null) =>
+  card.protocols.length === 0 || (protocolId !== null && card.protocols.some((p) => protocolId.startsWith(p)));
+
+/** Cards that fit this question, best first. */
+export function rank(question: string, protocolId: string | null) {
+  const q = new Set(terms(question));
+  if (!q.size) return [];
+  return cards
+    .filter((c) => inScope(c, protocolId))
+    .map((card) => ({ card, score: Math.max(...card.ask.map((a) => similarity(q, new Set(terms(a))))) }))
+    .filter((r) => r.score > 0)
+    .sort((a, b) => b.score - a.score);
+}
+
+export const ANSWER_THRESHOLD = 0.6;
 
 export type Answer =
-  | { kind: 'step'; protocolId: string; step: Step; lines: string[]; source: string; score: number }
+  | { kind: 'card'; card: Card; lines: string[]; source: string; score: number }
   | { kind: 'fallback'; lines: string[]; score: number };
 
-export function retrieve(question: string, k = 3, prefer?: string) {
-  const q = terms(question);
-  return docs
-    .map((d) => {
-      let score = 0;
-      for (const t of q) if (d.terms.has(t)) score += idf(t);
-      if (prefer && d.protocolId === prefer) score *= 1.25;
-      return { d, score };
-    })
-    .filter((r) => r.score > 0)
-    .sort((a, b) => b.score - a.score)
-    .slice(0, k);
-}
-
-export function answer(question: string, currentProtocol: string | null, inCompressions: boolean): Answer {
-  const [best] = retrieve(question, 1, currentProtocol ?? undefined);
-  // Threshold chosen so that at least two meaningful words must match.
-  if (best && best.score >= 4) {
+export function answer(question: string, protocolId: string | null, inCompressions: boolean): Answer {
+  const [best] = rank(question, protocolId);
+  if (best && best.score >= ANSWER_THRESHOLD) {
     return {
-      kind: 'step',
-      protocolId: best.d.protocolId,
-      step: best.d.step,
-      lines: best.d.step.say,
-      source: sources[best.d.step.source]?.title ?? best.d.step.source,
+      kind: 'card',
+      card: best.card,
+      lines: best.card.say,
+      source: sources[best.card.source]?.title ?? best.card.source,
       score: best.score,
     };
   }
@@ -76,6 +109,18 @@ export function answer(question: string, currentProtocol: string | null, inCompr
     lines: [inCompressions ? 'Keep doing compressions. Tell the dispatcher that.' : "I'm not sure. Tell the dispatcher that."],
     score: best?.score ?? 0,
   };
+}
+
+/** Passages for the online path: the best few cards, as citable text. */
+export function passagesFor(question: string, protocolId: string | null) {
+  return rank(question, protocolId)
+    .filter((r) => r.score > 0.15)
+    .slice(0, 3)
+    .map(({ card }) => ({
+      id: card.id,
+      text: `${card.ask[0]}? ${card.say.join(' ')}`,
+      source: sources[card.source]?.title ?? card.source,
+    }));
 }
 
 /** Does this sound like a question rather than a report or a command? */

@@ -42,6 +42,9 @@ export type Result = { state: EngineState; effects: Effect[] };
 
 const MAX_AUTO_HOPS = 12;
 
+/** "CPR" stays CPR; "Severe bleeding" becomes "severe bleeding". */
+const logTitle = (p: Protocol) => (p.title === p.title.toUpperCase() ? p.title : p.title.toLowerCase());
+
 export function ageGroupFor(state: { slots: Slots }, protocol?: Protocol): AgeGroup {
   const known = state.slots.age_group;
   if (known === 'adult' || known === 'child' || known === 'infant') return known;
@@ -73,7 +76,7 @@ function enter(state: EngineState, ref: string, at: number, effects: Effect[], h
     const known = next.slots[step.slot];
     const choice = known !== undefined ? step.choices.find((c) => c.value === known) : undefined;
     if (choice) {
-      effects.push({ type: 'log', text: `${step.text} ${choice.label} (already known)`, at });
+      effects.push({ type: 'log', text: `${step.text}${/[?.!]$/.test(step.text) ? '' : ':'} ${choice.label} (already known)`, at });
       return enter(next, choice.next, at, effects, hops + 1);
     }
   }
@@ -88,7 +91,7 @@ function enter(state: EngineState, ref: string, at: number, effects: Effect[], h
   const reentry = count > 1;
 
   if (protocolId !== state.protocolId) {
-    effects.push({ type: 'log', text: `Started ${getProtocol(protocolId).title.toLowerCase()}`, at });
+    effects.push({ type: 'log', text: `Started ${logTitle(getProtocol(protocolId))}`, at });
   }
   if (step.log) effects.push({ type: 'log', text: step.log, at });
   effects.push({ type: 'enter', protocolId, step, reentry });
@@ -116,7 +119,7 @@ function choose(state: EngineState, choice: Choice, step: Step, at: number, effe
   if (step.kind === 'ask' && step.slot && choice.value !== undefined) {
     slots = { ...slots, [step.slot]: choice.value };
   }
-  effects.push({ type: 'log', text: `${step.text} ${choice.label}`, at });
+  effects.push({ type: 'log', text: `${step.text}${/[?.!]$/.test(step.text) ? '' : ':'} ${choice.label}`, at });
   return enter({ ...state, slots }, choice.next, at, effects);
 }
 
@@ -132,7 +135,7 @@ export function reduce(state: EngineState | null, event: EngineEvent): Result {
       visits: state?.visits ?? {},
       trail: state?.trail ?? [],
     };
-    effects.push({ type: 'log', text: `Started ${protocol.title.toLowerCase()}`, at: event.at });
+    effects.push({ type: 'log', text: `Started ${logTitle(protocol)}`, at: event.at });
     // Enter via an absolute ref so the "Started" log is not duplicated.
     const next = enter({ ...base, protocolId: protocol.id }, protocol.entry, event.at, effects);
     return { state: next, effects };
@@ -156,7 +159,7 @@ export function reduce(state: EngineState | null, event: EngineEvent): Result {
 
     case 'timeout': {
       if (step.kind === 'ask' && step.timeoutNext) {
-        effects.push({ type: 'log', text: `${step.text} No answer`, at: event.at });
+        effects.push({ type: 'log', text: `${step.text}${/[?.!]$/.test(step.text) ? '' : ':'} no answer`, at: event.at });
         return { state: enter(state, step.timeoutNext, event.at, effects), effects };
       }
       if (step.kind === 'timer') {

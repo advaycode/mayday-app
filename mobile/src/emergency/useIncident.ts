@@ -11,7 +11,8 @@ import { getSettings } from '@/settings/store';
 import { currentStep, reduce, type Effect, type EngineEvent, type EngineState, type Slots } from '@/protocols/engine';
 import { protocols } from '@/protocols';
 import type { Intent, Step } from '@/protocols/schema';
-import { answer, isQuestion } from '@/voice/answer';
+import { askModel, online } from '@/ai/proxy';
+import { answer, isQuestion, passagesFor } from '@/voice/answer';
 import { isEcho } from '@/voice/echo';
 import { routeWithModel } from '@/voice/llmRouter';
 import { route } from '@/voice/router';
@@ -235,10 +236,23 @@ export function useIncident() {
       }
       if (isQuestion(text)) {
         const step = s.engine ? currentStep(s.engine) : null;
-        const a = answer(text, s.engine?.protocolId ?? null, step?.kind === 'cpr');
+        const inCompressions = step?.kind === 'cpr';
         log(`Asked: "${text}"`);
-        if (a.kind === 'step') update((x) => ({ ...x, answerSource: a.source }));
-        say(a.lines);
+        const offline = () => {
+          const a = answer(text, s.engine?.protocolId ?? null, inCompressions);
+          if (a.kind === 'card') update((x) => ({ ...x, answerSource: a.source }));
+          say(a.lines);
+        };
+        if (!online()) return offline();
+        // Online: Claude may rephrase, but only from the cited answer cards we picked.
+        const passages = passagesFor(text, s.engine?.protocolId ?? null);
+        if (!passages.length) return offline();
+        askModel(text, passages, inCompressions).then((m) => {
+          if (!m || !m.grounded) return offline();
+          const cited = passages.find((p) => p.id === m.cite[0]);
+          update((x) => ({ ...x, answerSource: cited?.source ?? null }));
+          say(m.say);
+        });
       }
     },
     // handoff is stable (defined below with useCallback); referenced lazily.

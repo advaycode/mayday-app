@@ -36,7 +36,7 @@ describe('adult CPR', () => {
     ]);
     expect(state.stepId).toBe('compressions');
     expect(state.slots).toMatchObject({ conscious: 'false', breathing: 'abnormal', rescue_breaths: 'false' });
-    expect(logs(effects)[0]).toBe('Started cpr');
+    expect(logs(effects)[0]).toBe('Started CPR');
     expect(said(effects)).toContain('Push hard and fast. Follow the beat.');
   });
 
@@ -54,7 +54,7 @@ describe('adult CPR', () => {
       { type: 'timeout' },
     ]);
     expect(state.stepId).toBe('position');
-    expect(logs(effects)).toContain('Send for an AED No answer');
+    expect(logs(effects)).toContain('Send for an AED: no answer');
   });
 
   it('jumps to the AED steps when someone says the AED is here, then back to compressions with a resume line', () => {

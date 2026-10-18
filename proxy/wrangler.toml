@@ -1,0 +1,10 @@
+# Cloudflare Worker config. Secrets are set with:
+#   npx wrangler secret put ANTHROPIC_API_KEY
+#   npx wrangler secret put GROQ_API_KEY
+name = "mayday-proxy"
+main = "src/index.ts"
+compatibility_date = "2026-09-01"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+ALLOWED_ORIGINS = "http://localhost:8742,http://localhost:8081"

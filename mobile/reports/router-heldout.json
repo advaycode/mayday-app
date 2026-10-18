@@ -1,0 +1,21 @@
+{
+  "cases": 20,
+  "protocolAccuracy": 0.85,
+  "failures": [
+    {
+      "say": "hot coffee spilled all over the baby",
+      "protocol": "burns",
+      "got": null
+    },
+    {
+      "say": "she suddenly can't move her right arm",
+      "protocol": "stroke",
+      "got": "cpr_adult"
+    },
+    {
+      "say": "I found my roommate passed out with a needle next to him",
+      "protocol": "opioid_overdose",
+      "got": "cpr_adult"
+    }
+  ]
+}

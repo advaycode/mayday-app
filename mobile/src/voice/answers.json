@@ -1,0 +1,216 @@
+{
+  "$schema": "mayday.answers.v1",
+  "note": "Answers to questions people ask mid-emergency. Each card lists the ways people ask it, what we say back (12 words or fewer per line), and the source. `protocols` limits a card to those protocols (prefix match, so 'cpr' covers all three CPR protocols); empty means it applies anywhere. Ported and rewritten from the August 2026 prototype's cards (app/assets/knowledge/faq_2025.json).",
+  "cards": [
+    {
+      "id": "move_patient",
+      "protocols": [],
+      "ask": ["should i move him", "should i move her", "can i move them", "is it ok to move them", "should i drag them", "do i move them out of the road", "should i pick them up"],
+      "say": ["Only move them if it's not safe where they are.", "For CPR, flat on a firm floor is best."],
+      "source": "aha2025-highlights",
+      "quote": "Verify scene safety. [...] For adult cardiac arrest, rescuers should perform chest compressions with the patient on a firm surface and with the patient's torso at approximately the level of the rescuer's knees.",
+      "verified": true
+    },
+    {
+      "id": "scene_safety",
+      "protocols": [],
+      "ask": ["is it safe", "is it safe to go in", "there is traffic", "there are wires down", "there is a fire", "is it safe to touch them"],
+      "say": ["Check for traffic, fire, wires, or water first.", "You can't help if you get hurt."],
+      "source": "aha2025-highlights",
+      "quote": "Verify scene safety.",
+      "verified": true
+    },
+    {
+      "id": "alone",
+      "protocols": [],
+      "ask": ["i am alone", "there is nobody else here", "no one else is around", "there is no one to help", "i am on my own"],
+      "say": ["Call 911 yourself, on speaker.", "Put the phone down beside you and keep going."],
+      "source": "aha2025-highlights",
+      "quote": "Activate emergency response system.",
+      "verified": true
+    },
+    {
+      "id": "cpr_depth_rate_adult",
+      "protocols": ["cpr_adult"],
+      "ask": ["how deep do i push", "how hard do i push", "how fast do i push", "what rate", "how many compressions a minute", "am i pushing hard enough", "am i going fast enough", "how far down"],
+      "say": ["About two inches deep. Let it come all the way up.", "Follow the beat. It's set to the right speed."],
+      "source": "aha2025-part7",
+      "quote": "During manual CPR, rescuers should perform chest compressions to a depth of at least 2 inches, or 5 cm, for an average adult while avoiding excessive chest compression depths (greater than 2.4 inches, or 6cm). [...] rescuers perform chest compressions at a rate of 100 to 120/min.",
+      "verified": true
+    },
+    {
+      "id": "cpr_depth_rate_young",
+      "protocols": ["cpr_child", "cpr_infant"],
+      "ask": ["how deep do i push", "how hard do i push", "how fast do i push", "am i pushing hard enough", "how far down"],
+      "say": ["About a third of the depth of the chest.", "Follow the beat. It's set to the right speed."],
+      "source": "aha2025-peds",
+      "quote": null,
+      "verified": false,
+      "note": "Pediatric depth not yet confirmed against the 2025 pediatric text."
+    },
+    {
+      "id": "cpr_hands",
+      "protocols": ["cpr_adult"],
+      "ask": ["where do i put my hands", "where exactly do i push", "which part of the chest", "where on the chest"],
+      "say": ["Heel of one hand on the center of the chest.", "Other hand on top. Arms straight."],
+      "source": "aha2025-part7",
+      "quote": null,
+      "verified": false,
+      "note": "Hand position: confirm the 2025 Part 7 sentence."
+    },
+    {
+      "id": "cpr_surface",
+      "protocols": ["cpr"],
+      "ask": ["they are on a bed", "can i do cpr on a couch", "should i move them to the floor", "does the surface matter", "they are in a chair"],
+      "say": ["Get them flat on the floor. Not a bed."],
+      "source": "aha2025-highlights",
+      "quote": "For adult cardiac arrest, rescuers should perform chest compressions with the patient on a firm surface and with the patient's torso at approximately the level of the rescuer's knees.",
+      "verified": true
+    },
+    {
+      "id": "cpr_gasping",
+      "protocols": ["cpr"],
+      "ask": ["they are gasping", "is gasping breathing", "they are making a snoring noise", "they took a breath should i stop", "is that breathing"],
+      "say": ["Gasping is not breathing.", "Keep pushing."],
+      "source": "aha2025-highlights",
+      "quote": "The No-No-Go framework is reiterated as an effective method for recognizing OHCA.",
+      "verified": true
+    },
+    {
+      "id": "cpr_breaths_adult",
+      "protocols": ["cpr_adult"],
+      "ask": ["do i do mouth to mouth", "do i give breaths", "should i do rescue breaths", "is hands only ok", "do i have to put my mouth on theirs"],
+      "say": ["If you're not trained, hands only is fine.", "Just keep pushing."],
+      "source": "aha2025-highlights",
+      "quote": "they are to guide lay rescuers to use Hands-Only CPR for adults and conventional CPR, including breaths, for children.",
+      "verified": true
+    },
+    {
+      "id": "cpr_stop",
+      "protocols": ["cpr"],
+      "ask": ["when do i stop", "can i stop now", "how long do i keep going", "how long do i do this", "when can i stop"],
+      "say": ["Keep going until they breathe normally or paramedics take over.", "Swap with someone every two minutes if you can."],
+      "source": "aha2025-part7",
+      "quote": null,
+      "verified": false,
+      "note": "Continue until EMS takes over or signs of life; switch compressors about every 2 minutes. Confirm the 2025 Part 7 wording."
+    },
+    {
+      "id": "aed_use",
+      "protocols": ["cpr"],
+      "ask": ["how do i use the aed", "how do i use a defibrillator", "should i go get the aed", "do i need to know how to use it", "what is an aed"],
+      "say": ["Turn it on. It talks you through every step.", "Don't stop pushing to go look for one."],
+      "source": "aha2025-highlights",
+      "quote": "Early high-quality CPR and prompt defibrillation are the most important interventions associated with improved outcomes in adult cardiac arrest.",
+      "verified": true
+    },
+    {
+      "id": "aed_bra",
+      "protocols": ["cpr"],
+      "ask": ["she is wearing a bra", "do i have to take her bra off", "aed on a woman", "do i take off the bra", "there is an underwire"],
+      "say": ["You can move a bra aside.", "No need to remove it."],
+      "source": "aha2025-highlights",
+      "quote": "When placing pads for defibrillation for an adult in cardiac arrest, it might be reasonable to adjust the position of a bra instead of removing it.",
+      "verified": true
+    },
+    {
+      "id": "choking_can_cough",
+      "protocols": ["choking"],
+      "ask": ["they can still cough", "should i hit them if they can cough", "they are coughing hard", "they can talk", "they can still breathe a little"],
+      "say": ["If they can cough hard, let them cough.", "Stay close and watch."],
+      "source": "aha2025-highlights",
+      "quote": "Encourage cough. Continue to check for signs of severe FBAO.",
+      "verified": true
+    },
+    {
+      "id": "choking_pregnant",
+      "protocols": ["choking"],
+      "ask": ["she is pregnant", "i cannot get my arms around them", "they are too big to reach around", "what if she is pregnant"],
+      "say": ["Use chest thrusts instead of belly thrusts."],
+      "source": "aha2025-highlights",
+      "quote": "For patients in the late stages of pregnancy, or when the rescuer is unable to encircle the patient's abdomen, 5 chest thrusts should be used instead.",
+      "verified": true
+    },
+    {
+      "id": "choking_after",
+      "protocols": ["choking"],
+      "ask": ["it came out are they okay", "do they still need a doctor", "it is clear now what next", "what now that it is out"],
+      "say": ["Stay with them until help arrives.", "Keep watching their breathing."],
+      "source": "aha2025-highlights",
+      "quote": "If object is expelled, continue to monitor until advanced care arrives.",
+      "verified": true
+    },
+    {
+      "id": "tourniquet_loosen",
+      "protocols": ["bleeding"],
+      "ask": ["can i take the tourniquet off", "should i loosen it", "it hurts a lot", "he says it hurts", "can i loosen the tourniquet"],
+      "say": ["Never loosen it. Only paramedics take it off.", "It hurts because it's working."],
+      "source": "acs-stop-the-bleed",
+      "quote": "Tourniquets HURT when applied effectively (they HURT A LOT) [...] Pain DOES NOT mean you should take the tourniquet off",
+      "verified": true
+    },
+    {
+      "id": "pressure_check",
+      "protocols": ["bleeding"],
+      "ask": ["should i check the wound", "can i lift up to look", "should i see if it stopped", "can i let go"],
+      "say": ["Don't lift to check. Keep pressing until help arrives."],
+      "source": "acs-stop-the-bleed",
+      "quote": "Don't release pressure to check the wound. [...] Hold pressure until relieved by medical responders.",
+      "verified": true
+    },
+    {
+      "id": "burn_ice",
+      "protocols": ["burns"],
+      "ask": ["should i put ice on it", "can i use ice", "should i put butter on it", "can i put cream on it", "what about aloe"],
+      "say": ["No ice, butter, or creams on it.", "Cool running water only."],
+      "source": "medlineplus-burns",
+      "quote": "Do not apply oil, butter, ice, medicines, cream, oil spray, or any household remedy to a severe burn.",
+      "verified": true
+    },
+    {
+      "id": "burn_how_long",
+      "protocols": ["burns"],
+      "ask": ["how long do i run water", "how long do i cool it", "how long under the water", "is that long enough"],
+      "say": ["At least ten minutes. Twenty is better."],
+      "source": "arc-burn-cooling",
+      "quote": "Begin immediate cooling of thermal burns, preferably with cool running water applied to the burn for a minimum of 10 minutes, ideally 20 minutes.",
+      "verified": true
+    },
+    {
+      "id": "burn_blisters",
+      "protocols": ["burns"],
+      "ask": ["should i pop the blister", "can i pop it", "what do i do about blisters", "should i cover it"],
+      "say": ["Don't pop blisters.", "Cover it loosely with a clean cloth."],
+      "source": "aha-arc-2024-fa",
+      "quote": "it may be reasonable to loosely cover a burn that has intact skin or an intact blister with a clean cloth or nonadherent dry dressing.",
+      "verified": true
+    },
+    {
+      "id": "stroke_time",
+      "protocols": ["stroke"],
+      "ask": ["why does time matter", "when did it start", "what do i tell 911", "how fast do they need help"],
+      "say": ["Note when they last seemed normal.", "Tell 911. Treatment depends on that time."],
+      "source": "medlineplus-stroke",
+      "quote": "TIME: If a person shows any of these symptoms, time is essential. Call 911 or the local emergency number.",
+      "verified": true
+    },
+    {
+      "id": "naloxone_second",
+      "protocols": ["opioid_overdose"],
+      "ask": ["when do i give another dose", "should i give more narcan", "it is not working", "nothing happened", "do i spray again"],
+      "say": ["No change in two to three minutes?", "New spray, other nostril."],
+      "source": "ohsu-narcan",
+      "quote": "If they don't within 2-3 minutes, give a 2nd dose in the other nostril. You will need a new nasal spray for the 2nd dose.",
+      "verified": true
+    },
+    {
+      "id": "naloxone_harm",
+      "protocols": ["opioid_overdose"],
+      "ask": ["what if it is not opioids", "will narcan hurt them", "i do not know what they took", "is narcan safe"],
+      "say": ["Narcan won't hurt them if it isn't opioids.", "Use it anyway."],
+      "source": "ohsu-narcan",
+      "quote": "If you think someone is having an overdose, use Narcan right away -- even if you don't know what drugs they took. Narcan only works for opioids, but there is no harm if they took a different drug.",
+      "verified": true
+    }
+  ]
+}

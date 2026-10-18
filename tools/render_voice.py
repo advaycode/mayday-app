@@ -11,6 +11,7 @@ rendered once, here, with the Piper neural voice, and shipped inside the app.
 
 Reads:   mobile/src/protocols/corpus/*.json   (every say / reminder / breath line)
          mobile/src/audio/systemLines.json    (counts and app lines)
+         mobile/src/voice/answers.json        (answers to open questions)
 Writes:  mobile/assets/voice/en/<key>.wav|mp3
          mobile/src/audio/voiceManifest.ts    (key -> require(...) for Metro)
 
@@ -36,6 +37,7 @@ ROOT = Path(__file__).resolve().parents[1]
 MOBILE = ROOT / "mobile"
 CORPUS = MOBILE / "src" / "protocols" / "corpus"
 SYSTEM = MOBILE / "src" / "audio" / "systemLines.json"
+ANSWERS = MOBILE / "src" / "voice" / "answers.json"
 OUT = MOBILE / "assets" / "voice" / "en"
 MANIFEST = MOBILE / "src" / "audio" / "voiceManifest.ts"
 MODEL = Path.home() / ".piper" / "models" / "en_US-lessac-medium.onnx"
@@ -87,6 +89,8 @@ def collect_lines() -> tuple[list[str], list[str]]:
                 lines.append(step["depthSay"])
     system = json.loads(SYSTEM.read_text(encoding="utf-8"))
     lines += list(system["lines"].values()) + list(system["confirm"].values()) + TIMELINE_LINES
+    for card in json.loads(ANSWERS.read_text(encoding="utf-8"))["cards"]:
+        lines += card["say"]
     counts = system["counts"]
     # De-duplicate while keeping order.
     seen: set[str] = set()

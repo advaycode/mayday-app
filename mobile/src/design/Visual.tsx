@@ -119,32 +119,31 @@ function AedPads() {
   );
 }
 
-// Reviewer: on the side, top knee bent forward at a right angle, head tilted
-// back, lower arm out in front, hand under the cheek.
+// Reviewer: seen from above. On their side, facing the bottom of the
+// picture. Lower arm out at a right angle; upper hand under the cheek; upper
+// leg with hip and knee both bent to right angles; lower leg straight.
 function Recovery() {
   return (
-    <G stroke={ink} strokeWidth={STROKE + 1} strokeLinecap="round" strokeLinejoin="round" fill="none">
-      <Line x1={10} y1={152} x2={190} y2={152} stroke={faint} strokeWidth={STROKE} />
-      <Circle cx={42} cy={106} r={14} />
-      <Path d="M56 112 L118 120" />
-      {/* top leg bent to a right angle */}
-      <Path d="M118 120 L148 104 L150 140" />
-      {/* lower leg straight */}
-      <Path d="M118 124 L182 140" stroke={faint} />
-      {/* top arm, hand under the cheek */}
-      <Path d="M70 114 L56 132 L40 122" />
+    <G strokeWidth={3} strokeLinecap="round" strokeLinejoin="round" fill="none">
+      <Circle cx={34} cy={98} r={14} stroke={ink} />
+      <Path d="M50 84 C70 80 104 80 122 86 C126 94 126 104 122 112 C104 118 70 118 50 114 C46 104 46 94 50 84 Z" stroke={ink} />
+      <Path d="M62 84 L62 42 L50 34" stroke={faint} />
+      <Path d="M70 114 L56 132 L36 118" stroke={ink} />
+      <Path d="M122 92 L188 92" stroke={faint} />
+      <Path d="M120 108 L134 150 L176 150" stroke={ink} />
     </G>
   );
 }
 
-// Reviewer: lying flat on the back on a firm floor.
+// Reviewer: lying flat on the back on a firm floor, seen from the side.
 function Supine() {
   return (
-    <G stroke={ink} strokeWidth={STROKE + 1} strokeLinecap="round" strokeLinejoin="round" fill="none">
-      <Line x1={10} y1={140} x2={190} y2={140} stroke={faint} strokeWidth={STROKE} />
-      <Circle cx={34} cy={122} r={13} />
-      <Path d="M47 124 L120 124 L182 128" />
-      <Path d="M70 124 L102 130" stroke={faint} />
+    <G strokeWidth={3} strokeLinecap="round" strokeLinejoin="round" fill="none">
+      <Line x1={8} y1={146} x2={192} y2={146} stroke={faint} strokeWidth={STROKE} />
+      <Circle cx={30} cy={124} r={13} stroke={ink} />
+      <Path d="M44 120 C60 112 98 112 114 118 L118 132 C100 136 62 136 44 132 Z" stroke={ink} />
+      <Path d="M118 120 L182 126 M118 132 L182 136 M182 126 L186 116 M182 136 L188 128" stroke={ink} />
+      <Path d="M58 132 L100 138" stroke={faint} />
     </G>
   );
 }

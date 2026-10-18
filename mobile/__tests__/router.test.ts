@@ -9,6 +9,7 @@ import * as path from 'path';
 import { normalizeUtterance, route } from '@/voice/router';
 import { RouterOutput } from '@/voice/routerSchema';
 
+import heldOut from './router-heldout.json';
 import evalSet from './router-eval.json';
 
 type IntakeCase = { say: string; protocol: string | null; slots: Record<string, string> };
@@ -78,5 +79,21 @@ describe('router', () => {
   it('asks the age when it matters and nobody said it', () => {
     expect(route("he's choking").next_question).toBe('age');
     expect(route('my baby is choking').next_question).toBeNull();
+  });
+});
+
+describe('router, held-out set', () => {
+  // These sentences were never used to tune the router. The number is reported,
+  // not tuned: a failure here is information, recorded in reports/router-heldout.json.
+  it('reports accuracy on unseen sentences', () => {
+    const results = heldOut.intake.map((c) => ({ ...c, got: route(c.say).protocol_id }));
+    const acc = results.filter((r) => r.got === r.protocol).length / results.length;
+    fs.writeFileSync(
+      path.join(__dirname, '..', 'reports', 'router-heldout.json'),
+      JSON.stringify({ cases: results.length, protocolAccuracy: +acc.toFixed(3), failures: results.filter((r) => r.got !== r.protocol) }, null, 2),
+    );
+    // Safety floor only: no unseen not-breathing sentence may miss CPR entirely.
+    for (const r of results) if (r.protocol?.startsWith('cpr')) expect([r.say, r.got?.startsWith('cpr') || r.got === 'opioid_overdose']).toEqual([r.say, true]);
+    expect(acc).toBeGreaterThan(0.6);
   });
 });

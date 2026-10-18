@@ -1,4 +1,4 @@
-import { Brain, ChatText, Fire, Person, Phone, PhoneDisconnect, Pill } from 'phosphor-react-native';
+import { Brain, Camera, ChatText, Fire, Person, Phone, PhoneDisconnect, Pill } from 'phosphor-react-native';
 import { StyleSheet, View } from 'react-native';
 
 import { DEMO_DIAL, DEMO_MODE } from '@/config';
@@ -8,6 +8,10 @@ import { Text } from '@/design/Text';
 import { color, space } from '@/design/tokens';
 import { elapsed, summaryLine } from '@/incident/log';
 import { formatCoords } from '@/location/location';
+
+import { online } from '@/ai/proxy';
+import { careAdvice, describe, miles } from '@/facilities/nearest';
+import { protocols } from '@/protocols';
 
 import { textTo911 } from './call';
 import type { Incident } from './useIncident';
@@ -23,6 +27,8 @@ export function DispatcherSheet({ incident, open, onClose, now }: { incident: In
   const where = fix?.address ?? (fix ? 'Address unavailable' : 'Finding location');
   const simulated = state.call.status === 'calling' && state.call.how === 'simulated';
 
+  const care = state.engine ? protocols[state.engine.protocolId].care : null;
+  const advice = fix ? careAdvice(care, slots, fix) : null;
   const body = `EMERGENCY. ${summary} Location: ${fix?.address ?? ''} ${fix ? formatCoords(fix) : ''}`.trim();
 
   return (
@@ -54,6 +60,14 @@ export function DispatcherSheet({ incident, open, onClose, now }: { incident: In
       <Text variant="body" selectable>
         {summary}
       </Text>
+      {fix && advice && advice.likely && (
+        <View style={{ gap: space[1] }}>
+          {advice.line ? <Text variant="bodyStrong">{advice.line}</Text> : null}
+          <Text variant="caption" tone="muted">
+            Nearest: {advice.likely.f.name}, {describe(advice.likely.f).replace(/\.$/, '').toLowerCase()}, {miles(fix, advice.likely.f).toFixed(1)} mi
+          </Text>
+        </View>
+      )}
       <View style={styles.row}>
         {state.call.status === 'calling' ? (
           <Button label={simulated ? 'End call' : 'Close'} icon={PhoneDisconnect} onPress={() => (simulated ? cancelCall() : onClose())} style={{ flex: 1 }} />
@@ -70,7 +84,7 @@ export function DispatcherSheet({ incident, open, onClose, now }: { incident: In
 }
 
 /** Everything that is not one of the three big tiles. */
-export function MoreSheet({ incident, open, onClose }: { incident: Incident; open: boolean; onClose: () => void }) {
+export function MoreSheet({ incident, open, onClose, onScan }: { incident: Incident; open: boolean; onClose: () => void; onScan: () => void }) {
   const { startProtocol, setAge, slots } = incident;
   const go = (id: Parameters<typeof startProtocol>[0], extra?: Parameters<typeof startProtocol>[1]) => {
     onClose();
@@ -98,6 +112,7 @@ export function MoreSheet({ incident, open, onClose }: { incident: Incident; ope
         <Button stacked size="emergency" icon={Brain} label="Stroke" onPress={() => go('stroke')} style={{ flex: 1 }} />
         <Button stacked size="emergency" icon={Fire} label="Burn" onPress={() => go('burns')} style={{ flex: 1 }} />
       </View>
+      {online() && <Button label="Photo check" icon={Camera} onPress={onScan} accessibilityHint="Take a photo of a burn or wound to pick the right steps" />}
     </Sheet>
   );
 }

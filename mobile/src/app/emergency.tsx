@@ -2,17 +2,18 @@ import { useKeepAwake } from 'expo-keep-awake';
 import { router } from 'expo-router';
 import { Microphone, MicrophoneSlash, X } from 'phosphor-react-native';
 import { useEffect, useRef, useState } from 'react';
-import { AppState, Pressable, StyleSheet, View } from 'react-native';
+import { AppState, Platform, Pressable, StyleSheet, View } from 'react-native';
 import Animated, { Easing, interpolateColor, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
 import { audio, unlockAudio } from '@/audio/engine';
 import systemLines from '@/audio/systemLines.json';
-import { CALL_COUNTDOWN_S } from '@/config';
+import { CALL_COUNTDOWN_S, DEMO_MODE } from '@/config';
 import { CprView } from '@/emergency/CprView';
 import { Handoff } from '@/emergency/Handoff';
 import { Intake } from '@/emergency/Intake';
 import { CallPill, DemoBanner, TopBar } from '@/emergency/parts';
 import { DispatcherSheet, MoreSheet } from '@/emergency/sheets';
+import { ScanSheet } from '@/emergency/ScanSheet';
 import { StepView } from '@/emergency/StepView';
 import { useIncident } from '@/emergency/useIncident';
 import { Glass } from '@/design/Glass';
@@ -33,7 +34,7 @@ export default function Emergency() {
   const incident = useIncident();
   const { state, step } = incident;
   const [now, setNow] = useState(Date.now());
-  const [sheet, setSheet] = useState<'dispatch' | 'more' | null>(null);
+  const [sheet, setSheet] = useState<'dispatch' | 'more' | 'scan' | null>(null);
   const [listen, setListen] = useState<ListenState>('off');
   const [voicePaused, setVoicePaused] = useState(false);
   const [showLog, setShowLog] = useState(false);
@@ -121,6 +122,23 @@ export default function Emergency() {
     return () => sub.remove();
   }, [state.call.status, state.call.how]);
 
+  // Test hook for the web preview (demo builds only): lets an automated
+  // browser "say" a sentence, the same way the speech recogniser would.
+  useEffect(() => {
+    if (Platform.OS !== 'web' || !DEMO_MODE) return;
+    const w = window as unknown as { __mayday?: object };
+    w.__mayday = {
+      hear: (t: string) => hear.current(t),
+      audio: () => {
+        const a = audio();
+        return a ? { state: (a.ctx as { state?: string }).state, time: a.now(), speaking: a.isSpeaking(), said: a.lastSpoken } : null;
+      },
+    };
+    return () => {
+      delete w.__mayday;
+    };
+  }, []);
+
   const phase = showLog ? 'handoff' : state.phase;
   const stepKey = `${state.engine?.protocolId}#${state.engine?.stepId}#${state.engine?.trail.length}`;
 
@@ -185,7 +203,8 @@ export default function Emergency() {
       {phase !== 'protocol' && <View style={{ height: insets.bottom }} />}
 
       <DispatcherSheet incident={incident} open={sheet === 'dispatch'} onClose={() => setSheet(null)} now={now} />
-      <MoreSheet incident={incident} open={sheet === 'more'} onClose={() => setSheet(null)} />
+      <MoreSheet incident={incident} open={sheet === 'more'} onClose={() => setSheet(null)} onScan={() => setSheet('scan')} />
+      <ScanSheet incident={incident} open={sheet === 'scan'} onClose={() => setSheet(null)} />
     </Animated.View>
   );
 }

@@ -6,6 +6,7 @@ import { clipKey, voiceClips, voiceDurations } from '@/audio/voiceManifest';
 import systemLines from '@/audio/systemLines.json';
 import { BACK_LINE, period, swapLine } from '@/cpr/timeline';
 import { protocols } from '@/protocols';
+import { cards } from '@/voice/answer';
 
 function allProtocolLines(): string[] {
   return Object.values(protocols).flatMap((p) =>
@@ -33,6 +34,10 @@ describe('voice clips', () => {
   it('cover the metronome lines (back to compressions, every swap minute)', () => {
     const lines = [BACK_LINE, ...Array.from({ length: 20 }, (_, i) => swapLine(i + 1)), swapLine(30)];
     expect(lines.filter((l) => !(clipKey(l) in voiceClips))).toEqual([]);
+  });
+
+  it('cover every answer card', () => {
+    expect(cards.flatMap((c) => c.say).filter((l) => !(clipKey(l) in voiceClips))).toEqual([]);
   });
 
   it('fit every count inside one beat at 110 per minute, with room for the click', () => {

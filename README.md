@@ -1,109 +1,76 @@
 # Mayday
 
-**Offline, voice-first coaching for an untrained bystander in a medical emergency.**
+**Mayday talks a panicking bystander through a medical emergency, out loud and step by step, while help is on the way, even with no signal.**
 
-Congressional App Challenge 2026. Flutter, Android and iOS.
+Congressional App Challenge 2026. Expo (React Native, TypeScript) for iPhone and Android, with a web build that runs inside a life-size iPhone frame on any computer.
 
-Most people who witness a cardiac arrest do nothing, and it is not because they do not care — it is
-because they do not know what to do and there is nobody standing next to them saying it out loud.
-Mayday is that voice. It works in a basement, on a trail, in a car park, with no signal and no
-account, and every single instruction it gives you shows you the line of the guidelines it came
-from.
-
----
+<p>
+<img src="docs/screens/home.png" width="200" alt="Home: a breathing light and a red 911 button you hold to start">
+<img src="docs/screens/emergency.png" width="200" alt="Emergency mode: a 911 countdown you can cancel, listening, and four large choices">
+<img src="docs/screens/cpr.png" width="200" alt="CPR coach: the compression count in very large type, pulsing on the beat">
+<img src="docs/screens/map.png" width="200" alt="Map: the nearest emergency room, with trauma centers and urgent care kept separate">
+</p>
 
 ## What it does
 
-- **One button.** Cold start to an instruction, no onboarding, no sign-in, no splash.
-- **One instruction at a time**, in type you can read at arm's length while kneeling.
-- **Talk to it.** Say what you can see — *"he's not breathing"*, *"something's stuck in her
-  throat"*, *"how deep do I push"* — and it answers out loud and starts the right protocol.
-- **Hands-free during the incident.** `next`, `repeat`, `what do I do`, `I'm alone`, `slower`,
-  `call 911`. Both of your hands are busy.
-- **A compression coach** with a drift-corrected metronome and a real rate estimate from the
-  accelerometer.
-- **An EMS handoff**: a timestamped timeline of everything that happened, to hand to the paramedics.
-- **A source on every screen.** Tap it and read the guideline text the instruction encodes.
+Hold the red button. Mayday starts listening and starts a 5-second countdown to call 911 that you can cancel. Say what is happening ("my dad collapsed and he's not breathing") or tap it. It answers out loud, asks at most one question, and coaches you through the right protocol: a big picture, one instruction in 32-point type, and a voice. For CPR it counts every compression out loud at 110 a minute, cues breaths if you are trained, tells you when to swap rescuers, and switches to AED steps the moment you say "the AED is here". It keeps a timestamped log to show the paramedics.
 
-## The three things that make it different
+Ten protocols, every step cited: adult, child and infant CPR; adult and child choking; infant choking; severe bleeding; burns; stroke (FAST); opioid overdose with naloxone; recovery position.
 
-**1. It shows you where every word came from.**
-The protocol corpus (`app/assets/protocols/`) is a set of cited state machines: one guideline quote
-per step, a `verified` flag per step, and a test that fails the build if a Tier A instruction is not
-traceable to a confirmed primary source. Two steps are currently marked **unconfirmed in the app
-itself**, because the AHA Part 7 PDF sits behind a Cloudflare challenge and has not been read
-first-hand. Showing that is the point.
+## Why it's different
 
-**2. Its AI feature contains no language model.**
-You can talk to Mayday and it answers — and the answer surface is a JSON file of authored, cited
-cards that you can read in ten minutes. Retrieval selects the answer; nothing writes one. That buys
-things a model cannot give here: a citation on every answer, an honest *"I don't know — call 911"*
-below a confidence threshold, microsecond latency with nothing to download, and a hard refusal on
-emergencies it does not cover. *"My baby is not breathing"* contains the most time-critical phrase
-in the app, and the correct answer is still to refuse — an infant is not a small adult, and the 2025
-Guidelines withdrew the infant technique most first-aid content still teaches. Full argument in
-[`app/docs/ASSISTANT.md`](app/docs/ASSISTANT.md).
+1. **The AI never writes medical instructions.** Every instruction comes from a protocol file with the guideline sentence it encodes. Models only pick which protocol fits and rephrase cited passages, and their output is schema-checked and discarded if it doesn't fit.
+2. **It listens.** Speech in, voice out, interruptible, and honest when a phone call takes the microphone away.
+3. **The metronome doesn't drift.** Beats are scheduled on the audio hardware clock. 10 simulated minutes with a deliberately bad timer: 1,100 beats, zero drift. A naive version is 2.2 seconds late.
+4. **It knows which hospital.** 145 Florida emergency rooms, all 36 state trauma centers with levels, urgent care marked "not for emergencies". Offline.
+5. **It works in a basement.** Protocols, voice, CPR coach, 911 and the hospital data need no signal.
+6. **It is built for the 2025 guidelines**, which changed infant CPR (no more two fingers), adult choking (back blows first) and AED pads (a bra can be moved aside). Tests fail the build if those regress.
 
-**3. It knows when it has gone deaf.**
-An app cannot record audio while a call is up, on either platform — and on Android the microphone
-API *succeeds* and returns digital silence rather than an error, so the naive implementation looks
-alive and is deaf. Mayday watches the call state, and when it loses the microphone it **says so**
-and hands you the touch path. Voice is an accelerator over something that always works.
+## Run it
 
-## Content currency
+**On this computer, as a phone:** double-click **Mayday Phone** on the desktop, or:
 
-Built against the **2025** AHA Guidelines for CPR and ECC (published October 2025), which changed
-things most shipping first-aid apps still get wrong:
-
-- Adult choking now starts with **5 back blows**, then 5 abdominal thrusts — reversing the previous
-  guidance and ending the historic AHA/Red Cross split.
-- The infant 2-finger compression technique is **withdrawn**.
-- The AED script may say a bra can be **moved aside** rather than removed, added because women are
-  defibrillated at significantly lower rates.
-
-Rate, and not depth, is measured — because
-[Ruiz de Gauna et al. (PLOS ONE, 2016)](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0150139)
-shows accelerometer depth only works with a bonded sensor on a rigid manikin, and telling a
-bystander their compressions are deep enough when they are not is the worst thing this app could
-do. Reasoning in [`research/DECISIONS.md`](research/DECISIONS.md).
-
-## Running it
-
-```bash
-cd app
-flutter pub get
-flutter test        # 94 tests
-flutter analyze
-flutter run
+```powershell
+cd mobile; npm install; npm run build:web
+powershell -ExecutionPolicy Bypass -File ..\mirror\launch.ps1
 ```
 
-The 911 dialer **refuses to place a real call unless the build is a release build**, so development,
-testing and filming the demo video are all safe.
+That opens the real app in an iPhone 17 Pro frame at its true resolution: 402 × 874 points (1206 × 2622 pixels), one screen pixel per point. All calls are simulated (DEMO_MODE).
+
+**On a phone:** `cd mobile && npx expo start`, then scan the QR code with Expo Go. Expo Go lacks two native modules (speech recognition and the audio engine), so for the full app build a development client: `npx expo run:android` or `eas build --profile development`.
+
+**Tests:** `cd mobile && npm test` (145 tests) and `npx tsc --noEmit`.
+
+**AI features (optional):** `cd proxy && npm install && npm run dev` with keys in `proxy/.dev.vars`, then `EXPO_PUBLIC_PROXY_URL=http://localhost:8787` in `mobile/.env.local`. Without keys the app is complete; the photo check is hidden.
+
+## How it works
+
+Plain-language walkthrough, with a diagram and a three-sentence explanation of each part: **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)**. Design rules: [design/SYSTEM.md](design/SYSTEM.md).
+
+## Medical sources
+
+Every spoken line, its source, and whether it has been verified: **[docs/MEDICAL_SOURCES.md](docs/MEDICAL_SOURCES.md)** (generated from the protocol files). Primary sources: 2025 American Heart Association Guidelines for CPR and ECC; 2024 AHA and American Red Cross Guidelines for First Aid; American Red Cross Scientific Advisory Council (burn cooling); American College of Surgeons STOP THE BLEED; NIH MedlinePlus. 64 of 78 steps are quoted from their source; 14 await review by a CPR-certified reviewer because the publisher blocks automated download, and they are marked in the app.
+
+## Data sources
+
+ERs: CMS Provider Data Catalog, Hospital General Information. Trauma centers: Florida Department of Health, Florida Trauma Centers (July 23 2026). Urgent care: OpenStreetMap contributors. Geocoding: U.S. Census Bureau. Statistics: CARES 2024 Metrics Summary. Map tiles: Esri, HERE, Garmin, OpenStreetMap. Voice: Piper (en_US-lessac-medium).
+
+## AI disclosure
+
+AI tools were used in building Mayday, and the app uses AI models at runtime. Full list of what each tool did: **[submission/ai-disclosure.md](submission/ai-disclosure.md)**.
+
+## Limitations
+
+Read [docs/PROGRESS.md](docs/PROGRESS.md#known-limitations-say-them-dont-hide-them). In short: not yet tested on physical phones; 14 steps await medical review; the router gets 85% of unseen sentences right (its misses are listed); English only.
+
+**Mayday guides you while help is on the way. Always call 911.** It is not a substitute for training or professional care, and it does not diagnose.
 
 ## Layout
 
 ```
-app/                     Flutter app
-  lib/src/domain/        protocol model — cited state machines
-  lib/src/engine/        Tier A execution: deterministic, no model in the loop
-  lib/src/cpr/           metronome + compression-rate detection
-  lib/src/ai/            the assistant — see app/docs/ASSISTANT.md
-  lib/src/features/      screens
-  assets/protocols/      the cited corpus
-  assets/knowledge/      the assistant's answer cards and vocabulary
-  test/                  94 tests, including the architectural invariants
-  DEPENDENCIES.md        third-party code and AI-use disclosure (CAC §3)
-research/                sourced research notes
-  DECISIONS.md           the findings that reshaped the spec — read this first
-STATE.md                 where the build is, and what is next
+mobile/      the app (Expo, TypeScript)          proxy/     model proxy (Cloudflare Worker)
+mirror/      phone frame + launcher               tools/     Python: voice, map data, sources doc, icons
+docs/        architecture, progress, sources      design/    design system
+research/    findings and raw notes               submission/, video/   drafts for the team to rewrite
+app/         the August 2026 Flutter prototype (superseded; its research and protocol content carried over)
 ```
-
-## Status and honesty
-
-This is in-progress work for the October 2026 deadline. What is **not** done is listed in
-[`STATE.md`](STATE.md) rather than hidden: audio clicks for the metronome, the iOS half of
-call-state detection, protocols beyond adult CPR and adult choking, and — importantly — nothing has
-run on physical hardware yet.
-
-Mayday coaches you through published first-aid protocols. It is not a substitute for professional
-medical care or for formal training, and it does not diagnose. In an emergency, call 911.

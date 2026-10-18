@@ -1,0 +1,25 @@
+{
+  "note": "HELD-OUT set, written on 2026-10-18 after the router was tuned on router-eval.json and never used for tuning. Its accuracy is the honest number to quote. If you change the router because of a failure here, move these cases into router-eval.json and write a new held-out set.",
+  "intake": [
+    { "say": "oh god my uncle just fell over at dinner and he's not moving or breathing", "protocol": "cpr_adult" },
+    { "say": "there's a man on the sidewalk who isn't breathing", "protocol": "cpr_adult" },
+    { "say": "please help my mother is unresponsive and making gasping sounds", "protocol": "cpr_adult" },
+    { "say": "my newborn won't breathe", "protocol": "cpr_infant" },
+    { "say": "my 9 year old son collapsed at practice no pulse", "protocol": "cpr_child" },
+    { "say": "a lady collapsed in the store she's breathing but out cold", "protocol": "recovery_position" },
+    { "say": "he's choking on a piece of meat and can't make a sound", "protocol": "choking" },
+    { "say": "my 8 month old is choking on something", "protocol": "choking_infant" },
+    { "say": "my daughter swallowed a marble and can't breathe", "protocol": "choking" },
+    { "say": "he sliced his thigh with a chainsaw there's blood everywhere", "protocol": "bleeding" },
+    { "say": "my coworker's arm is gushing blood", "protocol": "bleeding" },
+    { "say": "she's been stabbed in the neck", "protocol": "bleeding" },
+    { "say": "my kid touched the stove and burned his palm", "protocol": "burns" },
+    { "say": "hot coffee spilled all over the baby", "protocol": "burns" },
+    { "say": "my dad's speech is slurred and his face looks weird on one side", "protocol": "stroke" },
+    { "say": "she suddenly can't move her right arm", "protocol": "stroke" },
+    { "say": "my brother took heroin and he's blue and not breathing", "protocol": "opioid_overdose" },
+    { "say": "I found my roommate passed out with a needle next to him", "protocol": "opioid_overdose" },
+    { "say": "my friend is having an allergic reaction", "protocol": null },
+    { "say": "someone is having a seizure on the floor", "protocol": null }
+  ]
+}
