@@ -5,8 +5,10 @@ import { Platform } from 'react-native';
 
 if (Platform.OS === 'web') {
   const { LoadSkiaWeb } = require('@shopify/react-native-skia/lib/module/web');
-  // canvaskit.wasm is copied into public/ and served from the site root.
-  LoadSkiaWeb({ locateFile: (file) => `/${file}` }).then(() => require('expo-router/entry'));
+  // canvaskit.wasm is copied into public/ and served from the site root, or
+  // from the base path when the site lives in a folder (the iPhone build).
+  const base = process.env.EXPO_BASE_URL ?? '';
+  LoadSkiaWeb({ locateFile: (file) => `${base}/${file}` }).then(() => require('expo-router/entry'));
 } else {
   require('expo-router/entry');
 }

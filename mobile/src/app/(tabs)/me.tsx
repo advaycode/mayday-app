@@ -69,7 +69,7 @@ export default function Me() {
       {DEMO_MODE && (
         <View style={styles.demo}>
           <Text variant="bodyStrong" style={{ color: color.void }}>
-            Demo. Calls are simulated.
+            Mayday never calls 911. Call it yourself.
           </Text>
         </View>
       )}

@@ -6,14 +6,14 @@ Congressional App Challenge 2026. Expo (React Native, TypeScript) for iPhone and
 
 <p>
 <img src="docs/screens/home.png" width="200" alt="Home: a breathing light and a red 911 button you hold to start">
-<img src="docs/screens/emergency.png" width="200" alt="Emergency mode: a 911 countdown you can cancel, listening, and four large choices">
+<img src="docs/screens/emergency.png" width="200" alt="Emergency mode: a practice-call countdown, listening, and four large choices">
 <img src="docs/screens/cpr.png" width="200" alt="CPR coach: the compression count in very large type, pulsing on the beat">
 <img src="docs/screens/map.png" width="200" alt="Map: the nearest emergency room, with trauma centers and urgent care kept separate">
 </p>
 
 ## What it does
 
-Hold the red button. Mayday starts listening and starts a 5-second countdown to call 911 that you can cancel. Say what is happening ("my dad collapsed and he's not breathing") or tap it. It answers out loud, asks at most one question, and coaches you through the right protocol: a big picture, one instruction in 32-point type, and a voice. For CPR it counts every compression out loud at 110 a minute, cues breaths if you are trained, tells you when to swap rescuers, and switches to AED steps the moment you say "the AED is here". It keeps a timestamped log to show the paramedics.
+Hold the red button. Mayday starts listening and shows a 5-second practice-call countdown. **It never calls 911 itself**; you call, and it gives you your address and a summary to read out. Say what is happening ("my dad collapsed and he's not breathing") or tap it. It answers out loud, asks at most one question, and coaches you through the right protocol: a big picture, one instruction in 32-point type, and a voice. For CPR it counts every compression out loud at 110 a minute, cues breaths if you are trained, tells you when to swap rescuers, and switches to AED steps the moment you say "the AED is here". It keeps a timestamped log to show the paramedics.
 
 Ten protocols, every step cited: adult, child and infant CPR; adult and child choking; infant choking; severe bleeding; burns; stroke (FAST); opioid overdose with naloxone; recovery position.
 
@@ -23,7 +23,7 @@ Ten protocols, every step cited: adult, child and infant CPR; adult and child ch
 2. **It listens.** Speech in, voice out, interruptible, and honest when a phone call takes the microphone away.
 3. **The metronome doesn't drift.** Beats are scheduled on the audio hardware clock. 10 simulated minutes with a deliberately bad timer: 1,100 beats, zero drift. A naive version is 2.2 seconds late.
 4. **It knows which hospital.** 145 Florida emergency rooms, all 36 state trauma centers with levels, urgent care marked "not for emergencies". Offline.
-5. **It works in a basement.** Protocols, voice, CPR coach, 911 and the hospital data need no signal.
+5. **It works in a basement.** Protocols, voice, CPR coach and the hospital data need no signal.
 6. **It is built for the 2025 guidelines**, which changed infant CPR (no more two fingers), adult choking (back blows first) and AED pads (a bra can be moved aside). Tests fail the build if those regress.
 
 ## Run it
@@ -35,7 +35,7 @@ cd mobile; npm install; npm run build:web
 powershell -ExecutionPolicy Bypass -File ..\mirror\launch.ps1
 ```
 
-That opens the real app in an iPhone 17 Pro frame at its true resolution: 402 × 874 points (1206 × 2622 pixels), one screen pixel per point. All calls are simulated (DEMO_MODE).
+That opens the real app in an iPhone 17 Pro frame at its true resolution: 402 × 874 points (1206 × 2622 pixels), one screen pixel per point. Mayday never calls anyone; the call is a practice call.
 
 **On a phone:** `cd mobile && npx expo start`, then scan the QR code with Expo Go. Expo Go lacks two native modules (speech recognition and the audio engine), so for the full app build a development client: `npx expo run:android` or `eas build --profile development`.
 

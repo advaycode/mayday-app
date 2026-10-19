@@ -2,7 +2,7 @@ import { useKeepAwake } from 'expo-keep-awake';
 import { router } from 'expo-router';
 import { Microphone, MicrophoneSlash, X } from 'phosphor-react-native';
 import { useEffect, useRef, useState } from 'react';
-import { AppState, Platform, Pressable, StyleSheet, View } from 'react-native';
+import { Platform, Pressable, StyleSheet, View } from 'react-native';
 import Animated, { Easing, interpolateColor, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
 import { audio, unlockAudio } from '@/audio/engine';
@@ -110,18 +110,6 @@ export default function Emergency() {
       audio()?.stopSpeech();
     };
   }, [level]);
-
-  // Coming back from the phone's dialer while a real call is up: the
-  // microphone belongs to the call now, so say so and switch to touch.
-  useEffect(() => {
-    const sub = AppState.addEventListener('change', (s) => {
-      if (s === 'active' && state.call.status === 'calling' && state.call.how !== 'simulated') {
-        setVoicePaused(true);
-        audio()?.speak([systemLines.lines.micLost]);
-      }
-    });
-    return () => sub.remove();
-  }, [state.call.status, state.call.how]);
 
   // Test hook for the web preview (demo builds only): lets an automated
   // browser "say" a sentence, the same way the speech recogniser would.

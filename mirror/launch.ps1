@@ -20,7 +20,6 @@ function Test-Port($p) {
 if (-not $Dev -and -not (Test-Path (Join-Path $root 'mobile\dist\index.html'))) {
     Write-Host 'Building the web version of the app (first run only, about a minute)...'
     Push-Location (Join-Path $root 'mobile')
-    $env:EXPO_PUBLIC_DEMO_MODE = 'true'
     $env:EXPO_PUBLIC_PROXY_URL = 'http://127.0.0.1:8787'
     $env:EXPO_PUBLIC_TTS_URL = 'http://127.0.0.1:8743'
     npx expo export -p web

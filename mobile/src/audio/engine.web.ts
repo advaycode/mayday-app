@@ -16,6 +16,14 @@ export function audio(): AudioCore | null {
   if (typeof window === 'undefined') return null;
   const Ctor = window.AudioContext ?? (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
   if (!Ctor) return null;
+  // iPhone Safari mutes web audio when the ring switch is on silent, unless the
+  // page says it is playing media (Safari 16.4+). A rescuer must hear the count.
+  try {
+    const session = (navigator as unknown as { audioSession?: { type: string } }).audioSession;
+    if (session) session.type = 'playback';
+  } catch {
+    // older browser: the silent switch applies
+  }
   const ctx = new Ctor({ latencyHint: 'interactive' }) as unknown as Ctx;
   core = new AudioCore(
     ctx,

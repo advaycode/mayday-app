@@ -167,7 +167,7 @@ export function useIncident() {
     update((s) => ({ ...s, call: { ...s.call, status: 'calling', placedAt: Date.now() } }));
     const how = await placeCall();
     update((s) => ({ ...s, call: { ...s.call, status: 'calling', placedAt: Date.now(), how } }));
-    log(how === 'simulated' ? '911 called (demo, simulated)' : how === 'demo-dial' ? '911 called (demo number)' : '911 called');
+    log('Practice call (nothing dialed)');
     haptic('start');
     say([L.calling, L.speaker]);
     return how;

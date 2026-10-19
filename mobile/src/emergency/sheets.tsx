@@ -1,8 +1,7 @@
-import { Brain, Camera, ChatText, Fire, Person, Phone, PhoneDisconnect, Pill } from 'phosphor-react-native';
+import { Brain, Camera, Fire, Person, Phone, PhoneDisconnect, Pill } from 'phosphor-react-native';
 import { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import { DEMO_DIAL, DEMO_MODE } from '@/config';
 import { Button } from '@/design/Button';
 import { Sheet } from '@/design/Sheet';
 import { Text } from '@/design/Text';
@@ -14,7 +13,6 @@ import { capabilities } from '@/ai/proxy';
 import { careAdvice, describe, miles } from '@/facilities/nearest';
 import { protocols } from '@/protocols';
 
-import { textTo911 } from './call';
 import type { Incident } from './useIncident';
 
 /**
@@ -26,21 +24,20 @@ export function DispatcherSheet({ incident, open, onClose, now }: { incident: In
   const fix = state.fix;
   const summary = summaryLine(state.log, slots, state.engine?.protocolId ?? null);
   const where = fix?.address ?? (fix ? 'Address unavailable' : 'Finding location');
-  const simulated = state.call.status === 'calling' && state.call.how === 'simulated';
+  const calling = state.call.status === 'calling';
 
   const care = state.engine ? protocols[state.engine.protocolId].care : null;
   const advice = fix ? careAdvice(care, slots, fix) : null;
-  const body = `EMERGENCY. ${summary} Location: ${fix?.address ?? ''} ${fix ? formatCoords(fix) : ''}`.trim();
 
   return (
     <Sheet open={open} onClose={onClose}>
-      {simulated && (
+      {calling && (
         <View style={styles.callRow}>
           <Text variant="bodyStrong" tabular>
-            Demo call to 911  {elapsed(now - (state.call.placedAt ?? now))}
+            Practice call  {elapsed(now - (state.call.placedAt ?? now))}
           </Text>
           <Text variant="caption" tone="faint">
-            No real call. Simulated for testing.
+            Nothing was dialed. If this is real, call 911 yourself.
           </Text>
         </View>
       )}
@@ -70,16 +67,12 @@ export function DispatcherSheet({ incident, open, onClose, now }: { incident: In
         </View>
       )}
       <View style={styles.row}>
-        {state.call.status === 'calling' ? (
-          <Button label={simulated ? 'End call' : 'Close'} icon={PhoneDisconnect} onPress={() => (simulated ? cancelCall() : onClose())} style={{ flex: 1 }} />
+        {calling ? (
+          <Button label="End" icon={PhoneDisconnect} onPress={cancelCall} style={{ flex: 1 }} />
         ) : (
-          <Button label="Call 911" kind="signal" icon={Phone} onPress={() => { call(); onClose(); }} style={{ flex: 1 }} />
+          <Button label="Practice call" kind="signal" icon={Phone} onPress={() => { call(); onClose(); }} style={{ flex: 1 }} />
         )}
-        <Button label="Text 911" icon={ChatText} onPress={() => textTo911(body)} style={{ flex: 1 }} />
       </View>
-      <Text variant="caption" tone="faint">
-        Text to 911 works in many, not all, counties.{DEMO_MODE ? (DEMO_DIAL ? ' Demo: goes to the test number.' : ' Demo: disabled.') : ''}
-      </Text>
     </Sheet>
   );
 }

@@ -63,7 +63,7 @@ export function TabBar({ showEmergency, ...props }: TabListProps & { showEmergen
       {showEmergency && (
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel="Emergency. Opens emergency mode and starts a 911 countdown you can cancel."
+          accessibilityLabel="Emergency. Opens step-by-step help. It never calls anyone; call 911 yourself."
           onPress={() => {
             haptic('start');
             router.push('/emergency');

@@ -34,8 +34,7 @@
         "ACCESS_FINE_LOCATION",
         "ACCESS_COARSE_LOCATION",
         "CAMERA",
-        "VIBRATE",
-        "CALL_PHONE"
+        "VIBRATE"
       ]
     },
     "web": {

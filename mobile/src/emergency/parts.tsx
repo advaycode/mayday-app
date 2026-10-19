@@ -16,15 +16,15 @@ import type { IncidentState } from './useIncident';
 export function DemoBanner() {
   if (!DEMO_MODE) return null;
   return (
-    <View style={styles.demo} accessibilityRole="alert" accessibilityLabel="Demo mode. No real calls are made.">
+    <View style={styles.demo} accessibilityRole="alert" accessibilityLabel="Mayday never calls 911. Call it yourself.">
       <Text variant="caption" style={{ color: color.void }}>
-        Demo mode. No real calls.
+        Mayday never calls 911.
       </Text>
     </View>
   );
 }
 
-/** The 911 countdown: a red arc that empties over five seconds. */
+/** The practice-call countdown: a red arc that empties over five seconds. Nothing is dialed. */
 export function CountdownRing({ size, remaining, children }: { size: number; remaining: SharedValue<number>; children?: ReactNode }) {
   const r = size / 2 - 6;
   const path = Skia.Path.Circle(size / 2, size / 2, r);
@@ -67,15 +67,15 @@ export function CallPill({ call, now, onPress }: { call: IncidentState['call']; 
   let label: string;
   let red = false;
   if (call.status === 'countdown') {
-    label = `Calling 911 in ${Math.max(0, Math.ceil((call.endsAt - now) / 1000))}`;
+    label = `Practice call in ${Math.max(0, Math.ceil((call.endsAt - now) / 1000))}`;
     red = true;
   } else if (call.status === 'calling') {
-    label = `911  ${elapsed(now - (call.placedAt ?? now))}${call.how === 'simulated' ? '  demo' : ''}`;
+    label = `Practice  ${elapsed(now - (call.placedAt ?? now))}`;
     red = true;
   } else if (call.status === 'delegated') {
     label = 'Someone is calling 911';
   } else {
-    label = 'Call 911';
+    label = 'Practice call';
     red = true;
   }
   return (

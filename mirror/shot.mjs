@@ -5,7 +5,7 @@
 //
 // steps.json is a list like:
 //   [{"wait": 1500}, {"shot": "home.png"}, {"hold": [201, 640, 1000]}, {"wait": 800}, {"shot": "emergency.png"}]
-// Supported: wait, shot, click [x,y], hold [x,y,ms], eval "js", key "Enter".
+// Supported: wait, shot, click [x,y], hold [x,y,ms], eval "js", key "Enter", offline true|false, reload true.
 import { spawn } from 'node:child_process';
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
@@ -89,6 +89,12 @@ await send('Page.navigate', { url });
 const mouse = (type, x, y) => send('Input.dispatchMouseEvent', { type, x, y, button: 'left', clickCount: 1 });
 for (const step of steps) {
   if (step.wait) await sleep(step.wait);
+  if (step.offline !== undefined) {
+    // Airplane mode: the network is cut (a service worker can still answer).
+    await send('Network.enable');
+    await send('Network.emulateNetworkConditions', { offline: step.offline, latency: 0, downloadThroughput: -1, uploadThroughput: -1 });
+  }
+  if (step.reload) await send('Page.reload', { ignoreCache: false });
   if (step.click) {
     await mouse('mousePressed', ...step.click);
     await mouse('mouseReleased', ...step.click);

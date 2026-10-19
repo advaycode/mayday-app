@@ -34,7 +34,7 @@ The numbers that made it urgent: in 2024, 137,119 out-of-hospital cardiac arrest
 
 `[YOU]` Things that are true and worth saying if they are true for you:
 - Medical guidelines change: the 2025 guidelines dropped two-finger infant CPR and changed adult choking to back blows first, and most first-aid content online is out of date.
-- Phones don't let apps dial 911 or listen during a call, and designing honestly around that made the app better.
+- An app that could dial 911 by mistake is dangerous, so Mayday never dials at all, and a test proves it; it hands you what the dispatcher needs instead.
 - Testing what you claim (drift, accuracy on unseen data) changes what you claim.
 
 ## 6. What would you change about your app if you were to create a 2.0 version?

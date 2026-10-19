@@ -44,9 +44,9 @@ export function Intake({ incident, now, remaining, level, listening, onMore }: P
           {status === 'countdown' && (
             <>
               <Text variant="bodyStrong" tone="muted">
-                911
+                Practice call
               </Text>
-              <Text variant="countdown" tabular accessibilityLiveRegion="assertive" accessibilityLabel={`Calling 911 in ${secondsLeft}`}>
+              <Text variant="countdown" tabular accessibilityLiveRegion="assertive" accessibilityLabel={`Practice call in ${secondsLeft}. Nothing is dialed.`}>
                 {secondsLeft}
               </Text>
             </>
@@ -55,7 +55,7 @@ export function Intake({ incident, now, remaining, level, listening, onMore }: P
             <>
               <Phone size={32} color={color.ink} weight="fill" />
               <Text variant="title" style={{ marginTop: space[2] }}>
-                911
+                Practice
               </Text>
               <Text variant="timer" tone="muted" tabular>
                 {elapsed(now - (state.call.placedAt ?? now))}
@@ -74,7 +74,7 @@ export function Intake({ incident, now, remaining, level, listening, onMore }: P
               <Button label="Called" onPress={delegateCall} style={styles.half} accessibilityHint="Someone else is already on the phone with 911" />
             </>
           ) : status === 'calling' ? null : (
-            <Button label="Call 911" kind="signal" icon={Phone} onPress={call} style={{ flex: 1 }} />
+            <Button label="Practice call" kind="signal" icon={Phone} onPress={call} style={{ flex: 1 }} accessibilityHint="Nothing is dialed" />
           )}
         </View>
       </View>

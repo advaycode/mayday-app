@@ -106,13 +106,13 @@ Measured (`reports/adapt-eval.json`, real outputs on this laptop's CPU): qwen2.5
 
 > **Say it:** Mayday talks about your dad as your dad, slows down when you panic, and repeats itself when you're lost. That part runs offline, instantly. An AI can make the wording more natural, but it is never trusted: every line it writes is checked word by word against the original, and if it changes a single medical word, we use the original.
 
-## 5. 911, honestly
+## 5. Mayday never calls 911
 
-Neither iOS nor Android lets an app dial 911 silently, and that is the right rule. So: a 5-second ring you can cancel, then the phone's own dialer (one confirming tap on iOS). "Called" lets a bystander say someone else is on the phone, which is what CPR courses teach anyway. The "Tell the dispatcher" card shows the street address (reverse-geocoded), GPS coordinates with accuracy, and a one-line summary built by a template from the log, never by a model: *"Adult (age not given), unresponsive, not breathing normally. CPR started 3:01 PM."* Text-to-911 opens Messages with that text pre-filled (availability varies by county).
+**Under no circumstances does Mayday call 911, or anyone.** There is no code in the app that can dial or text a number (`src/emergency/call.ts`), the app does not ask for permission to make calls, and demo mode is a constant, not a setting. `__tests__/never911.test.ts` fails the build if a phone or text link, a calling library, or the call permission ever appears.
 
-**DEMO_MODE** is on in every development build and the web preview. It never dials 911: it shows a simulated call, or dials a team member's number. A store build turns it off at build time; nothing inside the app can.
+What the person sees is a practice call: a 5-second ring they can cancel, then "Practice call. Nothing was dialed. If this is real, call 911 yourself." "Called" records that someone else is on the phone, which is what CPR courses teach anyway. The "Tell the dispatcher" card is for the person's own call: the street address (reverse-geocoded), GPS coordinates with accuracy, and a one-line summary built by a template from the log, never by a model: *"Adult (age not given), unresponsive, not breathing normally. CPR started 3:01 PM."* The map shows each hospital's phone number as text; it never dials it.
 
-> **Say it:** Phones don't let apps dial 911 by themselves, so Mayday gives you five seconds to cancel and then hands the call to the phone, with your address and a one-line summary ready to read out. That summary is filled in from what actually happened, never written by AI. In every test build the call is simulated, so we can never reach a real dispatcher by accident.
+> **Say it:** Mayday never calls 911 itself. You call, and it hands you everything a dispatcher asks for: your address, your coordinates and a one-line summary of what happened, filled in from what actually happened, never written by AI. A test fails the build if anyone ever adds a way for the app to dial.
 
 ## 6. The right hospital
 
@@ -136,7 +136,7 @@ On iOS 26 the controls are Apple's real Liquid Glass. In the web preview we rebu
 
 ## 9. Offline
 
-Works with no signal: the protocols, the keyword router, the voice (pre-recorded, including the adapted he/she lines), the CPR coach, the 911 dialer, the dispatcher card's coordinates, and the ER and trauma data. Needs signal: the map's background tiles, the street address (on web), Groq, Claude, and the photo check. Speech recognition is on-device on most recent phones.
+Works with no signal: the protocols, the keyword router, the voice (pre-recorded, including the adapted he/she lines), the CPR coach, the dispatcher card's coordinates, and the ER and trauma data. Needs signal: the map's background tiles, the street address (on web), Groq, Claude, and the photo check. Speech recognition is on-device on most recent phones.
 
 > **Say it:** Emergencies happen in parking garages and basements, so everything that keeps someone alive works in airplane mode. The AI features are extras that switch on when there is signal. Turn off the network mid-CPR and the count doesn't miss a beat.
 

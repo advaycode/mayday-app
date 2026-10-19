@@ -1,19 +1,12 @@
 /**
  * App-wide switches.
  *
- * DEMO_MODE is the most important flag in the app. While it is on, nothing
- * this app does can reach a real 911 dispatcher: the call screen is simulated
- * (or dials EXPO_PUBLIC_DEMO_DIAL, a team member's phone), and texts go to the
- * same number. It is on by default in every development build and in the web
- * preview, and a banner is pinned to every emergency screen while it is on.
- *
- * A store build turns it off by setting EXPO_PUBLIC_DEMO_MODE=false at build
- * time. There is no switch inside the app that turns it off.
+ * DEMO_MODE is always on. Mayday never calls 911 or anyone else: the call
+ * screen is a simulation (src/emergency/call.ts), a banner says so on every
+ * emergency screen, and the voice tells the person to call 911 themselves.
+ * There is no build setting or switch that turns this off.
  */
-export const DEMO_MODE: boolean = __DEV__ || process.env.EXPO_PUBLIC_DEMO_MODE !== 'false';
-
-/** Number to dial instead of 911 while DEMO_MODE is on. Empty = simulated call screen. */
-export const DEMO_DIAL: string = process.env.EXPO_PUBLIC_DEMO_DIAL ?? '';
+export const DEMO_MODE = true;
 
 /**
  * Base URL of the model proxy (proxy/ at the repo root). Empty means the app

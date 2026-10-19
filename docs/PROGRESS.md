@@ -17,6 +17,9 @@ Read this at the start of every session; update it at the end.
 - Fixes: the voice said "nine hundred eleven" (now "nine one one"); the echo guard missed late transcripts of our own voice (now a 12-second window); "no, he's not responding" did not answer "is he breathing?" (now the leading yes/no answers); the map's Call button could dial a real hospital in a demo build (now it only shows the number).
 - 172 tests passing, typecheck clean.
 
+- **Mayday never calls 911.** All dialing and texting code removed, demo mode made permanent, the call permission dropped, and `__tests__/never911.test.ts` fails if any of it comes back. The countdown is a "practice call"; the voice says "Nothing was dialed. If this is real, call 911 yourself." Hospital numbers on the map are shown, never dialed.
+- **iPhone build** (`tools/build_iphone.py` → `mobile/dist-iphone`): an installable home-screen web app for Safari, with icons, full screen under the notch, a service worker that stores all 510 files on first open (tested: reloads and runs the emergency flow with the network cut), no long-press text selection on the 911 button, and audio that plays with the silent switch on. Install steps: `docs/IPHONE.md`.
+
 ### Learned
 - Local models on this CPU add little over the offline adaptation: the lines they get right are mostly the ones the rules already produce. A Claude key would make the AI layer worth its place; without one, the offline adaptation is the feature.
 
@@ -29,7 +32,7 @@ Read this at the start of every session; update it at the end.
 - Protocol engine (pure reducer) with skip-if-known and interrupts.
 - CPR coach on the audio clock: hands-only and 30:2, counts, coaching lines, 2-minute swaps, AED branch, haptics.
 - Voice: speech recognition wrapper, echo guard, barge-in, keyword router (100% on its tuning set, **85% held-out**), offline answers, Groq router and Claude answers through the proxy.
-- 911: 5-second countdown, cancel, "Already called", DEMO_MODE, dispatcher card with address, coordinates and summary, text-to-911.
+- 911: practice-call countdown (never dials), cancel, "Called", dispatcher card with address, coordinates and summary.
 - Map: 145 ERs, 36 trauma centers with levels, 25 urgent cares; nearest with drive estimate; directions; care advice by protocol.
 - Photo check (Claude vision via proxy), hedged, picks burns or bleeding.
 - Liquid Glass (iOS 26 native; web refraction), Skia orb shader, design system `design/SYSTEM.md`.
