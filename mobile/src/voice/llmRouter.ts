@@ -1,3 +1,4 @@
+import { capabilities } from '@/ai/proxy';
 import { PROXY_URL } from '@/config';
 import type { Slots } from '@/protocols/engine';
 
@@ -18,7 +19,7 @@ import { RouterOutput, type RouterOutput as Output } from './routerSchema';
 const DEADLINE_MS = 1200;
 
 export async function routeWithModel(transcript: string, context: { phase: string; slots: Slots }): Promise<Output | null> {
-  if (!PROXY_URL) return null;
+  if (!PROXY_URL || !(await capabilities()).groq) return null;
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), DEADLINE_MS);
   try {

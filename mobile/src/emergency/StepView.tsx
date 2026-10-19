@@ -2,7 +2,6 @@ import { Ambulance } from 'phosphor-react-native';
 import { useEffect, useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import { audio } from '@/audio/engine';
 import { Button } from '@/design/Button';
 import { haptic } from '@/design/haptics';
 import { Text } from '@/design/Text';
@@ -10,6 +9,8 @@ import { space } from '@/design/tokens';
 import { Visual } from '@/design/Visual';
 import { elapsed } from '@/incident/log';
 import type { Step } from '@/protocols/schema';
+import { personalize } from '@/voice/adapt';
+import { say, voiceContext } from '@/voice/voice';
 
 import type { Incident } from './useIncident';
 
@@ -36,7 +37,7 @@ export function StepView({ incident, step }: { incident: Incident; step: Exclude
     if (step.kind !== 'hold') return;
     let i = 0;
     const t = setInterval(() => {
-      audio()?.speak([step.reminders[i++ % step.reminders.length]]);
+      say([step.reminders[i++ % step.reminders.length]], { calm: false });
       haptic('attention');
     }, step.remindEveryS * 1000);
     return () => clearInterval(t);
@@ -48,15 +49,15 @@ export function StepView({ incident, step }: { incident: Incident; step: Exclude
   return (
     <View style={styles.wrap}>
       <View style={styles.center}>
-        <Visual id={step.visual} size={168} />
-        <Text variant="instruction" style={styles.instruction} accessibilityRole="header" accessibilityLiveRegion="assertive">
-          {step.text}
+        <Visual id={step.visual} size={280} />
+        <Text
+          variant="instruction"
+          style={styles.instruction}
+          accessibilityRole="header"
+          accessibilityLiveRegion="assertive"
+          accessibilityHint={step.sub}>
+          {personalize(step.text, voiceContext().pronoun)}
         </Text>
-        {step.sub ? (
-          <Text variant="instructionSub" tone="muted" style={styles.sub}>
-            {step.sub}
-          </Text>
-        ) : null}
         {timer !== null && (
           <Text variant="countdown" tabular style={{ marginTop: space[4] }} accessibilityLabel={`${Math.ceil(timer / 60)} minutes left`}>
             {elapsed(timer * 1000)}
@@ -134,7 +135,6 @@ const styles = StyleSheet.create({
   wrap: { flex: 1, paddingHorizontal: space[5], paddingBottom: space[3] },
   center: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: space[3] },
   instruction: { textAlign: 'center', marginTop: space[2] },
-  sub: { textAlign: 'center', maxWidth: 340 },
   actions: { gap: space[3] },
   pair: { flexDirection: 'row', gap: space[3] },
   stack: { gap: space[3] },

@@ -28,3 +28,9 @@ export const CPR_BPM = 110;
 
 /** Seconds on the "Calling 911" ring before the call is placed. */
 export const CALL_COUNTDOWN_S = 5;
+
+/**
+ * Local neural voice server (tools/tts_server.py) for lines that are not
+ * pre-recorded, such as AI-adapted phrasing. Empty means the phone's own voice.
+ */
+export const TTS_URL: string = process.env.EXPO_PUBLIC_TTS_URL ?? '';

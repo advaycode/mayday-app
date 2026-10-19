@@ -1,6 +1,8 @@
 import { setAudioModeAsync } from 'expo-audio';
 import * as Speech from 'expo-speech';
 
+import { TTS_URL } from '@/config';
+
 import { AudioCore, type Ctx } from './core';
 
 /**
@@ -26,6 +28,7 @@ export function audio(): AudioCore | null {
       ctx,
       (mod) => ctx.decodeAudioData(mod),
       (text) => Speech.speak(text, { rate: 0.95, pitch: 0.95 }),
+      TTS_URL,
     );
   } catch {
     core = null;

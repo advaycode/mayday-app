@@ -10,6 +10,7 @@
  *   POST /route   Groq, fast: what does this sentence mean? -> protocol id, facts, fixed question id
  *   POST /ask     Claude: answer an open question using ONLY the cited passages the app sends
  *   POST /scan    Claude vision: hedged description of a burn or wound photo -> which protocol fits
+ *   POST /adapt   Claude (or a local model): rephrase protocol lines for this patient and rescuer
  *
  * None of these can make the app say a medical instruction that is not in its
  * own cited protocol library: /route returns ids from fixed lists, /ask must
@@ -29,6 +30,9 @@ export interface Env {
   GROQ_MODEL?: string;
   /** Comma-separated origins allowed to call from a browser (the web preview). */
   ALLOWED_ORIGINS?: string;
+  /** Local models (Ollama) for /adapt when there is no Claude key. Local development only. */
+  OLLAMA_URL?: string;
+  OLLAMA_MODEL?: string;
 }
 
 const CLAUDE_MODEL = 'claude-opus-5-5';
@@ -83,6 +87,14 @@ const ScanOutput = z.object({
   severity_hint: z.enum(['major', 'minor']).nullable(),
   confidence: z.number().min(0).max(1),
 });
+
+const AdaptInput = z.object({
+  pronoun: z.enum(['he', 'she', 'they']),
+  relation: z.string().max(20).nullable(),
+  state: z.enum(['steady', 'panicked', 'confused']),
+  lines: z.array(z.string().max(160)).min(1).max(16),
+});
+const AdaptOutput = z.object({ lines: z.array(z.string()) });
 
 // --- Rate limiting -------------------------------------------------------------
 // A token bucket per caller IP, per server instance: 20 requests, refilling at
@@ -239,6 +251,86 @@ async function scan(body: unknown, env: Env, client: Anthropic) {
   return { status: 200, body: hedged ? out : unsure };
 }
 
+// --- /adapt (Claude, or a local model): situation-aware phrasing ---------------------
+//
+// Rewrites protocol lines for this rescuer and this patient ("your dad",
+// "him"). The proxy only checks the shape of the answer. The app checks every
+// line against the original (mobile/src/voice/adapt.ts checkRewrite) and keeps
+// the original wording for any line that drops or adds a medical word.
+
+const ADAPT_SYSTEM = `You adapt spoken first-aid instructions for a frightened bystander helping someone.
+For each line: refer to the patient with the given relation or pronoun instead of they, them, their. Keep it calm, plain and short.
+Keep every action, body part, number and negation exactly as written. Never add a new action, body part, object or number. Never drop one.
+You speak to the rescuer, never to the patient. 12 words or fewer per line. Return exactly as many lines as you were given, in the same order.
+Reply as JSON: {"lines": [...]}`;
+
+function adaptPrompt(input: z.infer<typeof AdaptInput>) {
+  const who = input.relation ? `the rescuer's ${input.relation} (${input.pronoun})` : `the patient (${input.pronoun})`;
+  const tone = input.state === 'panicked' ? 'The rescuer is panicking: be extra calm.' : input.state === 'confused' ? 'The rescuer is confused: use the simplest words.' : '';
+  return `Patient: ${who}. ${tone}
+
+${JSON.stringify({ lines: input.lines })}`;
+}
+
+async function adapt(body: unknown, env: Env) {
+  const input = AdaptInput.parse(body);
+  if (env.ANTHROPIC_API_KEY) {
+    const client = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY, maxRetries: 1, timeout: 20_000 });
+    const response = await client.beta.messages.parse({
+      model: env.CLAUDE_MODEL ?? CLAUDE_MODEL,
+      max_tokens: 4096,
+      output_config: { effort: 'low', format: betaZodOutputFormat(AdaptOutput) },
+      betas: ['server-side-fallback-2026-07-01'],
+      fallbacks: 'default',
+      system: ADAPT_SYSTEM,
+      messages: [{ role: 'user', content: adaptPrompt(input) }],
+    });
+    const lines = response.parsed_output?.lines;
+    if (response.stop_reason === 'refusal' || lines?.length !== input.lines.length) return { status: 502, body: { error: 'no adaptation' } };
+    return { status: 200, body: { lines, model: 'claude' } };
+  }
+  // No Claude key: a local model through Ollama, if one is running on this computer.
+  const ollama = env.OLLAMA_URL ?? 'http://127.0.0.1:11434';
+  const res = await fetch(`${ollama}/api/chat`, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({
+      // Measured on this laptop's CPU (reports/adapt-eval.json): qwen2.5 14B follows the
+      // rules best; the 3-4B models break grammar ("Do he respond?").
+      model: env.OLLAMA_MODEL ?? 'qwen2.5:14b-instruct',
+      stream: false,
+      format: 'json',
+      keep_alive: '30m',
+      options: { temperature: 0.1 },
+      messages: [
+        { role: 'system', content: ADAPT_SYSTEM },
+        { role: 'user', content: adaptPrompt(input) },
+      ],
+    }),
+  }).catch(() => null);
+  if (!res || !res.ok) return { status: 503, body: { error: 'no model available' } };
+  const data = (await res.json()) as { message?: { content?: string } };
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(data.message?.content ?? '');
+  } catch {
+    return { status: 502, body: { error: 'model returned invalid JSON' } };
+  }
+  const out = AdaptOutput.safeParse(parsed);
+  return out.success && out.data.lines.length === input.lines.length
+    ? { status: 200, body: { lines: out.data.lines, model: 'local' } }
+    : { status: 502, body: { error: 'model output failed validation' } };
+}
+
+async function ollamaUp(env: Env): Promise<boolean> {
+  try {
+    const r = await fetch(`${env.OLLAMA_URL ?? 'http://127.0.0.1:11434'}/api/tags`, { signal: AbortSignal.timeout(800) });
+    return r.ok;
+  } catch {
+    return false;
+  }
+}
+
 // --- Entry point ----------------------------------------------------------------------
 
 export default {
@@ -247,7 +339,8 @@ export default {
     if (req.method === 'OPTIONS') return new Response(null, { status: 204, headers });
     const path = new URL(req.url).pathname;
     if (req.method === 'GET' && path === '/health') {
-      return json({ ok: true, groq: !!env.GROQ_API_KEY, claude: !!env.ANTHROPIC_API_KEY }, 200, headers);
+      const local = await ollamaUp(env);
+      return json({ ok: true, groq: !!env.GROQ_API_KEY, claude: !!env.ANTHROPIC_API_KEY, adapt: !!env.ANTHROPIC_API_KEY || local, local }, 200, headers);
     }
     if (req.method !== 'POST') return json({ error: 'method not allowed' }, 405, headers);
 
@@ -262,6 +355,10 @@ export default {
     }
 
     try {
+      if (path === '/adapt') {
+        const r = await adapt(body, env);
+        return json(r.body, r.status, headers);
+      }
       if (path === '/route') {
         const r = await route(body, env);
         return json(r.body, r.status, headers);

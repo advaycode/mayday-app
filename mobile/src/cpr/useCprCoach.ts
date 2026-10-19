@@ -6,6 +6,7 @@ import systemLines from '@/audio/systemLines.json';
 import { CPR_BPM } from '@/config';
 import { haptic } from '@/design/haptics';
 import { getSettings } from '@/settings/store';
+import { adaptLine, say, voiceContext } from '@/voice/voice';
 
 import { LookaheadScheduler } from './scheduler';
 import { BACK_LINE, positionAt, swapLine, type CprMode, type CprPlan, type TimelineEvent } from './timeline';
@@ -54,12 +55,15 @@ export function useCprCoach(opts: Options) {
     let raf = 0;
     let interval: ReturnType<typeof setInterval> | undefined;
 
+    // Lines adapted to this patient ("watch his chest") and rescuer (alone or not).
+    const alone = voiceContext().alone;
     const plan: CprPlan = {
       bpm: CPR_BPM,
       mode: opts.mode,
-      reminders: opts.reminders,
-      breathsSay: opts.breathsSay,
+      reminders: opts.reminders.map(adaptLine),
+      breathsSay: opts.breathsSay.map(adaptLine),
       swapEveryS: opts.swapEveryS,
+      alone,
     };
     const a = audio();
     const now = a ? () => a.now() : () => performance.now() / 1000;
@@ -68,18 +72,18 @@ export function useCprCoach(opts: Options) {
       let t0: number;
       if (a) {
         const lines = [
-          ...opts.introLines,
+          ...opts.introLines.map(adaptLine),
           ...COUNTS,
-          ...opts.reminders,
-          ...opts.breathsSay,
+          ...plan.reminders,
+          ...plan.breathsSay,
           BACK_LINE,
-          ...Array.from({ length: 10 }, (_, i) => swapLine((i + 1) * 2)),
+          ...Array.from({ length: 10 }, (_, i) => swapLine((i + 1) * 2, alone)),
         ];
         await a.preload(lines);
         if (cancelled) return;
         // "Spoken coaching" off in settings: keep the click, drop the voice.
         const voice = getSettings().voice;
-        const spoken = voice ? await a.speak(opts.introLines) : { end: a.now() };
+        const spoken = voice ? await say(opts.introLines) : { end: a.now() };
         t0 = spoken.end + 0.35;
         const emit = (e: TimelineEvent) => {
           if (e.kind === 'beat') {

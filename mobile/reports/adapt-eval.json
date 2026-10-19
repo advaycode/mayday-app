@@ -1,0 +1,180 @@
+{
+  "qwen2.5:14b-instruct": {
+    "seconds": 56.2,
+    "accepted": 7,
+    "of": 10,
+    "verdicts": [
+      {
+        "original": "Tap their shoulders and shout.",
+        "model": "Tap his shoulders gently, shout.",
+        "ok": false,
+        "reason": "added: gently"
+      },
+      {
+        "original": "Do they respond?",
+        "model": "Does he respond?",
+        "ok": true
+      },
+      {
+        "original": "Lay them flat on their back, on the floor.",
+        "model": "Lay him flat on floor.",
+        "ok": false,
+        "reason": "too clipped"
+      },
+      {
+        "original": "Kneel beside their chest.",
+        "model": "Kneel beside his chest.",
+        "ok": true
+      },
+      {
+        "original": "Watch their chest.",
+        "model": "Watch his chest rise.",
+        "ok": true
+      },
+      {
+        "original": "Are they breathing normally?",
+        "model": "Is he breathing normally?",
+        "ok": true
+      },
+      {
+        "original": "Heel of one hand on the center of the chest.",
+        "model": "Place heel of hand center chest.",
+        "ok": false,
+        "reason": "too clipped"
+      },
+      {
+        "original": "Other hand on top. Lock your elbows.",
+        "model": "Other hand on top. Lock elbows.",
+        "ok": true
+      },
+      {
+        "original": "Don't lift to look.",
+        "model": "Don't lift to look.",
+        "ok": true
+      },
+      {
+        "original": "If they stop responding, tell me.",
+        "model": "If he stops responding, tell me.",
+        "ok": true
+      }
+    ]
+  },
+  "gemma3:4b": {
+    "seconds": 42.2,
+    "accepted": 8,
+    "of": 10,
+    "verdicts": [
+      {
+        "original": "Tap their shoulders and shout.",
+        "model": "Tap his shoulders and shout.",
+        "ok": true
+      },
+      {
+        "original": "Do they respond?",
+        "model": "Do he respond?",
+        "ok": false,
+        "reason": "grammar"
+      },
+      {
+        "original": "Lay them flat on their back, on the floor.",
+        "model": "Lay him flat on his back, on the floor.",
+        "ok": true
+      },
+      {
+        "original": "Kneel beside their chest.",
+        "model": "Kneel beside his chest.",
+        "ok": true
+      },
+      {
+        "original": "Watch their chest.",
+        "model": "Watch his chest.",
+        "ok": true
+      },
+      {
+        "original": "Are they breathing normally?",
+        "model": "Are he breathing normally?",
+        "ok": false,
+        "reason": "grammar"
+      },
+      {
+        "original": "Heel of one hand on the center of the chest.",
+        "model": "Heel of one hand on the center of his chest.",
+        "ok": true
+      },
+      {
+        "original": "Other hand on top. Lock your elbows.",
+        "model": "Other hand on top. Lock your elbows.",
+        "ok": true
+      },
+      {
+        "original": "Don't lift to look.",
+        "model": "Don't lift to look.",
+        "ok": true
+      },
+      {
+        "original": "If they stop responding, tell me.",
+        "model": "If he stops responding, tell me.",
+        "ok": true
+      }
+    ]
+  },
+  "llama3.2": {
+    "seconds": 31.4,
+    "accepted": 8,
+    "of": 10,
+    "verdicts": [
+      {
+        "original": "Tap their shoulders and shout.",
+        "model": "Tap his shoulders and shout.",
+        "ok": true
+      },
+      {
+        "original": "Do they respond?",
+        "model": "Do he respond?",
+        "ok": false,
+        "reason": "grammar"
+      },
+      {
+        "original": "Lay them flat on their back, on the floor.",
+        "model": "Lay him flat on his back, on the floor.",
+        "ok": true
+      },
+      {
+        "original": "Kneel beside their chest.",
+        "model": "Kneel beside his chest.",
+        "ok": true
+      },
+      {
+        "original": "Watch their chest.",
+        "model": "Watch his chest.",
+        "ok": true
+      },
+      {
+        "original": "Are they breathing normally?",
+        "model": "Is he breathing normally?",
+        "ok": true
+      },
+      {
+        "original": "Heel of one hand on the center of the chest.",
+        "model": "Heel of one hand on the center of his chest.",
+        "ok": true
+      },
+      {
+        "original": "Other hand on top. Lock your elbows.",
+        "model": "Other hand on top. Lock your elbows.",
+        "ok": true
+      },
+      {
+        "original": "Don't lift to look.",
+        "model": "Don't lift to look.",
+        "ok": true
+      },
+      {
+        "original": "If they stop responding, tell me.",
+        "model": "If he stop responding, tell me.",
+        "ok": false,
+        "reason": "grammar"
+      }
+    ]
+  }
+}

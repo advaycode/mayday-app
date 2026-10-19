@@ -4,6 +4,22 @@ Read this at the start of every session; update it at the end.
 
 **Deadline:** 12:00 pm Eastern, Monday October 26 2026. **Our deadline:** submit by 9:00 am that morning.
 
+## Status on Monday October 19
+
+### Done today
+- **Real pictures on the steps.** 15 images crawled from Wikimedia Commons (`tools/crawl_images.py`), chosen by hand, cropped and recolored to the app's two colors (`tools/pick_images.py`). Only public domain, CC0, CC BY and CC BY-SA. Credits in the app (Me → Photo credits) and `docs/IMAGE_CREDITS.md`. Rejected on purpose: every infant CPR image found (two-finger technique, withdrawn in 2025; the app keeps its own two-thumb drawing) and every naloxone image (injectable kit, not the nasal spray).
+- **Fewer words.** Step screens are a picture and a headline; the detail is spoken (and still read by screen readers). The voice bar shows only what was heard. Shorter buttons ("Called", "AED", "EMS"), trimmed Me and Learn.
+- **Adaptive voice** (`mobile/src/voice/adapt.ts`, `voice.ts`):
+  - Who: "my dad collapsed" → "Your dad collapsed. Let's check him first.", then "Watch his chest", "Is he breathing normally?". All 41 they/them lines have grammar-checked he and she versions, pre-recorded (no delay). On-screen headlines use the same pronoun.
+  - How the rescuer sounds: panic → "I'm right here with you." first, and a slower voice; "what?" → the step again, slower; silence on a yes/no question → asked again with "Yes or no?".
+  - Alone ("I'm by myself") → the 2-minute line drops "switch with someone".
+  - AI phrasing on top (`/adapt`, Claude or a local model through Ollama), checked line by line: a rewrite that drops or adds a medical word, a number or a "don't", talks to the patient, breaks grammar or gets clipped is thrown away. Measured on this laptop: 7–8 of 10 lines pass, 31–56 s per batch, so it runs in the background (`reports/adapt-eval.json`). New lines are spoken in the same voice by `tools/tts_server.py`, which `mirror/launch.ps1` starts.
+- Fixes: the voice said "nine hundred eleven" (now "nine one one"); the echo guard missed late transcripts of our own voice (now a 12-second window); "no, he's not responding" did not answer "is he breathing?" (now the leading yes/no answers); the map's Call button could dial a real hospital in a demo build (now it only shows the number).
+- 172 tests passing, typecheck clean.
+
+### Learned
+- Local models on this CPU add little over the offline adaptation: the lines they get right are mostly the ones the rules already produce. A Claude key would make the AI layer worth its place; without one, the offline adaptation is the feature.
+
 ## Status on Sunday October 18 (end of day)
 
 ### Done
@@ -36,6 +52,7 @@ Read this at the start of every session; update it at the end.
 6. **Submission text**: rewrite `submission/answers.md` in your own words.
 
 ### Known limitations (say them, don't hide them)
+- AI phrasing with a local model takes about a minute and only helps later steps; the first steps always use the offline adaptation.
 - Router misses on the held-out set: "hot coffee spilled all over the baby" (no protocol), "she suddenly can't move her right arm" (went to the CPR check, should be stroke), "found my roommate passed out with a needle" (CPR check, should be overdose).
 - Child and infant depth figures and AED pediatric pads are awaiting review.
 - Map tiles need signal; the facility data does not.

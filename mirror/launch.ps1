@@ -21,8 +21,25 @@ if (-not $Dev -and -not (Test-Path (Join-Path $root 'mobile\dist\index.html'))) 
     Write-Host 'Building the web version of the app (first run only, about a minute)...'
     Push-Location (Join-Path $root 'mobile')
     $env:EXPO_PUBLIC_DEMO_MODE = 'true'
+    $env:EXPO_PUBLIC_PROXY_URL = 'http://127.0.0.1:8787'
+    $env:EXPO_PUBLIC_TTS_URL = 'http://127.0.0.1:8743'
     npx expo export -p web
     Pop-Location
+}
+
+# The adaptive voice on this PC: the neural voice server (same voice as the
+# recorded clips) and the model proxy. With no API keys the proxy uses a local
+# model through Ollama if one is installed; otherwise the app adapts its
+# wording on its own, offline. None of this is needed for the app to work.
+if (-not (Test-Port 8743)) {
+    Start-Process -WindowStyle Hidden -FilePath 'python' -ArgumentList "`"$root\tools\tts_server.py`""
+}
+$ollama = Join-Path $env:LOCALAPPDATA 'Programs\Ollama\ollama.exe'
+if (-not (Test-Port 11434) -and (Test-Path $ollama)) {
+    Start-Process -WindowStyle Hidden -FilePath $ollama -ArgumentList 'serve'
+}
+if (-not (Test-Port 8787)) {
+    Start-Process -WindowStyle Hidden -FilePath 'node' -ArgumentList "`"$root\proxy\src\dev.ts`"" -WorkingDirectory (Join-Path $root 'proxy')
 }
 
 if (-not (Test-Port $port)) {

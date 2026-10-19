@@ -93,9 +93,22 @@ Evaluation: 47 messy intake sentences + 24 in-protocol commands, **100%** on the
 
 > **Say it:** The first thing that hears you is a set of rules that runs offline in under a millisecond, and anything that sounds like a life threat starts the protocol immediately. A language model can only help when the rules are unsure, and its answer has to fit a strict schema or we throw it away. On sentences it had never seen, it picked the right protocol 85% of the time, and it never missed someone who wasn't breathing.
 
+## 4b. The voice adapts, the medicine does not
+
+`voice/adapt.ts` (pure, tested) and `voice/voice.ts` (the voice of one emergency). Everything said during an emergency goes through `say()` there.
+
+- **Who.** The first thing the rescuer says usually names the patient: "my dad", "my wife", "he", "she". From then on lines say "him", "her", "your dad". `personalize()` turns every they/them line into correct English ("Do they respond?" → "Does he respond?", "where they are" → "where she is"); a test runs it over every spoken line and checks agreement, and the results are pre-recorded, so adapting costs no time.
+- **How they sound.** Pleading words or stutters → panicked: a calming line first, once, and the voice 8% slower. "What?" or "I don't understand" → confused: the step again, 14% slower. Silence on a yes/no question for 10 seconds → the question again, then "Yes or no?". These states fade after 45 seconds.
+- **Alone.** "I'm by myself" → the 2-minute line stops telling them to switch with someone.
+- **AI phrasing, optional.** The proxy's `/adapt` asks Claude (or, on the demo laptop with no key, a local model through Ollama) to phrase upcoming lines for this patient. It runs in the background; nothing waits for it. Every returned line must pass `checkRewrite()`: the same medical words (actions, body parts, numbers, negations, how hard or gently), no new ones, 12 words or fewer, not clipped, correct grammar, speaking to the rescuer and not the patient. A line that fails keeps its pre-recorded wording. A line that passes is spoken only once its audio is ready (`tools/tts_server.py`, the same Piper voice).
+
+Measured (`reports/adapt-eval.json`, real outputs on this laptop's CPU): qwen2.5 14B 7/10 lines pass in 56 s; gemma3 4B 8/10 in 42 s; llama3.2 3B 8/10 in 31 s. Every rejected line was a real problem: "gently" added to "tap and shout", "back" dropped from "flat on his back", "Do he respond?".
+
+> **Say it:** Mayday talks about your dad as your dad, slows down when you panic, and repeats itself when you're lost. That part runs offline, instantly. An AI can make the wording more natural, but it is never trusted: every line it writes is checked word by word against the original, and if it changes a single medical word, we use the original.
+
 ## 5. 911, honestly
 
-Neither iOS nor Android lets an app dial 911 silently, and that is the right rule. So: a 5-second ring you can cancel, then the phone's own dialer (one confirming tap on iOS). "Already called" lets a bystander say someone else is on the phone, which is what CPR courses teach anyway. The "Tell the dispatcher" card shows the street address (reverse-geocoded), GPS coordinates with accuracy, and a one-line summary built by a template from the log, never by a model: *"Adult (age not given), unresponsive, not breathing normally. CPR started 3:01 PM."* Text-to-911 opens Messages with that text pre-filled (availability varies by county).
+Neither iOS nor Android lets an app dial 911 silently, and that is the right rule. So: a 5-second ring you can cancel, then the phone's own dialer (one confirming tap on iOS). "Called" lets a bystander say someone else is on the phone, which is what CPR courses teach anyway. The "Tell the dispatcher" card shows the street address (reverse-geocoded), GPS coordinates with accuracy, and a one-line summary built by a template from the log, never by a model: *"Adult (age not given), unresponsive, not breathing normally. CPR started 3:01 PM."* Text-to-911 opens Messages with that text pre-filled (availability varies by county).
 
 **DEMO_MODE** is on in every development build and the web preview. It never dials 911: it shows a simulated call, or dials a team member's number. A store build turns it off at build time; nothing inside the app can.
 
@@ -123,7 +136,7 @@ On iOS 26 the controls are Apple's real Liquid Glass. In the web preview we rebu
 
 ## 9. Offline
 
-Works with no signal: the protocols, the keyword router, the voice (pre-recorded), the CPR coach, the 911 dialer, the dispatcher card's coordinates, and the ER and trauma data. Needs signal: the map's background tiles, the street address (on web), Groq, Claude, and the photo check. Speech recognition is on-device on most recent phones.
+Works with no signal: the protocols, the keyword router, the voice (pre-recorded, including the adapted he/she lines), the CPR coach, the 911 dialer, the dispatcher card's coordinates, and the ER and trauma data. Needs signal: the map's background tiles, the street address (on web), Groq, Claude, and the photo check. Speech recognition is on-device on most recent phones.
 
 > **Say it:** Emergencies happen in parking garages and basements, so everything that keeps someone alive works in airplane mode. The AI features are extras that switch on when there is signal. Turn off the network mid-CPR and the count doesn't miss a beat.
 
@@ -131,7 +144,7 @@ Works with no signal: the protocols, the keyword router, the voice (pre-recorded
 
 ```bash
 cd mobile && npm install
-npm test                 # 145 tests: protocols, engine, metronome, router, voice clips
+npm test                 # 172 tests: protocols, engine, metronome, router, voice clips, answers, adaptive voice
 npx tsc --noEmit         # typecheck
 npx expo start           # phone: scan the QR code (Expo Go: no speech recognition or audio engine)
 npm run build:web        # web build for the phone mirror

@@ -61,12 +61,12 @@ export default function Home() {
         <Pressable
           onPress={() => setSettings({ disclaimerSeen: true })}
           accessibilityRole="button"
-          accessibilityLabel="This guides you while help is on the way. Always call 911. Tap to dismiss."
+          accessibilityLabel="Mayday guides you while help is on the way. Always call 911. Tap to dismiss."
           style={styles.noteWrap}>
           <Glass radius={radius.lg}>
             <View style={styles.note}>
               <Text variant="body" style={{ flex: 1 }}>
-                This guides you while help is on the way. Always call 911.
+                Always call 911.
               </Text>
               <Text variant="bodyStrong" tone="muted">
                 OK

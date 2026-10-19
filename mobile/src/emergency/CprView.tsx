@@ -8,6 +8,8 @@ import { Text } from '@/design/Text';
 import { color, space } from '@/design/tokens';
 import { elapsed } from '@/incident/log';
 import type { StepOf } from '@/protocols/schema';
+import { personalize } from '@/voice/adapt';
+import { voiceContext } from '@/voice/voice';
 
 import { PulseRing } from './parts';
 import type { Incident } from './useIncident';
@@ -56,26 +58,24 @@ export function CprView({ incident, step }: { incident: Incident; step: StepOf<'
         </View>
 
         <Text variant="instruction" style={styles.instruction}>
-          {coach.phase === 'breaths' ? 'Two breaths' : step.text}
-        </Text>
-        <Text variant="instructionSub" tone="muted" style={styles.sub}>
-          {coach.phase === 'breaths' ? 'Watch the chest rise.' : step.sub}
+          {coach.phase === 'breaths' ? 'Two breaths' : personalize(step.text, voiceContext().pronoun)}
         </Text>
 
         <View style={styles.meta}>
           <Text variant="timer" tone="muted" tabular accessibilityLabel={`${Math.floor(coach.elapsed / 60)} minutes of compressions`}>
             {elapsed(coach.elapsed * 1000)}
           </Text>
-          <Text variant="caption" tone="faint">
-            {mode === '30:2' ? '30 and 2' : 'Hands only'}
-            {coach.withAudio ? '' : '  ·  sound off'}
-          </Text>
+          {!coach.withAudio && (
+            <Text variant="caption" tone="faint">
+              sound off
+            </Text>
+          )}
         </View>
       </View>
 
       <View style={styles.actions}>
-        <Button size="emergency" icon={Lightning} label="AED here" onPress={() => dispatch({ type: 'intent', intent: 'aed_here', at: Date.now() })} style={{ flex: 1 }} />
-        <Button size="emergency" icon={Ambulance} label="Help here" onPress={handoff} style={{ flex: 1 }} />
+        <Button size="emergency" icon={Lightning} label="AED" accessibilityHint="The AED is here" onPress={() => dispatch({ type: 'intent', intent: 'aed_here', at: Date.now() })} style={{ flex: 1 }} />
+        <Button size="emergency" icon={Ambulance} label="EMS" accessibilityHint="Paramedics are here" onPress={handoff} style={{ flex: 1 }} />
       </View>
     </View>
   );
@@ -87,7 +87,6 @@ const styles = StyleSheet.create({
   countWrap: { width: 250, height: 250, alignItems: 'center', justifyContent: 'center', marginBottom: space[4] },
   count: { color: color.ink, textAlign: 'center' },
   instruction: { textAlign: 'center' },
-  sub: { textAlign: 'center', maxWidth: 340 },
   meta: { flexDirection: 'row', alignItems: 'center', gap: space[3], marginTop: space[4] },
   actions: { flexDirection: 'row', gap: space[3] },
 });

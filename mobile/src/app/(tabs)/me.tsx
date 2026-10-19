@@ -1,11 +1,12 @@
-import { ScrollView, StyleSheet, Switch, TextInput, View } from 'react-native';
+import { useState } from 'react';
+import { Linking, Pressable, ScrollView, StyleSheet, Switch, TextInput, View } from 'react-native';
 
 import { DEMO_MODE } from '@/config';
 import { useDeviceInsets } from '@/design/insets';
+import { stepImages } from '@/design/stepImages';
 import { Text } from '@/design/Text';
 import { color, font, radius, space } from '@/design/tokens';
-import { facilities } from '@/facilities/nearest';
-import { protocols, sources } from '@/protocols';
+import { protocols } from '@/protocols';
 import { setSettings, useSettings, type MedicalId } from '@/settings/store';
 
 const FIELDS: { key: keyof MedicalId; label: string; placeholder: string }[] = [
@@ -35,7 +36,7 @@ export default function Me() {
         Medical ID
       </Text>
       <Text variant="body" tone="muted" style={styles.lede}>
-        Optional. Stays on this phone. Shown to paramedics only if you open it.
+        Stays on this phone.
       </Text>
 
       <View style={styles.group}>
@@ -68,10 +69,7 @@ export default function Me() {
       {DEMO_MODE && (
         <View style={styles.demo}>
           <Text variant="bodyStrong" style={{ color: color.void }}>
-            Demo build
-          </Text>
-          <Text variant="body" style={{ color: color.void }}>
-            Calls to 911 are simulated. A store build turns this off.
+            Demo. Calls are simulated.
           </Text>
         </View>
       )}
@@ -79,19 +77,36 @@ export default function Me() {
       <Text variant="title" style={styles.section}>
         About
       </Text>
-      <View style={[styles.group, { padding: space[4], gap: space[3] }]}>
-        <Text variant="body">This guides you while help is on the way. Always call 911.</Text>
-        <Text variant="body" tone="muted">
-          It is not a substitute for training or for professional care, and it does not diagnose.
-        </Text>
-        <Text variant="body" tone="muted">
-          {stepCount} protocol steps, {verified} quoted word for word from their source, {stepCount - verified} awaiting review by a CPR instructor. {facilities.length} emergency rooms, trauma centers and urgent cares in Florida, offline.
-        </Text>
+      <View style={[styles.group, { padding: space[4], gap: space[2] }]}>
+        <Text variant="body">Guides you until help arrives. Always call 911.</Text>
         <Text variant="caption" tone="faint">
-          Sources: {Object.values(sources).map((s) => s.publisher.replace(/ \(.*\)$/, '')).filter((v, i, a) => a.indexOf(v) === i).join('; ')}.
+          {verified} of {stepCount} steps quoted from their source.
         </Text>
       </View>
+      <Credits />
     </ScrollView>
+  );
+}
+
+/** Step pictures are from Wikimedia Commons; their licenses ask for credit, here and in docs/IMAGE_CREDITS.md. */
+function Credits() {
+  const [open, setOpen] = useState(false);
+  return (
+    <View style={[styles.group, { marginTop: space[3] }]}>
+      <Pressable onPress={() => setOpen((o) => !o)} accessibilityRole="button" accessibilityState={{ expanded: open }} style={{ padding: space[4] }}>
+        <Text variant="bodyStrong">Photo credits</Text>
+      </Pressable>
+      {open &&
+        Object.values(stepImages).map(({ credit }) => (
+          <Pressable key={credit.visual} onPress={() => Linking.openURL(credit.source)} accessibilityRole="link" style={[styles.credit, styles.divider]}>
+            <Text variant="caption">{credit.author}</Text>
+            <Text variant="caption" tone="faint">
+              {credit.license}
+              {credit.license.startsWith('CC') ? ', recolored' : ''}  ·  Wikimedia Commons
+            </Text>
+          </Pressable>
+        ))}
+    </View>
   );
 }
 
@@ -115,6 +130,7 @@ function Toggle({ label, value, onChange, divider }: { label: string; value: boo
 }
 
 const styles = StyleSheet.create({
+  credit: { paddingHorizontal: space[4], paddingVertical: space[2] },
   screen: { flex: 1, backgroundColor: color.canvas },
   heading: { paddingHorizontal: space[6] },
   lede: { paddingHorizontal: space[6], marginTop: space[1], marginBottom: space[5] },

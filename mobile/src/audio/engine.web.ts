@@ -1,5 +1,7 @@
 import { Asset } from 'expo-asset';
 
+import { TTS_URL } from '@/config';
+
 import { AudioCore, type Ctx } from './core';
 
 /**
@@ -31,6 +33,7 @@ export function audio(): AudioCore | null {
         // no system voice available
       }
     },
+    TTS_URL,
   );
   return core;
 }

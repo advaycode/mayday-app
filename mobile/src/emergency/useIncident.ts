@@ -1,4 +1,3 @@
-import * as Speech from 'expo-speech';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { audio } from '@/audio/engine';
@@ -7,7 +6,6 @@ import { CALL_COUNTDOWN_S } from '@/config';
 import { haptic } from '@/design/haptics';
 import type { LogEntry } from '@/incident/log';
 import { getFix, type Fix } from '@/location/location';
-import { getSettings } from '@/settings/store';
 import { currentStep, reduce, type Effect, type EngineEvent, type EngineState, type Slots } from '@/protocols/engine';
 import { protocols } from '@/protocols';
 import type { Intent, Step } from '@/protocols/schema';
@@ -15,7 +13,9 @@ import { askModel, online } from '@/ai/proxy';
 import { answer, isQuestion, passagesFor } from '@/voice/answer';
 import { isEcho } from '@/voice/echo';
 import { routeWithModel } from '@/voice/llmRouter';
-import { route } from '@/voice/router';
+import { normalizeUtterance, route } from '@/voice/router';
+import { NUDGE_SUFFIX, personalConfirm } from '@/voice/adapt';
+import { hearRescuer, prepare, resetVoice, say, sinceHeard, voiceContext } from '@/voice/voice';
 import type { ProtocolId, QuestionId, RouterSlots } from '@/voice/routerSchema';
 
 import { placeCall, type CallHow } from './call';
@@ -27,7 +27,8 @@ import { placeCall, type CallHow } from './call';
  *   - the protocol engine (pure, in src/protocols/engine.ts)
  *   - the 911 countdown and call state
  *   - what the person says, routed to a protocol or a command
- *   - what we say back
+ *   - what we say back, adapted to who is being helped and how the
+ *     rescuer sounds (src/voice/voice.ts)
  *   - the timestamped incident log for the handoff
  */
 
@@ -51,22 +52,21 @@ export type IncidentState = {
 
 const L = systemLines.lines;
 
-function say(lines: string[]) {
-  if (!getSettings().voice) return Promise.resolve({ start: 0, end: 0 });
-  const a = audio();
-  if (a) return a.speak(lines);
-  // Expo Go (no audio engine): the system voice, one line after another.
-  Speech.stop();
-  lines.forEach((l) => Speech.speak(l, { rate: 0.95, pitch: 0.95 }));
-  return Promise.resolve({ start: 0, end: 0 });
+/** The spoken lines of the steps after `stepId`, in order, for the model to phrase ahead of time. */
+function upcoming(protocolId: string, stepId: string | null): string[] {
+  const steps = protocols[protocolId]?.steps ?? [];
+  const from = stepId ? steps.findIndex((s) => s.id === stepId) : -1;
+  return steps.slice(from + 1).flatMap((s) => [...s.say, ...(s.kind === 'hold' || s.kind === 'cpr' ? s.reminders : [])]);
 }
 
 function recentlySaid(): string[] {
-  return audio()?.lastSpoken ?? [];
+  return audio()?.recentlySaid() ?? [];
 }
 
 export function useIncident() {
-  const [state, setState] = useState<IncidentState>(() => ({
+  const [state, setState] = useState<IncidentState>(() => {
+    resetVoice();
+    return {
     startedAt: Date.now(),
     phase: 'intake',
     engine: null,
@@ -77,7 +77,8 @@ export function useIncident() {
     question: null,
     answerSource: null,
     fix: null,
-  }));
+    };
+  });
   const ref = useRef(state);
   ref.current = state;
 
@@ -95,7 +96,12 @@ export function useIncident() {
       if (logs.length) update((s) => ({ ...s, log: [...s.log, ...logs.map((e) => ({ at: e.at, text: e.text }))] }));
       const enter = effects.find((e): e is Extract<Effect, { type: 'enter' }> => e.type === 'enter');
       const lines = [...prefix, ...effects.flatMap((e) => (e.type === 'say' ? e.lines : []))];
-      if (enter) haptic('navigate');
+      if (enter) {
+        haptic('navigate');
+        // Phrase the next steps for this patient while this one runs.
+        const st = ref.current.engine;
+        if (st && (voiceContext().relation || voiceContext().pronoun !== 'they')) prepare(upcoming(st.protocolId, enter.step.id));
+      }
       // The CPR coach speaks its own intro so the first count lands exactly
       // after it; everything else is spoken here.
       if (enter?.step.kind === 'cpr') {
@@ -123,7 +129,10 @@ export function useIncident() {
     (protocolId: ProtocolId, extra: Slots = {}, from: 'voice' | 'tap' = 'tap') => {
       const slots = { ...ref.current.slots, ...extra };
       const confirmKey = protocolId.startsWith('cpr') && slots.breathing !== 'abnormal' ? 'cpr_check' : protocolId;
-      const confirm = from === 'voice' ? [(systemLines.confirm as Record<string, string>)[confirmKey]].filter(Boolean) : [];
+      const said = (systemLines.confirm as Record<string, string>)[confirmKey];
+      // "Your dad isn't breathing." when we know who it is.
+      const confirm = from === 'voice' && said ? [personalConfirm(said, voiceContext())] : [];
+      if (voiceContext().relation || voiceContext().pronoun !== 'they') prepare(upcoming(protocolId, null));
       update((s) => ({ ...s, phase: 'protocol', slots, question: null }));
       dispatch({ type: 'start', protocolId, slots, at: Date.now() }, confirm);
     },
@@ -188,6 +197,7 @@ export function useIncident() {
   const hear = useCallback(
     (text: string) => {
       if (isEcho(text, recentlySaid())) return;
+      hearRescuer(text);
       update((s) => ({ ...s, heard: { text, final: true } }));
       const s = ref.current;
       const inProtocol = s.phase === 'protocol' && !!s.engine;
@@ -224,8 +234,16 @@ export function useIncident() {
         log('Rescuer tired');
         return;
       }
-      if (r.intent) {
-        const effects = dispatch({ type: 'intent', intent: r.intent as Intent, at: Date.now() });
+      // Lost ("what?", "I don't understand"): the same step again, slower.
+      const intent = r.intent ?? (voiceContext().state === 'confused' && voiceContext().stateAt > Date.now() - 1000 ? 'repeat' : null);
+      if (intent) {
+        const effects = dispatch({ type: 'intent', intent: intent as Intent, at: Date.now() });
+        if (!effects.some((e) => e.type === 'unhandled')) return;
+      }
+      // "No, he's not responding" to "Is he breathing normally?": the leading word answers the question.
+      const lead = normalizeUtterance(text).match(/^(no|nope|nah|yes|yeah|yep|yup)\b/);
+      if (lead && intent !== 'yes' && intent !== 'no') {
+        const effects = dispatch({ type: 'intent', intent: lead[1].startsWith('n') ? 'no' : 'yes', at: Date.now() });
         if (!effects.some((e) => e.type === 'unhandled')) return;
       }
       // A new, more serious emergency mid-protocol ("now he's not breathing").
@@ -279,6 +297,20 @@ export function useIncident() {
   }, [update]);
 
   const step: Step | null = useMemo(() => (state.engine ? currentStep(state.engine) : null), [state.engine]);
+
+  // --- Silence on a yes/no question: ask once more, shorter ----------------------
+  const askKey = step?.kind === 'ask' ? `${state.engine?.protocolId}#${step.id}#${state.engine?.trail.length}` : null;
+  useEffect(() => {
+    if (!askKey || !step || step.kind !== 'ask') return;
+    const yesNo = step.choices.some((c) => c.intents.includes('yes')) && step.choices.some((c) => c.intents.includes('no'));
+    const question = step.say[step.say.length - 1];
+    if (!yesNo || !question) return;
+    const timer = setTimeout(() => {
+      if (sinceHeard() >= 9000 && ref.current.phase === 'protocol') say([question, NUDGE_SUFFIX], { calm: false });
+    }, 10_000);
+    return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [askKey]);
   const slots = state.engine?.slots ?? state.slots;
 
   return {

@@ -35,12 +35,9 @@ export default function Learn() {
         <Glass radius={radius.lg + 6} interactive>
           <View style={styles.practice}>
             <Orb size={72} />
-            <View style={{ flex: 1 }}>
-              <Text variant="title">Practice CPR</Text>
-              <Text variant="body" tone="muted">
-                Find the beat. Two minutes.
-              </Text>
-            </View>
+            <Text variant="title" style={{ flex: 1 }}>
+              Practice CPR
+            </Text>
             <CaretRight size={20} color={color.inkMuted} />
           </View>
         </Glass>
@@ -76,9 +73,6 @@ export default function Learn() {
         })}
       </View>
 
-      <Text variant="caption" tone="faint" style={styles.footer}>
-        Every step cites the 2025 American Heart Association guidelines, the American Red Cross, or the source named on it.
-      </Text>
     </ScrollView>
   );
 }
@@ -91,5 +85,4 @@ const styles = StyleSheet.create({
   list: { marginTop: space[8], marginHorizontal: space[6] },
   row: { flexDirection: 'row', alignItems: 'center', gap: space[4], height: 60 },
   divider: { borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: color.hairline },
-  footer: { marginHorizontal: space[6], marginTop: space[8], lineHeight: 18 },
 });

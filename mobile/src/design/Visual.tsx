@@ -18,14 +18,17 @@ import {
   Warning,
   Wind,
 } from 'phosphor-react-native';
+import { Image } from 'expo-image';
 import type { ComponentType } from 'react';
 import { View } from 'react-native';
 import Svg, { Circle, G, Line, Path, Rect } from 'react-native-svg';
 
-import { color } from './tokens';
+import { stepImages } from './stepImages';
+import { color, radius } from './tokens';
 
 /**
- * Step pictures. The technique-critical ones (where exactly the hands go,
+ * Step pictures. Crawled photos and drawings come first (see stepImages.ts).
+ * Where none was good enough, the technique-critical ones (where exactly the hands go,
  * where AED pads go, the recovery position, where a tourniquet goes) are
  * drawn as precise line diagrams, one stroke weight, one colour. Everything
  * else uses a Phosphor icon from the same family as the rest of the app.
@@ -210,6 +213,20 @@ const ICONS: Record<string, IconType> = {
 
 export function Visual({ id, size = 180 }: { id?: string; size?: number }) {
   if (!id) return null;
+  // A real picture (crawled from Wikimedia Commons, credited) when we have a
+  // good one; otherwise our own diagram or an icon.
+  const photo = stepImages[id];
+  if (photo) {
+    return (
+      <Image
+        source={photo.src}
+        style={{ width: size, height: size, borderRadius: radius.lg }}
+        contentFit="cover"
+        accessibilityIgnoresInvertColors
+        accessible={false}
+      />
+    );
+  }
   const Diagram = DIAGRAMS[id];
   if (Diagram) {
     return (

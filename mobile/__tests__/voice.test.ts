@@ -32,7 +32,7 @@ describe('voice clips', () => {
   });
 
   it('cover the metronome lines (back to compressions, every swap minute)', () => {
-    const lines = [BACK_LINE, ...Array.from({ length: 20 }, (_, i) => swapLine(i + 1)), swapLine(30)];
+    const lines = [BACK_LINE, ...[false, true].flatMap((alone) => [...Array.from({ length: 20 }, (_, i) => swapLine(i + 1, alone)), swapLine(30, alone)])];
     expect(lines.filter((l) => !(clipKey(l) in voiceClips))).toEqual([]);
   });
 

@@ -92,9 +92,13 @@ Exits are faster than entrances. Only transform and opacity animate. With Reduce
 
 In the web preview the phone frame twitches instead (`mirror/index.html`), so haptics show up on video.
 
+## Pictures
+
+A step screen is a picture and a headline. The pictures are real photos and drawings from Wikimedia Commons, recolored to the two app colors (photos toned from near-black to warm off-white, drawings inverted to light lines on black), so the set is calm and consistent, and blood reads as gray. Square, 280 pt, `radius.lg`. Where no image was good enough (infant CPR, the nasal spray) the app's own line drawing or an icon stands in. `tools/pick_images.py` makes them; credits are in the app.
+
 ## Words
 
-Barely any. A screen gets a heading only if you would be lost without it. Instructions read like a calm paramedic: short sentences, the verb first, 12 words or fewer when spoken (tested), 5 or fewer in a headline (tested). No marketing words, no exclamation marks, no emoji.
+Barely any. The detail of a step is spoken, not shown. A screen gets a heading only if you would be lost without it. Instructions read like a calm paramedic: short sentences, the verb first, 12 words or fewer when spoken (tested), 5 or fewer in a headline (tested). No marketing words, no exclamation marks, no emoji.
 
 ## Banned (from the spec, enforced in review)
 

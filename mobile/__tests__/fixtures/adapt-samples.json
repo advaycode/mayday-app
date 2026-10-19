@@ -1,0 +1,63 @@
+{
+  "input": [
+    "Tap their shoulders and shout.",
+    "Do they respond?",
+    "Lay them flat on their back, on the floor.",
+    "Kneel beside their chest.",
+    "Watch their chest.",
+    "Are they breathing normally?",
+    "Heel of one hand on the center of the chest.",
+    "Other hand on top. Lock your elbows.",
+    "Don't lift to look.",
+    "If they stop responding, tell me."
+  ],
+  "pronoun": "he",
+  "relation": "dad",
+  "out": {
+    "qwen2.5:14b-instruct": {
+      "ms": 56233,
+      "lines": [
+        "Tap his shoulders gently, shout.",
+        "Does he respond?",
+        "Lay him flat on floor.",
+        "Kneel beside his chest.",
+        "Watch his chest rise.",
+        "Is he breathing normally?",
+        "Place heel of hand center chest.",
+        "Other hand on top. Lock elbows.",
+        "Don't lift to look.",
+        "If he stops responding, tell me."
+      ]
+    },
+    "gemma3:4b": {
+      "ms": 42200,
+      "lines": [
+        "Tap his shoulders and shout.",
+        "Do he respond?",
+        "Lay him flat on his back, on the floor.",
+        "Kneel beside his chest.",
+        "Watch his chest.",
+        "Are he breathing normally?",
+        "Heel of one hand on the center of his chest.",
+        "Other hand on top. Lock your elbows.",
+        "Don't lift to look.",
+        "If he stops responding, tell me."
+      ]
+    },
+    "llama3.2": {
+      "ms": 31371,
+      "lines": [
+        "Tap his shoulders and shout.",
+        "Do he respond?",
+        "Lay him flat on his back, on the floor.",
+        "Kneel beside his chest.",
+        "Watch his chest.",
+        "Is he breathing normally?",
+        "Heel of one hand on the center of his chest.",
+        "Other hand on top. Lock your elbows.",
+        "Don't lift to look.",
+        "If he stop responding, tell me."
+      ]
+    }
+  }
+}

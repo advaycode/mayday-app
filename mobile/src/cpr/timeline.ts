@@ -32,6 +32,8 @@ export type CprPlan = {
   /** Breath cues spoken in the 30:2 breath window, in order. */
   breathsSay: string[];
   swapEveryS: number;
+  /** The rescuer said they are on their own. */
+  alone?: boolean;
 };
 
 export const COUNT_BEATS = 30;
@@ -45,10 +47,12 @@ export const BACK_OFFSET_S = 6.0;
 export const SWAP_EXTRA_S = 2.4;
 const MINUTE_WORDS = ['Zero', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen', 'Twenty'];
 /** "Four minutes. Switch with someone if you can." Pre-rendered for every value up to twenty. */
-export function swapLine(minutes: number): string {
+/** The 2-minute line. Alone, there is nobody to switch with, so it only marks the time. */
+export function swapLine(minutes: number, alone = false): string {
   const m = Math.max(1, Math.round(minutes));
-  if (m > 20) return 'Keep going. Switch with someone if you can.';
-  return `${MINUTE_WORDS[m]} minute${m === 1 ? '' : 's'}. Switch with someone if you can.`;
+  const tail = alone ? 'Keep going.' : 'Switch with someone if you can.';
+  if (m > 20) return alone ? 'Keep going. Help is coming.' : 'Keep going. Switch with someone if you can.';
+  return `${MINUTE_WORDS[m]} minute${m === 1 ? '' : 's'}. ${tail}`;
 }
 
 export type TimelineEvent =
@@ -109,13 +113,13 @@ export function eventsOfCycle(plan: CprPlan, c: Cycle): TimelineEvent[] {
     for (let i = 0; i < COACH_BEATS; i++) {
       out.push({ kind: 'beat', at: c.start + (COUNT_BEATS + i) * p, cycle: c.index, index: COUNT_BEATS + i, count: null });
     }
-    const text = c.swap ? swapLine(c.minutes) : plan.reminders[c.index % plan.reminders.length];
+    const text = c.swap ? swapLine(c.minutes, plan.alone) : plan.reminders[c.index % plan.reminders.length];
     out.push({ kind: 'line', at: tailStart, cycle: c.index, text, role: c.swap ? 'swap' : 'reminder' });
   } else {
     out.push({ kind: 'phase', at: tailStart, cycle: c.index, phase: 'breaths' });
     let offset = 0;
     if (c.swap) {
-      out.push({ kind: 'line', at: tailStart, cycle: c.index, text: swapLine(c.minutes), role: 'swap' });
+      out.push({ kind: 'line', at: tailStart, cycle: c.index, text: swapLine(c.minutes, plan.alone), role: 'swap' });
       offset = SWAP_EXTRA_S;
     }
     plan.breathsSay.forEach((text, i) => {

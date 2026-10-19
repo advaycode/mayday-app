@@ -22,6 +22,7 @@ import { useDeviceInsets } from '@/design/insets';
 import { Text } from '@/design/Text';
 import { color, radius, space } from '@/design/tokens';
 import { createListener, type ListenState } from '@/voice/listen';
+import { rewriteTable, voiceContext } from '@/voice/voice';
 
 /**
  * Emergency mode. Near-black, huge type, nothing to scroll, nothing that is
@@ -133,6 +134,7 @@ export default function Emergency() {
         const a = audio();
         return a ? { state: (a.ctx as { state?: string }).state, time: a.now(), speaking: a.isSpeaking(), said: a.lastSpoken } : null;
       },
+      voice: () => ({ ...voiceContext(), rewrites: rewriteTable() }),
     };
     return () => {
       delete w.__mayday;
@@ -188,15 +190,7 @@ export default function Emergency() {
             <MicrophoneSlash size={16} color={color.inkFaint} />
           )}
           <Text variant="caption" tone="muted" numberOfLines={1} style={{ flex: 1 }}>
-            {voicePaused
-              ? 'Voice paused during the call. Use the buttons.'
-              : state.answerSource
-                ? `From ${state.answerSource}`
-                : state.heard
-                  ? `"${state.heard.text}"`
-                  : listen === 'listening'
-                    ? 'Listening. Say "next", "repeat", or ask a question.'
-                    : 'Voice off. Use the buttons.'}
+            {voicePaused ? 'On call' : state.heard ? state.heard.text : ''}
           </Text>
         </View>
       )}

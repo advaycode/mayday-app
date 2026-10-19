@@ -17,6 +17,7 @@ The 2026 rules require that "all AI usage is fully disclosed in the submission m
 |---|---|---|---|
 | **Groq**, `llama-3.1-8b-instant` | `proxy/src/index.ts` `/route` | Suggest which protocol fits a sentence the offline rules were unsure about | Write any instruction. Output must match a fixed schema of ids or it is discarded. Never delays a life-threat protocol |
 | **Claude**, `claude-opus-5-5` (Anthropic) | `/ask` | Rephrase an answer using only the cited protocol passages the app sends, citing them | Add facts or steps. Uncited or long answers are discarded and the app says "Keep doing compressions. Tell the dispatcher that." |
+| **Claude**, `claude-opus-5-5`, or on the demo laptop with no key a local model (`qwen2.5:14b-instruct` through Ollama) | `/adapt` | Rephrase upcoming spoken lines for this patient ("your dad", "him") and this rescuer (calmer when they panic) | Change any medical word, number or negation, add a step, or speak to the patient. The app checks every line against the original and keeps the original wording if it fails |
 | **Claude**, `claude-opus-5-5` | `/scan` (photo check) | Describe a burn or wound photo in hedged words and suggest burns or bleeding | Diagnose or give treatment steps |
 
 The app is complete with no AI at all: without the proxy the protocols, voice, CPR coach, 911 flow and map all work, and the photo check is hidden.
@@ -24,5 +25,7 @@ The app is complete with no AI at all: without the proxy the protocols, voice, C
 ## Third-party code and data
 
 Open-source libraries (each under its own license): Expo SDK and modules, React Native, React Native Reanimated, React Native Skia, react-native-audio-api, react-native-svg, expo-speech-recognition, Phosphor icons, zod, the Anthropic TypeScript SDK, Geist and Geist Mono fonts (SIL Open Font License), Piper TTS. Full list: `mobile/package.json` and `proxy/package.json`.
+
+Images: 15 step pictures from Wikimedia Commons (public domain, CC0, CC BY, CC BY-SA), recolored; authors and licenses in `docs/IMAGE_CREDITS.md` and in the app. Local model: Qwen2.5 (Apache 2.0) through Ollama, only on the demo laptop.
 
 Data: CMS Hospital General Information; Florida Department of Health trauma center list; OpenStreetMap; U.S. Census geocoder; CARES 2024 Metrics Summary; map tiles from Esri. Medical content: see `docs/MEDICAL_SOURCES.md`.

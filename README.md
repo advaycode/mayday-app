@@ -53,7 +53,7 @@ Every spoken line, its source, and whether it has been verified: **[docs/MEDICAL
 
 ## Data sources
 
-ERs: CMS Provider Data Catalog, Hospital General Information. Trauma centers: Florida Department of Health, Florida Trauma Centers (July 23 2026). Urgent care: OpenStreetMap contributors. Geocoding: U.S. Census Bureau. Statistics: CARES 2024 Metrics Summary. Map tiles: Esri, HERE, Garmin, OpenStreetMap. Voice: Piper (en_US-lessac-medium).
+ERs: CMS Provider Data Catalog, Hospital General Information. Trauma centers: Florida Department of Health, Florida Trauma Centers (July 23 2026). Urgent care: OpenStreetMap contributors. Geocoding: U.S. Census Bureau. Statistics: CARES 2024 Metrics Summary. Map tiles: Esri, HERE, Garmin, OpenStreetMap. Voice: Piper (en_US-lessac-medium). Step pictures: Wikimedia Commons, public domain and Creative Commons, recolored ([credits](docs/IMAGE_CREDITS.md)).
 
 ## AI disclosure
 

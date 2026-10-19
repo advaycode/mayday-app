@@ -3,6 +3,7 @@ import { Minus, NavigationArrow, Phone, Plus } from 'phosphor-react-native';
 import { useCallback, useMemo, useState } from 'react';
 import { Linking, Pressable, StyleSheet, View } from 'react-native';
 
+import { DEMO_MODE } from '@/config';
 import { Button } from '@/design/Button';
 import { Glass } from '@/design/Glass';
 import { haptic } from '@/design/haptics';
@@ -101,9 +102,17 @@ export default function MapScreen() {
                 {describe(focus)}
                 {focus.pediatric && focus.kind !== 'urgent' && !focus.traumaLevel?.includes('ediatric') ? '  Children' : ''}
               </Text>
+              {DEMO_MODE && focus.phone ? (
+                <Text variant="body" tone="muted" tabular>
+                  {focus.phone}
+                </Text>
+              ) : null}
               <View style={styles.actions}>
                 <Button label="Directions" icon={NavigationArrow} onPress={() => navigate(focus)} style={{ flex: 1 }} />
-                {focus.phone ? <Button label="Call" icon={Phone} onPress={() => Linking.openURL(`tel:${focus.phone}`)} style={{ flex: 1 }} /> : null}
+                {/* Demo builds never dial anyone real: the number is shown above, not called. */}
+                {focus.phone && !DEMO_MODE ? (
+                  <Button label="Call" icon={Phone} onPress={() => Linking.openURL(`tel:${focus.phone}`)} style={{ flex: 1 }} />
+                ) : null}
               </View>
             </View>
           </Glass>

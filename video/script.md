@@ -30,10 +30,10 @@ Screen recording, phone in hand (or the phone mirror), real voice audio.
 | Time | Picture | What we say or hear |
 |---|---|---|
 | 0:35 | Home: the orb, the red 911 button. Thumb holds it; the ring fills; red floods the screen | "One button. Hold it." |
-| 0:42 | Emergency mode: 911 countdown "Calling 911 in 4", DEMO banner visible | App: *"Tell me what's happening."* Rescuer: *"My dad collapsed, he's not breathing!"* |
-| 0:48 | Screen jumps to "Send for an AED" | App: *"Not breathing. We'll do this together."* (under 1.5 s) |
+| 0:42 | Emergency mode: 911 countdown ring, DEMO banner visible | App: *"Tell me what's happening."* Rescuer: *"My dad collapsed, he's not breathing!"* |
+| 0:48 | Screen jumps to "Send for an AED" | App: *"Your dad isn't breathing. We'll do this together."* (under 1.5 s; it heard "dad", and says "him" from here on) |
 | 0:52 | Countdown ends; demo call pill appears; tap it; the "Tell the dispatcher" card: address, coordinates, summary | "It calls 911 for you, and gives you your address and a summary to read out. In this demo the call is simulated." |
-| 1:00 | Hands diagram; then the count, 128 pt | App counts; *"Push hard and fast."* |
+| 1:00 | Hands photo; then the count, 128 pt | App counts; *"Push hard and fast."* |
 | 1:08 | 30:2: "Breathe" screen | App: *"Two breaths. Tilt the head. Lift the chin."* |
 | 1:15 | Rescuer: *"The AED is here!"* → "Turn the AED on", pads screen | App: *"You can move a bra aside. No need to remove it."* (caption: 2025 guideline change) |
 | 1:24 | Map tab: nearest ER, toggle to Trauma: "St. Joseph's Hospital, Level II and Pediatric" | "It knows an ER from a trauma center, from state and federal data." |

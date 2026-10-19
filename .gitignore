@@ -14,3 +14,7 @@ research/data/*.pdf
 proxy/node_modules/
 proxy/.dev.vars
 proxy/.wrangler/
+
+# Raw image-crawl candidates: re-create with tools/crawl_images.py (meta.json kept for provenance)
+research/images/candidates/**/*.jpg
+__pycache__/

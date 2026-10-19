@@ -38,6 +38,7 @@ MOBILE = ROOT / "mobile"
 CORPUS = MOBILE / "src" / "protocols" / "corpus"
 SYSTEM = MOBILE / "src" / "audio" / "systemLines.json"
 ANSWERS = MOBILE / "src" / "voice" / "answers.json"
+ADAPTED = MOBILE / "src" / "voice" / "adaptedLines.json"  # written by mobile/__tests__/adapt.test.ts
 OUT = MOBILE / "assets" / "voice" / "en"
 MANIFEST = MOBILE / "src" / "audio" / "voiceManifest.ts"
 MODEL = Path.home() / ".piper" / "models" / "en_US-lessac-medium.onnx"
@@ -51,8 +52,10 @@ TARGET_RMS_DB = -18.0
 MINUTE_WORDS = ["Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten",
                 "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen",
                 "Nineteen", "Twenty"]
-TIMELINE_LINES = ["Back to compressions.", "Keep going. Switch with someone if you can."] + [
-    f"{MINUTE_WORDS[m]} minute{'' if m == 1 else 's'}. Switch with someone if you can." for m in range(1, 21)
+TIMELINE_LINES = ["Back to compressions.", "Keep going. Switch with someone if you can.", "Keep going. Help is coming."] + [
+    f"{MINUTE_WORDS[m]} minute{'' if m == 1 else 's'}. {tail}"
+    for m in range(1, 21)
+    for tail in ("Switch with someone if you can.", "Keep going.")  # with a helper / alone
 ]
 
 
@@ -91,6 +94,8 @@ def collect_lines() -> tuple[list[str], list[str]]:
     lines += list(system["lines"].values()) + list(system["confirm"].values()) + TIMELINE_LINES
     for card in json.loads(ANSWERS.read_text(encoding="utf-8"))["cards"]:
         lines += card["say"]
+    if ADAPTED.exists():
+        lines += json.loads(ADAPTED.read_text(encoding="utf-8"))["lines"]
     counts = system["counts"]
     # De-duplicate while keeping order.
     seen: set[str] = set()
@@ -98,7 +103,13 @@ def collect_lines() -> tuple[list[str], list[str]]:
     return unique, counts
 
 
+def spoken(text: str) -> str:
+    """How a line should sound: the voice would read 911 as "nine hundred eleven"."""
+    return re.sub(r"\b911\b", "nine one one", text)
+
+
 def synth(voice: PiperVoice, text: str, length_scale: float) -> tuple[np.ndarray, int]:
+    text = spoken(text)
     buf = io.BytesIO()
     with wave.open(buf, "wb") as wav:
         voice.synthesize_wav(text, wav, SynthesisConfig(length_scale=length_scale, noise_scale=0.55, noise_w_scale=0.7))

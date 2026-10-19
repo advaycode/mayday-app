@@ -44,9 +44,9 @@ export function Intake({ incident, now, remaining, level, listening, onMore }: P
           {status === 'countdown' && (
             <>
               <Text variant="bodyStrong" tone="muted">
-                Calling 911 in
+                911
               </Text>
-              <Text variant="countdown" tabular accessibilityLiveRegion="assertive">
+              <Text variant="countdown" tabular accessibilityLiveRegion="assertive" accessibilityLabel={`Calling 911 in ${secondsLeft}`}>
                 {secondsLeft}
               </Text>
             </>
@@ -63,9 +63,7 @@ export function Intake({ incident, now, remaining, level, listening, onMore }: P
             </>
           )}
           {(status === 'cancelled' || status === 'delegated') && (
-            <Text variant="title" tone="muted" style={{ textAlign: 'center', paddingHorizontal: space[8] }}>
-              {status === 'delegated' ? 'Someone is calling' : 'Not calling'}
-            </Text>
+            <Phone size={36} color={color.inkMuted} weight={status === 'delegated' ? 'fill' : 'regular'} />
           )}
         </CountdownRing>
 
@@ -73,28 +71,26 @@ export function Intake({ incident, now, remaining, level, listening, onMore }: P
           {status === 'countdown' ? (
             <>
               <Button label="Cancel" onPress={cancelCall} style={styles.half} />
-              <Button label="Already called" onPress={delegateCall} style={styles.half} accessibilityHint="Someone else is already on the phone with 911" />
+              <Button label="Called" onPress={delegateCall} style={styles.half} accessibilityHint="Someone else is already on the phone with 911" />
             </>
           ) : status === 'calling' ? null : (
-            <Button label="Call 911 now" kind="signal" icon={Phone} onPress={call} style={{ flex: 1 }} />
+            <Button label="Call 911" kind="signal" icon={Phone} onPress={call} style={{ flex: 1 }} />
           )}
         </View>
       </View>
 
       <View style={styles.listen} accessibilityLiveRegion="polite">
         <Orb size={92} level={level} energy={listening ? 1 : 0} />
-        <Text
-          variant={heard ? 'title' : 'title'}
-          tone={heard ? 'ink' : 'muted'}
-          numberOfLines={2}
-          style={{ textAlign: 'center', marginTop: space[1] }}>
-          {heard ? `"${heard}"` : listening ? "Tell me what's happening." : 'Tap what you see.'}
-        </Text>
+        {heard ? (
+          <Text variant="title" numberOfLines={2} style={{ textAlign: 'center', marginTop: space[1] }}>
+            {heard}
+          </Text>
+        ) : null}
       </View>
 
       <View style={styles.grid}>
         <View style={styles.row}>
-          <Button stacked size="emergency" icon={Heartbeat} label="Not breathing" onPress={() => startProtocol(cpr, { conscious: 'false', breathing: 'abnormal' })} style={styles.half} />
+          <Button stacked size="emergency" icon={Heartbeat} label="No breath" accessibilityHint="Not breathing" onPress={() => startProtocol(cpr, { conscious: 'false', breathing: 'abnormal' })} style={styles.half} />
           <Button stacked size="emergency" icon={Wind} label="Choking" onPress={() => startProtocol(choking)} style={styles.half} />
         </View>
         <View style={styles.row}>

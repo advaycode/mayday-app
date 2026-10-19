@@ -1,4 +1,5 @@
 import { Brain, Camera, ChatText, Fire, Person, Phone, PhoneDisconnect, Pill } from 'phosphor-react-native';
+import { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { DEMO_DIAL, DEMO_MODE } from '@/config';
@@ -9,7 +10,7 @@ import { color, space } from '@/design/tokens';
 import { elapsed, summaryLine } from '@/incident/log';
 import { formatCoords } from '@/location/location';
 
-import { online } from '@/ai/proxy';
+import { capabilities } from '@/ai/proxy';
 import { careAdvice, describe, miles } from '@/facilities/nearest';
 import { protocols } from '@/protocols';
 
@@ -91,6 +92,11 @@ export function MoreSheet({ incident, open, onClose, onScan }: { incident: Incid
     startProtocol(id, extra);
   };
   const age = slots.age_group ?? 'adult';
+  // Photo check needs Claude behind the proxy; without it the button is not shown at all.
+  const [vision, setVision] = useState(false);
+  useEffect(() => {
+    capabilities().then((c) => setVision(c.claude));
+  }, []);
   return (
     <Sheet open={open} onClose={onClose}>
       <View style={styles.ageRow} accessibilityRole="radiogroup" accessibilityLabel="Age">
@@ -112,7 +118,7 @@ export function MoreSheet({ incident, open, onClose, onScan }: { incident: Incid
         <Button stacked size="emergency" icon={Brain} label="Stroke" onPress={() => go('stroke')} style={{ flex: 1 }} />
         <Button stacked size="emergency" icon={Fire} label="Burn" onPress={() => go('burns')} style={{ flex: 1 }} />
       </View>
-      {online() && <Button label="Photo check" icon={Camera} onPress={onScan} accessibilityHint="Take a photo of a burn or wound to pick the right steps" />}
+      {vision && <Button label="Photo check" icon={Camera} onPress={onScan} accessibilityHint="Take a photo of a burn or wound to pick the right steps" />}
     </Sheet>
   );
 }

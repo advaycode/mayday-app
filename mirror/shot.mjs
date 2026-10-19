@@ -33,6 +33,8 @@ const proc = spawn(chrome, [
   '--hide-scrollbars',
   '--autoplay-policy=no-user-gesture-required',
   '--use-fake-ui-for-media-stream',
+  // A fake microphone, so a test never hears this laptop's speakers (or the room).
+  '--use-fake-device-for-media-stream',
   '--no-first-run',
   'about:blank',
 ], { stdio: 'ignore' });
