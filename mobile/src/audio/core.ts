@@ -34,7 +34,26 @@ export type Ctx = {
 
 export type SpeakResult = { start: number; end: number };
 
-export class AudioCore {
+/** What the app needs from an audio engine: this one (Web Audio), or players.ts (Expo Go). */
+export interface VoiceEngine {
+  readonly state: string;
+  speakingUntil: number;
+  lastSpoken: string[];
+  now(): number;
+  unlock(): Promise<void>;
+  has(text: string): boolean;
+  ready(text: string): boolean;
+  preload(lines: string[]): Promise<void>;
+  playClick(when: number, accent?: boolean): void;
+  playLineAt(text: string, when: number, rate?: number): number | null;
+  speak(lines: string[], opts?: { rate?: number; gap?: number }): Promise<SpeakResult>;
+  stopSpeech(): void;
+  isSpeaking(): boolean;
+  duck(on: boolean): void;
+  recentlySaid(seconds?: number): string[];
+}
+
+export class AudioCore implements VoiceEngine {
   private buffers = new Map<string, Buf>();
   private loading = new Map<string, Promise<Buf | null>>();
   private voiceGain: ReturnType<Ctx['createGain']>;
@@ -66,6 +85,10 @@ export class AudioCore {
 
   now(): number {
     return this.ctx.currentTime;
+  }
+
+  get state(): string {
+    return this.ctx.state ?? 'running';
   }
 
   async unlock() {

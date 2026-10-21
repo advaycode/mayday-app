@@ -7,6 +7,7 @@ import { Glass } from '@/design/Glass';
 import { useDeviceInsets } from '@/design/insets';
 import { Text } from '@/design/Text';
 import { color, radius, space } from '@/design/tokens';
+import { emergencyFor } from '@/design/emergencies';
 import { Visual } from '@/design/Visual';
 import { protocols, sources, type Step } from '@/protocols';
 
@@ -55,7 +56,6 @@ export default function ProtocolReader() {
         </Text>
         <Text variant="body" tone="muted" style={styles.meta}>
           {p.appliesTo ? 'Adults and children' : p.ageGroup === 'infant' ? 'Babies under 1 year' : p.ageGroup === 'child' ? 'Children, 1 year to puberty' : p.ageGroup === 'adult' ? 'Adults' : 'Any age'}
-          {'  ·  '}v{p.version}
         </Text>
 
         {steps.map((s, i) => {
@@ -80,11 +80,8 @@ export default function ProtocolReader() {
                       {s.sub}
                     </Text>
                   ) : null}
-                  <Text variant="caption" tone={s.verified ? 'muted' : 'faint'} style={{ marginTop: space[1] }}>
-                    {src?.publisher.replace(/ \(.*\)$/, '')}  ·  {s.verified ? 'quoted' : 'awaiting review'}
-                  </Text>
                 </View>
-                {s.visual ? <Visual id={s.visual} size={56} /> : null}
+                {s.visual ? <Visual id={s.visual} size={64} tone={emergencyFor(p.id).tint} /> : null}
               </View>
               {expanded && (
                 <View style={styles.quote}>
@@ -94,7 +91,7 @@ export default function ProtocolReader() {
                     </Text>
                   ) : null}
                   <Text variant="caption" tone="muted" selectable>
-                    {src?.title}. {src?.citation}
+                    {src?.title}. {src?.citation} {s.verified ? '' : '(Awaiting medical review.)'}
                   </Text>
                   {s.note ? (
                     <Text variant="caption" tone="faint" selectable>

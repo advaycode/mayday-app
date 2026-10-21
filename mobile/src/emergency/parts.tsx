@@ -1,131 +1,192 @@
-import { Canvas, Circle, Path, Skia } from '@shopify/react-native-skia';
-import { ListBullets, Phone, PhoneCall } from 'phosphor-react-native';
-import type { ReactNode } from 'react';
+import { Canvas, Circle } from '@shopify/react-native-skia';
+import { CaretDown, CaretLeft, Check, Phone, SpeakerHigh, X } from 'phosphor-react-native';
+import { useEffect, useState, type ReactNode } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
-import { useDerivedValue, type SharedValue } from 'react-native-reanimated';
+import Animated, { FadeIn, FadeOut, useAnimatedStyle, useDerivedValue, useSharedValue, withTiming, type SharedValue } from 'react-native-reanimated';
 
-import { DEMO_MODE } from '@/config';
+import { emergencyFor } from '@/design/emergencies';
 import { Glass } from '@/design/Glass';
+import { haptic } from '@/design/haptics';
+import { TalkButton } from '@/design/TalkButton';
 import { Text } from '@/design/Text';
 import { color, radius, space } from '@/design/tokens';
-import { elapsed } from '@/incident/log';
-
-import type { IncidentState } from './useIncident';
-
-/** Pinned to every emergency screen while DEMO_MODE is on. Impossible to miss, impossible to confuse with red. */
-export function DemoBanner() {
-  if (!DEMO_MODE) return null;
-  return (
-    <View style={styles.demo} accessibilityRole="alert" accessibilityLabel="Mayday never calls 911. Call it yourself.">
-      <Text variant="caption" style={{ color: color.void }}>
-        Mayday never calls 911.
-      </Text>
-    </View>
-  );
-}
-
-/** The practice-call countdown: a red arc that empties over five seconds. Nothing is dialed. */
-export function CountdownRing({ size, remaining, children }: { size: number; remaining: SharedValue<number>; children?: ReactNode }) {
-  const r = size / 2 - 6;
-  const path = Skia.Path.Circle(size / 2, size / 2, r);
-  const end = useDerivedValue(() => remaining.value);
-  return (
-    <View style={{ width: size, height: size, alignItems: 'center', justifyContent: 'center' }}>
-      <Canvas style={StyleSheet.absoluteFill} pointerEvents="none">
-        <Circle cx={size / 2} cy={size / 2} r={r} style="stroke" strokeWidth={6} color={color.hairline} />
-        <Path
-          path={path}
-          style="stroke"
-          strokeWidth={6}
-          strokeCap="round"
-          color={color.signal}
-          start={0}
-          end={end}
-          transform={[{ rotate: -Math.PI / 2 }]}
-          origin={{ x: size / 2, y: size / 2 }}
-        />
-      </Canvas>
-      {children}
-    </View>
-  );
-}
 
 /** A beat you can see: a ring that swells on every compression. */
-export function PulseRing({ size, pulse }: { size: number; pulse: SharedValue<number> }) {
+export function PulseRing({ size, pulse, tone = color.ink }: { size: number; pulse: SharedValue<number>; tone?: string }) {
   const r = useDerivedValue(() => size / 2 - 14 + pulse.value * 10);
-  const opacity = useDerivedValue(() => 0.25 + pulse.value * 0.6);
+  const opacity = useDerivedValue(() => 0.3 + pulse.value * 0.6);
   return (
     <Canvas style={{ position: 'absolute', width: size, height: size }} pointerEvents="none">
       <Circle cx={size / 2} cy={size / 2} r={size / 2 - 14} style="stroke" strokeWidth={2} color={color.hairline} />
-      <Circle cx={size / 2} cy={size / 2} r={r} style="stroke" strokeWidth={4} color={color.ink} opacity={opacity} />
+      <Circle cx={size / 2} cy={size / 2} r={r} style="stroke" strokeWidth={5} color={tone} opacity={opacity} />
     </Canvas>
   );
 }
 
-/** Compact call status for the top bar once a protocol is running. Tap for the dispatcher card. */
-export function CallPill({ call, now, onPress }: { call: IncidentState['call']; now: number; onPress: () => void }) {
-  let label: string;
-  let red = false;
-  if (call.status === 'countdown') {
-    label = `Practice call in ${Math.max(0, Math.ceil((call.endsAt - now) / 1000))}`;
-    red = true;
-  } else if (call.status === 'calling') {
-    label = `Practice  ${elapsed(now - (call.placedAt ?? now))}`;
-    red = true;
-  } else if (call.status === 'delegated') {
-    label = 'Someone is calling 911';
-  } else {
-    label = 'Practice call';
-    red = true;
-  }
+function RoundButton({ onPress, label, children }: { onPress: () => void; label: string; children: ReactNode }) {
   return (
     <Pressable
-      onPress={onPress}
+      onPress={() => {
+        haptic('navigate');
+        onPress();
+      }}
       accessibilityRole="button"
-      accessibilityLabel={`${label}. Opens what to tell the dispatcher.`}
-      style={({ pressed }) => [styles.pill, { backgroundColor: red ? color.signal : 'rgba(242,239,232,0.08)' }, pressed && { opacity: 0.85 }]}>
-      {call.status === 'calling' ? <PhoneCall size={18} color={color.onSignal} weight="fill" /> : <Phone size={18} color={red ? color.onSignal : color.ink} weight="fill" />}
-      <Text variant="bodyStrong" tabular style={{ color: red ? color.onSignal : color.ink }}>
-        {label}
-      </Text>
+      accessibilityLabel={label}
+      hitSlop={8}>
+      <Glass radius={radius.pill} style={styles.round}>
+        <View style={styles.roundInner}>{children}</View>
+      </Glass>
     </Pressable>
   );
 }
 
-export function TopBar({ left, onLog }: { left: ReactNode; onLog: () => void }) {
+/**
+ * Top of every emergency screen: close on the left, what is happening in the
+ * middle (its color, icon and name; tap to switch), say-it-again on the right.
+ */
+export function TopBar({
+  protocolId,
+  onClose,
+  onSwitch,
+  onRepeat,
+}: {
+  protocolId: string | null;
+  onClose: () => void;
+  onSwitch: () => void;
+  onRepeat: (() => void) | null;
+}) {
+  const e = emergencyFor(protocolId);
   return (
     <View style={styles.top}>
-      <View style={{ flexShrink: 1 }}>{left}</View>
-      <Pressable onPress={onLog} accessibilityRole="button" accessibilityLabel="Incident log for paramedics" hitSlop={8}>
-        <Glass radius={radius.pill} style={styles.round}>
-          <View style={styles.roundInner}>
-            <ListBullets size={22} color={color.ink} />
-          </View>
-        </Glass>
+      <RoundButton onPress={onClose} label="Close">
+        <X size={22} color={color.ink} />
+      </RoundButton>
+
+      <Pressable
+        onPress={onSwitch}
+        accessibilityRole="button"
+        accessibilityLabel={protocolId ? `${e.label}. Tap to change.` : 'Choose what is happening'}
+        style={({ pressed }) => [styles.chip, { backgroundColor: e.tint.deep, borderColor: `${e.tint.hue}55` }, pressed && { opacity: 0.85 }]}>
+        <e.Icon size={20} color={e.tint.hue} weight="fill" />
+        <Text variant="bodyStrong">{protocolId ? e.label : 'Choose'}</Text>
+        <CaretDown size={14} color={color.inkMuted} weight="bold" />
+      </Pressable>
+
+      {onRepeat ? (
+        <RoundButton onPress={onRepeat} label="Say it again">
+          <SpeakerHigh size={22} color={color.ink} />
+        </RoundButton>
+      ) : (
+        <View style={styles.round} />
+      )}
+    </View>
+  );
+}
+
+/** How far through the steps, in the emergency's color. */
+export function Progress({ fraction, tone }: { fraction: number; tone: string }) {
+  const shown = Math.max(0.04, Math.min(1, fraction));
+  const w = useSharedValue(shown);
+  useEffect(() => {
+    w.value = withTiming(shown, { duration: 300 });
+  }, [shown, w]);
+  const style = useAnimatedStyle(() => ({ width: `${w.value * 100}%` }));
+  return (
+    <View style={styles.track} accessibilityRole="progressbar" accessibilityValue={{ min: 0, max: 100, now: Math.round(fraction * 100) }}>
+      <Animated.View style={[styles.fill, { backgroundColor: tone }, style]} />
+    </View>
+  );
+}
+
+/**
+ * The bottom bar, under the thumb: Back, Talk to Mayday in the middle (the
+ * biggest control), and 911, which shows what to tell the dispatcher.
+ */
+export function Dock({
+  canBack,
+  onBack,
+  listening,
+  level,
+  onTalk,
+  on911,
+  bottomInset,
+}: {
+  canBack: boolean;
+  onBack: () => void;
+  listening: boolean;
+  level: SharedValue<number>;
+  onTalk: () => void;
+  on911: () => void;
+  bottomInset: number;
+}) {
+  return (
+    <View style={[styles.dock, { paddingBottom: Math.max(bottomInset, space[3]) }]}>
+      <Pressable
+        onPress={() => {
+          haptic('navigate');
+          onBack();
+        }}
+        disabled={!canBack}
+        accessibilityRole="button"
+        accessibilityLabel="Back one step"
+        accessibilityState={{ disabled: !canBack }}
+        style={({ pressed }) => [styles.side, { opacity: canBack ? 1 : 0.3 }, pressed && { opacity: 0.7 }]}>
+        <View style={styles.sideCircle}>
+          <CaretLeft size={26} color={color.ink} weight="bold" />
+        </View>
+        <Text variant="caption" tone="muted">
+          Back
+        </Text>
+      </Pressable>
+
+      <TalkButton size="dock" listening={listening} level={level} onPress={onTalk} />
+
+      <Pressable
+        onPress={() => {
+          haptic('attention');
+          on911();
+        }}
+        accessibilityRole="button"
+        accessibilityLabel="Call 911. Shows your address and what to tell them. Mayday does not dial."
+        style={({ pressed }) => [styles.side, pressed && { opacity: 0.8 }]}>
+        <View style={[styles.sideCircle, { backgroundColor: color.signal }]}>
+          <Phone size={24} color={color.onSignal} weight="fill" />
+        </View>
+        <Text variant="caption" style={{ color: color.ink }}>
+          911
+        </Text>
       </Pressable>
     </View>
   );
 }
 
+/** "Heard: no" for two and a half seconds, only for things Mayday acted on. */
+export function Understood({ understood }: { understood: { text: string; at: number } | null }) {
+  const [shown, setShown] = useState<string | null>(null);
+  useEffect(() => {
+    if (!understood) return;
+    setShown(understood.text);
+    const t = setTimeout(() => setShown(null), 2500);
+    return () => clearTimeout(t);
+  }, [understood]);
+  return (
+    <View style={styles.heardSlot} accessibilityLiveRegion="polite">
+      {shown && (
+        <Animated.View entering={FadeIn.duration(160)} exiting={FadeOut.duration(220)} style={styles.heard}>
+          <Check size={14} color={color.accent} weight="bold" />
+          <Text variant="caption" style={{ color: color.ink }} numberOfLines={1}>
+            {shown}
+          </Text>
+        </Animated.View>
+      )}
+    </View>
+  );
+}
+
 const styles = StyleSheet.create({
-  demo: {
-    backgroundColor: color.accent,
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: 24,
-  },
-  pill: {
-    height: 44,
-    borderRadius: radius.pill,
-    paddingHorizontal: space[4],
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: space[2],
-    alignSelf: 'flex-start',
-  },
   top: {
     height: 60,
-    paddingHorizontal: space[5],
+    paddingHorizontal: space[4],
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -133,4 +194,43 @@ const styles = StyleSheet.create({
   },
   round: { width: 44, height: 44 },
   roundInner: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center' },
+  chip: {
+    height: 44,
+    flexShrink: 1,
+    borderRadius: radius.pill,
+    borderWidth: 1,
+    paddingHorizontal: space[4],
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: space[2],
+  },
+  track: { height: 4, marginHorizontal: space[4], borderRadius: 2, backgroundColor: color.hairline, overflow: 'hidden' },
+  fill: { height: 4, borderRadius: 2 },
+  dock: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+    paddingHorizontal: space[6],
+    paddingTop: space[2],
+  },
+  side: { alignItems: 'center', width: 72, gap: space[1], paddingTop: space[2] },
+  sideCircle: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(242, 239, 232, 0.10)',
+  },
+  heardSlot: { height: 30, alignItems: 'center', justifyContent: 'center' },
+  heard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: space[1],
+    paddingHorizontal: space[3],
+    height: 28,
+    borderRadius: radius.pill,
+    backgroundColor: 'rgba(242, 239, 232, 0.08)',
+    maxWidth: 320,
+  },
 });

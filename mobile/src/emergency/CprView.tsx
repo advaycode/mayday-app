@@ -4,6 +4,7 @@ import { StyleSheet, View } from 'react-native';
 
 import { useCprCoach } from '@/cpr/useCprCoach';
 import { Button } from '@/design/Button';
+import { emergencyFor } from '@/design/emergencies';
 import { Text } from '@/design/Text';
 import { color, space } from '@/design/tokens';
 import { elapsed } from '@/incident/log';
@@ -19,6 +20,7 @@ import type { Incident } from './useIncident';
  * rescuer can follow it from their knees without reading anything else.
  */
 export function CprView({ incident, step }: { incident: Incident; step: StepOf<'cpr'> }) {
+  const tone = emergencyFor(incident.state.engine?.protocolId).tint;
   const { slots, dispatch, handoff, log, state } = incident;
   const mode = step.ratio === '30:2' || (step.ratio === 'fromSlot' && slots.rescue_breaths === 'true') ? '30:2' : 'handsOnly';
   const reentry = (state.engine?.visits[`${state.engine.protocolId}#${step.id}`] ?? 1) > 1;
@@ -47,7 +49,7 @@ export function CprView({ incident, step }: { incident: Incident; step: StepOf<'
     <View style={styles.wrap}>
       <View style={styles.center}>
         <View style={styles.countWrap}>
-          <PulseRing size={250} pulse={coach.pulse} />
+          <PulseRing size={250} pulse={coach.pulse} tone={tone.hue} />
           <Text
             variant={bigIsNumber ? 'count' : 'display'}
             tabular
@@ -74,8 +76,8 @@ export function CprView({ incident, step }: { incident: Incident; step: StepOf<'
       </View>
 
       <View style={styles.actions}>
-        <Button size="emergency" icon={Lightning} label="AED" accessibilityHint="The AED is here" onPress={() => dispatch({ type: 'intent', intent: 'aed_here', at: Date.now() })} style={{ flex: 1 }} />
-        <Button size="emergency" icon={Ambulance} label="EMS" accessibilityHint="Paramedics are here" onPress={handoff} style={{ flex: 1 }} />
+        <Button size="emergency" kind="tint" tint={tone.hue} icon={Lightning} label="AED is here" onPress={() => dispatch({ type: 'intent', intent: 'aed_here', at: Date.now() })} style={{ flex: 1 }} />
+        <Button size="emergency" icon={Ambulance} label="Paramedics" accessibilityHint="Paramedics are here" onPress={handoff} style={{ flex: 1 }} />
       </View>
     </View>
   );

@@ -1,91 +1,53 @@
 import { useKeepAwake } from 'expo-keep-awake';
-import { router } from 'expo-router';
-import { Microphone, MicrophoneSlash, X } from 'phosphor-react-native';
+import { router, useLocalSearchParams } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
-import { Platform, Pressable, StyleSheet, View } from 'react-native';
-import Animated, { Easing, interpolateColor, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
+import { Platform, StyleSheet, View } from 'react-native';
+import { useSharedValue, withTiming } from 'react-native-reanimated';
 
 import { audio, unlockAudio } from '@/audio/engine';
 import systemLines from '@/audio/systemLines.json';
-import { CALL_COUNTDOWN_S, DEMO_MODE } from '@/config';
+import { DEMO_MODE } from '@/config';
 import { CprView } from '@/emergency/CprView';
 import { Handoff } from '@/emergency/Handoff';
 import { Intake } from '@/emergency/Intake';
-import { CallPill, DemoBanner, TopBar } from '@/emergency/parts';
+import { Dock, Progress, TopBar, Understood } from '@/emergency/parts';
 import { DispatcherSheet, MoreSheet } from '@/emergency/sheets';
 import { ScanSheet } from '@/emergency/ScanSheet';
 import { StepView } from '@/emergency/StepView';
 import { useIncident } from '@/emergency/useIncident';
-import { Glass } from '@/design/Glass';
-import { haptic } from '@/design/haptics';
+import { EMERGENCIES, emergencyFor } from '@/design/emergencies';
 import { useDeviceInsets } from '@/design/insets';
-import { Text } from '@/design/Text';
-import { color, radius, space } from '@/design/tokens';
+import { color } from '@/design/tokens';
+import { protocols } from '@/protocols';
 import { createListener, type ListenState } from '@/voice/listen';
 import { rewriteTable, voiceContext } from '@/voice/voice';
 
 /**
- * Emergency mode. Near-black, huge type, nothing to scroll, nothing that is
- * not needed right now. The screen arrives on the same red as the button
- * that opened it and fades to black, so it reads as one continuous action.
+ * Help, step by step. Three bands, the same on every step:
+ *   top     close, what is happening (tap to change), say it again
+ *   middle  one picture, one instruction, the answers as big buttons
+ *   bottom  Back, Talk to Mayday, 911 (what to tell the dispatcher)
+ *
+ * Opened from Home either by Talk (listening straight away) or by an
+ * emergency tile (the steps start straight away).
  */
 export default function Emergency() {
   useKeepAwake();
   const insets = useDeviceInsets();
+  const params = useLocalSearchParams<{ talk?: string; tile?: string }>();
   const incident = useIncident();
   const { state, step } = incident;
-  const [now, setNow] = useState(Date.now());
   const [sheet, setSheet] = useState<'dispatch' | 'more' | 'scan' | null>(null);
   const [listen, setListen] = useState<ListenState>('off');
-  const [voicePaused, setVoicePaused] = useState(false);
   const [showLog, setShowLog] = useState(false);
   const level = useSharedValue(0);
-  const remaining = useSharedValue(1);
-  const arrive = useSharedValue(0);
 
-  // Arrive on red, settle to black.
-  useEffect(() => {
-    arrive.value = withTiming(1, { duration: 520, easing: Easing.bezier(0.16, 1, 0.3, 1) });
-  }, [arrive]);
-  const bg = useAnimatedStyle(() => ({ backgroundColor: interpolateColor(arrive.value, [0, 1], [color.signal, color.void]) }));
-
-  // A clock for countdowns and call timers.
-  useEffect(() => {
-    const t = setInterval(() => setNow(Date.now()), 250);
-    return () => clearInterval(t);
-  }, []);
-
-  // The 911 countdown ring empties over five seconds; at zero, call.
-  useEffect(() => {
-    if (state.call.status === 'countdown') {
-      remaining.value = 1;
-      remaining.value = withTiming(0, { duration: CALL_COUNTDOWN_S * 1000, easing: Easing.linear });
-    } else {
-      remaining.value = withTiming(state.call.status === 'calling' ? 1 : 0, { duration: 300 });
-    }
-  }, [state.call.status, remaining]);
-
-  const lastSecond = useRef(CALL_COUNTDOWN_S + 1);
-  useEffect(() => {
-    if (state.call.status !== 'countdown') return;
-    const left = Math.ceil((state.call.endsAt - now) / 1000);
-    if (left !== lastSecond.current && left > 0) {
-      lastSecond.current = left;
-      haptic('countdown');
-    }
-    if (now >= state.call.endsAt) {
-      // Never cover the current step with a sheet: the call pill shows the
-      // call, and one tap on it opens what to tell the dispatcher.
-      incident.call();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [now, state.call.status]);
-
-  // Listen from the first moment. Voice is a shortcut; every step also works by touch.
+  // --- Talk to Mayday: tap to listen, tap again to stop ---------------------------
   const hear = useRef(incident.hear);
   hear.current = incident.hear;
   const partial = useRef(incident.hearPartial);
   partial.current = incident.hearPartial;
+  const listener = useRef<ReturnType<typeof createListener> | null>(null);
   useEffect(() => {
     unlockAudio();
     const l = createListener({
@@ -94,25 +56,44 @@ export default function Emergency() {
       onLevel: (v) => (level.value = withTiming(v, { duration: 120 })),
       onState: (s) => {
         setListen(s);
-        if (s === 'interrupted') {
-          setVoicePaused(true);
-          audio()?.speak([systemLines.lines.micLost]);
-        }
+        if (s === 'interrupted') audio()?.speak([systemLines.lines.micLost]);
       },
     });
+    listener.current = l;
+
+    const tile = EMERGENCIES.find((e) => e.id === params.tile);
     const t = setTimeout(() => {
-      audio()?.speak([systemLines.lines.intake]);
-      l.start();
-    }, 450);
+      if (tile) incident.startProtocol(tile.protocol, tile.slots);
+      else {
+        audio()?.speak([systemLines.lines.intake]);
+        if (params.talk) l.start();
+      }
+    }, 300);
     return () => {
       clearTimeout(t);
       l.stop();
       audio()?.stopSpeech();
     };
-  }, [level]);
+    // Once, on open.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  // Test hook for the web preview (demo builds only): lets an automated
-  // browser "say" a sentence, the same way the speech recogniser would.
+  const listening = listen === 'listening' || listen === 'starting';
+  const talk = () => {
+    const l = listener.current;
+    if (!l) return;
+    if (listening) {
+      l.stop();
+      return;
+    }
+    // Barge in: Mayday stops talking so it can hear you.
+    audio()?.stopSpeech();
+    if (!l.available) audio()?.speak([systemLines.lines.micLost]);
+    l.start();
+  };
+
+  // Test hook for the web preview: lets an automated browser "say" a sentence,
+  // the same way the speech recogniser would.
   useEffect(() => {
     if (Platform.OS !== 'web' || !DEMO_MODE) return;
     const w = window as unknown as { __mayday?: object };
@@ -120,7 +101,7 @@ export default function Emergency() {
       hear: (t: string) => hear.current(t),
       audio: () => {
         const a = audio();
-        return a ? { state: (a.ctx as { state?: string }).state, time: a.now(), speaking: a.isSpeaking(), said: a.lastSpoken } : null;
+        return a ? { state: a.state, time: a.now(), speaking: a.isSpeaking(), said: a.lastSpoken } : null;
       },
       voice: () => ({ ...voiceContext(), rewrites: rewriteTable() }),
     };
@@ -131,76 +112,60 @@ export default function Emergency() {
 
   const phase = showLog ? 'handoff' : state.phase;
   const stepKey = `${state.engine?.protocolId}#${state.engine?.stepId}#${state.engine?.trail.length}`;
+  const protocolId = state.engine?.protocolId ?? null;
+  const tone = emergencyFor(protocolId).tint;
+  const steps = protocolId ? protocols[protocolId].steps : [];
+  const index = step ? steps.findIndex((s) => s.id === step.id) : -1;
+  const fraction = steps.length > 1 && index >= 0 ? (index + 1) / steps.length : 0;
+
+  if (phase === 'handoff') {
+    return (
+      <View style={[styles.screen, { paddingTop: insets.top, paddingBottom: insets.bottom }]}>
+        <Handoff
+          incident={incident}
+          onBack={() => {
+            setShowLog(false);
+            if (state.phase === 'handoff') incident.resume();
+          }}
+        />
+      </View>
+    );
+  }
 
   return (
-    <Animated.View style={[styles.screen, { paddingTop: insets.top }, bg]}>
-      <DemoBanner />
-
-      {phase === 'intake' ? (
-        <TopBar
-          left={
-            <Pressable onPress={() => router.back()} accessibilityRole="button" accessibilityLabel="Close emergency mode" hitSlop={8}>
-              <Glass radius={radius.pill} style={styles.round}>
-                <View style={styles.roundInner}>
-                  <X size={22} color={color.ink} />
-                </View>
-              </Glass>
-            </Pressable>
-          }
-          onLog={() => setShowLog(true)}
-        />
-      ) : (
-        <TopBar left={<CallPill call={state.call} now={now} onPress={() => setSheet('dispatch')} />} onLog={() => setShowLog(true)} />
-      )}
+    <View style={[styles.screen, { paddingTop: insets.top }]}>
+      <TopBar
+        protocolId={protocolId}
+        onClose={() => router.back()}
+        onSwitch={() => setSheet('more')}
+        onRepeat={step ? () => incident.dispatch({ type: 'intent', intent: 'repeat', at: Date.now() }) : null}
+      />
+      {protocolId && <Progress fraction={fraction} tone={tone.hue} />}
 
       <View style={{ flex: 1 }}>
-        {phase === 'intake' && (
-          <Intake incident={incident} now={now} remaining={remaining} level={level} listening={listen === 'listening'} onMore={() => setSheet('more')} />
-        )}
+        {phase === 'intake' && <Intake incident={incident} level={level} listening={listening} />}
         {phase === 'protocol' && step && step.kind === 'cpr' && <CprView key={stepKey} incident={incident} step={step} />}
         {phase === 'protocol' && step && step.kind !== 'cpr' && <StepView key={stepKey} incident={incident} step={step} />}
-        {phase === 'handoff' && (
-          <Handoff
-            incident={incident}
-            onBack={() => {
-              setShowLog(false);
-              if (state.phase === 'handoff') incident.resume();
-            }}
-          />
-        )}
       </View>
 
-      {phase === 'protocol' && (
-        <View style={[styles.voice, { paddingBottom: insets.bottom }]}>
-          {listen === 'listening' && !voicePaused ? (
-            <Microphone size={16} color={color.inkMuted} weight="fill" />
-          ) : (
-            <MicrophoneSlash size={16} color={color.inkFaint} />
-          )}
-          <Text variant="caption" tone="muted" numberOfLines={1} style={{ flex: 1 }}>
-            {voicePaused ? 'On call' : state.heard ? state.heard.text : ''}
-          </Text>
-        </View>
-      )}
-      {phase !== 'protocol' && <View style={{ height: insets.bottom }} />}
+      <Understood understood={state.understood} />
+      <Dock
+        canBack={incident.canBack}
+        onBack={incident.back}
+        listening={listening}
+        level={level}
+        onTalk={talk}
+        on911={() => setSheet('dispatch')}
+        bottomInset={insets.bottom}
+      />
 
-      <DispatcherSheet incident={incident} open={sheet === 'dispatch'} onClose={() => setSheet(null)} now={now} />
+      <DispatcherSheet incident={incident} open={sheet === 'dispatch'} onClose={() => setSheet(null)} />
       <MoreSheet incident={incident} open={sheet === 'more'} onClose={() => setSheet(null)} onScan={() => setSheet('scan')} />
       <ScanSheet incident={incident} open={sheet === 'scan'} onClose={() => setSheet(null)} />
-    </Animated.View>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  screen: { flex: 1 },
-  round: { width: 44, height: 44 },
-  roundInner: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center' },
-  voice: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: space[2],
-    paddingHorizontal: space[5],
-    paddingTop: space[2],
-    minHeight: 40,
-  },
+  screen: { flex: 1, backgroundColor: color.void },
 });

@@ -3,20 +3,21 @@ import * as Speech from 'expo-speech';
 
 import { TTS_URL } from '@/config';
 
-import { AudioCore, type Ctx } from './core';
+import { AudioCore, type Ctx, type VoiceEngine } from './core';
+import { PlayerCore } from './players';
 
 /**
  * Phone: react-native-audio-api gives us the Web Audio API on the native
  * audio engine, so core.ts schedules beats on the hardware clock here too.
  *
  * It is a native module, so it exists in development and store builds but
- * not inside Expo Go. In Expo Go audio() returns null, and the CPR screen
- * still runs on haptics and the on-screen count.
+ * not inside Expo Go. In Expo Go, players.ts plays the same recorded voice,
+ * counts and clicks through expo-audio, a little less exactly.
  */
-let core: AudioCore | null = null;
+let core: VoiceEngine | null = null;
 let tried = false;
 
-export function audio(): AudioCore | null {
+export function audio(): VoiceEngine | null {
   if (core || tried) return core;
   tried = true;
   try {
@@ -31,7 +32,8 @@ export function audio(): AudioCore | null {
       TTS_URL,
     );
   } catch {
-    core = null;
+    // Expo Go: no audio engine module, so the recorded voice and clicks go through expo-audio players.
+    core = new PlayerCore((text) => Speech.speak(text, { rate: 0.95, pitch: 0.95 }), TTS_URL);
   }
   return core;
 }

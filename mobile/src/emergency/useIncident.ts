@@ -2,11 +2,10 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { audio } from '@/audio/engine';
 import systemLines from '@/audio/systemLines.json';
-import { CALL_COUNTDOWN_S } from '@/config';
 import { haptic } from '@/design/haptics';
 import type { LogEntry } from '@/incident/log';
 import { getFix, type Fix } from '@/location/location';
-import { currentStep, reduce, type Effect, type EngineEvent, type EngineState, type Slots } from '@/protocols/engine';
+import { canGoBack, currentStep, reduce, type Effect, type EngineEvent, type EngineState, type Slots } from '@/protocols/engine';
 import { protocols } from '@/protocols';
 import type { Intent, Step } from '@/protocols/schema';
 import { askModel, online } from '@/ai/proxy';
@@ -18,21 +17,17 @@ import { NUDGE_SUFFIX, personalConfirm } from '@/voice/adapt';
 import { hearRescuer, prepare, resetVoice, say, sinceHeard, voiceContext } from '@/voice/voice';
 import type { ProtocolId, QuestionId, RouterSlots } from '@/voice/routerSchema';
 
-import { placeCall, type CallHow } from './call';
-
 /**
- * The incident controller: everything that happens between pressing the
- * emergency button and handing over to paramedics.
+ * The incident controller: everything that happens between opening help and
+ * handing over to paramedics. Mayday never calls 911; the person does.
  *
- *   - the protocol engine (pure, in src/protocols/engine.ts)
- *   - the 911 countdown and call state
+ *   - the protocol engine (pure, in src/protocols/engine.ts), with Back
  *   - what the person says, routed to a protocol or a command
  *   - what we say back, adapted to who is being helped and how the
  *     rescuer sounds (src/voice/voice.ts)
  *   - the timestamped incident log for the handoff
  */
 
-export type CallStatus = 'countdown' | 'calling' | 'cancelled' | 'delegated';
 export type Phase = 'intake' | 'protocol' | 'handoff';
 
 export type IncidentState = {
@@ -42,8 +37,9 @@ export type IncidentState = {
   /** Facts known before a protocol started (the engine owns them after). */
   slots: Slots;
   log: LogEntry[];
-  call: { status: CallStatus; endsAt: number; placedAt: number | null; how: CallHow | null };
   heard: { text: string; final: boolean } | null;
+  /** The last thing said that Mayday acted on, shown briefly so the person knows it was heard. */
+  understood: { text: string; at: number } | null;
   question: QuestionId | null;
   /** The last answer to an open question, with where it came from. */
   answerSource: string | null;
@@ -71,9 +67,9 @@ export function useIncident() {
     phase: 'intake',
     engine: null,
     slots: {},
-    log: [{ at: Date.now(), text: 'Emergency mode started' }],
-    call: { status: 'countdown', endsAt: Date.now() + CALL_COUNTDOWN_S * 1000, placedAt: null, how: null },
+    log: [{ at: Date.now(), text: 'Help started' }],
     heard: null,
+    understood: null,
     question: null,
     answerSource: null,
     fix: null,
@@ -159,31 +155,12 @@ export function useIncident() {
     [dispatch, log, update],
   );
 
-  // --- The call ------------------------------------------------------------
-
-  const call = useCallback(async (): Promise<CallHow | null> => {
-    if (ref.current.call.status === 'calling') return null;
-    // Mark it immediately so a second tick of the countdown cannot dial twice.
-    update((s) => ({ ...s, call: { ...s.call, status: 'calling', placedAt: Date.now() } }));
-    const how = await placeCall();
-    update((s) => ({ ...s, call: { ...s.call, status: 'calling', placedAt: Date.now(), how } }));
-    log('Practice call (nothing dialed)');
-    haptic('start');
-    say([L.calling, L.speaker]);
-    return how;
-  }, [log, update]);
-
-  const cancelCall = useCallback(() => {
-    update((s) => ({ ...s, call: { ...s.call, status: 'cancelled' } }));
-    log('911 countdown cancelled');
-    say([L.callCancelled]);
-  }, [log, update]);
-
-  const delegateCall = useCallback(() => {
-    update((s) => ({ ...s, call: { ...s.call, status: 'delegated' } }));
-    log('Bystander calling 911');
-    say([L.someoneCalling]);
-  }, [log, update]);
+  /** Back one step (the engine forgets that step's answer and asks again). */
+  const back = useCallback(() => {
+    if (!canGoBack(ref.current.engine)) return;
+    audio()?.stopSpeech();
+    dispatch({ type: 'back', at: Date.now() });
+  }, [dispatch]);
 
   // --- Hearing -----------------------------------------------------------------
 
@@ -199,6 +176,7 @@ export function useIncident() {
       if (isEcho(text, recentlySaid())) return;
       hearRescuer(text);
       update((s) => ({ ...s, heard: { text, final: true } }));
+      const ack = () => update((x) => ({ ...x, understood: { text, at: Date.now() } }));
       const s = ref.current;
       const inProtocol = s.phase === 'protocol' && !!s.engine;
       const known = s.engine?.slots ?? s.slots;
@@ -208,6 +186,7 @@ export function useIncident() {
         // Life threat or a confident match: start now. Nothing waits on a model.
         if (r.protocol_id && (r.urgent || r.confidence >= 0.7)) {
           log(`Heard: "${text}"`);
+          ack();
           startProtocol(r.protocol_id, r.slots, 'voice');
           return;
         }
@@ -217,6 +196,7 @@ export function useIncident() {
         routeWithModel(text, { phase: 'intake', slots: known }).then((m) => {
           if (m && m.protocol_id && m.confidence >= 0.75 && ref.current.phase === 'intake') {
             log(`Heard: "${text}" (model)`);
+            ack();
             startProtocol(m.protocol_id, m.slots, 'voice');
           }
         });
@@ -226,10 +206,12 @@ export function useIncident() {
       // In a protocol.
       if (Object.keys(r.slots).length) dispatch({ type: 'setSlots', slots: r.slots, at: Date.now() });
       if (r.intent === 'ems_here') {
+        ack();
         handoff();
         return;
       }
       if (r.intent === 'tired') {
+        ack();
         say(['Switch with someone if you can. Keep going.']);
         log('Rescuer tired');
         return;
@@ -238,21 +220,23 @@ export function useIncident() {
       const intent = r.intent ?? (voiceContext().state === 'confused' && voiceContext().stateAt > Date.now() - 1000 ? 'repeat' : null);
       if (intent) {
         const effects = dispatch({ type: 'intent', intent: intent as Intent, at: Date.now() });
-        if (!effects.some((e) => e.type === 'unhandled')) return;
+        if (!effects.some((e) => e.type === 'unhandled')) return ack();
       }
       // "No, he's not responding" to "Is he breathing normally?": the leading word answers the question.
       const lead = normalizeUtterance(text).match(/^(no|nope|nah|yes|yeah|yep|yup)\b/);
       if (lead && intent !== 'yes' && intent !== 'no') {
         const effects = dispatch({ type: 'intent', intent: lead[1].startsWith('n') ? 'no' : 'yes', at: Date.now() });
-        if (!effects.some((e) => e.type === 'unhandled')) return;
+        if (!effects.some((e) => e.type === 'unhandled')) return ack();
       }
       // A new, more serious emergency mid-protocol ("now he's not breathing").
       if (r.urgent && r.protocol_id && s.engine && !s.engine.protocolId.startsWith(r.protocol_id.split('_')[0])) {
         log(`Heard: "${text}"`);
+        ack();
         startProtocol(r.protocol_id, r.slots, 'voice');
         return;
       }
       if (isQuestion(text)) {
+        ack();
         const step = s.engine ? currentStep(s.engine) : null;
         const inCompressions = step?.kind === 'cpr';
         log(`Asked: "${text}"`);
@@ -320,9 +304,8 @@ export function useIncident() {
     startProtocol,
     setAge,
     dispatch,
-    call,
-    cancelCall,
-    delegateCall,
+    back,
+    canBack: canGoBack(state.engine),
     hear,
     hearPartial,
     handoff,

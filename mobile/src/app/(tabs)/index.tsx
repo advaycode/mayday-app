@@ -1,121 +1,68 @@
-import { router, useFocusEffect } from 'expo-router';
-import { useCallback, useState } from 'react';
-import { Pressable, StyleSheet, useWindowDimensions, View } from 'react-native';
-import Animated, { Easing, runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
+import { router } from 'expo-router';
+import { Phone } from 'phosphor-react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 
 import { unlockAudio } from '@/audio/engine';
-import { Glass } from '@/design/Glass';
-import { HoldButton } from '@/design/HoldButton';
+import { EMERGENCIES, type Emergency } from '@/design/emergencies';
+import { EmergencyTile } from '@/design/EmergencyTile';
 import { useDeviceInsets } from '@/design/insets';
-import { Orb } from '@/design/Orb';
+import { TalkButton } from '@/design/TalkButton';
 import { Text } from '@/design/Text';
-import { color, radius, space } from '@/design/tokens';
-import { setSettings, useSettings } from '@/settings/store';
+import { color, space } from '@/design/tokens';
 
 /**
- * Home. Three things on screen: the name, a quiet light, and the control.
- * Everything else lives one tab away.
+ * Home is the emergency screen. The biggest thing on it is Talk to Mayday;
+ * below it, every kind of emergency as one colored tile. One tap either way
+ * and the steps start. Mayday never calls 911: the red line says to call.
  */
 export default function Home() {
   const insets = useDeviceInsets();
-  const settings = useSettings();
-  const { width, height } = useWindowDimensions();
-  const [origin, setOrigin] = useState({ x: width / 2, y: height * 0.66, size: 184 });
-  const grow = useSharedValue(0);
 
-  // Reset the red surge when we come back from emergency mode.
-  useFocusEffect(
-    useCallback(() => {
-      grow.value = 0;
-    }, [grow]),
-  );
-
-  const go = () => router.push('/emergency');
-
-  const start = (o: { x: number; y: number; size: number }) => {
-    setOrigin(o);
-    // The red disc grows to fill the screen, then emergency mode takes over
-    // on the same red and fades to black: one continuous surface.
-    grow.value = withTiming(1, { duration: 380, easing: Easing.bezier(0.16, 1, 0.3, 1) }, (done) => {
-      if (done) runOnJS(go)();
-    });
+  const talk = () => {
+    unlockAudio();
+    router.push({ pathname: '/emergency', params: { talk: '1' } });
+  };
+  const open = (e: Emergency) => {
+    unlockAudio();
+    router.push({ pathname: '/emergency', params: { tile: e.id } });
   };
 
-  const cover = Math.hypot(width, height) * 2.1;
-  const surge = useAnimatedStyle(() => ({
-    opacity: grow.value > 0 ? 1 : 0,
-    transform: [{ scale: 1 + grow.value * (cover / origin.size - 1) }],
-  }));
-
-  const orbSize = Math.min(width * 0.86, 340);
+  const [last, ...rest] = [...EMERGENCIES].reverse();
+  const grid = rest.reverse();
 
   return (
-    <View style={[styles.screen, { paddingTop: insets.top + space[3] }]}>
+    <ScrollView
+      style={styles.screen}
+      contentContainerStyle={{ paddingTop: insets.top + space[2], paddingBottom: insets.bottom + 112, paddingHorizontal: space[4], gap: space[4] }}
+      showsVerticalScrollIndicator={false}>
       <View style={styles.header}>
         <Text variant="title" accessibilityRole="header">
           Mayday
         </Text>
+        <View style={styles.call} accessible accessibilityLabel="Call 911 first. Mayday does not call for you.">
+          <Phone size={16} color={color.signal} weight="fill" />
+          <Text variant="bodyStrong" style={{ color: color.ink }}>
+            Call 911 first
+          </Text>
+        </View>
       </View>
 
-      {!settings.disclaimerSeen && (
-        <Pressable
-          onPress={() => setSettings({ disclaimerSeen: true })}
-          accessibilityRole="button"
-          accessibilityLabel="Mayday guides you while help is on the way. Always call 911. Tap to dismiss."
-          style={styles.noteWrap}>
-          <Glass radius={radius.lg}>
-            <View style={styles.note}>
-              <Text variant="body" style={{ flex: 1 }}>
-                Always call 911.
-              </Text>
-              <Text variant="bodyStrong" tone="muted">
-                OK
-              </Text>
-            </View>
-          </Glass>
-        </Pressable>
-      )}
+      <TalkButton size="hero" onPress={talk} />
 
-      <View style={styles.orbArea} pointerEvents="none">
-        <Orb size={orbSize} />
+      <View style={styles.grid}>
+        {grid.map((e) => (
+          <EmergencyTile key={e.id} emergency={e} onPress={() => open(e)} style={styles.cell} />
+        ))}
       </View>
-
-      <View style={[styles.control, { paddingBottom: insets.bottom + 96 }]}>
-        <HoldButton
-          label="911"
-          accessibilityLabel="Emergency"
-          onPressStart={unlockAudio}
-          onComplete={start}
-        />
-        <Text variant="caption" tone="faint" style={{ marginTop: space[3] }}>
-          Hold
-        </Text>
-      </View>
-
-      <Animated.View
-        pointerEvents="none"
-        style={[
-          styles.surge,
-          {
-            left: origin.x - origin.size / 2,
-            top: origin.y - origin.size / 2,
-            width: origin.size,
-            height: origin.size,
-            borderRadius: origin.size / 2,
-          },
-          surge,
-        ]}
-      />
-    </View>
+      <EmergencyTile emergency={last} onPress={() => open(last)} compact />
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: color.canvas },
-  header: { paddingHorizontal: space[6], height: 44, justifyContent: 'center' },
-  orbArea: { flex: 1, alignItems: 'center', justifyContent: 'center' },
-  control: { alignItems: 'center' },
-  surge: { position: 'absolute', backgroundColor: color.signal },
-  noteWrap: { marginHorizontal: space[4], marginTop: space[2] },
-  note: { flexDirection: 'row', alignItems: 'center', gap: space[4], paddingHorizontal: space[4], paddingVertical: space[3] },
+  header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', height: 44, paddingHorizontal: space[1] },
+  call: { flexDirection: 'row', alignItems: 'center', gap: space[2] },
+  grid: { flexDirection: 'row', flexWrap: 'wrap', gap: space[3] },
+  cell: { width: '48%', flexGrow: 1 },
 });

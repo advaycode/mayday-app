@@ -1,9 +1,9 @@
 /**
  * App-wide switches.
  *
- * DEMO_MODE is always on. Mayday never calls 911 or anyone else: the call
- * screen is a simulation (src/emergency/call.ts), a banner says so on every
- * emergency screen, and the voice tells the person to call 911 themselves.
+ * DEMO_MODE is always on. Mayday never calls 911 or anyone else: there is no
+ * dialing code at all. The red 911 button shows the person what to say when
+ * they call from their own phone.
  * There is no build setting or switch that turns this off.
  */
 export const DEMO_MODE = true;
@@ -19,8 +19,6 @@ export const PROXY_URL: string = process.env.EXPO_PUBLIC_PROXY_URL ?? '';
 /** Compression tempo. AHA: 100 to 120 per minute; 110 sits in the middle. */
 export const CPR_BPM = 110;
 
-/** Seconds on the "Calling 911" ring before the call is placed. */
-export const CALL_COUNTDOWN_S = 5;
 
 /**
  * Local neural voice server (tools/tts_server.py) for lines that are not

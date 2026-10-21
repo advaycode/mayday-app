@@ -1,48 +1,46 @@
-import { Brain, Camera, Fire, Person, Phone, PhoneDisconnect, Pill } from 'phosphor-react-native';
+import { Ambulance, Camera, Phone } from 'phosphor-react-native';
 import { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
+import { capabilities } from '@/ai/proxy';
 import { Button } from '@/design/Button';
+import { EMERGENCIES } from '@/design/emergencies';
+import { EmergencyTile } from '@/design/EmergencyTile';
 import { Sheet } from '@/design/Sheet';
 import { Text } from '@/design/Text';
 import { color, space } from '@/design/tokens';
-import { elapsed, summaryLine } from '@/incident/log';
+import { summaryLine } from '@/incident/log';
 import { formatCoords } from '@/location/location';
-
-import { capabilities } from '@/ai/proxy';
-import { careAdvice, describe, miles } from '@/facilities/nearest';
+import { careAdvice, miles } from '@/facilities/nearest';
 import { protocols } from '@/protocols';
 
 import type { Incident } from './useIncident';
 
 /**
- * "Tell the dispatcher": the three things a 911 call-taker asks first, ready
- * to read out. Where you are, how precise that is, and what happened.
+ * 911. Mayday does not dial: this is what to say when you call. The three
+ * things a call-taker asks first, ready to read out: where you are, how
+ * precise that is, and what happened.
  */
-export function DispatcherSheet({ incident, open, onClose, now }: { incident: Incident; open: boolean; onClose: () => void; now: number }) {
-  const { state, slots, call, cancelCall } = incident;
+export function DispatcherSheet({ incident, open, onClose }: { incident: Incident; open: boolean; onClose: () => void }) {
+  const { state, slots } = incident;
   const fix = state.fix;
   const summary = summaryLine(state.log, slots, state.engine?.protocolId ?? null);
   const where = fix?.address ?? (fix ? 'Address unavailable' : 'Finding location');
-  const calling = state.call.status === 'calling';
-
   const care = state.engine ? protocols[state.engine.protocolId].care : null;
   const advice = fix ? careAdvice(care, slots, fix) : null;
 
   return (
     <Sheet open={open} onClose={onClose}>
-      {calling && (
-        <View style={styles.callRow}>
-          <Text variant="bodyStrong" tabular>
-            Practice call  {elapsed(now - (state.call.placedAt ?? now))}
-          </Text>
-          <Text variant="caption" tone="faint">
-            Nothing was dialed. If this is real, call 911 yourself.
-          </Text>
+      <View style={styles.callHead}>
+        <View style={styles.callIcon}>
+          <Phone size={22} color={color.onSignal} weight="fill" />
         </View>
-      )}
+        <Text variant="title" style={{ flex: 1 }}>
+          Call 911 on your phone
+        </Text>
+      </View>
       <Text variant="caption" tone="muted">
-        Tell the dispatcher
+        Tell them
       </Text>
       <Text variant="title" selectable>
         {where}
@@ -59,32 +57,20 @@ export function DispatcherSheet({ incident, open, onClose, now }: { incident: In
         {summary}
       </Text>
       {fix && advice && advice.likely && (
-        <View style={{ gap: space[1] }}>
-          {advice.line ? <Text variant="bodyStrong">{advice.line}</Text> : null}
-          <Text variant="caption" tone="muted">
-            Nearest: {advice.likely.f.name}, {describe(advice.likely.f).replace(/\.$/, '').toLowerCase()}, {miles(fix, advice.likely.f).toFixed(1)} mi
-          </Text>
-        </View>
+        <Text variant="caption" tone="muted">
+          Nearest ER: {advice.likely.f.name}, {miles(fix, advice.likely.f).toFixed(1)} mi
+        </Text>
       )}
-      <View style={styles.row}>
-        {calling ? (
-          <Button label="End" icon={PhoneDisconnect} onPress={cancelCall} style={{ flex: 1 }} />
-        ) : (
-          <Button label="Practice call" kind="signal" icon={Phone} onPress={() => { call(); onClose(); }} style={{ flex: 1 }} />
-        )}
-      </View>
+      <Button label="Done" kind="primary" onPress={onClose} />
     </Sheet>
   );
 }
 
-/** Everything that is not one of the three big tiles. */
+/** Change what is happening, or who it is happening to. */
 export function MoreSheet({ incident, open, onClose, onScan }: { incident: Incident; open: boolean; onClose: () => void; onScan: () => void }) {
-  const { startProtocol, setAge, slots } = incident;
-  const go = (id: Parameters<typeof startProtocol>[0], extra?: Parameters<typeof startProtocol>[1]) => {
-    onClose();
-    startProtocol(id, extra);
-  };
+  const { startProtocol, setAge, slots, state, handoff } = incident;
   const age = slots.age_group ?? 'adult';
+  const family = state.engine?.protocolId.startsWith('cpr') || state.engine?.protocolId.startsWith('choking');
   // Photo check needs Claude behind the proxy; without it the button is not shown at all.
   const [vision, setVision] = useState(false);
   useEffect(() => {
@@ -92,26 +78,48 @@ export function MoreSheet({ incident, open, onClose, onScan }: { incident: Incid
   }, []);
   return (
     <Sheet open={open} onClose={onClose}>
-      <View style={styles.ageRow} accessibilityRole="radiogroup" accessibilityLabel="Age">
-        {(['adult', 'child', 'infant'] as const).map((a) => (
-          <Button
-            key={a}
-            label={a === 'infant' ? 'Baby' : a === 'child' ? 'Child' : 'Adult'}
-            kind={age === a ? 'primary' : 'glass'}
-            onPress={() => setAge(a)}
-            style={{ flex: 1 }}
+      {family && (
+        <View style={styles.ageRow} accessibilityRole="radiogroup" accessibilityLabel="Age">
+          {(['adult', 'child', 'infant'] as const).map((a) => (
+            <Button
+              key={a}
+              label={a === 'infant' ? 'Baby' : a === 'child' ? 'Child' : 'Adult'}
+              kind={age === a ? 'primary' : 'glass'}
+              onPress={() => {
+                setAge(a);
+                onClose();
+              }}
+              style={{ flex: 1 }}
+            />
+          ))}
+        </View>
+      )}
+      <View style={styles.grid}>
+        {EMERGENCIES.map((e) => (
+          <EmergencyTile
+            key={e.id}
+            emergency={e}
+            compact
+            style={styles.cell}
+            onPress={() => {
+              onClose();
+              startProtocol(e.protocol, e.slots);
+            }}
           />
         ))}
       </View>
       <View style={styles.row}>
-        <Button stacked size="emergency" icon={Person} label="Passed out" onPress={() => go('recovery_position', { conscious: 'false' })} style={{ flex: 1 }} />
-        <Button stacked size="emergency" icon={Pill} label="Overdose" onPress={() => go('opioid_overdose')} style={{ flex: 1 }} />
+        <Button
+          icon={Ambulance}
+          label="Paramedics here"
+          onPress={() => {
+            onClose();
+            handoff();
+          }}
+          style={{ flex: 1 }}
+        />
+        {vision && <Button label="Photo" icon={Camera} onPress={onScan} accessibilityHint="Take a photo of a burn or wound to pick the right steps" style={{ flex: 1 }} />}
       </View>
-      <View style={styles.row}>
-        <Button stacked size="emergency" icon={Brain} label="Stroke" onPress={() => go('stroke')} style={{ flex: 1 }} />
-        <Button stacked size="emergency" icon={Fire} label="Burn" onPress={() => go('burns')} style={{ flex: 1 }} />
-      </View>
-      {vision && <Button label="Photo check" icon={Camera} onPress={onScan} accessibilityHint="Take a photo of a burn or wound to pick the right steps" />}
     </Sheet>
   );
 }
@@ -119,6 +127,9 @@ export function MoreSheet({ incident, open, onClose, onScan }: { incident: Incid
 const styles = StyleSheet.create({
   row: { flexDirection: 'row', gap: space[3] },
   ageRow: { flexDirection: 'row', gap: space[2] },
+  grid: { flexDirection: 'row', flexWrap: 'wrap', gap: space[2] },
+  cell: { width: '48%', flexGrow: 1 },
   rule: { height: StyleSheet.hairlineWidth, backgroundColor: color.hairlineStrong, marginVertical: space[1] },
-  callRow: { gap: space[1], paddingBottom: space[2] },
+  callHead: { flexDirection: 'row', alignItems: 'center', gap: space[3] },
+  callIcon: { width: 40, height: 40, borderRadius: 20, backgroundColor: color.signal, alignItems: 'center', justifyContent: 'center' },
 });

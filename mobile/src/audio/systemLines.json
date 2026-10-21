@@ -34,10 +34,6 @@
   ],
   "lines": {
     "intake": "Tell me what's happening.",
-    "calling": "Practice call. Nothing was dialed.",
-    "speaker": "If this is real, call 911 yourself.",
-    "callCancelled": "Okay. Not calling.",
-    "someoneCalling": "Good. Keep them on the line.",
     "micLost": "I can't hear you during the call. Tap the screen instead.",
     "notUnderstood": "Tap what you see.",
     "groundFallback": "Keep doing compressions. Tell the dispatcher that.",

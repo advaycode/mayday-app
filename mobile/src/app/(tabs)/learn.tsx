@@ -7,11 +7,12 @@ import { Glass } from '@/design/Glass';
 import { haptic } from '@/design/haptics';
 import { useDeviceInsets } from '@/design/insets';
 import { Orb } from '@/design/Orb';
+import { emergencyFor } from '@/design/emergencies';
 import { Text } from '@/design/Text';
 import { color, radius, space } from '@/design/tokens';
 import { libraryOrder, protocols } from '@/protocols';
 
-type IconType = ComponentType<{ size?: number; color?: string; weight?: 'regular' | 'light' }>;
+type IconType = ComponentType<{ size?: number; color?: string; weight?: 'regular' | 'light' | 'fill' }>;
 const ICON: Record<string, IconType> = { heartbeat: Heartbeat, baby: Baby, wind: Wind, drop: Drop, fire: Fire, brain: Brain, pill: Pill, person: Person };
 const AGE: Record<string, string> = { adult: 'Adult', child: 'Child', infant: 'Baby', any: '' };
 
@@ -58,7 +59,9 @@ export default function Learn() {
               accessibilityRole="button"
               accessibilityLabel={`${p.id.startsWith('cpr') || p.id.startsWith('choking') ? p.short : p.title}${age ? `, ${age}` : ''}`}
               style={({ pressed }) => [styles.row, i > 0 && styles.divider, pressed && { opacity: 0.6 }]}>
-              <Icon size={24} color={color.ink} weight="light" />
+              <View style={[styles.icon, { backgroundColor: emergencyFor(id).tint.deep }]}>
+                <Icon size={20} color={emergencyFor(id).tint.hue} weight="fill" />
+              </View>
               <Text variant="bodyStrong" style={{ flex: 1 }}>
                 {p.id.startsWith('cpr') || p.id.startsWith('choking') ? p.short : p.title}
               </Text>
@@ -78,6 +81,7 @@ export default function Learn() {
 }
 
 const styles = StyleSheet.create({
+  icon: { width: 36, height: 36, borderRadius: 18, alignItems: 'center', justifyContent: 'center' },
   screen: { flex: 1, backgroundColor: color.canvas },
   heading: { paddingHorizontal: space[6], marginBottom: space[5] },
   practiceWrap: { marginHorizontal: space[4] },

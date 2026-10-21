@@ -20,3 +20,4 @@ research/images/candidates/**/*.jpg
 __pycache__/
 mobile/dist-iphone/
 .pages/
+research/images/candidates-color/**/*.jpg

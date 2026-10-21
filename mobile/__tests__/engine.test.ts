@@ -1,7 +1,7 @@
 /**
  * The protocol engine, walked branch by branch.
  */
-import { reduce, type EngineEvent, type EngineState, type Effect } from '@/protocols/engine';
+import { canGoBack, reduce, type EngineEvent, type EngineState, type Effect } from '@/protocols/engine';
 import { protocols, type Step } from '@/protocols';
 
 let clock = 0;
@@ -95,6 +95,35 @@ describe('adult CPR', () => {
   it('sends a breathing, unresponsive person to the recovery position', () => {
     const { state } = run([{ type: 'start', protocolId: 'cpr_adult', slots: { conscious: 'false', breathing: 'normal' } }]);
     expect(state.protocolId).toBe('recovery_position');
+  });
+});
+
+describe('back', () => {
+  it('returns to the previous question and asks it again', () => {
+    const { state, effects } = run([
+      { type: 'start', protocolId: 'cpr_adult' },
+      { type: 'choose', choiceId: 'no' }, // no response
+      { type: 'choose', choiceId: 'no' }, // not breathing
+      { type: 'back' },
+    ]);
+    expect(state.stepId).toBe('breathing');
+    expect(state.slots.breathing).toBeUndefined();
+    expect(logs(effects)).toContain('Went back a step');
+    // Answering again goes forward normally.
+    const next = run([{ type: 'choose', choiceId: 'yes' }], state).state;
+    expect(next.stepId).not.toBe('breathing');
+  });
+
+  it('does nothing on the first step', () => {
+    const { state } = run([{ type: 'start', protocolId: 'choking' }]);
+    expect(canGoBack(state)).toBe(false);
+    expect(run([{ type: 'back' }], state).state.stepId).toBe(state.stepId);
+  });
+
+  it('never goes back past a question the person answered before starting', () => {
+    const { state } = run([{ type: 'start', protocolId: 'cpr_adult', slots: { conscious: 'false', breathing: 'abnormal' } }]);
+    expect(state.stepId).toBe('send_aed');
+    expect(canGoBack(state)).toBe(false);
   });
 });
 

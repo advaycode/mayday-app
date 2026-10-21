@@ -1,20 +1,21 @@
 """
-Turn the chosen crawled images into step pictures that fit the app, and
-write their credits.
+Turn the chosen crawled images into step pictures for the app, and write
+their credits.
 
     python tools/pick_images.py
 
-Choices below were made by looking at every candidate's contact sheet
-(research/images/candidates/<visual>/sheet.jpg) and rejecting anything
-anatomically wrong for 2025 guidance. Rejected on purpose:
+Choices were made by looking at every candidate's contact sheet
+(research/images/candidates*/<visual>/sheet.jpg) and rejecting anything wrong
+for 2025 guidance. Rejected on purpose:
   - every infant CPR image found shows the two-finger technique, withdrawn in
     2025, so infant CPR keeps the app's own two-thumb diagram;
-  - naloxone photos show the injectable kit, not the nasal spray device.
+  - every naloxone image shows the injectable kit, not the nasal spray;
+  - a green "tourniquet" that is really a blood-draw strap.
 
-Styling, so the pictures are calm on a black screen and look like one set:
-  line   drawings on white: inverted to light lines on near-black
-  photo  photographs: toned to the app's two colors (near-black to warm
-         off-white), which also takes the color out of any blood
+Full color (2026-10-21). Every picture sits on the same light card in the app:
+  ill    illustrations and drawings on white: the white becomes the card color
+         (multiply), so the drawing sits on the card with no visible box
+  photo  photographs: a centered square crop, colors kept
 Output: mobile/assets/steps/<visual>.jpg (square, 720 px), the TypeScript
 manifest, and docs/IMAGE_CREDITS.md. Wikimedia licenses require credit and,
 for CC BY-SA, that the edited image keeps the same license; both are stated.
@@ -22,34 +23,40 @@ for CC BY-SA, that the edited image keeps the same license; both are stated.
 import json
 from pathlib import Path
 
-from PIL import Image, ImageEnhance, ImageOps
+from PIL import Image, ImageChops, ImageEnhance
 
 ROOT = Path(__file__).resolve().parents[1]
-CAND = ROOT / "research" / "images" / "candidates"
+SOURCES = {
+    "c": ROOT / "research" / "images" / "candidates-color",
+    "o": ROOT / "research" / "images" / "candidates",
+}
 OUT = ROOT / "mobile" / "assets" / "steps"
 MANIFEST = ROOT / "mobile" / "src" / "design" / "stepImages.ts"
 CREDITS = ROOT / "docs" / "IMAGE_CREDITS.md"
 SIZE = 720
-VOID = (5, 5, 5)
-INK = (242, 239, 232)
+# The card behind every step picture (mobile/src/design/tokens.ts color.card).
+CARD = (243, 239, 231)
 
-# visual -> (candidate folder, file, style, crop box as fractions of width/height: left, top, right, bottom)
+# visual -> (source, candidate folder, file, style, crop box as fractions: left, top, right, bottom)
+# Crops cut off the captions burned into some illustrations.
 PICKS = {
-    "hands-adult": ("hands-adult", "2.jpg", "photo", (0.18, 0.0, 0.92, 1.0)),
-    "hands-child": ("hands-child", "1.jpg", "photo", (0.1, 0.0, 0.9, 0.8)),
-    "check-breathing": ("check-breathing", "0.jpg", "photo", (0.05, 0.0, 0.85, 1.0)),
-    "recovery": ("recovery", "1.jpg", "line", (0.0, 0.0, 1.0, 1.0)),
-    "choking-sign": ("choking-sign", "1.jpg", "line", (0.0, 0.0, 1.0, 0.85)),
-    "back-blows": ("back-blows", "0.jpg", "line", (0.0, 0.0, 1.0, 1.0)),
-    "abdominal-thrusts": ("abdominal-thrusts", "3.jpg", "line", (0.0, 0.0, 1.0, 1.0)),
-    "chest-thrusts": ("chest-thrusts", "3.jpg", "line", (0.0, 0.0, 1.0, 1.0)),
-    "aed": ("aed", "1.jpg", "photo", (0.0, 0.0, 1.0, 1.0)),
-    "aed-pads": ("aed-pads", "1.jpg", "line-color", (0.2, 0.3, 0.86, 0.82)),
-    "tourniquet": ("tourniquet", "3.jpg", "photo", (0.0, 0.0, 1.0, 1.0)),
-    "pressure": ("pressure", "3.jpg", "photo", (0.05, 0.0, 0.95, 1.0)),
-    "pack": ("pressure", "9.jpg", "photo", (0.1, 0.1, 0.9, 1.0)),
-    "cool-water": ("cool-water", "0.jpg", "photo", (0.0, 0.2, 1.0, 1.0)),
-    "fast-face": ("fast-face", "1.jpg", "line", (0.15, 0.05, 0.85, 0.85)),
+    "hands-adult": ("c", "hands-adult", "5.jpg", "ill", (0.0, 0.0, 1.0, 0.80)),
+    "hands-child": ("c", "hands-child", "0.jpg", "ill", (0.0, 0.0, 1.0, 0.78)),
+    "check-breathing": ("c", "check-breathing", "0.jpg", "ill", (0.0, 0.17, 1.0, 1.0)),
+    "abdominal-thrusts": ("c", "abdominal-thrusts", "1.jpg", "ill", (0.052, 0.08, 0.358, 0.76)),
+    "infant-back-blows": ("c", "infant-choking", "0.jpg", "ill", (0.0, 0.0, 0.5, 0.74)),
+    "back-blows": ("o", "back-blows", "0.jpg", "ill", (0.0, 0.0, 1.0, 1.0)),
+    "chest-thrusts": ("o", "chest-thrusts", "3.jpg", "ill", (0.0, 0.0, 1.0, 1.0)),
+    "choking-sign": ("o", "choking-sign", "1.jpg", "ill", (0.0, 0.0, 1.0, 0.85)),
+    "recovery": ("o", "recovery", "1.jpg", "ill", (0.0, 0.0, 1.0, 1.0)),
+    "fast-face": ("o", "fast-face", "1.jpg", "ill", (0.15, 0.05, 0.85, 0.85)),
+    "aed-pads": ("o", "aed-pads", "1.jpg", "ill", (0.2, 0.3, 0.86, 0.82)),
+    "point": ("c", "aed", "9.jpg", "photo", (0.0, 0.0, 1.0, 1.0)),
+    "aed": ("o", "aed", "1.jpg", "photo", (0.0, 0.0, 1.0, 1.0)),
+    "tourniquet": ("o", "tourniquet", "3.jpg", "photo", (0.0, 0.0, 1.0, 1.0)),
+    "pressure": ("o", "pressure", "3.jpg", "photo", (0.05, 0.0, 0.95, 1.0)),
+    "pack": ("o", "pressure", "9.jpg", "photo", (0.1, 0.1, 0.9, 1.0)),
+    "cool-water": ("o", "cool-water", "0.jpg", "photo", (0.0, 0.2, 1.0, 1.0)),
 }
 
 
@@ -58,44 +65,33 @@ def square(im: Image.Image, box, kind: str) -> Image.Image:
     l, t, r, b = box
     im = im.crop((int(l * w), int(t * h), int(r * w), int(b * h)))
     if kind == "photo":
-        # Photos: crop to a centered square (no bars).
+        # Photos: a centered square, no bars.
         side = min(im.size)
         x, y = (im.width - side) // 2, (im.height - side) // 2
         return im.crop((x, y, x + side, y + side)).resize((SIZE, SIZE), Image.LANCZOS)
-    # Drawings: pad to square on white so nothing is cut off.
-    side = max(im.size)
+    # Drawings: pad to square on white (which becomes the card color), with a margin.
+    side = int(max(im.size) * 1.08)
     bg = Image.new("RGB", (side, side), (255, 255, 255))
     bg.paste(im, ((side - im.width) // 2, (side - im.height) // 2))
     return bg.resize((SIZE, SIZE), Image.LANCZOS)
 
 
-def tone(gray: Image.Image) -> Image.Image:
-    """Map a grayscale image onto the app's two colors."""
-    return ImageOps.colorize(gray, black=VOID, white=INK)
-
-
 def style(im: Image.Image, kind: str) -> Image.Image:
-    g = ImageOps.grayscale(im)
-    if kind == "line":
-        g = ImageOps.autocontrast(ImageOps.invert(g), cutoff=1)
-        return tone(g)
-    if kind == "line-color":
-        # Colored drawings: invert lightness but keep shapes readable.
-        g = ImageOps.autocontrast(ImageOps.invert(g), cutoff=1)
-        g = ImageEnhance.Contrast(g).enhance(1.15)
-        return tone(g)
-    # photo: gentle contrast, a little darker so it sits on black
-    g = ImageOps.autocontrast(g, cutoff=1)
-    g = ImageEnhance.Brightness(g).enhance(0.88)
-    return tone(g)
+    if kind == "ill":
+        # White paper becomes the card; colors and lines are kept.
+        return ImageChops.multiply(im, Image.new("RGB", im.size, CARD))
+    return ImageEnhance.Contrast(im).enhance(1.04)
 
 
 def main():
     OUT.mkdir(parents=True, exist_ok=True)
     rows, credits = [], []
-    for visual, (folder, file, kind, box) in PICKS.items():
-        meta = {m["file"]: m for m in json.loads((CAND / folder / "meta.json").read_text(encoding="utf-8"))}[file]
-        im = Image.open(CAND / folder / file).convert("RGB")
+    for old in OUT.glob("*.jpg"):
+        old.unlink()
+    for visual, (source, folder, file, kind, box) in PICKS.items():
+        base = SOURCES[source] / folder
+        meta = {m["file"]: m for m in json.loads((base / "meta.json").read_text(encoding="utf-8"))}[file]
+        im = Image.open(base / file).convert("RGB")
         out = style(square(im, box, kind), kind)
         out.save(OUT / f"{visual}.jpg", quality=86, optimize=True)
         # Commons author fields can hold several lines (a unit and its address); keep the first.
@@ -125,7 +121,7 @@ def main():
         "# Image credits",
         "",
         "Step pictures come from Wikimedia Commons, found with `tools/crawl_images.py` and chosen by hand with `tools/pick_images.py`. "
-        "Each was cropped and recolored to the app's two colors (changes made). Images under a CC BY-SA license remain under that same license in their edited form.",
+        "Each was cropped (removing burned-in captions) and set on the app's light card color (changes made). Images under a CC BY-SA license remain under that same license in their edited form.",
         "",
         "| Step picture | Original | Author | License |",
         "|---|---|---|---|",

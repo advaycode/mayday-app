@@ -4,6 +4,7 @@ picture, keeping only images whose license lets us use them with credit.
 
     python tools/crawl_images.py              # crawl every visual
     python tools/crawl_images.py recovery     # just one
+    python tools/crawl_images.py --color      # second round: full-color candidates
 
 Writes research/images/candidates/<visual>/<n>.jpg plus meta.json (title,
 author, license, source page) and a contact sheet per visual for choosing.
@@ -61,6 +62,31 @@ QUERIES: dict[str, list[str]] = {
     "fast-face": ["facial droop stroke", "facial palsy smile"],
     "fast-arms": ["arm drift stroke test", "pronator drift"],
     "nasal-spray": ["naloxone", "naloxone kit", "Narcan"],
+}
+
+
+# Second round (2026-10-21): full-color illustrations and photos, shown in color
+# on a light card. BruceBlaus's CC BY-SA medical illustration set covers CPR
+# and choking in one consistent style.
+COLOR_OUT = ROOT / "research" / "images" / "candidates-color"
+COLOR_QUERIES: dict[str, list[str]] = {
+    "hands-adult": ["CPR Adult Chest Compression", "CPR on an Adult"],
+    "hands-child": ["CPR Child Chest Compression"],
+    "hands-infant": ["CPR Infant Chest Compression", "infant CPR two thumb"],
+    "check-breathing": ["CPR Adult Airway", "head tilt chin lift", "look listen feel breathing"],
+    "abdominal-thrusts": ["Heimlich Adult & Child", "Heimlich maneuver", "abdominal thrusts choking"],
+    "infant-choking": ["Heimlich Infant", "infant choking back blows"],
+    "back-blows": ["back blows choking", "back slaps choking adult"],
+    "choking-sign": ["universal sign of choking", "choking sign hands throat"],
+    "recovery": ["recovery position", "stabile Seitenlage", "lateral recovery position"],
+    "tap-shout": ["checking responsiveness shoulder tap", "unresponsive person check"],
+    "fast-face": ["stroke facial droop", "FAST stroke symptoms", "facial weakness stroke"],
+    "nasal-spray": ["Narcan nasal spray", "naloxone nasal spray", "intranasal naloxone"],
+    "pressure": ["direct pressure wound bleeding", "bleeding control training", "Stop the Bleed"],
+    "tourniquet": ["tourniquet applied leg", "combat application tourniquet", "tourniquet arm"],
+    "cool-water": ["burn cooling water", "cool running water burn", "hand under running tap water"],
+    "aed": ["automated external defibrillator", "AED defibrillator wall"],
+    "aed-pads": ["defibrillator pad placement", "AED electrode placement"],
 }
 
 
@@ -122,12 +148,12 @@ def contact_sheet(folder: Path, items: list[dict]) -> None:
     sheet.save(folder / "sheet.jpg", quality=80)
 
 
-def crawl(visual: str) -> None:
-    folder = OUT / visual
+def crawl(visual: str, queries: dict[str, list[str]] = QUERIES, out: Path = OUT) -> None:
+    folder = out / visual
     folder.mkdir(parents=True, exist_ok=True)
     seen: set[str] = set()
     items: list[dict] = []
-    for q in QUERIES[visual]:
+    for q in queries[visual]:
         for it in search(q):
             if it["title"] in seen:
                 continue
@@ -152,5 +178,10 @@ def crawl(visual: str) -> None:
 
 
 if __name__ == "__main__":
-    for v in sys.argv[1:] or QUERIES:
-        crawl(v)
+    args = sys.argv[1:]
+    if args[:1] == ["--color"]:
+        for v in args[1:] or COLOR_QUERIES:
+            crawl(v, COLOR_QUERIES, COLOR_OUT)
+    else:
+        for v in args or QUERIES:
+            crawl(v)

@@ -24,7 +24,7 @@ import { View } from 'react-native';
 import Svg, { Circle, G, Line, Path, Rect } from 'react-native-svg';
 
 import { stepImages } from './stepImages';
-import { color, radius } from './tokens';
+import { color } from './tokens';
 
 /**
  * Step pictures. Crawled photos and drawings come first (see stepImages.ts).
@@ -211,8 +211,14 @@ const ICONS: Record<string, IconType> = {
   drop: Drop,
 };
 
-export function Visual({ id, size = 180 }: { id?: string; size?: number }) {
+/**
+ * Every picture sits on a card of the same size and shape. Crawled pictures
+ * on the light card (their white paper already matches it); our own diagrams
+ * and icons on the emergency's deep color, drawn in light lines.
+ */
+export function Visual({ id, size = 180, tone }: { id?: string; size?: number; tone?: { hue: string; deep: string } }) {
   if (!id) return null;
+  const card = { width: size, height: size, borderRadius: 28, overflow: 'hidden' as const };
   // A real picture (crawled from Wikimedia Commons, credited) when we have a
   // good one; otherwise our own diagram or an icon.
   const photo = stepImages[id];
@@ -220,18 +226,19 @@ export function Visual({ id, size = 180 }: { id?: string; size?: number }) {
     return (
       <Image
         source={photo.src}
-        style={{ width: size, height: size, borderRadius: radius.lg }}
+        style={[card, { backgroundColor: color.card }]}
         contentFit="cover"
         accessibilityIgnoresInvertColors
         accessible={false}
       />
     );
   }
+  const deep = tone?.deep ?? color.raised;
   const Diagram = DIAGRAMS[id];
   if (Diagram) {
     return (
-      <View accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
-        <Svg width={size} height={size} viewBox="0 0 200 200">
+      <View style={[card, { backgroundColor: deep, alignItems: 'center', justifyContent: 'center' }]} accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
+        <Svg width={size * 0.88} height={size * 0.88} viewBox="0 0 200 200">
           <Diagram />
         </Svg>
       </View>
@@ -240,8 +247,8 @@ export function Visual({ id, size = 180 }: { id?: string; size?: number }) {
   const Icon = ICONS[id];
   if (!Icon) return null;
   return (
-    <View style={{ width: size, height: size, alignItems: 'center', justifyContent: 'center' }} accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
-      <Icon size={size * 0.62} color={color.ink} weight="light" />
+    <View style={[card, { backgroundColor: deep, alignItems: 'center', justifyContent: 'center' }]} accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
+      <Icon size={size * 0.5} color={tone?.hue ?? color.ink} weight="regular" />
     </View>
   );
 }

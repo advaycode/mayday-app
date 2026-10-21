@@ -17,7 +17,9 @@ export type ButtonProps = {
    * glass    liquid glass: everything else
    * signal   red: 911 actions only
    */
-  kind?: 'primary' | 'glass' | 'signal';
+  kind?: 'primary' | 'glass' | 'signal' | 'tint';
+  /** With kind 'tint': the emergency's color. */
+  tint?: string;
   icon?: IconType;
   size?: 'emergency' | 'regular';
   style?: StyleProp<ViewStyle>;
@@ -32,11 +34,11 @@ export type ButtonProps = {
  * selection tick. Emergency size is 72 pt tall: big enough for a gloved or
  * shaking thumb.
  */
-export function Button({ label, onPress, kind = 'glass', icon: Icon, size = 'regular', style, accessibilityHint, stacked }: ButtonProps) {
+export function Button({ label, onPress, kind = 'glass', icon: Icon, size = 'regular', style, accessibilityHint, stacked, tint }: ButtonProps) {
   const pressed = useSharedValue(0);
   const anim = useAnimatedStyle(() => ({ transform: [{ scale: 1 - pressed.value * 0.03 }] }));
   const height = stacked ? 92 : size === 'emergency' ? hit.emergency : 52;
-  const fg = kind === 'primary' ? color.void : kind === 'signal' ? color.onSignal : color.ink;
+  const fg = kind === 'primary' || kind === 'tint' ? color.void : kind === 'signal' ? color.onSignal : color.ink;
   const textVariant = size === 'emergency' && !stacked ? 'title' : 'bodyStrong';
 
   const content = (
@@ -66,7 +68,7 @@ export function Button({ label, onPress, kind = 'glass', icon: Icon, size = 'reg
             {content}
           </Glass>
         ) : (
-          <View style={{ borderRadius: radius.lg, backgroundColor: kind === 'primary' ? color.ink : color.signal }}>{content}</View>
+          <View style={{ borderRadius: radius.lg, backgroundColor: kind === 'tint' ? (tint ?? color.ink) : kind === 'primary' ? color.ink : color.signal }}>{content}</View>
         )}
       </Pressable>
     </Animated.View>

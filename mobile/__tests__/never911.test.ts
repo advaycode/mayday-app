@@ -4,11 +4,9 @@
  */
 import * as fs from 'fs';
 import * as path from 'path';
-import { Linking } from 'react-native';
 
 import appJson from '../app.json';
 import { DEMO_MODE } from '@/config';
-import { placeCall } from '@/emergency/call';
 
 function sourceFiles(dir: string): string[] {
   return fs.readdirSync(dir, { withFileTypes: true }).flatMap((e) => {
@@ -42,11 +40,10 @@ describe('Mayday never calls 911', () => {
     }
   });
 
-  it('a "call" opens nothing and dials nothing', async () => {
-    const open = jest.spyOn(Linking, 'openURL').mockResolvedValue(undefined);
-    await expect(placeCall()).resolves.toBe('simulated');
-    expect(open).not.toHaveBeenCalled();
-    open.mockRestore();
+  it('has no code that places a call at all', () => {
+    expect(fs.existsSync(path.join(SRC, 'emergency', 'call.ts'))).toBe(false);
+    const offenders = FILES.filter((f) => /\b(placeCall|textTo911|Linking\.canOpenURL\(['"`]tel)/.test(fs.readFileSync(f, 'utf8')));
+    expect(offenders).toEqual([]);
   });
 
   it('demo mode is permanent', () => {

@@ -1,8 +1,9 @@
 import { Ambulance } from 'phosphor-react-native';
 import { useEffect, useRef, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, useWindowDimensions, View } from 'react-native';
 
 import { Button } from '@/design/Button';
+import { emergencyFor } from '@/design/emergencies';
 import { haptic } from '@/design/haptics';
 import { Text } from '@/design/Text';
 import { space } from '@/design/tokens';
@@ -45,11 +46,16 @@ export function StepView({ incident, step }: { incident: Incident; step: Exclude
   }, [stepKey]);
 
   const timer = useTimer(step.kind === 'timer' ? step.seconds : null, stepKey, () => dispatch({ type: 'timeout', at: at() }));
+  const tone = emergencyFor(incident.state.engine?.protocolId).tint;
+  // The picture is as big as the screen allows once the answers have their room.
+  const { width, height } = useWindowDimensions();
+  const answers = step.kind === 'ask' ? (pairable(step.choices) ? 1 : step.choices.length) : step.kind === 'do' ? step.alts.length + 1 : step.kind === 'timer' ? 1 : 1 + ('choices' in step ? step.choices.length : 0);
+  const imageSize = Math.max(150, Math.min(width - 72, 320, height - 430 - answers * 84 + 84));
 
   return (
     <View style={styles.wrap}>
       <View style={styles.center}>
-        <Visual id={step.visual} size={280} />
+        <Visual id={step.visual} size={imageSize} tone={tone} />
         <Text
           variant="instruction"
           style={styles.instruction}
@@ -71,7 +77,7 @@ export function StepView({ incident, step }: { incident: Incident; step: Exclude
             {step.alts.map((c) => (
               <Button key={c.id} size="emergency" label={c.label} onPress={() => dispatch({ type: 'choose', choiceId: c.id, at: at() })} />
             ))}
-            <Button size="emergency" kind="primary" label={step.action} onPress={() => dispatch({ type: 'advance', at: at() })} />
+            <Button size="emergency" kind="tint" tint={tone.hue} label={step.action} onPress={() => dispatch({ type: 'advance', at: at() })} />
           </>
         )}
         {step.kind === 'ask' && (
@@ -89,14 +95,14 @@ export function StepView({ incident, step }: { incident: Incident; step: Exclude
           </View>
         )}
         {step.kind === 'timer' && (
-          <Button size="emergency" kind="primary" label={step.action} onPress={() => dispatch({ type: 'advance', at: at() })} />
+          <Button size="emergency" kind="tint" tint={tone.hue} label={step.action} onPress={() => dispatch({ type: 'advance', at: at() })} />
         )}
         {(step.kind === 'hold' || step.kind === 'end') && (
           <>
             {step.choices.map((c) => (
               <Button key={c.id} size="emergency" label={c.label} onPress={() => dispatch({ type: 'choose', choiceId: c.id, at: at() })} />
             ))}
-            <Button size="emergency" icon={Ambulance} label="Paramedics are here" onPress={handoff} />
+            <Button size="emergency" icon={Ambulance} label="Paramedics here" onPress={handoff} />
           </>
         )}
       </View>
@@ -132,7 +138,7 @@ function useTimer(seconds: number | null, key: string, onDone: () => void) {
 }
 
 const styles = StyleSheet.create({
-  wrap: { flex: 1, paddingHorizontal: space[5], paddingBottom: space[3] },
+  wrap: { flex: 1, paddingHorizontal: space[4], paddingBottom: space[1] },
   center: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: space[3] },
   instruction: { textAlign: 'center', marginTop: space[2] },
   actions: { gap: space[3] },

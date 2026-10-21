@@ -36,7 +36,8 @@ export type EngineEvent =
   | { type: 'intent'; intent: Intent; at: number }
   | { type: 'timeout'; at: number }
   | { type: 'goto'; ref: string; at: number }
-  | { type: 'setSlots'; slots: Slots; at: number };
+  | { type: 'setSlots'; slots: Slots; at: number }
+  | { type: 'back'; at: number };
 
 export type Result = { state: EngineState; effects: Effect[] };
 
@@ -63,6 +64,17 @@ export function resolveRef(ref: string, state: { protocolId: string; slots: Slot
 
 export function currentStep(state: EngineState): Step {
   return getStep(state.protocolId, state.stepId);
+}
+
+/** Where Back goes: the last step entered before this one, or null at the first step. */
+function previousStep(state: EngineState): { index: number; protocolId: string; stepId: string } | null {
+  let i = state.trail.length - 1;
+  while (i >= 0 && state.trail[i].protocolId === state.protocolId && state.trail[i].stepId === state.stepId) i--;
+  return i < 0 ? null : { index: i, ...state.trail[i] };
+}
+
+export function canGoBack(state: EngineState | null): boolean {
+  return !!state && previousStep(state) !== null;
 }
 
 function enter(state: EngineState, ref: string, at: number, effects: Effect[], hops = 0): EngineState {
@@ -150,6 +162,19 @@ export function reduce(state: EngineState | null, event: EngineEvent): Result {
 
     case 'goto':
       return { state: enter(state, event.ref, event.at, effects), effects };
+
+    case 'back': {
+      const prev = previousStep(state);
+      if (!prev) return { state, effects };
+      // Going back to a question asks it again, so its answer is forgotten
+      // (otherwise the known answer would skip straight past it).
+      const prevStep = getStep(prev.protocolId, prev.stepId);
+      const slots = { ...state.slots };
+      if (prevStep.kind === 'ask' && prevStep.slot) delete slots[prevStep.slot];
+      effects.push({ type: 'log', text: 'Went back a step', at: event.at });
+      const base: EngineState = { ...state, slots, trail: state.trail.slice(0, prev.index) };
+      return { state: enter(base, `@${prev.protocolId}#${prev.stepId}`, event.at, effects), effects };
+    }
 
     case 'advance': {
       if (step.kind === 'do') return { state: enter(state, step.next, event.at, effects), effects };

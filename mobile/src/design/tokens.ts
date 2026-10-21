@@ -36,11 +36,33 @@ export const color = {
   // blocks or large fills.
   accent: '#D2BE94',
 
-  // Signal red: emergency actions only.
+  // Signal red: 911 only.
   signal: '#D7261E',
   signalPressed: '#B81E17',
   onSignal: '#FFF6F2', // 4.7:1 on signal: AAA for large text, and every label on red is large
+
+  // The light card every step picture sits on (tools/pick_images.py uses the same value).
+  card: '#F3EFE7',
 } as const;
+
+/**
+ * One color per kind of emergency: its tile on Home, its chip and progress bar
+ * during the steps, and its main button. Each has a bright hue and a deep
+ * shade of the same hue. Measured contrast: the hue on its deep shade 5.7 to
+ * 8.9:1, ink text on the deep shade 12.8 to 14.6:1, near-black text on the hue
+ * 6.9 to 12.2:1. Meaning never rests on color alone: every tile and chip also
+ * has an icon and a word.
+ */
+export const tint = {
+  cpr: { hue: '#FF7A66', deep: '#35140F' },
+  choking: { hue: '#F7C04A', deep: '#33260A' },
+  bleeding: { hue: '#FF5C8A', deep: '#36101D' },
+  burns: { hue: '#FF9A4D', deep: '#361C0B' },
+  stroke: { hue: '#6CB8FF', deep: '#0F2236' },
+  overdose: { hue: '#4ED8A8', deep: '#0C2E22' },
+  recovery: { hue: '#B9A6FF', deep: '#211A3A' },
+} as const;
+export type TintName = keyof typeof tint;
 
 /** 4pt base grid. Anything not on this scale is a bug. */
 export const space = {
