@@ -19,7 +19,9 @@ import { EMERGENCIES, emergencyFor } from '@/design/emergencies';
 import { useDeviceInsets } from '@/design/insets';
 import { color } from '@/design/tokens';
 import { protocols } from '@/protocols';
+import { capabilities, online } from '@/ai/proxy';
 import { createListener, type ListenState } from '@/voice/listen';
+import { trace } from '@/voice/trace';
 import { rewriteTable, voiceContext } from '@/voice/voice';
 
 /**
@@ -60,6 +62,9 @@ export default function Emergency() {
       },
     });
     listener.current = l;
+    capabilities().then((c) =>
+      trace('boot', { ...c, proxy: online(), listener: l.available ? 'speech recognition' : 'none (buttons)', voice: audio() ? 'audio engine' : 'system voice' }),
+    );
 
     const tile = EMERGENCIES.find((e) => e.id === params.tile);
     const t = setTimeout(() => {

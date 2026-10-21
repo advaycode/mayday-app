@@ -6,6 +6,7 @@ import systemLines from '@/audio/systemLines.json';
 import { CPR_BPM } from '@/config';
 import { haptic } from '@/design/haptics';
 import { getSettings } from '@/settings/store';
+import { trace } from '@/voice/trace';
 import { adaptLine, say, voiceContext } from '@/voice/voice';
 
 import { LookaheadScheduler } from './scheduler';
@@ -94,6 +95,7 @@ export function useCprCoach(opts: Options) {
           }
         };
         const scheduler = new LookaheadScheduler(plan, t0, { now }, emit);
+        trace('cpr', { bpm: plan.bpm, mode: plan.mode, alone: !!plan.alone, swapEveryS: plan.swapEveryS, clock: 'audio hardware', lookaheadMs: 200, tickMs: 25 });
         interval = setInterval(() => scheduler.tick(), 25);
         scheduler.tick();
       } else {

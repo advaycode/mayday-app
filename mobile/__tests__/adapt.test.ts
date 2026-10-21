@@ -9,7 +9,7 @@ import * as path from 'path';
 
 import { protocols } from '@/protocols';
 import systemLines from '@/audio/systemLines.json';
-import { CALM_LINE, checkRewrite, initialContext, learn, NUDGE_SUFFIX, personalConfirm, personalize, preface, RELATION_NAMES, voiceRate } from '@/voice/adapt';
+import { assess, CALM_LINE, checkRewrite, initialContext, learn, NUDGE_SUFFIX, personalConfirm, personalize, preface, RELATION_NAMES, voiceRate } from '@/voice/adapt';
 import { cards } from '@/voice/answer';
 
 function allLines(): string[] {
@@ -161,5 +161,28 @@ describe('alone', () => {
     expect(learn(c, 'my brother is here now').alone).toBe(false);
     expect(swapLine(2, true)).toBe('Two minutes. Keep going.');
     expect(swapLine(2)).toBe('Two minutes. Switch with someone if you can.');
+  });
+});
+
+describe('reading the rescuer: weighted signals', () => {
+  it('adds up signals and keeps the evidence', () => {
+    const a = assess('oh my god please help he is not he is not breathing');
+    expect(a.state).toBe('panicked');
+    expect(a.distress).toBeGreaterThanOrEqual(0.85);
+    const fired = a.distressSignals.filter((s) => s.evidence).map((s) => [s.name, s.evidence]);
+    expect(fired).toEqual([
+      ['Pleading', 'oh my god'],
+      ['Repetition', 'he is not ×2'],
+    ]);
+  });
+  it('needs more than one weak signal', () => {
+    expect(assess('he is not breathing!').state).toBeNull(); // one exclamation mark: 0.25
+    expect(assess('HELP!! he is not breathing').state).toBe('panicked'); // shouting + exclamation: 0.5
+  });
+  it('tells confusion from panic', () => {
+    const a = assess("what? I don't understand");
+    expect(a.state).toBe('confused');
+    expect(a.confusion).toBe(1);
+    expect(assess('is he breathing').state).toBeNull();
   });
 });

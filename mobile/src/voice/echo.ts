@@ -15,12 +15,17 @@ const COUNT_WORDS = new Set([
   'twenty', 'thirty', 'and',
 ]);
 
+/** Share of the transcript's words that we said ourselves in the last few seconds (0 to 1). */
+export function echoOverlap(transcript: string, recentlySaid: string[]): number {
+  const words = normalizeUtterance(transcript).split(' ').filter(Boolean);
+  if (!words.length) return 1;
+  const said = new Set(recentlySaid.flatMap((l) => normalizeUtterance(l).split(' ')));
+  return words.filter((w) => said.has(w)).length / words.length;
+}
+
 export function isEcho(transcript: string, recentlySaid: string[]): boolean {
   const words = normalizeUtterance(transcript).split(' ').filter(Boolean);
   if (!words.length) return true;
   if (words.every((w) => COUNT_WORDS.has(w) || /^\d+$/.test(w))) return true;
-
-  const said = new Set(recentlySaid.flatMap((l) => normalizeUtterance(l).split(' ')));
-  const overlap = words.filter((w) => said.has(w)).length / words.length;
-  return words.length >= 2 && overlap >= 0.7;
+  return words.length >= 2 && echoOverlap(transcript, recentlySaid) >= 0.7;
 }

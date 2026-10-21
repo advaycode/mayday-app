@@ -11,9 +11,9 @@ import { PROXY_URL } from '@/config';
 
 export const online = () => PROXY_URL.length > 0;
 
-const Health = z.object({ groq: z.boolean().default(false), claude: z.boolean().default(false), adapt: z.boolean().default(false) });
+const Health = z.object({ groq: z.boolean().default(false), claude: z.boolean().default(false), adapt: z.boolean().default(false), local: z.boolean().default(false) });
 export type Capabilities = z.infer<typeof Health>;
-const NONE: Capabilities = { groq: false, claude: false, adapt: false };
+const NONE: Capabilities = { groq: false, claude: false, adapt: false, local: false };
 let caps: Promise<Capabilities> | null = null;
 
 /**

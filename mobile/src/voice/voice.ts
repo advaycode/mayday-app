@@ -5,6 +5,7 @@ import { adaptLines as requestAdaptation, capabilities } from '@/ai/proxy';
 import { getSettings } from '@/settings/store';
 
 import { checkRewrite, currentState, initialContext, learn, personalize, preface, voiceRate, type VoiceContext } from './adapt';
+import { trace } from './trace';
 
 /**
  * The voice of one emergency: who we are helping, how the rescuer sounds,
@@ -63,6 +64,19 @@ export function say(lines: string[], opts: { calm?: boolean } = {}) {
   if (calm.length) calmedFor = ctx.stateAt;
   const spoken = [...calm, ...lines.map(adaptLine)];
   const rate = voiceRate(ctx, now);
+  const engine = audio();
+  trace('say', {
+    rate,
+    calm: calm.length > 0,
+    lines: [
+      ...calm.map((l) => ({ original: null, spoken: l, how: 'calming line', audio: engine?.has(l) ? 'recorded' : 'system voice' })),
+      ...lines.map((l) => {
+        const out = adaptLine(l);
+        const how = rewrites.get(l) === out ? 'AI rewrite (checked)' : out !== l ? 'personalized' : 'as written';
+        return { original: out !== l ? l : null, spoken: out, how, audio: engine?.has(out) ? 'recorded' : engine?.ready(out) ? 'neural voice' : 'system voice' };
+      }),
+    ],
+  });
   const a = audio();
   if (a) return a.speak(spoken, { rate });
   // Expo Go (no audio engine): the system voice, one line after another.
@@ -79,24 +93,35 @@ export function say(lines: string[], opts: { calm?: boolean } = {}) {
 let inFlight = false;
 
 export async function prepare(lines: string[]) {
-  if (inFlight || !(await capabilities()).adapt) return;
+  if (inFlight) return;
+  // Claim the slot before the first await, so two calls in the same moment send one request.
+  inFlight = true;
   const todo = [...new Set(lines)].filter((l) => !requested.has(l)).slice(0, 12);
-  if (!todo.length) return;
+  if (!todo.length || !(await capabilities()).adapt) {
+    inFlight = false;
+    return;
+  }
   todo.forEach((l) => requested.add(l));
   const asked = ctx;
-  inFlight = true;
+  const started = Date.now();
+  trace('rewrite-start', { count: todo.length, pronoun: asked.pronoun, relation: asked.relation, state: currentState(asked) });
   const out = await requestAdaptation({ pronoun: asked.pronoun, relation: asked.relation, state: currentState(asked), lines: todo }).finally(() => {
     inFlight = false;
   });
   if (!out || out.lines.length !== todo.length || asked.pronoun !== ctx.pronoun || asked.relation !== ctx.relation) return;
   const accepted: string[] = [];
+  const verdicts: { original: string; rewrite: string; ok: boolean; reason: string | null }[] = [];
   todo.forEach((original, i) => {
     const line = out.lines[i].trim();
-    if (line !== original && line !== personalize(original, ctx.pronoun) && checkRewrite(original, line, ctx.pronoun, ctx.relation).ok) {
+    const same = line === original || line === personalize(original, ctx.pronoun);
+    const verdict = checkRewrite(original, line, ctx.pronoun, ctx.relation);
+    verdicts.push({ original, rewrite: line, ok: !same && verdict.ok, reason: same ? 'same as offline' : verdict.ok ? null : verdict.reason });
+    if (!same && verdict.ok) {
       rewrites.set(original, line);
       accepted.push(line);
     }
   });
+  trace('rewrite', { model: out.model ?? 'model', seconds: Math.round((Date.now() - started) / 100) / 10, verdicts });
   // Fetch their audio now, so they are ready when their step comes.
   await audio()?.preload(accepted);
 }

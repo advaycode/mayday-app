@@ -65,7 +65,7 @@ New-Item -ItemType Directory -Force -Path $profileDir | Out-Null
 
 Start-Process -FilePath $browser -ArgumentList @(
     "--app=$url",
-    '--window-size=540,1060',
+    '--window-size=1020,1060',
     '--window-position=40,20',
     '--force-device-scale-factor=1',
     "--user-data-dir=`"$profileDir`"",

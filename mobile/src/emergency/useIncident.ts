@@ -9,11 +9,12 @@ import { canGoBack, currentStep, reduce, type Effect, type EngineEvent, type Eng
 import { protocols } from '@/protocols';
 import type { Intent, Step } from '@/protocols/schema';
 import { askModel, online } from '@/ai/proxy';
-import { answer, isQuestion, passagesFor } from '@/voice/answer';
-import { isEcho } from '@/voice/echo';
+import { ANSWER_THRESHOLD, answer, isQuestion, passagesFor, rank } from '@/voice/answer';
+import { echoOverlap, isEcho } from '@/voice/echo';
 import { routeWithModel } from '@/voice/llmRouter';
 import { normalizeUtterance, route } from '@/voice/router';
-import { NUDGE_SUFFIX, personalConfirm } from '@/voice/adapt';
+import { assess, currentState, NUDGE_SUFFIX, personalConfirm, voiceRate } from '@/voice/adapt';
+import { since, trace } from '@/voice/trace';
 import { hearRescuer, prepare, resetVoice, say, sinceHeard, voiceContext } from '@/voice/voice';
 import type { ProtocolId, QuestionId, RouterSlots } from '@/voice/routerSchema';
 
@@ -94,6 +95,14 @@ export function useIncident() {
       const lines = [...prefix, ...effects.flatMap((e) => (e.type === 'say' ? e.lines : []))];
       if (enter) {
         haptic('navigate');
+        trace('step', {
+          protocol: enter.protocolId,
+          step: enter.step.id,
+          stepKind: enter.step.kind,
+          text: enter.step.text,
+          skipped: logs.filter((e) => e.text.includes('already known')).map((e) => e.text),
+          revisit: enter.reentry,
+        });
         // Phrase the next steps for this patient while this one runs.
         const st = ref.current.engine;
         if (st && (voiceContext().relation || voiceContext().pronoun !== 'they')) prepare(upcoming(st.protocolId, enter.step.id));
@@ -173,7 +182,13 @@ export function useIncident() {
 
   const hear = useCallback(
     (text: string) => {
-      if (isEcho(text, recentlySaid())) return;
+      const t0 = performance.now();
+      const recent = recentlySaid();
+      const overlap = echoOverlap(text, recent);
+      if (isEcho(text, recent)) {
+        trace('heard', { raw: text, clean: normalizeUtterance(text), echo: overlap, dropped: true });
+        return;
+      }
       hearRescuer(text);
       update((s) => ({ ...s, heard: { text, final: true } }));
       const ack = () => update((x) => ({ ...x, understood: { text, at: Date.now() } }));
@@ -181,6 +196,22 @@ export function useIncident() {
       const inProtocol = s.phase === 'protocol' && !!s.engine;
       const known = s.engine?.slots ?? s.slots;
       const r = route(text, { inProtocol, known: known as RouterSlots });
+      trace('heard', { raw: text, clean: normalizeUtterance(text), echo: overlap, dropped: false });
+      trace('route', { protocol: r.protocol_id, intent: r.intent, slots: r.slots, confidence: r.confidence, urgent: r.urgent, next: r.next_question, inProtocol, ms: since(t0) });
+      const read = assess(text);
+      const vc = voiceContext();
+      trace('rescuer', {
+        distress: read.distress,
+        confusion: read.confusion,
+        distressSignals: read.distressSignals,
+        confusionSignals: read.confusionSignals,
+        state: currentState(vc),
+        stateAt: vc.stateAt,
+        relation: vc.relation,
+        pronoun: vc.pronoun,
+        alone: vc.alone,
+        rate: voiceRate(vc),
+      });
 
       if (!inProtocol) {
         // Life threat or a confident match: start now. Nothing waits on a model.
@@ -237,6 +268,8 @@ export function useIncident() {
       }
       if (isQuestion(text)) {
         ack();
+        const ranked = rank(text, s.engine?.protocolId ?? null).slice(0, 4);
+        trace('answer', { question: text, threshold: ANSWER_THRESHOLD, candidates: ranked.map((c) => ({ id: c.card.id, score: c.score })), chosen: ranked[0] && ranked[0].score >= ANSWER_THRESHOLD ? ranked[0].card.id : null });
         const step = s.engine ? currentStep(s.engine) : null;
         const inCompressions = step?.kind === 'cpr';
         log(`Asked: "${text}"`);

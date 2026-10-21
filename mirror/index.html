@@ -6,7 +6,7 @@
 <title>Mayday Phone</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
 <style>
   /*
    * Phone mirror: runs the real Mayday web build inside a frame that is
@@ -113,6 +113,58 @@
   .caption button:hover, .caption select:hover { border-color: rgba(242,239,232,0.25); }
   .caption button:focus-visible, .caption select:focus-visible { outline: 2px solid #d2be94; outline-offset: 2px; }
   @media (prefers-reduced-motion: reduce) { .buzz-tick, .buzz-thud { animation: none; } }
+  /* ---- Adaptive engine panel ------------------------------------------------
+   * Everything the app works out, live, from real values it sends while it
+   * runs (mobile/src/voice/trace.ts). Desk-side only: the phone stays quiet. */
+  :root { --panel: 468px; --ok: #4ED8A8; --no: #FF7A66; --accent: #D2BE94; --line: rgba(242,239,232,0.09); --mono: 'Geist Mono', ui-monospace, monospace; }
+  body.with-engine { padding-right: var(--panel); }
+  #engine {
+    display: none; position: fixed; top: 0; right: 0; bottom: 0; width: var(--panel);
+    background: #0a0a09; border-left: 1px solid var(--line); overflow-y: auto; overscroll-behavior: contain;
+    font-size: 13px; line-height: 1.5; color: #d9d5cc; scrollbar-width: thin; scrollbar-color: #2a2926 transparent;
+  }
+  body.with-engine #engine { display: block; }
+  #engine header { position: sticky; top: 0; z-index: 2; background: #0a0a09; padding: 18px 22px 12px; border-bottom: 1px solid var(--line); }
+  #engine h2 { margin: 0; font-size: 15px; font-weight: 600; color: #f2efe8; letter-spacing: -0.1px; }
+  #engine .caps { margin-top: 4px; font-family: var(--mono); font-size: 11px; color: #8a867e; }
+  .pipe { display: flex; gap: 4px; margin: 12px 0 0; padding: 0; list-style: none; }
+  .pipe li { flex: 1; text-align: center; font-size: 10.5px; padding: 6px 0; border-radius: 6px; background: #151413; color: #77736b; transition: background 600ms, color 600ms; }
+  .pipe li.on { background: var(--accent); color: #0a0a09; transition: none; }
+  #engine section { padding: 14px 22px; border-bottom: 1px solid var(--line); }
+  #engine h3 { margin: 0 0 8px; font-size: 11px; font-weight: 500; letter-spacing: 0.6px; text-transform: uppercase; color: #8a867e; display: flex; justify-content: space-between; }
+  #engine h3 .ms { font-family: var(--mono); letter-spacing: 0; text-transform: none; color: var(--accent); }
+  .kv { display: grid; grid-template-columns: 96px 1fr; gap: 3px 10px; align-items: baseline; }
+  .kv dt { color: #77736b; font-size: 12px; }
+  .kv dd { margin: 0; font-family: var(--mono); font-size: 12px; color: #e8e4dc; word-break: break-word; }
+  .q { color: #f2efe8; }
+  .faint { color: #66625b; }
+  .bar { display: inline-block; vertical-align: middle; width: 120px; height: 6px; border-radius: 3px; background: #1d1c1a; margin-right: 8px; overflow: hidden; }
+  .bar i { display: block; height: 100%; border-radius: 3px; background: var(--accent); transition: width 400ms cubic-bezier(0.16,1,0.3,1); }
+  .bar.hot i { background: var(--no); }
+  .bar.cool i { background: #6CB8FF; }
+  .sig { display: grid; grid-template-columns: 14px 108px 44px 1fr; gap: 6px; font-family: var(--mono); font-size: 11.5px; color: #66625b; }
+  .sig.hit { color: #e8e4dc; }
+  .sig .w { text-align: right; }
+  .sig.hit .w { color: var(--accent); }
+  .say { margin: 0 0 8px; }
+  .say .line { color: #f2efe8; }
+  .say .from { font-size: 11.5px; color: #66625b; text-decoration: line-through; text-decoration-color: rgba(255,122,102,0.6); }
+  .tag { display: inline-block; font-family: var(--mono); font-size: 10.5px; padding: 1px 6px; border-radius: 4px; background: #1d1c1a; color: #a8a39a; margin-left: 6px; }
+  .tag.ai { background: rgba(78,216,168,0.14); color: var(--ok); }
+  .tag.p { background: rgba(210,190,148,0.14); color: var(--accent); }
+  .verdict { display: grid; grid-template-columns: 16px 1fr; gap: 6px; margin-bottom: 6px; font-size: 12.5px; }
+  .verdict .why { font-family: var(--mono); font-size: 11px; color: var(--no); }
+  .ok { color: var(--ok); }
+  .no { color: var(--no); }
+  .cand { display: grid; grid-template-columns: 1fr 132px; gap: 8px; font-family: var(--mono); font-size: 11.5px; color: #a8a39a; }
+  .cand.win { color: var(--ok); }
+  #trace { list-style: none; margin: 0; padding: 0; font-family: var(--mono); font-size: 11px; max-height: 260px; overflow-y: auto; }
+  #trace li { display: grid; grid-template-columns: 82px 64px 1fr; gap: 6px; padding: 2px 0; color: #8a867e; border-bottom: 1px solid rgba(242,239,232,0.04); }
+  #trace li b { font-weight: 500; color: var(--accent); }
+  #trace li span:last-child { color: #c9c5bc; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .empty { color: #55524c; margin: 0; }
+  @media (prefers-reduced-motion: reduce) { .pipe li, .bar i { transition: none; } }
+
 </style>
 </head>
 <body>
@@ -143,8 +195,27 @@
     <span id="spec"></span>
     <button id="scaleBtn" type="button"></button>
     <button id="reload" type="button" aria-label="Reload app">Reload</button>
+    <button id="engineBtn" type="button" aria-pressed="true">Engine</button>
   </div>
 </div>
+
+<aside id="engine" aria-label="Adaptive engine, live">
+  <header>
+    <h2>Adaptive engine</h2>
+    <div class="caps" id="caps">waiting for the app</div>
+    <ol class="pipe" id="pipe" aria-hidden="true">
+      <li data-s="hear">Hear</li><li data-s="clean">Clean</li><li data-s="route">Understand</li><li data-s="rescuer">Read rescuer</li><li data-s="adapt">Adapt</li><li data-s="verify">Verify</li><li data-s="speak">Speak</li>
+    </ol>
+  </header>
+  <section><h3>Heard <span class="ms" id="heardMs"></span></h3><div id="heard"><p class="empty">Tap Talk and speak, or tap an emergency.</p></div></section>
+  <section><h3>Understanding <span class="ms" id="routeMs"></span></h3><div id="route"><p class="empty">Keyword router and slot filler, offline.</p></div></section>
+  <section><h3>Rescuer model</h3><div id="rescuer"><p class="empty">Weighted signals for distress and confusion.</p></div></section>
+  <section><h3>Protocol</h3><div id="step"><p class="empty">No protocol yet.</p></div></section>
+  <section><h3>Voice out</h3><div id="say"><p class="empty">Every line, as written and as spoken.</p></div></section>
+  <section><h3>AI rewrites <span class="ms" id="rwMs"></span></h3><div id="rewrite"><p class="empty">Rewrites run in the background and every line is checked against the original.</p></div></section>
+  <section><h3>Answer match</h3><div id="answer"><p class="empty">Questions are matched to cited answer cards.</p></div></section>
+  <section><h3>Trace <span class="ms" id="count">0 events</span></h3><ol id="trace"></ol></section>
+</aside>
 <script>
   // Screen sizes in points (what the app lays out in) and physical pixels.
   // iPhone 17 family figures are Apple's published resolutions divided by 3.
@@ -189,7 +260,8 @@
 
   function fit() {
     const rect = { w: stage.offsetWidth, h: stage.offsetHeight + 56 };
-    const s = Math.min(1, (innerWidth - 32) / rect.w, (innerHeight - 24) / rect.h);
+    const panel = document.body.classList.contains('with-engine') ? 468 : 0;
+    const s = Math.min(1, (innerWidth - panel - 32) / rect.w, (innerHeight - 24) / rect.h);
     const scale = mode === '1:1' ? 1 : s;
     stage.style.transform = `scale(${scale})`;
     const real = s >= 0.999;
@@ -218,6 +290,130 @@
     phone.classList.remove('buzz-tick', 'buzz-thud');
     void phone.offsetWidth; // restart the animation
     phone.classList.add(heavy ? 'buzz-thud' : 'buzz-tick');
+  });
+
+
+  // ---- Adaptive engine panel: draws the app's trace events ---------------------
+  const $ = (id) => document.getElementById(id);
+  const esc = (v) => String(v ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+  const num = (v, d = 2) => (typeof v === 'number' ? v.toFixed(d) : '—');
+  const bar = (v, cls = '') => `<span class="bar ${cls}"><i style="width:${Math.round(Math.max(0, Math.min(1, v || 0)) * 100)}%"></i></span>${num(v)}`;
+  let events = 0;
+  let engineOn = localStorageGet('mirror.engine') !== 'off';
+  const engineBtn = $('engineBtn');
+  function setEngine(on) {
+    engineOn = on;
+    document.body.classList.toggle('with-engine', on);
+    engineBtn.setAttribute('aria-pressed', String(on));
+    engineBtn.textContent = on ? 'Hide engine' : 'Engine';
+    localStorageSet('mirror.engine', on ? 'on' : 'off');
+    fit();
+  }
+  engineBtn.addEventListener('click', () => setEngine(!engineOn));
+  setEngine(engineOn);
+
+  function flash(...stages) {
+    for (const st of stages) {
+      const li = document.querySelector(`.pipe li[data-s="${st}"]`);
+      if (!li) continue;
+      li.classList.add('on');
+      setTimeout(() => li.classList.remove('on'), 700);
+    }
+  }
+  function log(kind, text, t) {
+    const d = new Date(t || Date.now());
+    const stamp = `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}:${String(d.getSeconds()).padStart(2, '0')}.${String(d.getMilliseconds()).padStart(3, '0')}`;
+    const li = document.createElement('li');
+    li.innerHTML = `<span>${stamp}</span><b>${esc(kind)}</b><span title="${esc(text)}">${esc(text)}</span>`;
+    const list = $('trace');
+    list.prepend(li);
+    while (list.children.length > 120) list.lastChild.remove();
+    $('count').textContent = `${++events} events`;
+  }
+  const slots = (o) => Object.entries(o || {}).map(([k, v]) => `${esc(k)}=${esc(v)}`).join('  ') || '<span class="faint">none</span>';
+  const signals = (list) => (list || []).map((g) => `<div class="sig ${g.evidence ? 'hit' : ''}"><span>${g.evidence ? '✓' : '·'}</span><span>${esc(g.name)}</span><span class="w">+${num(g.weight)}</span><span>${g.evidence ? '“' + esc(g.evidence) + '”' : ''}</span></div>`).join('');
+
+  const draw = {
+    boot(m) {
+      $('caps').textContent = [
+        m.proxy ? 'proxy on' : 'offline',
+        m.claude ? 'Claude' : null,
+        m.local ? 'local model (Ollama)' : null,
+        m.adapt ? 'AI rewrites on' : 'AI rewrites off',
+        m.groq ? 'Groq router' : null,
+        m.listener,
+        m.voice,
+      ].filter(Boolean).join('  ·  ');
+      log('boot', $('caps').textContent, m.t);
+    },
+    heard(m) {
+      flash('hear', 'clean');
+      $('heard').innerHTML = `<dl class="kv"><dt>raw</dt><dd class="q">“${esc(m.raw)}”</dd><dt>cleaned</dt><dd>${esc(m.clean)}</dd><dt>echo check</dt><dd>${bar(m.echo, m.dropped ? 'hot' : '')} ${m.dropped ? '<span class="no">own voice, ignored</span>' : '<span class="faint">ignored at 0.70</span>'}</dd></dl>`;
+      log('heard', `${m.dropped ? '(echo) ' : ''}${m.raw}`, m.t);
+    },
+    route(m) {
+      flash('route');
+      $('routeMs').textContent = `${m.ms} ms`;
+      $('route').innerHTML = `<dl class="kv"><dt>protocol</dt><dd>${esc(m.protocol || '—')}</dd><dt>intent</dt><dd>${esc(m.intent || '—')}</dd><dt>facts</dt><dd>${slots(m.slots)}</dd><dt>confidence</dt><dd>${bar(m.confidence)}${m.urgent ? ' <span class="no">life threat</span>' : ''}</dd><dt>context</dt><dd>${m.inProtocol ? 'inside a protocol' : 'intake'}${m.next ? ' · next question: ' + esc(m.next) : ''}</dd></dl>`;
+      log('route', `${m.protocol || m.intent || 'nothing'}  conf ${num(m.confidence)}  ${m.ms} ms`, m.t);
+    },
+    rescuer(m) {
+      flash('rescuer');
+      const fade = m.state !== 'steady' ? Math.max(0, Math.round(45 - (Date.now() - m.stateAt) / 1000)) : 0;
+      $('rescuer').innerHTML = `<dl class="kv"><dt>distress</dt><dd>${bar(m.distress, 'hot')}</dd></dl>${signals(m.distressSignals)}
+        <dl class="kv" style="margin-top:8px"><dt>confusion</dt><dd>${bar(m.confusion, 'cool')}</dd></dl>${signals(m.confusionSignals)}
+        <dl class="kv" style="margin-top:8px"><dt>state</dt><dd>${esc(m.state)}${fade ? ` <span class="faint">fades in ${fade} s</span>` : ''}</dd>
+        <dt>patient</dt><dd>${m.relation ? 'your ' + esc(m.relation) + ' · ' : ''}${esc(m.pronoun)}</dd><dt>alone</dt><dd>${m.alone ? 'yes' : 'no'}</dd><dt>voice rate</dt><dd>×${num(m.rate)}</dd></dl>`;
+      log('rescuer', `${m.state}  distress ${num(m.distress)}  confusion ${num(m.confusion)}${m.relation ? '  ' + m.relation : ''}`, m.t);
+    },
+    step(m) {
+      flash('route');
+      $('step').innerHTML = `<dl class="kv"><dt>protocol</dt><dd>${esc(m.protocol)}</dd><dt>step</dt><dd>${esc(m.step)} <span class="faint">(${esc(m.stepKind)}${m.revisit ? ', again' : ''})</span></dd><dt>on screen</dt><dd class="q">${esc(m.text)}</dd>${m.skipped && m.skipped.length ? `<dt>skipped</dt><dd>${m.skipped.map(esc).join('<br>')}</dd>` : ''}</dl>`;
+      log('step', `${m.protocol}#${m.step}`, m.t);
+    },
+    say(m) {
+      flash('adapt', 'speak');
+      $('say').innerHTML = (m.lines || []).map((l) => {
+        const cls = l.how.startsWith('AI') ? 'ai' : l.how === 'personalized' || l.how === 'calming line' ? 'p' : '';
+        return `<div class="say"><div class="line">“${esc(l.spoken)}”<span class="tag ${cls}">${esc(l.how)}</span><span class="tag">${esc(l.audio)}</span></div>${l.original ? `<div class="from">${esc(l.original)}</div>` : ''}</div>`;
+      }).join('') + `<div class="faint" style="font-size:11.5px">rate ×${num(m.rate)}${m.calm ? ' · calming line first' : ''}</div>`;
+      log('say', (m.lines || []).map((l) => l.spoken).join(' / '), m.t);
+    },
+    'rewrite-start'(m) {
+      flash('adapt');
+      $('rwMs').textContent = 'working';
+      log('rewrite', `asked for ${m.count} lines (${m.relation || m.pronoun}, ${m.state})`, m.t);
+    },
+    rewrite(m) {
+      flash('verify');
+      const vs = m.verdicts || [];
+      const same = (v) => v.reason === 'same as offline';
+      const ok = vs.filter((v) => v.ok).length;
+      const kept = vs.filter(same).length;
+      const rejected = vs.length - ok - kept;
+      $('rwMs').textContent = `${esc(m.model)} · ${m.seconds} s`;
+      $('rewrite').innerHTML = `<div class="faint" style="margin-bottom:8px">${ok} improved · ${kept} already right · ${rejected} rejected by the check</div>` + vs.map((v) => {
+        const mark = v.ok ? '<span class="ok">✓</span>' : same(v) ? '<span class="faint">=</span>' : '<span class="no">✗</span>';
+        const why = v.ok ? '' : same(v) ? '<div class="faint" style="font-family:var(--mono);font-size:11px">matches the offline wording</div>' : `<div class="why">${esc(v.reason)}</div>`;
+        return `<div class="verdict">${mark}<div><div class="${v.ok ? 'q' : ''}">“${esc(v.rewrite)}”</div>${why}</div></div>`;
+      }).join('');
+      log('verify', `${ok} improved, ${kept} same, ${rejected} rejected  ${m.seconds} s`, m.t);
+    },
+    answer(m) {
+      flash('route');
+      $('answer').innerHTML = `<div class="q" style="margin-bottom:6px">“${esc(m.question)}”</div>` + (m.candidates || []).map((c) =>
+        `<div class="cand ${c.id === m.chosen ? 'win' : ''}"><span>${c.id === m.chosen ? '✓ ' : ''}${esc(c.id)}</span><span>${bar(c.score)}</span></div>`).join('') +
+        `<div class="faint" style="font-size:11.5px;margin-top:6px">answers only at ${num(m.threshold)} or more${m.chosen ? '' : '; below it, Mayday does not guess'}</div>`;
+      log('answer', `${m.chosen || 'no card'}  ${m.candidates && m.candidates[0] ? num(m.candidates[0].score) : ''}`, m.t);
+    },
+    cpr(m) {
+      log('cpr', `${m.bpm}/min ${m.mode} · ${m.clock} · lookahead ${m.lookaheadMs} ms · tick ${m.tickMs} ms${m.alone ? ' · alone' : ''}`, m.t);
+    },
+  };
+  addEventListener('message', (e) => {
+    const m = e.data;
+    if (!m || m.type !== 'mayday:trace' || !draw[m.kind]) return;
+    draw[m.kind](m);
   });
 
   load();

@@ -92,9 +92,17 @@ Exits are faster than entrances. Only transform and opacity animate. With Reduce
 
 In the web preview the phone frame twitches instead (`mirror/index.html`), so haptics show up on video.
 
+## Emergency colors
+
+Each kind of emergency has one color (`tint` in `mobile/src/design/tokens.ts`): coral for CPR, amber for choking, raspberry for bleeding, orange for burns, sky for stroke, mint for overdose, lavender for passed out. A bright hue and a deep shade of the same hue: the tile, the chip and the progress bar during the steps, and the main button. Red stays for 911 only. Color never carries meaning alone; every tile and chip also has an icon and a word.
+
+## Talk to Mayday
+
+The AI assistant is the easiest thing to press on every screen: a 128 pt bar on Home, an 84 pt circle in the middle of the bottom bar during the steps. Light on dark, a microphone, no hold. While listening it turns sand and a ring breathes with the voice.
+
 ## Pictures
 
-A step screen is a picture and a headline. The pictures are real photos and drawings from Wikimedia Commons, recolored to the two app colors (photos toned from near-black to warm off-white, drawings inverted to light lines on black), so the set is calm and consistent, and blood reads as gray. Square, 280 pt, `radius.lg`. Where no image was good enough (infant CPR, the nasal spray) the app's own line drawing or an icon stands in. `tools/pick_images.py` makes them; credits are in the app.
+A step screen is a picture and a headline. The pictures are real illustrations and photos from Wikimedia Commons in full color, on one light card (`color.card`): drawings on white blend into it, photos fill it. Square, 280 pt, `radius.lg`. Where no image was good enough (infant CPR, the nasal spray) the app's own line drawing or an icon stands in. `tools/pick_images.py` makes them; credits are in the app.
 
 ## Words
 

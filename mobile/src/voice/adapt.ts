@@ -47,8 +47,61 @@ const RELATIONS: [RegExp, string, Pronoun][] = [
 
 export const RELATION_NAMES = [...new Set(RELATIONS.map(([, name]) => name))];
 
-const PANIC = /\b(oh my god|oh god|please|help me|hurry|i can not|i cannot|scared|panicking|what do i do)\b/;
-const CONFUSED = /\b(what|huh|i do not understand|i don t understand|i do not get it|how do i|say that again|repeat|slower|too fast)\b/;
+// --- Reading the rescuer: weighted signals ----------------------------------------
+//
+// Several weak signals, each with a weight, add up to a score from 0 to 1.
+// 0.5 or more is a state. Every signal that fired is kept with its evidence,
+// so the decision can be shown and checked (the desktop mirror's engine panel
+// shows exactly these numbers).
+
+export type Signal = { name: string; weight: number; evidence: string | null };
+export type Assessment = { distress: number; confusion: number; distressSignals: Signal[]; confusionSignals: Signal[]; state: RescuerState | null };
+
+type Rule = { name: string; weight: number; find: (clean: string, raw: string) => string | null };
+const match = (re: RegExp) => (clean: string) => clean.match(re)?.[0] ?? null;
+
+/** A word or a short phrase said twice in a row: "no no", "he's not, he's not". */
+function repeated(raw: string): string | null {
+  const w = raw.toLowerCase().replace(/[^a-z' ]+/g, ' ').split(/\s+/).filter(Boolean);
+  for (let n = 3; n >= 1; n--) {
+    for (let i = 0; i + 2 * n <= w.length; i++) {
+      const a = w.slice(i, i + n).join(' ');
+      if (a.length > 1 && a === w.slice(i + n, i + 2 * n).join(' ')) return `${a} ×2`;
+    }
+  }
+  return null;
+}
+
+const DISTRESS: Rule[] = [
+  { name: 'Pleading', weight: 0.5, find: match(/\b(oh my god|oh god|please|help me|hurry|what do i do)\b/) },
+  { name: 'Fear', weight: 0.5, find: match(/\b(scared|panicking|freaking out|terrified|i can not|i cannot|he is dying|she is dying)\b/) },
+  { name: 'Repetition', weight: 0.35, find: (_c, raw) => repeated(raw) },
+  { name: 'Exclamation', weight: 0.25, find: (_c, raw) => (/!/.test(raw) ? raw.match(/!+/)![0] : null) },
+  { name: 'Shouting', weight: 0.25, find: (_c, raw) => raw.match(/\b[A-Z]{3,}\b/)?.[0] ?? null },
+];
+
+const CONFUSION: Rule[] = [
+  { name: 'Asked "what"', weight: 0.5, find: match(/^(what|huh)\b/) },
+  { name: 'Not following', weight: 0.6, find: match(/\b(i do not understand|i don t understand|i do not get it|i don t get it|confused|i am lost)\b/) },
+  { name: 'Asked again', weight: 0.5, find: match(/\b(say that again|repeat|slower|too fast)\b/) },
+  { name: 'How do I', weight: 0.4, find: match(/\bhow do i\b/) },
+];
+
+function score(rules: Rule[], clean: string, raw: string): { total: number; signals: Signal[] } {
+  const signals = rules.map((r) => ({ name: r.name, weight: r.weight, evidence: r.find(clean, raw) }));
+  const total = Math.min(1, signals.reduce((sum, s) => sum + (s.evidence ? s.weight : 0), 0));
+  return { total, signals };
+}
+
+/** How the rescuer sounds in one utterance. */
+export function assess(utterance: string): Assessment {
+  const clean = normalizeUtterance(utterance);
+  const d = score(DISTRESS, clean, utterance);
+  const c = score(CONFUSION, clean, utterance);
+  const short = clean.split(' ').length <= 8;
+  const state: RescuerState | null = d.total >= 0.5 ? 'panicked' : c.total >= 0.5 && short ? 'confused' : null;
+  return { distress: d.total, confusion: c.total, distressSignals: d.signals, confusionSignals: c.signals, state };
+}
 
 /** Update what we know from something the rescuer said. */
 export function learn(ctx: VoiceContext, utterance: string, now = Date.now()): VoiceContext {
@@ -69,14 +122,9 @@ export function learn(ctx: VoiceContext, utterance: string, now = Date.now()): V
     if (/\b(he|him|his)\b/.test(t)) pronoun = 'he';
     else if (/\b(she|her)\b/.test(t)) pronoun = 'she';
   }
-  // Panic: pleading words, or the same word over and over ("no no no").
-  const words = t.split(' ');
-  const stutter = words.some((w, i) => i > 0 && w === words[i - 1] && w.length > 1);
-  if (PANIC.test(t) || stutter || /!{2,}/.test(utterance)) {
-    state = 'panicked';
-    stateAt = now;
-  } else if (CONFUSED.test(t) && words.length <= 8) {
-    state = 'confused';
+  const read = assess(utterance);
+  if (read.state) {
+    state = read.state;
     stateAt = now;
   }
   return { relation, pronoun, state, stateAt, alone };

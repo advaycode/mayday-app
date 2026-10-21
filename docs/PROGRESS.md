@@ -4,6 +4,22 @@ Read this at the start of every session; update it at the end.
 
 **Deadline:** 12:00 pm Eastern, Monday October 26 2026. **Our deadline:** submit by 9:00 am that morning.
 
+## Status on Wednesday October 21
+
+### Done today
+- **Redesign for real use** (feedback: too wordy, no color, hard to navigate).
+  - Home: one big **Talk to Mayday** button (the AI assistant: one tap, no hold) and a colored tile per emergency. "Call 911 first" in red.
+  - Tabs have words: Help, Learn, Map, Me. The red phone button is gone (it looked like it dialed).
+  - Every step: close, the emergency's chip (tap to switch), say-it-again; a progress bar; one picture card; one headline; big answers with the main one in the emergency's color; and a bottom bar under the thumb: **Back**, **Talk**, **911** (address and summary to read out; nothing is dialed).
+  - Back: a new engine event that returns to the previous step and asks its question again (tested).
+  - Listening is tap-to-talk; only things Mayday acted on are shown ("✓ no"), so room noise never appears.
+  - One color per emergency (`tokens.tint`), every pair contrast-checked (5.7:1 and up).
+- **Pictures in full color.** A second Commons crawl; BruceBlaus's CC BY-SA medical illustrations for adult and child CPR, the airway, the Heimlich and infant back blows; everything on one light card.
+- **Adaptive engine panel** in the desktop phone window (Engine button): live, real values from the running app. What was heard and how it was cleaned, the echo check, the router's decision and its time, the rescuer model's weighted signals (distress and confusion, each signal with its weight and evidence), the patient, the protocol step and what was skipped, each spoken line against its original, every AI rewrite with its verdict, and answer-card match scores.
+- The rescuer read is now a weighted multi-signal score (`assess()` in `voice/adapt.ts`), tested.
+- iPhone: Expo Go audio fallback (`audio/players.ts`). Real-device work paused at the user's request.
+- 184 tests passing, typecheck clean.
+
 ## Status on Monday October 19
 
 ### Done today
