@@ -7,6 +7,7 @@ import { useSharedValue, withTiming } from 'react-native-reanimated';
 import { audio, unlockAudio } from '@/audio/engine';
 import systemLines from '@/audio/systemLines.json';
 import { DEMO_MODE } from '@/config';
+import { BreathCheck } from '@/emergency/BreathCheck';
 import { CprView } from '@/emergency/CprView';
 import { Handoff } from '@/emergency/Handoff';
 import { Intake } from '@/emergency/Intake';
@@ -19,6 +20,7 @@ import { EMERGENCIES, emergencyFor } from '@/design/emergencies';
 import { useDeviceInsets } from '@/design/insets';
 import { color } from '@/design/tokens';
 import { protocols } from '@/protocols';
+import { useMonitor } from '@/sensors/useMonitor';
 import { capabilities, online } from '@/ai/proxy';
 import { createListener, type ListenState } from '@/voice/listen';
 import { trace } from '@/voice/trace';
@@ -41,7 +43,7 @@ export default function Emergency() {
   const params = useLocalSearchParams<{ talk?: string; tile?: string }>();
   const incident = useIncident();
   const { state, step } = incident;
-  const [sheet, setSheet] = useState<'dispatch' | 'more' | 'scan' | null>(null);
+  const [sheet, setSheet] = useState<'dispatch' | 'more' | 'scan' | 'breath' | null>(null);
   const [listen, setListen] = useState<ListenState>('off');
   const [showLog, setShowLog] = useState(false);
   const level = useSharedValue(0);
@@ -122,6 +124,20 @@ export default function Emergency() {
   const protocolId = state.engine?.protocolId ?? null;
   const tone = emergencyFor(protocolId).tint;
   const steps = protocolId ? protocols[protocolId].steps : [];
+
+  // "Breathing normally?" can be checked by laying the phone on the chest
+  // (not on a baby: a phone is too heavy and too long for an infant's chest).
+  // With no motion sensor (the desktop phone window) the simulated person is gasping:
+  // the case bystanders most often mistake for breathing.
+  const monitor = useMonitor({ mode: 'check', age: protocolId === 'cpr_child' ? 'child' : 'adult', scenario: 'agonal' });
+  const breathStep = step && step.kind === 'ask' && step.slot === 'breathing' && protocolId !== 'cpr_infant' ? step : null;
+  const phoneCheck = () => {
+    audio()?.stopSpeech();
+    // Started inside the tap: iOS only asks for motion permission there.
+    monitor.start();
+    incident.setQuiet(true);
+    setSheet('breath');
+  };
   const index = step ? steps.findIndex((s) => s.id === step.id) : -1;
   const fraction = steps.length > 1 && index >= 0 ? (index + 1) / steps.length : 0;
 
@@ -152,7 +168,7 @@ export default function Emergency() {
       <View style={{ flex: 1 }}>
         {phase === 'intake' && <Intake incident={incident} level={level} listening={listening} />}
         {phase === 'protocol' && step && step.kind === 'cpr' && <CprView key={stepKey} incident={incident} step={step} />}
-        {phase === 'protocol' && step && step.kind !== 'cpr' && <StepView key={stepKey} incident={incident} step={step} />}
+        {phase === 'protocol' && step && step.kind !== 'cpr' && <StepView key={stepKey} incident={incident} step={step} onPhoneCheck={breathStep ? phoneCheck : undefined} />}
       </View>
 
       <Understood understood={state.understood} />
@@ -169,6 +185,17 @@ export default function Emergency() {
       <DispatcherSheet incident={incident} open={sheet === 'dispatch'} onClose={() => setSheet(null)} />
       <MoreSheet incident={incident} open={sheet === 'more'} onClose={() => setSheet(null)} onScan={() => setSheet('scan')} />
       <ScanSheet incident={incident} open={sheet === 'scan'} onClose={() => setSheet(null)} />
+      {sheet === 'breath' && breathStep && (
+        <BreathCheck
+          incident={incident}
+          step={breathStep}
+          monitor={monitor}
+          onClose={() => {
+            incident.setQuiet(false);
+            setSheet(null);
+          }}
+        />
+      )}
     </View>
   );
 }

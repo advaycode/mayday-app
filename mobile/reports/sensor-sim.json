@@ -1,0 +1,1887 @@
+{
+  "generated": "2026-10-21T18:11:18.785Z",
+  "trialsPerScenario": 60,
+  "scenarios": [
+    {
+      "id": "normal",
+      "label": "Breathing normally",
+      "expect": "regular",
+      "age": "adult",
+      "heart": true
+    },
+    {
+      "id": "shallow",
+      "label": "Shallow breathing",
+      "expect": "regular",
+      "age": "adult",
+      "heart": true
+    },
+    {
+      "id": "child",
+      "label": "Child breathing",
+      "expect": "regular",
+      "age": "child",
+      "heart": true
+    },
+    {
+      "id": "slow",
+      "label": "Very slow (overdose)",
+      "expect": "irregular",
+      "age": "adult",
+      "heart": true
+    },
+    {
+      "id": "agonal",
+      "label": "Gasping (cardiac arrest)",
+      "expect": "irregular",
+      "age": "adult",
+      "heart": false
+    },
+    {
+      "id": "none",
+      "label": "Not breathing",
+      "expect": "none",
+      "age": "adult",
+      "heart": false
+    },
+    {
+      "id": "none_steps",
+      "label": "Not breathing, people walking",
+      "expect": "none",
+      "age": "adult",
+      "heart": false
+    },
+    {
+      "id": "seesaw",
+      "label": "See-saw (blocked airway)",
+      "expect": "seesaw",
+      "age": "adult",
+      "heart": true
+    },
+    {
+      "id": "hand",
+      "label": "Hand on the phone",
+      "expect": "moving",
+      "age": "adult",
+      "heart": true
+    }
+  ],
+  "runs": [
+    {
+      "name": "Emergency check, 100/s (native app)",
+      "mode": "check",
+      "sensor": {
+        "fs": 100
+      },
+      "rows": [
+        {
+          "scenario": "normal",
+          "label": "Breathing normally",
+          "expect": "regular",
+          "trials": 60,
+          "correct": 0.95,
+          "saidRegular": 0.95,
+          "saidStartCpr": 0.05,
+          "counts": {
+            "regular": 57,
+            "irregular": 3
+          },
+          "rateMae": 0.64,
+          "heartFound": null,
+          "heartMae": null
+        },
+        {
+          "scenario": "shallow",
+          "label": "Shallow breathing",
+          "expect": "regular",
+          "trials": 60,
+          "correct": 0.95,
+          "saidRegular": 0.95,
+          "saidStartCpr": 0.05,
+          "counts": {
+            "regular": 57,
+            "irregular": 3
+          },
+          "rateMae": 0.75,
+          "heartFound": null,
+          "heartMae": null
+        },
+        {
+          "scenario": "child",
+          "label": "Child breathing",
+          "expect": "regular",
+          "trials": 60,
+          "correct": 0.967,
+          "saidRegular": 0.967,
+          "saidStartCpr": 0.033,
+          "counts": {
+            "regular": 58,
+            "none": 1,
+            "irregular": 1
+          },
+          "rateMae": 0.79,
+          "heartFound": null,
+          "heartMae": null
+        },
+        {
+          "scenario": "slow",
+          "label": "Very slow (overdose)",
+          "expect": "irregular",
+          "trials": 60,
+          "correct": 1,
+          "saidRegular": 0,
+          "saidStartCpr": 1,
+          "counts": {
+            "irregular": 57,
+            "none": 3
+          },
+          "rateMae": null,
+          "heartFound": null,
+          "heartMae": null
+        },
+        {
+          "scenario": "agonal",
+          "label": "Gasping (cardiac arrest)",
+          "expect": "irregular",
+          "trials": 60,
+          "correct": 1,
+          "saidRegular": 0,
+          "saidStartCpr": 1,
+          "counts": {
+            "irregular": 58,
+            "none": 2
+          },
+          "rateMae": null,
+          "heartFound": null,
+          "heartMae": null
+        },
+        {
+          "scenario": "none",
+          "label": "Not breathing",
+          "expect": "none",
+          "trials": 60,
+          "correct": 1,
+          "saidRegular": 0,
+          "saidStartCpr": 1,
+          "counts": {
+            "none": 60
+          },
+          "rateMae": null,
+          "heartFound": null,
+          "heartMae": null
+        },
+        {
+          "scenario": "none_steps",
+          "label": "Not breathing, people walking",
+          "expect": "none",
+          "trials": 60,
+          "correct": 1,
+          "saidRegular": 0,
+          "saidStartCpr": 1,
+          "counts": {
+            "none": 60
+          },
+          "rateMae": null,
+          "heartFound": null,
+          "heartMae": null
+        },
+        {
+          "scenario": "seesaw",
+          "label": "See-saw (blocked airway)",
+          "expect": "seesaw",
+          "trials": 60,
+          "correct": 0,
+          "saidRegular": 1,
+          "saidStartCpr": 0,
+          "counts": {
+            "regular": 60
+          },
+          "rateMae": 0.68,
+          "heartFound": null,
+          "heartMae": null
+        },
+        {
+          "scenario": "hand",
+          "label": "Hand on the phone",
+          "expect": "moving",
+          "trials": 60,
+          "correct": 1,
+          "saidRegular": 0,
+          "saidStartCpr": 0,
+          "counts": {
+            "moving": 60
+          },
+          "rateMae": null,
+          "heartFound": null,
+          "heartMae": null
+        }
+      ]
+    },
+    {
+      "name": "Emergency check, 60/s (browser)",
+      "mode": "check",
+      "sensor": {
+        "fs": 60
+      },
+      "rows": [
+        {
+          "scenario": "normal",
+          "label": "Breathing normally",
+          "expect": "regular",
+          "trials": 60,
+          "correct": 0.967,
+          "saidRegular": 0.967,
+          "saidStartCpr": 0.033,
+          "counts": {
+            "regular": 58,
+            "irregular": 2
+          },
+          "rateMae": 0.61,
+          "heartFound": null,
+          "heartMae": null
+        },
+        {
+          "scenario": "shallow",
+          "label": "Shallow breathing",
+          "expect": "regular",
+          "trials": 60,
+          "correct": 0.933,
+          "saidRegular": 0.933,
+          "saidStartCpr": 0.067,
+          "counts": {
+            "regular": 56,
+            "irregular": 4
+          },
+          "rateMae": 0.81,
+          "heartFound": null,
+          "heartMae": null
+        },
+        {
+          "scenario": "child",
+          "label": "Child breathing",
+          "expect": "regular",
+          "trials": 60,
+          "correct": 0.983,
+          "saidRegular": 0.983,
+          "saidStartCpr": 0.017,
+          "counts": {
+            "regular": 59,
+            "none": 1
+          },
+          "rateMae": 0.78,
+          "heartFound": null,
+          "heartMae": null
+        },
+        {
+          "scenario": "slow",
+          "label": "Very slow (overdose)",
+          "expect": "irregular",
+          "trials": 60,
+          "correct": 1,
+          "saidRegular": 0,
+          "saidStartCpr": 1,
+          "counts": {
+            "irregular": 57,
+            "none": 3
+          },
+          "rateMae": null,
+          "heartFound": null,
+          "heartMae": null
+        },
+        {
+          "scenario": "agonal",
+          "label": "Gasping (cardiac arrest)",
+          "expect": "irregular",
+          "trials": 60,
+          "correct": 1,
+          "saidRegular": 0,
+          "saidStartCpr": 1,
+          "counts": {
+            "irregular": 58,
+            "none": 2
+          },
+          "rateMae": null,
+          "heartFound": null,
+          "heartMae": null
+        },
+        {
+          "scenario": "none",
+          "label": "Not breathing",
+          "expect": "none",
+          "trials": 60,
+          "correct": 1,
+          "saidRegular": 0,
+          "saidStartCpr": 1,
+          "counts": {
+            "none": 60
+          },
+          "rateMae": null,
+          "heartFound": null,
+          "heartMae": null
+        },
+        {
+          "scenario": "none_steps",
+          "label": "Not breathing, people walking",
+          "expect": "none",
+          "trials": 60,
+          "correct": 1,
+          "saidRegular": 0,
+          "saidStartCpr": 1,
+          "counts": {
+            "none": 60
+          },
+          "rateMae": null,
+          "heartFound": null,
+          "heartMae": null
+        },
+        {
+          "scenario": "seesaw",
+          "label": "See-saw (blocked airway)",
+          "expect": "seesaw",
+          "trials": 60,
+          "correct": 0,
+          "saidRegular": 1,
+          "saidStartCpr": 0,
+          "counts": {
+            "regular": 60
+          },
+          "rateMae": 0.68,
+          "heartFound": null,
+          "heartMae": null
+        },
+        {
+          "scenario": "hand",
+          "label": "Hand on the phone",
+          "expect": "moving",
+          "trials": 60,
+          "correct": 1,
+          "saidRegular": 0,
+          "saidStartCpr": 0,
+          "counts": {
+            "moving": 60
+          },
+          "rateMae": null,
+          "heartFound": null,
+          "heartMae": null
+        }
+      ]
+    },
+    {
+      "name": "Emergency check, 60/s, 2× sensor noise",
+      "mode": "check",
+      "sensor": {
+        "fs": 60,
+        "noiseUg": 360
+      },
+      "rows": [
+        {
+          "scenario": "normal",
+          "label": "Breathing normally",
+          "expect": "regular",
+          "trials": 60,
+          "correct": 0.95,
+          "saidRegular": 0.95,
+          "saidStartCpr": 0.05,
+          "counts": {
+            "regular": 57,
+            "none": 1,
+            "irregular": 2
+          },
+          "rateMae": 0.65,
+          "heartFound": null,
+          "heartMae": null
+        },
+        {
+          "scenario": "shallow",
+          "label": "Shallow breathing",
+          "expect": "regular",
+          "trials": 60,
+          "correct": 0.75,
+          "saidRegular": 0.75,
+          "saidStartCpr": 0.25,
+          "counts": {
+            "regular": 45,
+            "irregular": 15
+          },
+          "rateMae": 0.84,
+          "heartFound": null,
+          "heartMae": null
+        },
+        {
+          "scenario": "child",
+          "label": "Child breathing",
+          "expect": "regular",
+          "trials": 60,
+          "correct": 0.95,
+          "saidRegular": 0.95,
+          "saidStartCpr": 0.05,
+          "counts": {
+            "regular": 57,
+            "none": 1,
+            "irregular": 2
+          },
+          "rateMae": 0.83,
+          "heartFound": null,
+          "heartMae": null
+        },
+        {
+          "scenario": "slow",
+          "label": "Very slow (overdose)",
+          "expect": "irregular",
+          "trials": 60,
+          "correct": 1,
+          "saidRegular": 0,
+          "saidStartCpr": 1,
+          "counts": {
+            "irregular": 55,
+            "none": 5
+          },
+          "rateMae": null,
+          "heartFound": null,
+          "heartMae": null
+        },
+        {
+          "scenario": "agonal",
+          "label": "Gasping (cardiac arrest)",
+          "expect": "irregular",
+          "trials": 60,
+          "correct": 1,
+          "saidRegular": 0,
+          "saidStartCpr": 1,
+          "counts": {
+            "irregular": 54,
+            "none": 6
+          },
+          "rateMae": null,
+          "heartFound": null,
+          "heartMae": null
+        },
+        {
+          "scenario": "none",
+          "label": "Not breathing",
+          "expect": "none",
+          "trials": 60,
+          "correct": 1,
+          "saidRegular": 0,
+          "saidStartCpr": 1,
+          "counts": {
+            "none": 60
+          },
+          "rateMae": null,
+          "heartFound": null,
+          "heartMae": null
+        },
+        {
+          "scenario": "none_steps",
+          "label": "Not breathing, people walking",
+          "expect": "none",
+          "trials": 60,
+          "correct": 1,
+          "saidRegular": 0,
+          "saidStartCpr": 1,
+          "counts": {
+            "none": 60
+          },
+          "rateMae": null,
+          "heartFound": null,
+          "heartMae": null
+        },
+        {
+          "scenario": "seesaw",
+          "label": "See-saw (blocked airway)",
+          "expect": "seesaw",
+          "trials": 60,
+          "correct": 0,
+          "saidRegular": 1,
+          "saidStartCpr": 0,
+          "counts": {
+            "regular": 60
+          },
+          "rateMae": 0.66,
+          "heartFound": null,
+          "heartMae": null
+        },
+        {
+          "scenario": "hand",
+          "label": "Hand on the phone",
+          "expect": "moving",
+          "trials": 60,
+          "correct": 1,
+          "saidRegular": 0,
+          "saidStartCpr": 0,
+          "counts": {
+            "moving": 60
+          },
+          "rateMae": null,
+          "heartFound": null,
+          "heartMae": null
+        }
+      ]
+    },
+    {
+      "name": "Emergency check, 60/s, 4× sensor noise",
+      "mode": "check",
+      "sensor": {
+        "fs": 60,
+        "noiseUg": 720
+      },
+      "rows": [
+        {
+          "scenario": "normal",
+          "label": "Breathing normally",
+          "expect": "regular",
+          "trials": 60,
+          "correct": 0.883,
+          "saidRegular": 0.883,
+          "saidStartCpr": 0.117,
+          "counts": {
+            "regular": 53,
+            "irregular": 5,
+            "none": 2
+          },
+          "rateMae": 0.72,
+          "heartFound": null,
+          "heartMae": null
+        },
+        {
+          "scenario": "shallow",
+          "label": "Shallow breathing",
+          "expect": "regular",
+          "trials": 60,
+          "correct": 0.35,
+          "saidRegular": 0.35,
+          "saidStartCpr": 0.65,
+          "counts": {
+            "regular": 21,
+            "none": 5,
+            "irregular": 34
+          },
+          "rateMae": 0.87,
+          "heartFound": null,
+          "heartMae": null
+        },
+        {
+          "scenario": "child",
+          "label": "Child breathing",
+          "expect": "regular",
+          "trials": 60,
+          "correct": 0.867,
+          "saidRegular": 0.867,
+          "saidStartCpr": 0.133,
+          "counts": {
+            "regular": 52,
+            "irregular": 5,
+            "none": 3
+          },
+          "rateMae": 0.75,
+          "heartFound": null,
+          "heartMae": null
+        },
+        {
+          "scenario": "slow",
+          "label": "Very slow (overdose)",
+          "expect": "irregular",
+          "trials": 60,
+          "correct": 1,
+          "saidRegular": 0,
+          "saidStartCpr": 1,
+          "counts": {
+            "irregular": 53,
+            "none": 7
+          },
+          "rateMae": null,
+          "heartFound": null,
+          "heartMae": null
+        },
+        {
+          "scenario": "agonal",
+          "label": "Gasping (cardiac arrest)",
+          "expect": "irregular",
+          "trials": 60,
+          "correct": 1,
+          "saidRegular": 0,
+          "saidStartCpr": 1,
+          "counts": {
+            "irregular": 46,
+            "none": 14
+          },
+          "rateMae": null,
+          "heartFound": null,
+          "heartMae": null
+        },
+        {
+          "scenario": "none",
+          "label": "Not breathing",
+          "expect": "none",
+          "trials": 60,
+          "correct": 1,
+          "saidRegular": 0,
+          "saidStartCpr": 1,
+          "counts": {
+            "none": 60
+          },
+          "rateMae": null,
+          "heartFound": null,
+          "heartMae": null
+        },
+        {
+          "scenario": "none_steps",
+          "label": "Not breathing, people walking",
+          "expect": "none",
+          "trials": 60,
+          "correct": 1,
+          "saidRegular": 0,
+          "saidStartCpr": 1,
+          "counts": {
+            "none": 60
+          },
+          "rateMae": null,
+          "heartFound": null,
+          "heartMae": null
+        },
+        {
+          "scenario": "seesaw",
+          "label": "See-saw (blocked airway)",
+          "expect": "seesaw",
+          "trials": 60,
+          "correct": 0,
+          "saidRegular": 1,
+          "saidStartCpr": 0,
+          "counts": {
+            "regular": 60
+          },
+          "rateMae": 0.68,
+          "heartFound": null,
+          "heartMae": null
+        },
+        {
+          "scenario": "hand",
+          "label": "Hand on the phone",
+          "expect": "moving",
+          "trials": 60,
+          "correct": 0.95,
+          "saidRegular": 0,
+          "saidStartCpr": 0.05,
+          "counts": {
+            "moving": 57,
+            "irregular": 3
+          },
+          "rateMae": null,
+          "heartFound": null,
+          "heartMae": null
+        }
+      ]
+    },
+    {
+      "name": "Emergency check, 60/s, 8× sensor noise",
+      "mode": "check",
+      "sensor": {
+        "fs": 60,
+        "noiseUg": 1440
+      },
+      "rows": [
+        {
+          "scenario": "normal",
+          "label": "Breathing normally",
+          "expect": "regular",
+          "trials": 60,
+          "correct": 0.633,
+          "saidRegular": 0.633,
+          "saidStartCpr": 0.367,
+          "counts": {
+            "regular": 38,
+            "irregular": 18,
+            "none": 4
+          },
+          "rateMae": 0.82,
+          "heartFound": null,
+          "heartMae": null
+        },
+        {
+          "scenario": "shallow",
+          "label": "Shallow breathing",
+          "expect": "regular",
+          "trials": 60,
+          "correct": 0,
+          "saidRegular": 0,
+          "saidStartCpr": 1,
+          "counts": {
+            "irregular": 36,
+            "none": 24
+          },
+          "rateMae": null,
+          "heartFound": null,
+          "heartMae": null
+        },
+        {
+          "scenario": "child",
+          "label": "Child breathing",
+          "expect": "regular",
+          "trials": 60,
+          "correct": 0.667,
+          "saidRegular": 0.667,
+          "saidStartCpr": 0.333,
+          "counts": {
+            "regular": 40,
+            "none": 9,
+            "irregular": 11
+          },
+          "rateMae": 0.73,
+          "heartFound": null,
+          "heartMae": null
+        },
+        {
+          "scenario": "slow",
+          "label": "Very slow (overdose)",
+          "expect": "irregular",
+          "trials": 60,
+          "correct": 1,
+          "saidRegular": 0,
+          "saidStartCpr": 1,
+          "counts": {
+            "irregular": 46,
+            "none": 14
+          },
+          "rateMae": null,
+          "heartFound": null,
+          "heartMae": null
+        },
+        {
+          "scenario": "agonal",
+          "label": "Gasping (cardiac arrest)",
+          "expect": "irregular",
+          "trials": 60,
+          "correct": 1,
+          "saidRegular": 0,
+          "saidStartCpr": 1,
+          "counts": {
+            "irregular": 32,
+            "none": 28
+          },
+          "rateMae": null,
+          "heartFound": null,
+          "heartMae": null
+        },
+        {
+          "scenario": "none",
+          "label": "Not breathing",
+          "expect": "none",
+          "trials": 60,
+          "correct": 1,
+          "saidRegular": 0,
+          "saidStartCpr": 1,
+          "counts": {
+            "none": 60
+          },
+          "rateMae": null,
+          "heartFound": null,
+          "heartMae": null
+        },
+        {
+          "scenario": "none_steps",
+          "label": "Not breathing, people walking",
+          "expect": "none",
+          "trials": 60,
+          "correct": 1,
+          "saidRegular": 0,
+          "saidStartCpr": 1,
+          "counts": {
+            "none": 60
+          },
+          "rateMae": null,
+          "heartFound": null,
+          "heartMae": null
+        },
+        {
+          "scenario": "seesaw",
+          "label": "See-saw (blocked airway)",
+          "expect": "seesaw",
+          "trials": 60,
+          "correct": 0,
+          "saidRegular": 1,
+          "saidStartCpr": 0,
+          "counts": {
+            "regular": 60
+          },
+          "rateMae": 0.67,
+          "heartFound": null,
+          "heartMae": null
+        },
+        {
+          "scenario": "hand",
+          "label": "Hand on the phone",
+          "expect": "moving",
+          "trials": 60,
+          "correct": 0.7,
+          "saidRegular": 0.117,
+          "saidStartCpr": 0.183,
+          "counts": {
+            "irregular": 11,
+            "moving": 42,
+            "regular": 7
+          },
+          "rateMae": 4.1,
+          "heartFound": null,
+          "heartMae": null
+        }
+      ]
+    },
+    {
+      "name": "Lab, 100/s",
+      "mode": "lab",
+      "sensor": {
+        "fs": 100
+      },
+      "rows": [
+        {
+          "scenario": "normal",
+          "label": "Breathing normally",
+          "expect": "regular",
+          "trials": 60,
+          "correct": 0.983,
+          "saidRegular": 0.983,
+          "saidStartCpr": 0.017,
+          "counts": {
+            "regular": 59,
+            "irregular": 1
+          },
+          "rateMae": 0.46,
+          "heartFound": 0.85,
+          "heartMae": 0.8
+        },
+        {
+          "scenario": "shallow",
+          "label": "Shallow breathing",
+          "expect": "regular",
+          "trials": 60,
+          "correct": 0.95,
+          "saidRegular": 0.95,
+          "saidStartCpr": 0.05,
+          "counts": {
+            "regular": 57,
+            "seesaw": 1,
+            "irregular": 2
+          },
+          "rateMae": 0.37,
+          "heartFound": 0.883,
+          "heartMae": 1
+        },
+        {
+          "scenario": "child",
+          "label": "Child breathing",
+          "expect": "regular",
+          "trials": 60,
+          "correct": 0.967,
+          "saidRegular": 0.967,
+          "saidStartCpr": 0.033,
+          "counts": {
+            "regular": 58,
+            "none": 1,
+            "irregular": 1
+          },
+          "rateMae": 0.48,
+          "heartFound": 0.85,
+          "heartMae": 3.1
+        },
+        {
+          "scenario": "slow",
+          "label": "Very slow (overdose)",
+          "expect": "irregular",
+          "trials": 60,
+          "correct": 1,
+          "saidRegular": 0,
+          "saidStartCpr": 1,
+          "counts": {
+            "irregular": 59,
+            "none": 1
+          },
+          "rateMae": null,
+          "heartFound": 0.733,
+          "heartMae": 0.8
+        },
+        {
+          "scenario": "agonal",
+          "label": "Gasping (cardiac arrest)",
+          "expect": "irregular",
+          "trials": 60,
+          "correct": 1,
+          "saidRegular": 0,
+          "saidStartCpr": 1,
+          "counts": {
+            "irregular": 60
+          },
+          "rateMae": null,
+          "heartFound": 0,
+          "heartMae": null
+        },
+        {
+          "scenario": "none",
+          "label": "Not breathing",
+          "expect": "none",
+          "trials": 60,
+          "correct": 1,
+          "saidRegular": 0,
+          "saidStartCpr": 1,
+          "counts": {
+            "none": 60
+          },
+          "rateMae": null,
+          "heartFound": 0,
+          "heartMae": null
+        },
+        {
+          "scenario": "none_steps",
+          "label": "Not breathing, people walking",
+          "expect": "none",
+          "trials": 60,
+          "correct": 1,
+          "saidRegular": 0,
+          "saidStartCpr": 1,
+          "counts": {
+            "none": 60
+          },
+          "rateMae": null,
+          "heartFound": 0.433,
+          "heartMae": null
+        },
+        {
+          "scenario": "seesaw",
+          "label": "See-saw (blocked airway)",
+          "expect": "seesaw",
+          "trials": 60,
+          "correct": 0.683,
+          "saidRegular": 0.317,
+          "saidStartCpr": 0.683,
+          "counts": {
+            "seesaw": 41,
+            "regular": 19
+          },
+          "rateMae": 0.32,
+          "heartFound": 0.867,
+          "heartMae": 1.3
+        },
+        {
+          "scenario": "hand",
+          "label": "Hand on the phone",
+          "expect": "moving",
+          "trials": 60,
+          "correct": 1,
+          "saidRegular": 0,
+          "saidStartCpr": 0,
+          "counts": {
+            "moving": 60
+          },
+          "rateMae": null,
+          "heartFound": 0,
+          "heartMae": null
+        }
+      ]
+    },
+    {
+      "name": "Lab, 60/s",
+      "mode": "lab",
+      "sensor": {
+        "fs": 60
+      },
+      "rows": [
+        {
+          "scenario": "normal",
+          "label": "Breathing normally",
+          "expect": "regular",
+          "trials": 60,
+          "correct": 0.967,
+          "saidRegular": 0.967,
+          "saidStartCpr": 0.033,
+          "counts": {
+            "regular": 58,
+            "irregular": 2
+          },
+          "rateMae": 0.45,
+          "heartFound": 0.8,
+          "heartMae": 1.8
+        },
+        {
+          "scenario": "shallow",
+          "label": "Shallow breathing",
+          "expect": "regular",
+          "trials": 60,
+          "correct": 0.95,
+          "saidRegular": 0.95,
+          "saidStartCpr": 0.05,
+          "counts": {
+            "regular": 57,
+            "irregular": 3
+          },
+          "rateMae": 0.41,
+          "heartFound": 0.783,
+          "heartMae": 0.7
+        },
+        {
+          "scenario": "child",
+          "label": "Child breathing",
+          "expect": "regular",
+          "trials": 60,
+          "correct": 0.967,
+          "saidRegular": 0.967,
+          "saidStartCpr": 0.033,
+          "counts": {
+            "regular": 58,
+            "none": 1,
+            "irregular": 1
+          },
+          "rateMae": 0.47,
+          "heartFound": 0.75,
+          "heartMae": 1.1
+        },
+        {
+          "scenario": "slow",
+          "label": "Very slow (overdose)",
+          "expect": "irregular",
+          "trials": 60,
+          "correct": 1,
+          "saidRegular": 0,
+          "saidStartCpr": 1,
+          "counts": {
+            "irregular": 59,
+            "none": 1
+          },
+          "rateMae": null,
+          "heartFound": 0.617,
+          "heartMae": 1
+        },
+        {
+          "scenario": "agonal",
+          "label": "Gasping (cardiac arrest)",
+          "expect": "irregular",
+          "trials": 60,
+          "correct": 1,
+          "saidRegular": 0,
+          "saidStartCpr": 1,
+          "counts": {
+            "irregular": 60
+          },
+          "rateMae": null,
+          "heartFound": 0,
+          "heartMae": null
+        },
+        {
+          "scenario": "none",
+          "label": "Not breathing",
+          "expect": "none",
+          "trials": 60,
+          "correct": 1,
+          "saidRegular": 0,
+          "saidStartCpr": 1,
+          "counts": {
+            "none": 60
+          },
+          "rateMae": null,
+          "heartFound": 0,
+          "heartMae": null
+        },
+        {
+          "scenario": "none_steps",
+          "label": "Not breathing, people walking",
+          "expect": "none",
+          "trials": 60,
+          "correct": 1,
+          "saidRegular": 0,
+          "saidStartCpr": 1,
+          "counts": {
+            "none": 60
+          },
+          "rateMae": null,
+          "heartFound": 0.45,
+          "heartMae": null
+        },
+        {
+          "scenario": "seesaw",
+          "label": "See-saw (blocked airway)",
+          "expect": "seesaw",
+          "trials": 60,
+          "correct": 0.65,
+          "saidRegular": 0.35,
+          "saidStartCpr": 0.65,
+          "counts": {
+            "seesaw": 39,
+            "regular": 21
+          },
+          "rateMae": 0.32,
+          "heartFound": 0.817,
+          "heartMae": 3.5
+        },
+        {
+          "scenario": "hand",
+          "label": "Hand on the phone",
+          "expect": "moving",
+          "trials": 60,
+          "correct": 1,
+          "saidRegular": 0,
+          "saidStartCpr": 0,
+          "counts": {
+            "moving": 60
+          },
+          "rateMae": null,
+          "heartFound": 0,
+          "heartMae": null
+        }
+      ]
+    },
+    {
+      "name": "Lab, 100/s, sensor offset ≤ 0 mg",
+      "mode": "lab",
+      "sensor": {
+        "fs": 100,
+        "biasMg": 0
+      },
+      "rows": [
+        {
+          "scenario": "normal",
+          "label": "Breathing normally",
+          "expect": "regular",
+          "trials": 60,
+          "correct": 0.967,
+          "saidRegular": 0.967,
+          "saidStartCpr": 0.033,
+          "counts": {
+            "regular": 58,
+            "irregular": 2
+          },
+          "rateMae": 0.46,
+          "heartFound": 0.867,
+          "heartMae": 0.7
+        },
+        {
+          "scenario": "shallow",
+          "label": "Shallow breathing",
+          "expect": "regular",
+          "trials": 60,
+          "correct": 0.967,
+          "saidRegular": 0.967,
+          "saidStartCpr": 0.033,
+          "counts": {
+            "regular": 58,
+            "irregular": 2
+          },
+          "rateMae": 0.35,
+          "heartFound": 0.817,
+          "heartMae": 0.9
+        },
+        {
+          "scenario": "child",
+          "label": "Child breathing",
+          "expect": "regular",
+          "trials": 60,
+          "correct": 0.967,
+          "saidRegular": 0.967,
+          "saidStartCpr": 0.033,
+          "counts": {
+            "regular": 58,
+            "none": 1,
+            "irregular": 1
+          },
+          "rateMae": 0.48,
+          "heartFound": 0.9,
+          "heartMae": 1.8
+        },
+        {
+          "scenario": "slow",
+          "label": "Very slow (overdose)",
+          "expect": "irregular",
+          "trials": 60,
+          "correct": 1,
+          "saidRegular": 0,
+          "saidStartCpr": 1,
+          "counts": {
+            "irregular": 59,
+            "none": 1
+          },
+          "rateMae": null,
+          "heartFound": 0.733,
+          "heartMae": 0.8
+        },
+        {
+          "scenario": "agonal",
+          "label": "Gasping (cardiac arrest)",
+          "expect": "irregular",
+          "trials": 60,
+          "correct": 1,
+          "saidRegular": 0,
+          "saidStartCpr": 1,
+          "counts": {
+            "irregular": 60
+          },
+          "rateMae": null,
+          "heartFound": 0,
+          "heartMae": null
+        },
+        {
+          "scenario": "none",
+          "label": "Not breathing",
+          "expect": "none",
+          "trials": 60,
+          "correct": 1,
+          "saidRegular": 0,
+          "saidStartCpr": 1,
+          "counts": {
+            "none": 60
+          },
+          "rateMae": null,
+          "heartFound": 0,
+          "heartMae": null
+        },
+        {
+          "scenario": "none_steps",
+          "label": "Not breathing, people walking",
+          "expect": "none",
+          "trials": 60,
+          "correct": 1,
+          "saidRegular": 0,
+          "saidStartCpr": 1,
+          "counts": {
+            "none": 60
+          },
+          "rateMae": null,
+          "heartFound": 0.383,
+          "heartMae": null
+        },
+        {
+          "scenario": "seesaw",
+          "label": "See-saw (blocked airway)",
+          "expect": "seesaw",
+          "trials": 60,
+          "correct": 1,
+          "saidRegular": 0,
+          "saidStartCpr": 1,
+          "counts": {
+            "seesaw": 60
+          },
+          "rateMae": null,
+          "heartFound": 0.867,
+          "heartMae": 1.2
+        },
+        {
+          "scenario": "hand",
+          "label": "Hand on the phone",
+          "expect": "moving",
+          "trials": 60,
+          "correct": 1,
+          "saidRegular": 0,
+          "saidStartCpr": 0,
+          "counts": {
+            "moving": 60
+          },
+          "rateMae": null,
+          "heartFound": 0,
+          "heartMae": null
+        }
+      ]
+    },
+    {
+      "name": "Lab, 100/s, sensor offset ≤ 5 mg",
+      "mode": "lab",
+      "sensor": {
+        "fs": 100,
+        "biasMg": 5
+      },
+      "rows": [
+        {
+          "scenario": "normal",
+          "label": "Breathing normally",
+          "expect": "regular",
+          "trials": 60,
+          "correct": 0.967,
+          "saidRegular": 0.967,
+          "saidStartCpr": 0.033,
+          "counts": {
+            "regular": 58,
+            "irregular": 2
+          },
+          "rateMae": 0.46,
+          "heartFound": 0.867,
+          "heartMae": 1.6
+        },
+        {
+          "scenario": "shallow",
+          "label": "Shallow breathing",
+          "expect": "regular",
+          "trials": 60,
+          "correct": 0.967,
+          "saidRegular": 0.967,
+          "saidStartCpr": 0.033,
+          "counts": {
+            "regular": 58,
+            "irregular": 2
+          },
+          "rateMae": 0.36,
+          "heartFound": 0.883,
+          "heartMae": 0.8
+        },
+        {
+          "scenario": "child",
+          "label": "Child breathing",
+          "expect": "regular",
+          "trials": 60,
+          "correct": 0.967,
+          "saidRegular": 0.967,
+          "saidStartCpr": 0.033,
+          "counts": {
+            "regular": 58,
+            "irregular": 2
+          },
+          "rateMae": 0.46,
+          "heartFound": 0.85,
+          "heartMae": 3.1
+        },
+        {
+          "scenario": "slow",
+          "label": "Very slow (overdose)",
+          "expect": "irregular",
+          "trials": 60,
+          "correct": 1,
+          "saidRegular": 0,
+          "saidStartCpr": 1,
+          "counts": {
+            "irregular": 59,
+            "none": 1
+          },
+          "rateMae": null,
+          "heartFound": 0.733,
+          "heartMae": 0.9
+        },
+        {
+          "scenario": "agonal",
+          "label": "Gasping (cardiac arrest)",
+          "expect": "irregular",
+          "trials": 60,
+          "correct": 1,
+          "saidRegular": 0,
+          "saidStartCpr": 1,
+          "counts": {
+            "irregular": 60
+          },
+          "rateMae": null,
+          "heartFound": 0,
+          "heartMae": null
+        },
+        {
+          "scenario": "none",
+          "label": "Not breathing",
+          "expect": "none",
+          "trials": 60,
+          "correct": 1,
+          "saidRegular": 0,
+          "saidStartCpr": 1,
+          "counts": {
+            "none": 60
+          },
+          "rateMae": null,
+          "heartFound": 0,
+          "heartMae": null
+        },
+        {
+          "scenario": "none_steps",
+          "label": "Not breathing, people walking",
+          "expect": "none",
+          "trials": 60,
+          "correct": 1,
+          "saidRegular": 0,
+          "saidStartCpr": 1,
+          "counts": {
+            "none": 60
+          },
+          "rateMae": null,
+          "heartFound": 0.433,
+          "heartMae": null
+        },
+        {
+          "scenario": "seesaw",
+          "label": "See-saw (blocked airway)",
+          "expect": "seesaw",
+          "trials": 60,
+          "correct": 0.983,
+          "saidRegular": 0.017,
+          "saidStartCpr": 0.983,
+          "counts": {
+            "seesaw": 59,
+            "regular": 1
+          },
+          "rateMae": 0.33,
+          "heartFound": 0.883,
+          "heartMae": 2.3
+        },
+        {
+          "scenario": "hand",
+          "label": "Hand on the phone",
+          "expect": "moving",
+          "trials": 60,
+          "correct": 1,
+          "saidRegular": 0,
+          "saidStartCpr": 0,
+          "counts": {
+            "moving": 60
+          },
+          "rateMae": null,
+          "heartFound": 0,
+          "heartMae": null
+        }
+      ]
+    },
+    {
+      "name": "Lab, 100/s, sensor offset ≤ 40 mg",
+      "mode": "lab",
+      "sensor": {
+        "fs": 100,
+        "biasMg": 40
+      },
+      "rows": [
+        {
+          "scenario": "normal",
+          "label": "Breathing normally",
+          "expect": "regular",
+          "trials": 60,
+          "correct": 0.95,
+          "saidRegular": 0.95,
+          "saidStartCpr": 0.05,
+          "counts": {
+            "regular": 57,
+            "irregular": 1,
+            "seesaw": 2
+          },
+          "rateMae": 0.46,
+          "heartFound": 0.867,
+          "heartMae": 0.7
+        },
+        {
+          "scenario": "shallow",
+          "label": "Shallow breathing",
+          "expect": "regular",
+          "trials": 60,
+          "correct": 0.9,
+          "saidRegular": 0.9,
+          "saidStartCpr": 0.1,
+          "counts": {
+            "regular": 54,
+            "seesaw": 4,
+            "irregular": 2
+          },
+          "rateMae": 0.39,
+          "heartFound": 0.833,
+          "heartMae": 0.9
+        },
+        {
+          "scenario": "child",
+          "label": "Child breathing",
+          "expect": "regular",
+          "trials": 60,
+          "correct": 0.967,
+          "saidRegular": 0.967,
+          "saidStartCpr": 0.033,
+          "counts": {
+            "regular": 58,
+            "irregular": 2
+          },
+          "rateMae": 0.48,
+          "heartFound": 0.85,
+          "heartMae": 1
+        },
+        {
+          "scenario": "slow",
+          "label": "Very slow (overdose)",
+          "expect": "irregular",
+          "trials": 60,
+          "correct": 1,
+          "saidRegular": 0,
+          "saidStartCpr": 1,
+          "counts": {
+            "irregular": 59,
+            "none": 1
+          },
+          "rateMae": null,
+          "heartFound": 0.733,
+          "heartMae": 0.8
+        },
+        {
+          "scenario": "agonal",
+          "label": "Gasping (cardiac arrest)",
+          "expect": "irregular",
+          "trials": 60,
+          "correct": 1,
+          "saidRegular": 0,
+          "saidStartCpr": 1,
+          "counts": {
+            "irregular": 60
+          },
+          "rateMae": null,
+          "heartFound": 0,
+          "heartMae": null
+        },
+        {
+          "scenario": "none",
+          "label": "Not breathing",
+          "expect": "none",
+          "trials": 60,
+          "correct": 1,
+          "saidRegular": 0,
+          "saidStartCpr": 1,
+          "counts": {
+            "none": 60
+          },
+          "rateMae": null,
+          "heartFound": 0,
+          "heartMae": null
+        },
+        {
+          "scenario": "none_steps",
+          "label": "Not breathing, people walking",
+          "expect": "none",
+          "trials": 60,
+          "correct": 1,
+          "saidRegular": 0,
+          "saidStartCpr": 1,
+          "counts": {
+            "none": 60
+          },
+          "rateMae": null,
+          "heartFound": 0.417,
+          "heartMae": null
+        },
+        {
+          "scenario": "seesaw",
+          "label": "See-saw (blocked airway)",
+          "expect": "seesaw",
+          "trials": 60,
+          "correct": 0.433,
+          "saidRegular": 0.567,
+          "saidStartCpr": 0.433,
+          "counts": {
+            "regular": 34,
+            "seesaw": 26
+          },
+          "rateMae": 0.33,
+          "heartFound": 0.883,
+          "heartMae": 1.3
+        },
+        {
+          "scenario": "hand",
+          "label": "Hand on the phone",
+          "expect": "moving",
+          "trials": 60,
+          "correct": 1,
+          "saidRegular": 0,
+          "saidStartCpr": 0,
+          "counts": {
+            "moving": 60
+          },
+          "rateMae": null,
+          "heartFound": 0,
+          "heartMae": null
+        }
+      ]
+    },
+    {
+      "name": "Lab, 100/s, heartbeat 3 mg",
+      "mode": "lab",
+      "sensor": {
+        "fs": 100,
+        "scgMg": 3
+      },
+      "rows": [
+        {
+          "scenario": "normal",
+          "label": "Breathing normally",
+          "expect": "regular",
+          "trials": 60,
+          "correct": 0.983,
+          "saidRegular": 0.983,
+          "saidStartCpr": 0.017,
+          "counts": {
+            "regular": 59,
+            "irregular": 1
+          },
+          "rateMae": 0.45,
+          "heartFound": 0,
+          "heartMae": null
+        },
+        {
+          "scenario": "shallow",
+          "label": "Shallow breathing",
+          "expect": "regular",
+          "trials": 60,
+          "correct": 0.95,
+          "saidRegular": 0.95,
+          "saidStartCpr": 0.05,
+          "counts": {
+            "regular": 57,
+            "seesaw": 1,
+            "irregular": 2
+          },
+          "rateMae": 0.35,
+          "heartFound": 0,
+          "heartMae": null
+        },
+        {
+          "scenario": "child",
+          "label": "Child breathing",
+          "expect": "regular",
+          "trials": 60,
+          "correct": 0.967,
+          "saidRegular": 0.967,
+          "saidStartCpr": 0.033,
+          "counts": {
+            "regular": 58,
+            "none": 1,
+            "irregular": 1
+          },
+          "rateMae": 0.47,
+          "heartFound": 0,
+          "heartMae": null
+        },
+        {
+          "scenario": "slow",
+          "label": "Very slow (overdose)",
+          "expect": "irregular",
+          "trials": 60,
+          "correct": 1,
+          "saidRegular": 0,
+          "saidStartCpr": 1,
+          "counts": {
+            "irregular": 59,
+            "none": 1
+          },
+          "rateMae": null,
+          "heartFound": 0,
+          "heartMae": null
+        },
+        {
+          "scenario": "agonal",
+          "label": "Gasping (cardiac arrest)",
+          "expect": "irregular",
+          "trials": 60,
+          "correct": 1,
+          "saidRegular": 0,
+          "saidStartCpr": 1,
+          "counts": {
+            "irregular": 60
+          },
+          "rateMae": null,
+          "heartFound": 0,
+          "heartMae": null
+        },
+        {
+          "scenario": "none",
+          "label": "Not breathing",
+          "expect": "none",
+          "trials": 60,
+          "correct": 1,
+          "saidRegular": 0,
+          "saidStartCpr": 1,
+          "counts": {
+            "none": 60
+          },
+          "rateMae": null,
+          "heartFound": 0,
+          "heartMae": null
+        },
+        {
+          "scenario": "none_steps",
+          "label": "Not breathing, people walking",
+          "expect": "none",
+          "trials": 60,
+          "correct": 1,
+          "saidRegular": 0,
+          "saidStartCpr": 1,
+          "counts": {
+            "none": 60
+          },
+          "rateMae": null,
+          "heartFound": 0.433,
+          "heartMae": null
+        },
+        {
+          "scenario": "seesaw",
+          "label": "See-saw (blocked airway)",
+          "expect": "seesaw",
+          "trials": 60,
+          "correct": 0.683,
+          "saidRegular": 0.317,
+          "saidStartCpr": 0.683,
+          "counts": {
+            "seesaw": 41,
+            "regular": 19
+          },
+          "rateMae": 0.33,
+          "heartFound": 0,
+          "heartMae": null
+        },
+        {
+          "scenario": "hand",
+          "label": "Hand on the phone",
+          "expect": "moving",
+          "trials": 60,
+          "correct": 1,
+          "saidRegular": 0,
+          "saidStartCpr": 0,
+          "counts": {
+            "moving": 60
+          },
+          "rateMae": null,
+          "heartFound": 0,
+          "heartMae": null
+        }
+      ]
+    },
+    {
+      "name": "Lab, 100/s, heartbeat 30 mg",
+      "mode": "lab",
+      "sensor": {
+        "fs": 100,
+        "scgMg": 30
+      },
+      "rows": [
+        {
+          "scenario": "normal",
+          "label": "Breathing normally",
+          "expect": "regular",
+          "trials": 60,
+          "correct": 0.967,
+          "saidRegular": 0.967,
+          "saidStartCpr": 0.033,
+          "counts": {
+            "regular": 58,
+            "irregular": 2
+          },
+          "rateMae": 0.47,
+          "heartFound": 1,
+          "heartMae": 0.8
+        },
+        {
+          "scenario": "shallow",
+          "label": "Shallow breathing",
+          "expect": "regular",
+          "trials": 60,
+          "correct": 0.9,
+          "saidRegular": 0.9,
+          "saidStartCpr": 0.1,
+          "counts": {
+            "regular": 54,
+            "irregular": 5,
+            "seesaw": 1
+          },
+          "rateMae": 0.38,
+          "heartFound": 1,
+          "heartMae": 0.7
+        },
+        {
+          "scenario": "child",
+          "label": "Child breathing",
+          "expect": "regular",
+          "trials": 60,
+          "correct": 0.95,
+          "saidRegular": 0.95,
+          "saidStartCpr": 0.05,
+          "counts": {
+            "regular": 57,
+            "none": 1,
+            "irregular": 2
+          },
+          "rateMae": 0.46,
+          "heartFound": 1,
+          "heartMae": 0.7
+        },
+        {
+          "scenario": "slow",
+          "label": "Very slow (overdose)",
+          "expect": "irregular",
+          "trials": 60,
+          "correct": 1,
+          "saidRegular": 0,
+          "saidStartCpr": 1,
+          "counts": {
+            "irregular": 58,
+            "none": 2
+          },
+          "rateMae": null,
+          "heartFound": 1,
+          "heartMae": 0.8
+        },
+        {
+          "scenario": "agonal",
+          "label": "Gasping (cardiac arrest)",
+          "expect": "irregular",
+          "trials": 60,
+          "correct": 1,
+          "saidRegular": 0,
+          "saidStartCpr": 1,
+          "counts": {
+            "irregular": 60
+          },
+          "rateMae": null,
+          "heartFound": 0,
+          "heartMae": null
+        },
+        {
+          "scenario": "none",
+          "label": "Not breathing",
+          "expect": "none",
+          "trials": 60,
+          "correct": 1,
+          "saidRegular": 0,
+          "saidStartCpr": 1,
+          "counts": {
+            "none": 60
+          },
+          "rateMae": null,
+          "heartFound": 0,
+          "heartMae": null
+        },
+        {
+          "scenario": "none_steps",
+          "label": "Not breathing, people walking",
+          "expect": "none",
+          "trials": 60,
+          "correct": 1,
+          "saidRegular": 0,
+          "saidStartCpr": 1,
+          "counts": {
+            "none": 60
+          },
+          "rateMae": null,
+          "heartFound": 0.433,
+          "heartMae": null
+        },
+        {
+          "scenario": "seesaw",
+          "label": "See-saw (blocked airway)",
+          "expect": "seesaw",
+          "trials": 60,
+          "correct": 0.65,
+          "saidRegular": 0.35,
+          "saidStartCpr": 0.65,
+          "counts": {
+            "seesaw": 39,
+            "regular": 21
+          },
+          "rateMae": 0.37,
+          "heartFound": 1,
+          "heartMae": 0.8
+        },
+        {
+          "scenario": "hand",
+          "label": "Hand on the phone",
+          "expect": "moving",
+          "trials": 60,
+          "correct": 1,
+          "saidRegular": 0,
+          "saidStartCpr": 0,
+          "counts": {
+            "moving": 60
+          },
+          "rateMae": null,
+          "heartFound": 0,
+          "heartMae": null
+        }
+      ]
+    }
+  ]
+}

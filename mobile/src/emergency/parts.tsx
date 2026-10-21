@@ -23,7 +23,7 @@ export function PulseRing({ size, pulse, tone = color.ink }: { size: number; pul
   );
 }
 
-function RoundButton({ onPress, label, children }: { onPress: () => void; label: string; children: ReactNode }) {
+export function RoundButton({ onPress, label, children }: { onPress: () => void; label: string; children: ReactNode }) {
   return (
     <Pressable
       onPress={() => {

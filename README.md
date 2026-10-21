@@ -11,11 +11,16 @@ Congressional App Challenge 2026. Expo (React Native, TypeScript) for iPhone and
 <img src="docs/screens/map.png" width="200" alt="Map: the nearest emergency room, with trauma centers and urgent care kept separate">
 </p>
 
+<p>
+<img src="docs/screens/breath-check.png" width="200" alt="Phone check result: No breathing seen, no chest movement over 0.07 degrees in 10 seconds, a flat tilt trace, and a Start CPR button">
+<img src="docs/screens/sensor.png" width="200" alt="Breathing sensor lab: a level dial reading plus 0.20 degrees, a breathing trace, 17 breaths a minute, and an experimental heartbeat of 94 a minute">
+</p>
+
 <p><img src="docs/screens/engine.png" width="620" alt="The desktop phone window with the engine panel: what was heard, the protocol chosen in 2.8 ms, and the rescuer's distress score with each signal that set it"></p>
 
 ## What it does
 
-Tap **Talk to Mayday** and say what is happening ("my dad collapsed and he's not breathing"), or tap the colored tile for the emergency. Mayday answers out loud, asks at most one question, and coaches you through the right protocol: one picture, one short instruction, big answer buttons, and a voice. Back, Talk and 911 sit under your thumb on every step. **Mayday never calls anyone.** You call 911; its 911 button shows your address and a summary to read to the dispatcher. For CPR it counts every compression out loud at 110 a minute, cues breaths if you are trained, tells you when to swap rescuers, and switches to AED steps the moment you say "the AED is here". It keeps a timestamped log to show the paramedics.
+Tap **Talk to Mayday** and say what is happening ("my dad collapsed and he's not breathing"), or tap the colored tile for the emergency. Mayday answers out loud, asks at most one question, and coaches you through the right protocol: one picture, one short instruction, big answer buttons, and a voice. Back, Talk and 911 sit under your thumb on every step. **Mayday never calls anyone.** You call 911; its 911 button shows your address and a summary to read to the dispatcher. At "Breathing normally?" you can lay the phone on their chest: it reads the chest's movement from the phone's tilt, to a hundredth of a degree, and can only ever tell you to start CPR sooner. For CPR it counts every compression out loud at 110 a minute, cues breaths if you are trained, tells you when to swap rescuers, and switches to AED steps the moment you say "the AED is here". It keeps a timestamped log to show the paramedics.
 
 Ten protocols, every step cited: adult, child and infant CPR; adult and child choking; infant choking; severe bleeding; burns; stroke (FAST); opioid overdose with naloxone; recovery position.
 
@@ -41,7 +46,7 @@ That opens the real app in an iPhone 17 Pro frame at its true resolution: 402 ×
 
 **On a phone:** `cd mobile && npx expo start`, then scan the QR code with Expo Go. Expo Go has no speech recognition, so there you tap instead of talk; the voice plays through expo-audio. For the full app build a development client: `npx expo run:android` or `eas build --profile development`.
 
-**Tests:** `cd mobile && npm test` (184 tests) and `npx tsc --noEmit`.
+**Tests:** `cd mobile && npm test` and `npx tsc --noEmit`. The breathing sensor's simulated bench: `SENSOR_REPORT=1 npx jest sensors` (results in [docs/SENSOR_SIM.md](docs/SENSOR_SIM.md)).
 
 **AI features (optional):** `cd proxy && npm install && npm run dev` with keys in `proxy/.dev.vars`, then `EXPO_PUBLIC_PROXY_URL=http://localhost:8787` in `mobile/.env.local`. Without keys the app is complete; the photo check is hidden.
 

@@ -98,6 +98,10 @@ Each kind of emergency has one color (`tint` in `mobile/src/design/tokens.ts`): 
 
 The AI assistant is the easiest thing to press on every screen: a 128 pt bar on Home, an 84 pt circle in the middle of the bottom bar during the steps. Light on dark, a microphone, no hold. While listening it turns sand and a ring breathes with the voice.
 
+## The level
+
+The breathing sensor borrows the iPhone Level: two circles, one fixed, one that moves with the tilt, and when they meet the dial turns green (`tint.overdose`, the one green in the app). The movement is magnified 40 times and the angle is shown to a hundredth of a degree in Geist Mono, because a breath is only one or two degrees. Below it, the last seconds of tilt as a line in the emergency's color, with a faint band showing the smallest change that counts as a breath. Results use the same words and buttons as a step: one headline, one line under it, the main action in the emergency's color.
+
 ## Pictures
 
 A step screen is a picture and a headline. The pictures are real illustrations and photos from Wikimedia Commons in full color, on one light card (`color.card`): drawings on white blend into it, photos fill it. Square, 280 pt, `radius.lg`. Where no image was good enough (infant CPR, the nasal spray) the app's own line drawing or an icon stands in. `tools/pick_images.py` makes them; credits are in the app.

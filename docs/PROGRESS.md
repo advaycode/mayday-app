@@ -7,6 +7,8 @@ Read this at the start of every session; update it at the end.
 ## Status on Wednesday October 21
 
 ### Done today
+- **Breathing check with the phone** (user's idea: phone on the chest, top on the chest, bottom on the belly, read the tilt like the iPhone Level). "Check with the phone" at "Breathing normally?": place, level, 10 s, then "No breathing seen. Start CPR." or "Chest moving, N a minute. Normal breathing, or gasping?". It can only push toward CPR, never reassure (tested). Lab in Learn → Breathing sensor with the level magnified 40×, a 30 s trace, chest-belly sync and an experimental heartbeat (seismocardiography, after Landreani et al.). Engine panel has a Motion sensor section. Research: `research/sensor-breathing.md`. Code: `mobile/src/sensors/`.
+- **Simulated physical testing**: a simulated person (`sensors/sim.ts`) with real-sized chest and belly motion, heartbeat, a rescuer's hand, footsteps and a phone-class accelerometer; thousands of runs across noise, sample rate, sensor offset and heartbeat strength (`docs/SENSOR_SIM.md`, `SENSOR_REPORT=1 npx jest sensors`). It caught six bugs before any person was involved. **Next: test on yourself** (plan at the end of `research/sensor-breathing.md`) and measure Safari's real sample rate.
 - **Redesign for real use** (feedback: too wordy, no color, hard to navigate).
   - Home: one big **Talk to Mayday** button (the AI assistant: one tap, no hold) and a colored tile per emergency. "Call 911 first" in red.
   - Tabs have words: Help, Learn, Map, Me. The red phone button is gone (it looked like it dialed).

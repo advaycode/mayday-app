@@ -42,6 +42,7 @@ export default function RootLayout() {
           options={{ presentation: 'fullScreenModal', animation: 'fade', gestureEnabled: false, contentStyle: { backgroundColor: color.void } }}
         />
         <Stack.Screen name="practice" options={{ presentation: 'fullScreenModal', animation: 'fade', contentStyle: { backgroundColor: color.void } }} />
+        <Stack.Screen name="sensor" options={{ presentation: 'fullScreenModal', animation: 'fade', contentStyle: { backgroundColor: color.void } }} />
         <Stack.Screen name="protocol/[id]" options={{ animation: 'slide_from_right' }} />
       </Stack>
     </ThemeProvider>

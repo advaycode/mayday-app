@@ -1,5 +1,5 @@
 import { router } from 'expo-router';
-import { Baby, Brain, CaretRight, Drop, Fire, Heartbeat, Person, Pill, Wind } from 'phosphor-react-native';
+import { Baby, Brain, CaretRight, DeviceMobile, Drop, Fire, Heartbeat, Person, Pill, Wind } from 'phosphor-react-native';
 import type { ComponentType } from 'react';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
@@ -9,7 +9,7 @@ import { useDeviceInsets } from '@/design/insets';
 import { Orb } from '@/design/Orb';
 import { emergencyFor } from '@/design/emergencies';
 import { Text } from '@/design/Text';
-import { color, radius, space } from '@/design/tokens';
+import { color, radius, space, tint } from '@/design/tokens';
 import { libraryOrder, protocols } from '@/protocols';
 
 type IconType = ComponentType<{ size?: number; color?: string; weight?: 'regular' | 'light' | 'fill' }>;
@@ -39,6 +39,31 @@ export default function Learn() {
             <Text variant="title" style={{ flex: 1 }}>
               Practice CPR
             </Text>
+            <CaretRight size={20} color={color.inkMuted} />
+          </View>
+        </Glass>
+      </Pressable>
+
+      <Pressable
+        onPress={() => {
+          haptic('navigate');
+          router.push('/sensor');
+        }}
+        accessibilityRole="button"
+        accessibilityLabel="Breathing sensor"
+        accessibilityHint="Measures breathing from the phone's tilt on your chest"
+        style={({ pressed }) => [styles.practiceWrap, { marginTop: space[3] }, pressed && { transform: [{ scale: 0.985 }] }]}>
+        <Glass radius={radius.lg + 6} interactive>
+          <View style={styles.practice}>
+            <View style={[styles.sensorIcon, { backgroundColor: tint.overdose.deep }]}>
+              <DeviceMobile size={34} color={tint.overdose.hue} weight="fill" />
+            </View>
+            <View style={{ flex: 1 }}>
+              <Text variant="title">Breathing sensor</Text>
+              <Text variant="caption" tone="muted">
+                Phone on your chest. Tilt to 0.01°.
+              </Text>
+            </View>
             <CaretRight size={20} color={color.inkMuted} />
           </View>
         </Glass>
@@ -86,6 +111,7 @@ const styles = StyleSheet.create({
   heading: { paddingHorizontal: space[6], marginBottom: space[5] },
   practiceWrap: { marginHorizontal: space[4] },
   practice: { flexDirection: 'row', alignItems: 'center', gap: space[4], padding: space[4] },
+  sensorIcon: { width: 72, height: 72, borderRadius: 36, alignItems: 'center', justifyContent: 'center' },
   list: { marginTop: space[8], marginHorizontal: space[6] },
   row: { flexDirection: 'row', alignItems: 'center', gap: space[4], height: 60 },
   divider: { borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: color.hairline },

@@ -1,4 +1,4 @@
-import { Ambulance } from 'phosphor-react-native';
+import { Ambulance, DeviceMobile } from 'phosphor-react-native';
 import { useEffect, useRef, useState } from 'react';
 import { StyleSheet, useWindowDimensions, View } from 'react-native';
 
@@ -20,7 +20,7 @@ import type { Incident } from './useIncident';
  * read from the floor, and the answers as big buttons. Voice does the same
  * things as the buttons; the buttons always work.
  */
-export function StepView({ incident, step }: { incident: Incident; step: Exclude<Step, { kind: 'cpr' }> }) {
+export function StepView({ incident, step, onPhoneCheck }: { incident: Incident; step: Exclude<Step, { kind: 'cpr' }>; onPhoneCheck?: () => void }) {
   const { dispatch, handoff } = incident;
   const at = () => Date.now();
   const stepKey = `${incident.state.engine?.protocolId}#${step.id}#${incident.state.engine?.trail.length}`;
@@ -49,7 +49,7 @@ export function StepView({ incident, step }: { incident: Incident; step: Exclude
   const tone = emergencyFor(incident.state.engine?.protocolId).tint;
   // The picture is as big as the screen allows once the answers have their room.
   const { width, height } = useWindowDimensions();
-  const answers = step.kind === 'ask' ? (pairable(step.choices) ? 1 : step.choices.length) : step.kind === 'do' ? step.alts.length + 1 : step.kind === 'timer' ? 1 : 1 + ('choices' in step ? step.choices.length : 0);
+  const answers = step.kind === 'ask' ? (pairable(step.choices) ? 1 : step.choices.length) + (onPhoneCheck ? 1 : 0) : step.kind === 'do' ? step.alts.length + 1 : step.kind === 'timer' ? 1 : 1 + ('choices' in step ? step.choices.length : 0);
   const imageSize = Math.max(150, Math.min(width - 72, 320, height - 430 - answers * 84 + 84));
 
   return (
@@ -94,6 +94,7 @@ export function StepView({ incident, step }: { incident: Incident; step: Exclude
             ))}
           </View>
         )}
+        {step.kind === 'ask' && onPhoneCheck && <Button icon={DeviceMobile} label="Check with the phone" onPress={onPhoneCheck} accessibilityHint="Lay the phone on their chest; it measures the chest's movement for 10 seconds" />}
         {step.kind === 'timer' && (
           <Button size="emergency" kind="tint" tint={tone.hue} label={step.action} onPress={() => dispatch({ type: 'advance', at: at() })} />
         )}

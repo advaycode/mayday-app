@@ -316,6 +316,11 @@ export function useIncident() {
   const step: Step | null = useMemo(() => (state.engine ? currentStep(state.engine) : null), [state.engine]);
 
   // --- Silence on a yes/no question: ask once more, shorter ----------------------
+  // Not while something else has the floor (the phone is measuring the chest).
+  const quiet = useRef(false);
+  const setQuiet = useCallback((on: boolean) => {
+    quiet.current = on;
+  }, []);
   const askKey = step?.kind === 'ask' ? `${state.engine?.protocolId}#${step.id}#${state.engine?.trail.length}` : null;
   useEffect(() => {
     if (!askKey || !step || step.kind !== 'ask') return;
@@ -323,7 +328,7 @@ export function useIncident() {
     const question = step.say[step.say.length - 1];
     if (!yesNo || !question) return;
     const timer = setTimeout(() => {
-      if (sinceHeard() >= 9000 && ref.current.phase === 'protocol') say([question, NUDGE_SUFFIX], { calm: false });
+      if (!quiet.current && sinceHeard() >= 9000 && ref.current.phase === 'protocol') say([question, NUDGE_SUFFIX], { calm: false });
     }, 10_000);
     return () => clearTimeout(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -333,6 +338,7 @@ export function useIncident() {
   return {
     state,
     step,
+    setQuiet,
     slots,
     startProtocol,
     setAge,

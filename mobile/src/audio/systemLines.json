@@ -47,7 +47,14 @@
     "scanUnsure": "I can't tell from the photo. Tell me what you see.",
     "groundFallbackGeneral": "I'm not sure. Tell the dispatcher that.",
     "answerFrom": "Here's what the guidelines say.",
-    "voiceBack": "I can hear you again."
+    "voiceBack": "I can hear you again.",
+    "sensorPlace": "Lay the phone on their chest.",
+    "sensorHow": "Top on the chest. Bottom on the belly. Let go.",
+    "sensorMeasuring": "Measuring. Don't touch it.",
+    "sensorLetGo": "Let go of the phone.",
+    "sensorNone": "No normal breathing seen. Start CPR.",
+    "sensorMoving": "The chest is moving. Is it normal breathing, or gasping?",
+    "sensorUnsure": "I couldn't measure. Watch the chest."
   },
   "confirm": {
     "cpr_adult": "Not breathing. We'll do this together.",

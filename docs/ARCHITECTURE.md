@@ -39,6 +39,7 @@ flowchart LR
 | Voice | Speech recognition, echo guard, keyword router, offline answers, model router | `mobile/src/voice/` |
 | Incident | The controller tying it all together; the log and summary | `mobile/src/emergency/useIncident.ts`, `mobile/src/incident/log.ts` |
 | Places | ERs, trauma centers, urgent care; nearest and care advice | `mobile/src/facilities/` |
+| Sensors | Breathing from the phone's tilt, the level, the experimental heartbeat, the simulated person | `mobile/src/sensors/` |
 | Design | Tokens, Liquid Glass, the orb shader, buttons, diagrams | `mobile/src/design/` |
 | Screens | Expo Router routes | `mobile/src/app/` |
 | Proxy | Keeps API keys off the phone; Groq and Claude | `proxy/src/index.ts` |
@@ -107,6 +108,23 @@ Measured (`reports/adapt-eval.json`, real outputs on this laptop's CPU): qwen2.5
 **The engine panel.** In the desktop phone window, the Engine button opens a live view of all of this, fed by trace events the app sends while it runs (`voice/trace.ts`; nothing on a phone): heard → cleaned → echo check → route (with its time in ms) → rescuer model (every signal and weight) → protocol step → each spoken line against its original → every AI rewrite and its verdict → answer-card scores. The numbers are the app's own, so it can be shown to a judge and checked.
 
 > **Say it:** Mayday talks about your dad as your dad, slows down when you panic, and repeats itself when you're lost. That part runs offline, instantly. An AI can make the wording more natural, but it is never trusted: every line it writes is checked word by word against the original, and if it changes a single medical word, we use the original.
+
+## 4c. The phone feels the breathing
+
+At "Breathing normally?" (adult and child CPR, overdose) there is a third button: **Check with the phone**. Lay it on the person's chest, top end on the chest and bottom end on the belly, and let go. Breathing lifts the belly about twice as far as the chest, so the phone tips by a degree or two with every breath. The accelerometer reads that tilt the way the iPhone's Level does, from where gravity points, to a hundredth of a degree (`sensors/analyze.ts`). Research basis and sources: `research/sensor-breathing.md`.
+
+1. **Place.** It waits until the phone lies face up and still (no hand on it).
+2. **Level.** One still second becomes zero, like tapping the iPhone Level to set a reference. The screen shows two circles that meet and turn green, magnified 40 times.
+3. **Measure, 10 seconds.** Low-pass the tilt below 1 Hz, measure the noise floor, and count turning points bigger than 8 times the noise. Then rate, depth (degrees, and millimetres between the two ends), how much of the time the chest is still, and whether timing and depth are even.
+4. **Say what it saw.** No movement → "No breathing seen. Start CPR." Too few, too slow, too still or uneven (gasps) → "Not normal breathing. Start CPR." Steady movement → "Chest moving, 14 a minute. Normal breathing, or gasping?" and the rescuer answers.
+
+**It can only push toward CPR.** Chest movement is not air moving: gasps and a blocked airway move the chest too, and gasping happens in about half of witnessed cardiac arrests. So the phone never answers "breathing normally" for anyone (`suggestAnswer`, tested). Guidelines say lay rescuers should start CPR when in any doubt, and that CPR rarely harms someone who turns out not to need it. A hand on the phone or a bump restarts the measurement ("Let go of the phone").
+
+**Tested on simulated people, because it has not been tested on real ones yet.** `sensors/sim.ts` models the chest and belly (2-4 mm and 4-9 mm per breath), the phone's geometry, a heartbeat, a rescuer's hand, footsteps, and the accelerometer: 180 µg/√Hz noise (a typical phone-class sensor; swept to 8 times that), 1 mg steps, fixed offsets, late and dropped samples, at 100 samples a second (app) and 60 (browser). Nine kinds of person, about 6,500 simulated people across 12 sensor setups (`docs/SENSOR_SIM.md`). Across all of them, nobody who was not breathing, only gasping, or breathing too slowly was ever called "regular"; with ordinary sensor noise the 10-second check sees normal breathing 93-98% of the time, within about 0.7 breaths a minute. Building the simulator caught six real bugs first, including a filter edge that invented breaths and a hand detector that a noisier phone would have set off forever.
+
+**The lab** (Learn → Breathing sensor) runs it continuously on yourself: 30 s of breathing, the level, and two experimental readings that never feed an emergency. *Chest-belly sync* spots see-saw breathing (belly up, chest down) by comparing the phone's tilt with its up-and-down motion; it works when the accelerometer's offset is small and is fooled when it is not. *Heartbeat* follows Landreani et al.: the chest vibrates at 5-25 Hz with each beat, so band-pass, rectify, find the period and the beats, and show each beat-to-beat interval. In the simulator it finds the beat 75-90% of the time, within 1-3 a minute, misses a weak one entirely, and is fooled by footsteps nearby about 40% of the time, so it is labelled "not a pulse check". On a computer there is no accelerometer, so a simulated person lies under the phone, labelled as such, and you can change what they are doing.
+
+> **Say it:** Lay the phone on someone's chest and it feels them breathe: the belly rises more than the chest, so the phone tips about a degree with each breath, and we read that tilt to a hundredth of a degree, like the iPhone's level. We tested it on thousands of simulated people before any real ones, and it never once told a rescuer that someone gasping was fine, because it isn't allowed to. It can only tell you to start CPR sooner.
 
 ## 5. Mayday never calls 911
 

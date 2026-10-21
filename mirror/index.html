@@ -213,6 +213,7 @@
   <section><h3>Understanding <span class="ms" id="routeMs"></span></h3><div id="route"><p class="empty">Keyword router and slot filler, offline.</p></div></section>
   <section><h3>Rescuer model</h3><div id="rescuer"><p class="empty">Weighted signals for distress and confusion.</p></div></section>
   <section><h3>Protocol</h3><div id="step"><p class="empty">No protocol yet.</p></div></section>
+  <section><h3>Motion sensor <span class="ms" id="sensorMs"></span></h3><div id="sensor"><p class="empty">Phone on the chest: tilt, breathing, heartbeat. Opens from "Breathing normally?" or Learn.</p></div></section>
   <section><h3>Voice out</h3><div id="say"><p class="empty">Every line, as written and as spoken.</p></div></section>
   <section><h3>AI rewrites <span class="ms" id="rwMs"></span></h3><div id="rewrite"><p class="empty">Rewrites run in the background and every line is checked against the original.</p></div></section>
   <section><h3>Answer match</h3><div id="answer"><p class="empty">Questions are matched to cited answer cards.</p></div></section>
@@ -411,7 +412,49 @@
     cpr(m) {
       log('cpr', `${m.bpm}/min ${m.mode} · ${m.clock} · lookahead ${m.lookaheadMs} ms · tick ${m.tickMs} ms${m.alone ? ' · alone' : ''}`, m.t);
     },
+    // Motion sensor: the level, the breathing read from it, the experimental heartbeat.
+    'sensor-source'(m) {
+      sensor.source = m.source === 'simulated' ? `simulated person · ${m.scenario}` : m.source === 'phone' ? 'phone accelerometer' : 'no sensor';
+      $('sensorMs').textContent = sensor.source;
+      log('sensor', `source: ${sensor.source}`, m.t);
+    },
+    'sensor-phase'(m) {
+      sensor.phase = m.phase;
+      log('sensor', `phase: ${m.phase}`, m.t);
+      drawSensor();
+    },
+    sensor(m) {
+      sensor.last = m;
+      drawSensor();
+    },
+    'sensor-result'(m) {
+      sensor.result = m;
+      drawSensor();
+      log('sensor', `result: ${m.status} · ${m.why}`, m.t);
+    },
   };
+  const sensor = { source: '', phase: '', last: null, result: null };
+  const deg = (v, d = 2) => (typeof v === 'number' ? `${v >= 0 ? '+' : '−'}${Math.abs(v).toFixed(d)}°` : '—');
+  function drawSensor() {
+    const m = sensor.last;
+    const b = m && m.breath;
+    const h = m && m.heart;
+    const r = sensor.result;
+    $('sensor').innerHTML = `<dl class="kv">
+      <dt>phase</dt><dd>${esc(sensor.phase)}</dd>
+      ${m ? `<dt>level</dt><dd>pitch ${deg(m.pitch)} · roll ${deg(m.roll)}</dd>
+      <dt>tilt now</dt><dd>${m.relPitch == null ? 'not leveled yet' : deg(m.relPitch) + ' <span class="faint">from the leveled zero</span>'}</dd>
+      <dt>samples</dt><dd>${m.rate}/s · noise ${num(m.noiseDeg, 3)}° · counts a breath above ${b ? num(b.thresholdDeg, 3) : '—'}°</dd>
+      <dt>hand on it</dt><dd>${bar(Math.min(1, m.tremorMg / 6), m.tremorMg > 1.5 && m.tremorMg > 3 * (m.shakeNoiseMg || 0) ? 'hot' : '')} mg shake at 6-12 Hz <span class="faint">(a hand: over 1.5 and over 3× the sensor's own ${num(m.shakeNoiseMg)} mg)</span></dd>` : ''}
+      ${b ? `<dt>breathing</dt><dd>${esc(b.status)} <span class="faint">${esc(b.why)}</span></dd>
+      <dt>rate</dt><dd>${b.perMin ? Math.round(b.perMin) + '/min' : '—'} · ${b.turns} turning points</dd>
+      <dt>tilt per breath</dt><dd>${b.depthDeg ? num(b.depthDeg) + '° ≈ ' + num(b.depthMm, 1) + ' mm chest–belly' : '—'}</dd>
+      <dt>still share</dt><dd>${b.stillShare == null ? '—' : bar(b.stillShare, b.stillShare > 0.45 ? 'hot' : '')} <span class="faint">(gasps: over 0.45)</span></dd>
+      ${b.sync != null ? `<dt>chest & belly</dt><dd>${num(Math.abs(b.sync))} ${Math.abs(b.sync) < 0.3 ? '<span class="no">see-saw</span>' : 'together'} <span class="faint">experimental</span></dd>` : ''}` : ''}
+      ${h ? `<dt>heartbeat</dt><dd>${h.status === 'found' ? Math.round(h.perMin) + '/min' : esc(h.status)} · sure ${bar(h.confidence)}${h.rmssdMs ? ' · varies ' + Math.round(h.rmssdMs) + ' ms' : ''} <span class="faint">experimental, never used to decide</span></dd>` : ''}
+      ${r ? `<dt>check result</dt><dd class="q">${esc(r.status)}: ${esc(r.why)}${['none', 'irregular', 'seesaw'].includes(r.status) ? ' → <span class="no">Start CPR</span>' : r.status === 'regular' ? ' → the rescuer decides' : ''}</dd>` : ''}
+    </dl>`;
+  }
   addEventListener('message', (e) => {
     const m = e.data;
     if (!m || m.type !== 'mayday:trace' || !draw[m.kind]) return;
