@@ -18,6 +18,9 @@ Read this at the start of every session; update it at the end.
 - **Adaptive engine panel** in the desktop phone window (Engine button): live, real values from the running app. What was heard and how it was cleaned, the echo check, the router's decision and its time, the rescuer model's weighted signals (distress and confusion, each signal with its weight and evidence), the patient, the protocol step and what was skipped, each spoken line against its original, every AI rewrite with its verdict, and answer-card match scores.
 - The rescuer read is now a weighted multi-signal score (`assess()` in `voice/adapt.ts`), tested.
 - iPhone: Expo Go audio fallback (`audio/players.ts`). Real-device work paused at the user's request.
+- Fixes from a screenshot pass: the CPR screen's two buttons were cut off ("AED is h…"), now full width and stacked; closing a help screen on web threw a wake-lock error, now silent.
+- README, video script and shot list, YouTube description, submission draft, architecture and design docs updated to the new design (no hold, no countdown; the engine panel added to the video at 1:56). New screenshots in `docs/screens/`.
+- iPhone home-screen build rebuilt with the redesign and checked offline (`python tools/build_iphone.py`). Not deployed: needs `gh auth login`.
 - 184 tests passing, typecheck clean.
 
 ## Status on Monday October 19

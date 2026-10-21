@@ -41,7 +41,7 @@ One family, Geist (SIL Open Font License, via Google Fonts), plus Geist Mono for
 | `instruction` | Geist SemiBold | **32** / 38 | -0.8 | Emergency instruction (floor: 28) |
 | `instructionSub` | Geist Regular | 20 / 27 | -0.2 | The second line of an instruction |
 | `count` | Geist Medium | **128** / 132 | -6 | Compression count (floor: 64) |
-| `countdown` | Geist Light | 96 / 100 | -4 | 911 countdown, burn-cooling timer |
+| `countdown` | Geist Light | 96 / 100 | -4 | Burn-cooling timer |
 | `timer` | Geist Mono Medium | 17 / 22 | 0 | Elapsed time |
 | `mono` | Geist Mono | 13 / 18 | 0 | Coordinates, log times |
 
@@ -72,20 +72,18 @@ Glass is for the control layer that floats above content (tab bar, buttons, shee
 | `breath` | 6000 ms | One orb breath: about ten breaths a minute, a calming pace |
 | `spring.press` | damping 22, stiffness 340, mass 0.6 | Buttons settling after a press (scale 0.97) |
 | `spring.settle` | damping 24, stiffness 180 | Sheets arriving |
-| Easing | `cubic-bezier(0.16, 1, 0.3, 1)` | Fast out, long settle. No bounce, no linear (except the countdown ring, which must look like a clock) |
+| Easing | `cubic-bezier(0.16, 1, 0.3, 1)` | Fast out, long settle. No bounce, no linear (except timers, which must look like a clock) |
 
 Exits are faster than entrances. Only transform and opacity animate. With Reduce Motion on, the orb holds still.
 
-**The emergency transition:** holding 911 fills a ring for 0.8 s; on release a red disc grows from the button to fill the screen in 380 ms; emergency mode opens on that same red and fades to black over 520 ms. One continuous surface instead of a screen change.
+**Opening help:** one tap, on Talk or on a tile, and the help screen is there. No hold, no countdown: in an emergency every second of ceremony is a second without help.
 
 ## Haptics
 
 | Event | Pattern | Why |
 |---|---|---|
 | Navigate | Selection tick | Soft acknowledgement |
-| Hold ring at 1/3 and 2/3 | Light impact | You are getting there |
 | Emergency starts | Heavy impact | Unmistakable |
-| 911 countdown, each second | Medium impact | Time is passing |
 | Compression | Rigid impact, every beat | Coaches with the phone in a pocket |
 | Switch rescuers | Three medium taps, 120 ms apart | Different from a beat, every 2 minutes |
 | Needs attention | Warning notification | Bleeding-pressure reminders |

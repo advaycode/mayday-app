@@ -23,7 +23,9 @@ const step = protocols.cpr_adult.steps.find((s) => s.kind === 'cpr')!;
  * Two minutes is one full rescuer shift, so it ends on the swap prompt.
  */
 export default function Practice() {
-  useKeepAwake();
+  // The screen stays on while helping. On web the lock can still be pending when
+  // the screen closes; releasing it early is harmless, so the warning is muted.
+  useKeepAwake(undefined, { suppressDeactivateWarnings: true });
   const insets = useDeviceInsets();
   const [active, setActive] = useState(false);
   const [mode, setMode] = useState<'handsOnly' | '30:2'>('handsOnly');

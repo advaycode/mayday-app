@@ -13,7 +13,7 @@ What this adds to the normal web export:
   - iOS tags: full screen, black status bar, content under the notch with safe areas
   - sw.js, a service worker that stores every file on first open, so the app,
     the voice and the hospital data work with no signal afterwards
-  - no text selection or callout on long press (the 911 button is held down)
+  - no text selection or callout on long press (buttons are pressed hard and fast)
   - 404.html and .nojekyll, which GitHub Pages needs for this app
 
 Nothing in Mayday can call 911 or anyone else (see mobile/__tests__/never911.test.ts).
@@ -144,7 +144,7 @@ def html(base: str):
     <link rel="manifest" href="{base}/manifest.webmanifest" />
     <style id="mayday-iphone">
       html, body {{ background: {BG}; }}
-      /* The 911 button is held down: no text selection, magnifier or callout. */
+      /* Buttons are pressed hard and fast: no text selection, magnifier or callout. */
       body {{ -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; touch-action: manipulation; overscroll-behavior: none; }}
       input, textarea {{ -webkit-user-select: text; user-select: text; }}
     </style>

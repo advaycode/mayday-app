@@ -14,7 +14,7 @@ Mayday
 
 Mayday talks a panicking bystander through a medical emergency, out loud and step by step, while help is on the way, even with no signal.
 
-You hold one button and say what is happening. Mayday starts a cancellable 911 call, works out which of ten protocols fits (CPR for adults, children and babies; choking; severe bleeding; burns; stroke; opioid overdose; recovery position), and coaches you with a calm voice, one large instruction at a time, and a picture. During CPR it counts every compression at 110 a minute and tells you when to give breaths, swap rescuers, or use the AED. It shows where the nearest emergency room and trauma center are, and it keeps a timestamped log for the paramedics.
+You tap one button and say what is happening, or tap the emergency. Mayday works out which of ten protocols fits (CPR for adults, children and babies; choking; severe bleeding; burns; stroke; opioid overdose; recovery position), and coaches you with a calm voice, one large instruction at a time, and a picture. During CPR it counts every compression at 110 a minute and tells you when to give breaths, swap rescuers, or use the AED. It never dials 911 itself: you make the call, and it shows your address and a summary to read to the dispatcher. It shows where the nearest emergency room and trauma center are, and it keeps a timestamped log for the paramedics.
 
 ## 3. What inspired you to create this app?
 

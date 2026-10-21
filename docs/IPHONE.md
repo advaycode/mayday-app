@@ -2,7 +2,7 @@
 
 Apple only installs native apps from the App Store, TestFlight, or a Mac with Xcode. So on an iPhone, Mayday installs as a home-screen web app: Safari adds it with its own icon, it opens full screen, and after the first open it works with no signal.
 
-**Mayday never calls 911.** The countdown is a practice call; nothing is ever dialed. In a real emergency, call 911 yourself.
+**Mayday never calls 911.** Nothing is ever dialed; its 911 button shows what to say. In a real emergency, call 911 yourself.
 
 ## Install (2 minutes)
 
@@ -11,7 +11,7 @@ Apple only installs native apps from the App Store, TestFlight, or a Mac with Xc
 3. Tap **Share** (the square with an arrow) → **Add to Home Screen** → **Add**.
 4. Open Mayday from the home screen. When it asks for the microphone, tap **Allow**.
 
-Test that it works offline: turn on Airplane Mode, open Mayday from the home screen, hold the button, and tap **No breath**. The steps and the voice should keep going.
+Test that it works offline: turn on Airplane Mode, open Mayday from the home screen and tap **Not breathing**. The steps and the voice should keep going.
 
 ## Differences from the native app
 

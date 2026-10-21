@@ -110,9 +110,9 @@ Measured (`reports/adapt-eval.json`, real outputs on this laptop's CPU): qwen2.5
 
 ## 5. Mayday never calls 911
 
-**Under no circumstances does Mayday call 911, or anyone.** There is no code in the app that can dial or text a number (`src/emergency/call.ts`), the app does not ask for permission to make calls, and demo mode is a constant, not a setting. `__tests__/never911.test.ts` fails the build if a phone or text link, a calling library, or the call permission ever appears.
+**Under no circumstances does Mayday call 911, or anyone.** There is no code in the app that can dial or text a number (the old `call.ts` was deleted), the app does not ask for permission to make calls, and demo mode is a constant, not a setting. `__tests__/never911.test.ts` fails the build if a phone or text link, a calling library, or the call permission ever appears.
 
-What the person sees is a practice call: a 5-second ring they can cancel, then "Practice call. Nothing was dialed. If this is real, call 911 yourself." "Called" records that someone else is on the phone, which is what CPR courses teach anyway. The "Tell the dispatcher" card is for the person's own call: the street address (reverse-geocoded), GPS coordinates with accuracy, and a one-line summary built by a template from the log, never by a model: *"Adult (age not given), unresponsive, not breathing normally. CPR started 3:01 PM."* The map shows each hospital's phone number as text; it never dials it.
+What the person sees: Home says "Call 911 first", and every step has a red 911 button at the bottom. It opens "Call 911 on your phone", for the person's own call: the street address (reverse-geocoded), GPS coordinates with accuracy, and a one-line summary built by a template from the log, never by a model: *"Adult (age not given), unresponsive, not breathing normally. CPR started 3:01 PM."* The map shows each hospital's phone number as text; it never dials it.
 
 > **Say it:** Mayday never calls 911 itself. You call, and it hands you everything a dispatcher asks for: your address, your coordinates and a one-line summary of what happened, filled in from what actually happened, never written by AI. A test fails the build if anyone ever adds a way for the app to dial.
 
@@ -124,11 +124,11 @@ Which place to suggest is decided by the protocol's `care` field, not a model: c
 
 > **Say it:** Not every hospital has an emergency room and only 36 in Florida are trauma centers, so we built our own map data from the federal hospital database and the state's trauma center list. It's bundled in the app, so it works with no signal. And for a cardiac arrest the app tells you to stay put, because the ambulance is faster than you are.
 
-## 7. Liquid Glass and the orb
+## 7. Liquid Glass, the light, and color
 
-On iOS 26 the controls are Apple's real Liquid Glass. In the web preview we rebuild the effect: a displacement map computed for each control's exact shape bends the background at the rim like the curved edge of a lens (`design/Glass.web.tsx`). The orb is one fragment shader in SkSL running on the GPU through Skia: a breathing sphere of light that swells when you speak and pulses on every compression (`design/Orb.tsx`).
+On iOS 26 the controls are Apple's real Liquid Glass. In the web preview we rebuild the effect: a displacement map computed for each control's exact shape bends the background at the rim like the curved edge of a lens (`design/Glass.web.tsx`). The orb is one fragment shader in SkSL running on the GPU through Skia: a breathing sphere of light that swells when you speak (`design/Orb.tsx`), on the listening screen. During CPR a ring in the emergency's color pulses on every compression. Each kind of emergency has its own color, on its tile, its progress bar and its main button (`tint` in `design/tokens.ts`); red is kept for 911.
 
-> **Say it:** The calm screens use Apple's Liquid Glass, and in our web preview we recreate it by computing how a curved lens would bend the background at each button's edge. The breathing light is a GPU shader we wrote, which reacts to your voice and pulses with every compression. In emergency mode all of that disappears: black screen, huge type, one thing to do.
+> **Say it:** The calm screens use Apple's Liquid Glass, and in our web preview we recreate it by computing how a curved lens would bend the background at each button's edge. The breathing light is a GPU shader we wrote, which reacts to your voice. In emergency mode the screen goes black: one picture, huge type, one thing to do, and the emergency's color so you always know where you are.
 
 ## 8. The proxy keeps keys off the phone
 

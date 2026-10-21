@@ -29,10 +29,10 @@ Screen recording, phone in hand (or the phone mirror), real voice audio.
 
 | Time | Picture | What we say or hear |
 |---|---|---|
-| 0:35 | Home: the orb, the red 911 button. Thumb holds it; the ring fills; red floods the screen | "One button. Hold it." |
-| 0:42 | Emergency mode: 911 countdown ring, DEMO banner visible | App: *"Tell me what's happening."* Rescuer: *"My dad collapsed, he's not breathing!"* |
+| 0:35 | Home: the big "Talk to Mayday" button and the colored tiles. Thumb taps Talk | "One button. Tap it and talk." |
+| 0:40 | The listening screen: the light swells with the rescuer's voice | App: *"Tell me what's happening."* Rescuer: *"My dad collapsed, he's not breathing!"* |
 | 0:48 | Screen jumps to "Send for an AED" | App: *"Your dad isn't breathing. We'll do this together."* (under 1.5 s; it heard "dad", and says "him" from here on) |
-| 0:52 | Countdown ends; "Practice call" pill appears; tap it; the "Tell the dispatcher" card: address, coordinates, summary | "It never dials 911 itself. You call, and it gives you your address and a summary to read out." |
+| 0:52 | Thumb taps the red 911 at the bottom: "Call 911 on your phone", with the address, coordinates and a summary | "It never dials 911. You call, and it gives you your address and a summary to read out." |
 | 1:00 | Hands photo; then the count, 128 pt | App counts; *"Push hard and fast."* |
 | 1:08 | 30:2: "Breathe" screen | App: *"Two breaths. Tilt the head. Lift the chin."* |
 | 1:15 | Rescuer: *"The AED is here!"* → "Turn the AED on", pads screen | App: *"You can move a bra aside. No need to remove it."* (caption: 2025 guideline change) |
@@ -47,7 +47,10 @@ Team member on camera for the first sentence, then animation and real code.
 **1:45** On camera: "Here's the part we're proudest of: the AI is never allowed to give medical advice."
 
 **1:50** Remotion animation of the architecture (from `docs/ARCHITECTURE.md`): voice → offline rules → protocol engine → voice and screen; a dotted side path to the AI through our proxy, with a schema check on the way back.
-**Voice:** "What you say goes first to rules that run on the phone in under a millisecond. Anything that sounds like a life threat starts the protocol immediately. The AI only helps when the rules are unsure, and its answer has to match a strict format or we throw it away."
+**Voice:** "What you say goes first to rules that run on the phone in a few milliseconds. Anything that sounds like a life threat starts the protocol immediately. The AI only helps when the rules are unsure, and its answer has to match a strict format or we throw it away."
+
+**1:56** Screen recording of the desktop phone window with the **Engine** panel open (`docs/screens/engine.png`). Say *"Oh my god, please help, my dad collapsed, he is not, he is not breathing."* The panel fills in: cpr_adult at 0.97, distress 0.85 from "oh my god" and the repeated "he is not", state panicked, voice ×0.92, two questions skipped as already known.
+**Voice:** "It also listens to how you sound. Panic slows the voice down and adds one calming line. This panel is the app's real reasoning, live, not an animation."
 
 **2:02** Code snippet 1 on screen, `mobile/src/protocols/corpus/cpr_adult.json`, the `aed_pads` step with its `quote` highlighted.
 **Voice:** "Every instruction is data with the guideline sentence it came from. 78 steps, and tests fail the build if one loses its source."
@@ -55,7 +58,7 @@ Team member on camera for the first sentence, then animation and real code.
 **2:10** Code snippet 2, `mobile/src/cpr/timeline.ts`, the line `const start = t0 + index * baseCycle + ...` highlighted, then `scheduler.ts`.
 **Voice:** "JavaScript timers drift: a normal metronome is two seconds late after ten minutes. We schedule every beat on the phone's audio hardware clock. Our test runs ten minutes with a bad timer, and all 1,100 beats land on time."
 
-**2:20** Numbers card: **145 tests** · **85% on sentences it had never heard** · **0 ms drift** · **[NOVICE TIME] seconds** from "your friend collapsed" to first compression, someone who had never seen the app.
+**2:20** Numbers card: **184 tests** · **85% on sentences it had never heard** · **0 ms drift** · **[NOVICE TIME] seconds** from "your friend collapsed" to first compression, someone who had never seen the app.
 
 ## 2:30 to 2:55 · Impact and learning
 
@@ -66,7 +69,7 @@ Team member on camera for the first sentence, then animation and real code.
 - "The hardest part was `[YOU: the one challenge from your written answer]`."
 - "What we learned: `[YOU]`."
 - On screen, 4 seconds: **AI disclosure**: "We used Claude Code to help write code and documentation, and Piper to record the voice. Full disclosure in our repository."
-- Last frame: the red button. "Mayday. Always call 911."
+- Last frame: the home screen, Talk to Mayday. "Mayday. Always call 911."
 
 ---
 

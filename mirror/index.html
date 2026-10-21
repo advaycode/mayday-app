@@ -106,6 +106,8 @@
     font-size: 13px; color: var(--desk-faint); white-space: nowrap;
   }
   .caption b { color: var(--desk-ink); font-weight: 500; }
+  /* With the engine panel open the bar is wider than the phone; the size readout goes. */
+  body.with-engine #spec { display: none; }
   .caption select, .caption button {
     font: inherit; color: var(--desk-ink); background: #1b1a18; border: 1px solid rgba(242,239,232,0.12);
     border-radius: 8px; padding: 4px 10px; cursor: pointer;

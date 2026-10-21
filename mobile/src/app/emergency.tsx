@@ -34,7 +34,9 @@ import { rewriteTable, voiceContext } from '@/voice/voice';
  * emergency tile (the steps start straight away).
  */
 export default function Emergency() {
-  useKeepAwake();
+  // The screen stays on while helping. On web the lock can still be pending when
+  // the screen closes; releasing it early is harmless, so the warning is muted.
+  useKeepAwake(undefined, { suppressDeactivateWarnings: true });
   const insets = useDeviceInsets();
   const params = useLocalSearchParams<{ talk?: string; tile?: string }>();
   const incident = useIncident();

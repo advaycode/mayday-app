@@ -76,8 +76,8 @@ export function CprView({ incident, step }: { incident: Incident; step: StepOf<'
       </View>
 
       <View style={styles.actions}>
-        <Button size="emergency" kind="tint" tint={tone.hue} icon={Lightning} label="AED is here" onPress={() => dispatch({ type: 'intent', intent: 'aed_here', at: Date.now() })} style={{ flex: 1 }} />
-        <Button size="emergency" icon={Ambulance} label="Paramedics" accessibilityHint="Paramedics are here" onPress={handoff} style={{ flex: 1 }} />
+        <Button size="emergency" kind="tint" tint={tone.hue} icon={Lightning} label="AED is here" onPress={() => dispatch({ type: 'intent', intent: 'aed_here', at: Date.now() })} />
+        <Button icon={Ambulance} label="Paramedics are here" onPress={handoff} />
       </View>
     </View>
   );
@@ -90,5 +90,6 @@ const styles = StyleSheet.create({
   count: { color: color.ink, textAlign: 'center' },
   instruction: { textAlign: 'center' },
   meta: { flexDirection: 'row', alignItems: 'center', gap: space[3], marginTop: space[4] },
-  actions: { flexDirection: 'row', gap: space[3] },
+  // Full width, one above the other: side by side the words were cut off.
+  actions: { gap: space[2] },
 });

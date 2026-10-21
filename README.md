@@ -5,15 +5,17 @@
 Congressional App Challenge 2026. Expo (React Native, TypeScript) for iPhone and Android, with a web build that runs inside a life-size iPhone frame on any computer.
 
 <p>
-<img src="docs/screens/home.png" width="200" alt="Home: a breathing light and a red 911 button you hold to start">
-<img src="docs/screens/emergency.png" width="200" alt="Emergency mode: a practice-call countdown, listening, and four large choices">
+<img src="docs/screens/home.png" width="200" alt="Home: a large Talk to Mayday button and a colored tile for each emergency">
+<img src="docs/screens/step.png" width="200" alt="A choking step: one picture, the question, two large answers, and Back, Talk and 911 at the bottom">
 <img src="docs/screens/cpr.png" width="200" alt="CPR coach: the compression count in very large type, pulsing on the beat">
 <img src="docs/screens/map.png" width="200" alt="Map: the nearest emergency room, with trauma centers and urgent care kept separate">
 </p>
 
+<p><img src="docs/screens/engine.png" width="620" alt="The desktop phone window with the engine panel: what was heard, the protocol chosen in 2.8 ms, and the rescuer's distress score with each signal that set it"></p>
+
 ## What it does
 
-Hold the red button. Mayday starts listening and shows a 5-second practice-call countdown. **It never calls 911 itself**; you call, and it gives you your address and a summary to read out. Say what is happening ("my dad collapsed and he's not breathing") or tap it. It answers out loud, asks at most one question, and coaches you through the right protocol: a big picture, one instruction in 32-point type, and a voice. For CPR it counts every compression out loud at 110 a minute, cues breaths if you are trained, tells you when to swap rescuers, and switches to AED steps the moment you say "the AED is here". It keeps a timestamped log to show the paramedics.
+Tap **Talk to Mayday** and say what is happening ("my dad collapsed and he's not breathing"), or tap the colored tile for the emergency. Mayday answers out loud, asks at most one question, and coaches you through the right protocol: one picture, one short instruction, big answer buttons, and a voice. Back, Talk and 911 sit under your thumb on every step. **Mayday never calls anyone.** You call 911; its 911 button shows your address and a summary to read to the dispatcher. For CPR it counts every compression out loud at 110 a minute, cues breaths if you are trained, tells you when to swap rescuers, and switches to AED steps the moment you say "the AED is here". It keeps a timestamped log to show the paramedics.
 
 Ten protocols, every step cited: adult, child and infant CPR; adult and child choking; infant choking; severe bleeding; burns; stroke (FAST); opioid overdose with naloxone; recovery position.
 
@@ -35,11 +37,11 @@ cd mobile; npm install; npm run build:web
 powershell -ExecutionPolicy Bypass -File ..\mirror\launch.ps1
 ```
 
-That opens the real app in an iPhone 17 Pro frame at its true resolution: 402 × 874 points (1206 × 2622 pixels), one screen pixel per point. Mayday never calls anyone; the call is a practice call.
+That opens the real app in an iPhone 17 Pro frame at its true resolution: 402 × 874 points (1206 × 2622 pixels), one screen pixel per point. The **Engine** button opens a panel beside the phone that shows, live, what the app heard, what it decided and why. Mayday never calls anyone.
 
-**On a phone:** `cd mobile && npx expo start`, then scan the QR code with Expo Go. Expo Go lacks two native modules (speech recognition and the audio engine), so for the full app build a development client: `npx expo run:android` or `eas build --profile development`.
+**On a phone:** `cd mobile && npx expo start`, then scan the QR code with Expo Go. Expo Go has no speech recognition, so there you tap instead of talk; the voice plays through expo-audio. For the full app build a development client: `npx expo run:android` or `eas build --profile development`.
 
-**Tests:** `cd mobile && npm test` (145 tests) and `npx tsc --noEmit`.
+**Tests:** `cd mobile && npm test` (184 tests) and `npx tsc --noEmit`.
 
 **AI features (optional):** `cd proxy && npm install && npm run dev` with keys in `proxy/.dev.vars`, then `EXPO_PUBLIC_PROXY_URL=http://localhost:8787` in `mobile/.env.local`. Without keys the app is complete; the photo check is hidden.
 
@@ -53,7 +55,7 @@ Every spoken line, its source, and whether it has been verified: **[docs/MEDICAL
 
 ## Data sources
 
-ERs: CMS Provider Data Catalog, Hospital General Information. Trauma centers: Florida Department of Health, Florida Trauma Centers (July 23 2026). Urgent care: OpenStreetMap contributors. Geocoding: U.S. Census Bureau. Statistics: CARES 2024 Metrics Summary. Map tiles: Esri, HERE, Garmin, OpenStreetMap. Voice: Piper (en_US-lessac-medium). Step pictures: Wikimedia Commons, public domain and Creative Commons, recolored ([credits](docs/IMAGE_CREDITS.md)).
+ERs: CMS Provider Data Catalog, Hospital General Information. Trauma centers: Florida Department of Health, Florida Trauma Centers (July 23 2026). Urgent care: OpenStreetMap contributors. Geocoding: U.S. Census Bureau. Statistics: CARES 2024 Metrics Summary. Map tiles: Esri, HERE, Garmin, OpenStreetMap. Voice: Piper (en_US-lessac-medium). Step pictures: Wikimedia Commons, public domain and Creative Commons ([credits](docs/IMAGE_CREDITS.md)).
 
 ## AI disclosure
 
