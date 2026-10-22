@@ -1,5 +1,5 @@
 import { CONTACT_MM, G, type AgeGroup, type BreathStatus, type Sample } from './analyze';
-import { rng, type Rng } from './dsp';
+import { lowpass, rng, type Rng } from './dsp';
 
 /**
  * A simulated person with a phone on their chest, for testing what we cannot
@@ -22,6 +22,17 @@ import { rng, type Rng } from './dsp';
  *     no published rate found).
  *   a hand on the phone: 8-12 Hz tremor of 5-20 mg, and a slow sway of up
  *     to 1.5° (assumption).
+ *
+ * The gyroscope (on unless `gyro: false`) sees the same body turning:
+ *   the breathing tilt's rate of change, about the phone's x axis.
+ *   the heart's twist of the chest wall (gyrocardiography): 1°/s peak
+ *     (assumption, derived: a 10 mg vibration at 15 Hz moves the wall about
+ *     11 µm; across ~5 cm of chest that is 0.013°, at 15 Hz about 1.2°/s).
+ *   a hand: 0.5-3°/s of rotational tremor (assumption).
+ *   footsteps: the body rocks on the floor, a lever of 0.2-0.6 m (assumption).
+ *   noise 0.007°/s/√Hz (Bosch BMI160), a fixed offset up to 0.3°/s, 0.01°/s steps.
+ * `rotMap` scrambles the channel order, signs and units the way platforms do,
+ * to test that the phone works its own axes out.
  */
 
 export type Scenario = 'normal' | 'shallow' | 'child' | 'slow' | 'agonal' | 'none' | 'none_steps' | 'seesaw' | 'hand';
@@ -58,7 +69,27 @@ export type SimOptions = {
   /** How the body tips the phone at rest, degrees (random if not given). */
   pitch0?: number;
   roll0?: number;
+  /** Include a gyroscope (default true). */
+  gyro?: boolean;
+  /** Gyroscope noise density, °/s/√Hz. */
+  gyroNoise?: number;
+  /** Largest fixed gyroscope offset per axis, °/s. */
+  gyroBiasDps?: number;
+  /** The heart's twist of the chest wall, peak °/s. */
+  gcgDps?: number;
+  /** How the platform reports rotation: channel order (indices of x, y, z), signs, radians. */
+  rotMap?: { order: [number, number, number]; signs: [number, number, number]; radians?: boolean };
+  /** Real breathing to play instead of the scenario's formula (see `played`). */
+  recorded?: Recorded;
 };
+
+/**
+ * A recorded breathing belt (tools/heart_ml/breathing.py: the PhysioNet CEBS
+ * belts, 20 people): `breath` is in typical breaths (one breath's peak to
+ * valley is about 1, breathing in goes up), played from `from` seconds.
+ * `perMin` is the belt's own rate there.
+ */
+export type Recorded = { fs: number; breath: ArrayLike<number>; from: number; perMin: number | null };
 
 export type SimTruth = { scenario: Scenario; expect: BreathStatus; age: AgeGroup; breathsPerMin: number | null; heartPerMin: number | null; beats: number[] };
 
@@ -146,6 +177,36 @@ function breathing(s: Scenario, r: Rng, t: Float64Array) {
   return { chest, belly, rate: rate as number | null };
 }
 
+/**
+ * Real breathing, at the sizes 'normal' uses: a typical breath lifts the
+ * chest 2-4 mm and the belly 4-9 mm. A chest belt cannot tell chest from
+ * belly, so both follow the belt, the chest a little early or late, as in
+ * the formula.
+ */
+function played(rec: Recorded, r: Rng, t: Float64Array) {
+  const n = t.length;
+  const chestMm = r.uniform(2, 4);
+  const bellyMm = r.uniform(4, 9);
+  const lag = r.uniform(-0.15, 0.15);
+  const at = (s: number) => {
+    const u = Math.max(0, (rec.from + s) * rec.fs);
+    const i = Math.min(rec.breath.length - 2, Math.floor(u));
+    const f = Math.min(1, u - i);
+    return rec.breath[i] * (1 - f) + rec.breath[i + 1] * f;
+  };
+  const chest = new Float64Array(n);
+  const belly = new Float64Array(n);
+  for (let i = 0; i < n; i++) {
+    belly[i] = bellyMm * at(t[i]);
+    chest[i] = chestMm * at(t[i] - lag);
+  }
+  // Straight lines between the belt's samples bend sharply at each one: as
+  // acceleration and turn rate those bends are a buzz at hand-tremor
+  // frequencies that no chest makes. The belt was filtered to 2 Hz, so
+  // smoothing to 3 Hz removes only the bends.
+  return { chest: lowpass(chest, 3, INNER_FS), belly: lowpass(belly, 3, INNER_FS), rate: rec.perMin };
+}
+
 /** A damped ring: what one heart sound or one footstep looks like to an accelerometer. */
 function ring(out: Float64Array, at: number, amp: number, hz: number, decayS: number) {
   const i0 = Math.max(0, Math.floor(at * INNER_FS));
@@ -183,7 +244,7 @@ export function simulate(o: SimOptions): { samples: Sample[]; truth: SimTruth } 
   const t = Float64Array.from({ length: n }, (_, i) => i / INNER_FS);
 
   // --- The body -----------------------------------------------------------------
-  const { chest, belly, rate } = breathing(o.scenario, r, t);
+  const { chest, belly, rate } = o.recorded ? played(o.recorded, r, t) : breathing(o.scenario, r, t);
   const pitch0 = o.pitch0 ?? r.uniform(-8, 8);
   const roll0 = o.roll0 ?? r.uniform(-6, 6);
   const pitch = new Float64Array(n);
@@ -198,11 +259,13 @@ export function simulate(o: SimOptions): { samples: Sample[]; truth: SimTruth } 
   // Heartbeat: S1 then S2, along the axis out of the screen, a little along the body.
   const scgZ = new Float64Array(n);
   const scgY = new Float64Array(n);
+  const gcg = { x: new Float64Array(n), y: new Float64Array(n), z: new Float64Array(n) };
   const beats: number[] = [];
   let heartPerMin: number | null = null;
   if (meta.heart) {
     heartPerMin = o.scenario === 'child' ? r.uniform(80, 120) : o.scenario === 'seesaw' ? r.uniform(90, 130) : o.scenario === 'slow' ? r.uniform(50, 80) : r.uniform(55, 100);
     const amp = (o.scgMg ?? 10) * r.uniform(0.6, 1.4);
+    const twist = (o.gcgDps ?? 1) * r.uniform(0.6, 1.4);
     const f1 = r.uniform(12, 20);
     const f2 = r.uniform(18, 25);
     let at = r.uniform(0, 60 / heartPerMin);
@@ -212,13 +275,25 @@ export function simulate(o: SimOptions): { samples: Sample[]; truth: SimTruth } 
       ring(scgZ, at, amp, f1, 0.03);
       ring(scgZ, at + 0.32, 0.5 * amp, f2, 0.025);
       ring(scgY, at, 0.3 * amp, f1, 0.03);
+      ring(gcg.x, at + 0.01, twist, f1, 0.03);
+      ring(gcg.x, at + 0.33, 0.5 * twist, f2, 0.025);
+      ring(gcg.y, at + 0.01, 0.6 * twist, f1, 0.03);
+      ring(gcg.z, at + 0.01, 0.4 * twist, f1, 0.03);
       at += (60 / heartPerMin) * (1 + breathMod) + 0.015 * r.gauss();
     }
   }
 
   // A rescuer's hand on the phone: tremor and a slow sway.
   const tremor = { x: new Float64Array(n), y: new Float64Array(n), z: new Float64Array(n) };
+  const turnTremor = { x: new Float64Array(n), y: new Float64Array(n), z: new Float64Array(n) };
   if (o.scenario === 'hand') {
+    const dps = r.uniform(0.5, 3);
+    const thz = r.uniform(8, 12);
+    for (const axis of ['x', 'y', 'z'] as const) {
+      const ph = r.uniform(0, 2 * Math.PI);
+      const env = wander(r, n, 1, 0.5);
+      for (let i = 0; i < n; i++) turnTremor[axis][i] = dps * (0.7 + 0.3 * env[i]) * Math.sin(2 * Math.PI * thz * t[i] + ph);
+    }
     const size = r.uniform(5, 20);
     const hz = r.uniform(8, 12);
     for (const axis of ['x', 'y', 'z'] as const) {
@@ -236,13 +311,23 @@ export function simulate(o: SimOptions): { samples: Sample[]; truth: SimTruth } 
 
   // People walking past: each step rings the floor.
   const steps = new Float64Array(n);
+  const rock = { x: new Float64Array(n), y: new Float64Array(n) };
   if (o.scenario === 'none_steps') {
     let at = r.uniform(0, 2);
     while (at < o.seconds) {
       const walk = r.uniform(3, 8);
       const cadence = r.uniform(1.6, 2.2);
       const size = r.uniform(2, 15);
-      for (let s = at; s < Math.min(o.seconds, at + walk); s += 1 / cadence) ring(steps, s, size * r.uniform(0.6, 1.2), r.uniform(6, 15), 0.05);
+      for (let s = at; s < Math.min(o.seconds, at + walk); s += 1 / cadence) {
+        const a = size * r.uniform(0.6, 1.2);
+        const hz = r.uniform(6, 15);
+        ring(steps, s, a, hz, 0.05);
+        // The body rocks: a floor movement of a/ω² over a lever of 0.2-0.6 m, as a rate.
+        const dps = (((a / 1000) * G) / (2 * Math.PI * hz * r.uniform(0.2, 0.6))) * (180 / Math.PI);
+        const dir = r.uniform(0, 2 * Math.PI);
+        ring(rock.x, s, dps * Math.cos(dir), hz, 0.05);
+        ring(rock.y, s, dps * Math.sin(dir), hz, 0.05);
+      }
       at += walk + r.uniform(1, 5);
     }
   }
@@ -259,6 +344,13 @@ export function simulate(o: SimOptions): { samples: Sample[]; truth: SimTruth } 
   const mg = G / 1000;
   const samples: Sample[] = [];
   const quant = (v: number) => (q > 0 ? Math.round(v / q) * q : v);
+  const withGyro = o.gyro ?? true;
+  const gNoise = (o.gyroNoise ?? 0.007) * Math.sqrt(fs / 2);
+  const gb = o.gyroBiasDps ?? 0.3;
+  const gBias = [r.uniform(-gb, gb), r.uniform(-gb, gb), r.uniform(-gb, gb)];
+  const gq = (v: number) => Math.round(v / 0.01) * 0.01;
+  const map = o.rotMap ?? { order: [0, 1, 2], signs: [1, 1, 1] };
+  const turnRate = (a: Float64Array, i: number) => ((a[Math.min(n - 1, i + 1)] - a[Math.max(0, i - 1)]) * INNER_FS) / 2;
   for (let k = 0; ; k++) {
     if (o.dropRate && r.next() < o.dropRate) continue;
     const ts = k / fs + ((o.jitterMs ?? 0) / 1000) * r.gauss();
@@ -271,12 +363,23 @@ export function simulate(o: SimOptions): { samples: Sample[]; truth: SimTruth } 
     const len = Math.hypot(tx, ty, 1);
     const up = { x: tx / len, y: ty / len, z: 1 / len };
     const vertical = G + heaveAcc[i] + steps[i] * mg;
-    samples.push({
+    const sample: Sample = {
       t: ts,
       x: quant(vertical * up.x + tremor.x[i] * mg + bias.x + noise * r.gauss()),
       y: quant(vertical * up.y + (scgY[i] + tremor.y[i]) * mg + bias.y + noise * r.gauss()),
       z: quant(vertical * up.z + (scgZ[i] + tremor.z[i]) * mg + bias.z + noise * r.gauss()),
-    });
+    };
+    if (withGyro) {
+      // Top end up is a turn about +x; roll as measured is a turn about -y.
+      const truth = [
+        turnRate(pitch, i) + gcg.x[i] + turnTremor.x[i] + rock.x[i],
+        -turnRate(roll, i) + gcg.y[i] + turnTremor.y[i] + rock.y[i],
+        gcg.z[i] + turnTremor.z[i],
+      ].map((v, k) => gq(v + gBias[k] + gNoise * r.gauss()));
+      const out = map.order.map((k, j) => map.signs[j] * truth[k] * (map.radians ? Math.PI / 180 : 1)) as [number, number, number];
+      sample.rot = out;
+    }
+    samples.push(sample);
   }
   samples.sort((a, b) => a.t - b.t);
 

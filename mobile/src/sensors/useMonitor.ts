@@ -3,6 +3,8 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { trace } from '@/voice/trace';
 
 import { analyze, angles, type AgeGroup, type Reading, type Sample } from './analyze';
+import { mic, type Mic } from './mic';
+import { hearBreathing, type SoundFrame, type SoundReading } from './sounds';
 import type { Scenario } from './sim';
 import { phoneSource, simulatedSource, type Source, type SourceKind } from './source';
 
@@ -34,6 +36,14 @@ export function useMonitor(opts: { mode: 'check' | 'lab'; age?: AgeGroup; checkS
   const [retries, setRetries] = useState(0);
   const [kind, setKind] = useState<SourceKind | null>(null);
   const [scenario, setScenarioState] = useState<Scenario>(opts.scenario ?? 'normal');
+  const [heartMethod, setHeartMethod] = useState<'model' | 'rules'>('model');
+  // The emergency check also listens for gasps (sounds.ts), while measuring.
+  const [sound, setSound] = useState<SoundReading | null>(null);
+  const [listening, setListening] = useState(false);
+  const ear = useRef<Mic | null>(null);
+  const heard = useRef<SoundFrame[]>([]);
+  const method = useRef(heartMethod);
+  method.current = heartMethod;
 
   const buf = useRef<Sample[]>([]);
   const source = useRef<Source | null>(null);
@@ -56,6 +66,13 @@ export function useMonitor(opts: { mode: 'check' | 'lab'; age?: AgeGroup; checkS
   /** Call from a tap: iOS only asks for motion permission inside one. */
   const start = useCallback(async () => {
     if (st.current.phase !== 'idle' && st.current.phase !== 'unavailable' && st.current.phase !== 'done') return;
+    // Before any await: the browser starts audio only inside the tap.
+    if (mode === 'check' && !ear.current) {
+      ear.current = mic();
+      ear.current.prime();
+    }
+    heard.current = [];
+    setSound(null);
     buf.current = [];
     setFinal(null);
     setRetries(0);
@@ -73,11 +90,23 @@ export function useMonitor(opts: { mode: 'check' | 'lab'; age?: AgeGroup; checkS
     setKind(ok ? src.kind : null);
     trace('sensor-source', { source: ok ? src.kind : 'none', scenario: src.kind === 'simulated' ? scenario : null });
     go(ok ? 'place' : 'unavailable', 0);
-  }, [allowSim, go, push, scenario]);
+    // Listen only to frames captured while measuring; a retry starts them over.
+    if (ok && ear.current) {
+      const on = await ear.current.start((f) => {
+        if (st.current.phase === 'measuring') heard.current.push(f);
+        else if (st.current.phase !== 'done') heard.current = [];
+      });
+      setListening(on);
+      trace('sound-source', { source: on ? 'microphone' : 'none' });
+    }
+  }, [allowSim, go, mode, push, scenario]);
 
   const stop = useCallback(() => {
     source.current?.stop();
     source.current = null;
+    ear.current?.stop();
+    ear.current = null;
+    setListening(false);
     sim.current = null;
     st.current.phase = 'idle';
     setPhase('idle');
@@ -95,7 +124,13 @@ export function useMonitor(opts: { mode: 'check' | 'lab'; age?: AgeGroup; checkS
     trace('sensor-source', { source: 'simulated', scenario: s });
   }, []);
 
-  useEffect(() => () => source.current?.stop(), []);
+  useEffect(
+    () => () => {
+      source.current?.stop();
+      ear.current?.stop();
+    },
+    [],
+  );
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -125,7 +160,7 @@ export function useMonitor(opts: { mode: 'check' | 'lab'; age?: AgeGroup; checkS
       const measuring = s.phase === 'measuring';
       const elapsed = measuring ? now - s.measureAt : 0;
       const window = mode === 'lab' ? Math.min(30, Math.max(3, elapsed)) : measuring ? Math.max(2, Math.min(checkSeconds, elapsed)) : 2;
-      const r = analyze(b, { age, window, heart: mode === 'lab' && measuring, heartWindow: 10, sync: mode === 'lab' });
+      const r = analyze(b, { age, window, heart: mode === 'lab' && measuring, heartWindow: 10, sync: mode === 'lab', heartMethod: method.current });
       if (!r) return;
       setReading(r);
       const still = r.faceUp && !r.motion.moving;
@@ -150,6 +185,14 @@ export function useMonitor(opts: { mode: 'check' | 'lab'; age?: AgeGroup; checkS
             setFinal(f);
             trace('sensor-result', { status: f?.breath.status, why: f?.breath.why, perMin: f?.breath.perMin, depthDeg: f?.breath.depthDeg, turns: f?.breath.turns, thresholdDeg: f?.breath.thresholdDeg });
             source.current?.stop();
+            if (ear.current) {
+              const h = hearBreathing(heard.current);
+              setSound(h);
+              trace('sound', { status: h.status, why: h.why, floorDb: h.floorDb, events: h.events.map((e) => ({ s: +(e.end - e.start).toFixed(2), db: Math.round(e.peakDb), swells: e.swells, kind: e.kind })) });
+              ear.current.stop();
+              ear.current = null;
+              setListening(false);
+            }
             go('done', now);
           }
         }
@@ -166,13 +209,14 @@ export function useMonitor(opts: { mode: 'check' | 'lab'; age?: AgeGroup; checkS
           tremorMg: r.motion.tremorMg,
           shakeNoiseMg: r.motion.noiseMg,
           breath: r.breath,
-          heart: r.heart ? { status: r.heart.status, perMin: r.heart.perMin, confidence: r.heart.confidence, rmssdMs: r.heart.rmssdMs } : null,
+          heart: r.heart ? { status: r.heart.status, perMin: r.heart.perMin, confidence: r.heart.confidence, rmssdMs: r.heart.rmssdMs, method: r.heart.method, source: r.heart.source, beats: r.heart.beats.length } : null,
+          gyro: r.gyro,
         });
       }
     }, 100);
     return () => clearInterval(timer);
   }, [age, checkSeconds, go, mode]);
 
-  return { phase, level, reading, final, secondsLeft, retries, kind, scenario, setScenario, start, stop, relevel };
+  return { phase, level, reading, final, secondsLeft, retries, kind, scenario, setScenario, start, stop, relevel, heartMethod, setHeartMethod, sound, listening };
 }
 export type Monitor = ReturnType<typeof useMonitor>;

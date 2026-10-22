@@ -1,0 +1,495 @@
+{
+  "generated": "2026-10-22T15:07:12.940Z",
+  "runs": [
+    {
+      "name": "Emergency check (10 s), 100/s (native app)",
+      "mode": "check",
+      "sensor": {
+        "fs": 100
+      },
+      "windows": 2377,
+      "regular": 0.853,
+      "startCpr": 0.147,
+      "rateMedianError": 0.78,
+      "reasons": {
+        "regular": 2028,
+        "uneven depth": 26,
+        "rate too fast": 33,
+        "long pauses (looks like gasps)": 42,
+        "uneven timing": 70,
+        "too few breaths in the window": 160,
+        "no movement seen": 10,
+        "rate too slow": 8
+      },
+      "subjects": [
+        {
+          "subject": 1,
+          "windows": 131,
+          "beltRate": 19,
+          "regular": 0.947,
+          "mainMiss": "uneven depth"
+        },
+        {
+          "subject": 2,
+          "windows": 119,
+          "beltRate": 17.4,
+          "regular": 0.975,
+          "mainMiss": "uneven timing"
+        },
+        {
+          "subject": 3,
+          "windows": 119,
+          "beltRate": 17,
+          "regular": 0.983,
+          "mainMiss": "uneven depth"
+        },
+        {
+          "subject": 4,
+          "windows": 119,
+          "beltRate": 18.1,
+          "regular": 0.966,
+          "mainMiss": "uneven depth"
+        },
+        {
+          "subject": 5,
+          "windows": 119,
+          "beltRate": 16.5,
+          "regular": 0.807,
+          "mainMiss": "uneven timing"
+        },
+        {
+          "subject": 6,
+          "windows": 119,
+          "beltRate": 15.1,
+          "regular": 0.672,
+          "mainMiss": "too few breaths in the window"
+        },
+        {
+          "subject": 7,
+          "windows": 105,
+          "beltRate": 12.2,
+          "regular": 0.695,
+          "mainMiss": "too few breaths in the window"
+        },
+        {
+          "subject": 8,
+          "windows": 119,
+          "beltRate": 23.6,
+          "regular": 0.916,
+          "mainMiss": "rate too fast"
+        },
+        {
+          "subject": 9,
+          "windows": 119,
+          "beltRate": 11.1,
+          "regular": 0.311,
+          "mainMiss": "too few breaths in the window"
+        },
+        {
+          "subject": 10,
+          "windows": 119,
+          "beltRate": 15.5,
+          "regular": 0.908,
+          "mainMiss": "uneven timing"
+        },
+        {
+          "subject": 11,
+          "windows": 119,
+          "beltRate": 19.5,
+          "regular": 0.95,
+          "mainMiss": "uneven timing"
+        },
+        {
+          "subject": 12,
+          "windows": 119,
+          "beltRate": 23.8,
+          "regular": 0.983,
+          "mainMiss": "uneven timing"
+        },
+        {
+          "subject": 13,
+          "windows": 119,
+          "beltRate": 21,
+          "regular": 0.95,
+          "mainMiss": "uneven timing"
+        },
+        {
+          "subject": 14,
+          "windows": 118,
+          "beltRate": 15.3,
+          "regular": 0.932,
+          "mainMiss": "uneven timing"
+        },
+        {
+          "subject": 15,
+          "windows": 119,
+          "beltRate": 19.4,
+          "regular": 0.975,
+          "mainMiss": "long pauses (looks like gasps)"
+        },
+        {
+          "subject": 16,
+          "windows": 119,
+          "beltRate": 17.4,
+          "regular": 0.916,
+          "mainMiss": "uneven timing"
+        },
+        {
+          "subject": 17,
+          "windows": 119,
+          "beltRate": 17.1,
+          "regular": 0.958,
+          "mainMiss": "uneven timing"
+        },
+        {
+          "subject": 18,
+          "windows": 119,
+          "beltRate": 10.7,
+          "regular": 0.378,
+          "mainMiss": "too few breaths in the window"
+        },
+        {
+          "subject": 19,
+          "windows": 119,
+          "beltRate": 21.4,
+          "regular": 0.95,
+          "mainMiss": "uneven depth"
+        },
+        {
+          "subject": 20,
+          "windows": 119,
+          "beltRate": 12.8,
+          "regular": 0.866,
+          "mainMiss": "too few breaths in the window"
+        }
+      ]
+    },
+    {
+      "name": "Emergency check (10 s), 60/s (browser)",
+      "mode": "check",
+      "sensor": {
+        "fs": 60
+      },
+      "windows": 2377,
+      "regular": 0.849,
+      "startCpr": 0.151,
+      "rateMedianError": 0.78,
+      "reasons": {
+        "regular": 2018,
+        "uneven depth": 28,
+        "rate too fast": 33,
+        "long pauses (looks like gasps)": 51,
+        "uneven timing": 70,
+        "too few breaths in the window": 161,
+        "no movement seen": 9,
+        "rate too slow": 7
+      },
+      "subjects": [
+        {
+          "subject": 1,
+          "windows": 131,
+          "beltRate": 19,
+          "regular": 0.939,
+          "mainMiss": "uneven depth"
+        },
+        {
+          "subject": 2,
+          "windows": 119,
+          "beltRate": 17.4,
+          "regular": 0.975,
+          "mainMiss": "rate too fast"
+        },
+        {
+          "subject": 3,
+          "windows": 119,
+          "beltRate": 17,
+          "regular": 0.975,
+          "mainMiss": "uneven depth"
+        },
+        {
+          "subject": 4,
+          "windows": 119,
+          "beltRate": 18.1,
+          "regular": 0.975,
+          "mainMiss": "uneven depth"
+        },
+        {
+          "subject": 5,
+          "windows": 119,
+          "beltRate": 16.5,
+          "regular": 0.79,
+          "mainMiss": "uneven timing"
+        },
+        {
+          "subject": 6,
+          "windows": 119,
+          "beltRate": 15.1,
+          "regular": 0.664,
+          "mainMiss": "too few breaths in the window"
+        },
+        {
+          "subject": 7,
+          "windows": 105,
+          "beltRate": 12.2,
+          "regular": 0.676,
+          "mainMiss": "too few breaths in the window"
+        },
+        {
+          "subject": 8,
+          "windows": 119,
+          "beltRate": 23.6,
+          "regular": 0.924,
+          "mainMiss": "rate too fast"
+        },
+        {
+          "subject": 9,
+          "windows": 119,
+          "beltRate": 11.1,
+          "regular": 0.286,
+          "mainMiss": "too few breaths in the window"
+        },
+        {
+          "subject": 10,
+          "windows": 119,
+          "beltRate": 15.5,
+          "regular": 0.916,
+          "mainMiss": "uneven timing"
+        },
+        {
+          "subject": 11,
+          "windows": 119,
+          "beltRate": 19.5,
+          "regular": 0.941,
+          "mainMiss": "uneven timing"
+        },
+        {
+          "subject": 12,
+          "windows": 119,
+          "beltRate": 23.8,
+          "regular": 0.992,
+          "mainMiss": "uneven timing"
+        },
+        {
+          "subject": 13,
+          "windows": 119,
+          "beltRate": 21,
+          "regular": 0.95,
+          "mainMiss": "uneven timing"
+        },
+        {
+          "subject": 14,
+          "windows": 118,
+          "beltRate": 15.3,
+          "regular": 0.915,
+          "mainMiss": "long pauses (looks like gasps)"
+        },
+        {
+          "subject": 15,
+          "windows": 119,
+          "beltRate": 19.4,
+          "regular": 0.983,
+          "mainMiss": "long pauses (looks like gasps)"
+        },
+        {
+          "subject": 16,
+          "windows": 119,
+          "beltRate": 17.4,
+          "regular": 0.924,
+          "mainMiss": "too few breaths in the window"
+        },
+        {
+          "subject": 17,
+          "windows": 119,
+          "beltRate": 17.1,
+          "regular": 0.95,
+          "mainMiss": "uneven timing"
+        },
+        {
+          "subject": 18,
+          "windows": 119,
+          "beltRate": 10.7,
+          "regular": 0.345,
+          "mainMiss": "too few breaths in the window"
+        },
+        {
+          "subject": 19,
+          "windows": 119,
+          "beltRate": 21.4,
+          "regular": 0.966,
+          "mainMiss": "uneven timing"
+        },
+        {
+          "subject": 20,
+          "windows": 119,
+          "beltRate": 12.8,
+          "regular": 0.866,
+          "mainMiss": "too few breaths in the window"
+        }
+      ]
+    },
+    {
+      "name": "Lab (30 s), 100/s",
+      "mode": "lab",
+      "sensor": {
+        "fs": 100
+      },
+      "windows": 2335,
+      "regular": 0.768,
+      "startCpr": 0.232,
+      "rateMedianError": 0.43,
+      "reasons": {
+        "uneven depth": 116,
+        "regular": 1793,
+        "uneven timing": 192,
+        "long pauses (looks like gasps)": 85,
+        "rate too slow": 130,
+        "too few breaths in the window": 5,
+        "hand or bump (wrongly)": 1,
+        "seesaw": 3,
+        "rate too fast": 10
+      },
+      "subjects": [
+        {
+          "subject": 1,
+          "windows": 128,
+          "beltRate": 19,
+          "regular": 0.844,
+          "mainMiss": "uneven depth"
+        },
+        {
+          "subject": 2,
+          "windows": 117,
+          "beltRate": 17.5,
+          "regular": 0.957,
+          "mainMiss": "uneven depth"
+        },
+        {
+          "subject": 3,
+          "windows": 117,
+          "beltRate": 17.1,
+          "regular": 1,
+          "mainMiss": ""
+        },
+        {
+          "subject": 4,
+          "windows": 117,
+          "beltRate": 18.3,
+          "regular": 0.88,
+          "mainMiss": "uneven depth"
+        },
+        {
+          "subject": 5,
+          "windows": 117,
+          "beltRate": 16.7,
+          "regular": 0.684,
+          "mainMiss": "uneven timing"
+        },
+        {
+          "subject": 6,
+          "windows": 117,
+          "beltRate": 15.2,
+          "regular": 0.538,
+          "mainMiss": "uneven timing"
+        },
+        {
+          "subject": 7,
+          "windows": 102,
+          "beltRate": 12.4,
+          "regular": 0.451,
+          "mainMiss": "uneven timing"
+        },
+        {
+          "subject": 8,
+          "windows": 117,
+          "beltRate": 23.8,
+          "regular": 0.872,
+          "mainMiss": "uneven depth"
+        },
+        {
+          "subject": 9,
+          "windows": 117,
+          "beltRate": 7.1,
+          "regular": 0.137,
+          "mainMiss": "rate too slow"
+        },
+        {
+          "subject": 10,
+          "windows": 117,
+          "beltRate": 15.5,
+          "regular": 0.795,
+          "mainMiss": "uneven timing"
+        },
+        {
+          "subject": 11,
+          "windows": 117,
+          "beltRate": 19.5,
+          "regular": 0.932,
+          "mainMiss": "uneven timing"
+        },
+        {
+          "subject": 12,
+          "windows": 117,
+          "beltRate": 23.8,
+          "regular": 0.983,
+          "mainMiss": "uneven depth"
+        },
+        {
+          "subject": 13,
+          "windows": 117,
+          "beltRate": 21.1,
+          "regular": 0.94,
+          "mainMiss": "uneven timing"
+        },
+        {
+          "subject": 14,
+          "windows": 116,
+          "beltRate": 15.4,
+          "regular": 0.724,
+          "mainMiss": "uneven timing"
+        },
+        {
+          "subject": 15,
+          "windows": 117,
+          "beltRate": 19,
+          "regular": 0.949,
+          "mainMiss": "uneven depth"
+        },
+        {
+          "subject": 16,
+          "windows": 117,
+          "beltRate": 17.9,
+          "regular": 0.838,
+          "mainMiss": "uneven depth"
+        },
+        {
+          "subject": 17,
+          "windows": 117,
+          "beltRate": 17.3,
+          "regular": 0.957,
+          "mainMiss": "uneven depth"
+        },
+        {
+          "subject": 18,
+          "windows": 117,
+          "beltRate": 8.7,
+          "regular": 0.094,
+          "mainMiss": "rate too slow"
+        },
+        {
+          "subject": 19,
+          "windows": 117,
+          "beltRate": 21.4,
+          "regular": 0.889,
+          "mainMiss": "uneven depth"
+        },
+        {
+          "subject": 20,
+          "windows": 117,
+          "beltRate": 12.8,
+          "regular": 0.846,
+          "mainMiss": "long pauses (looks like gasps)"
+        }
+      ]
+    }
+  ]
+}

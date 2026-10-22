@@ -4,6 +4,20 @@ Read this at the start of every session; update it at the end.
 
 **Deadline:** 12:00 pm Eastern, Monday October 26 2026. **Our deadline:** submit by 9:00 am that morning.
 
+## Status on Thursday October 22
+
+### Done today (the sensors meet real data)
+- **Heartbeat model fixed** (`docs/HEART_MODEL.md`). It scored 58% because of a fault in the PhysioNet CEBS database: b002-b020's signal files are copies of p002-p020 (same SHA-256 in PhysioNet's own checksum list) under the basal recordings' annotations. Records are now checked against R waves found in their own ECG; the 19 are dropped and the 20 fifty-minute music recordings added (18 hours, 76,945 beats). The gyroscope model now learns from real hearts too. On people it never saw: 96.4% of beats found, 96.6% precision (rules 95.2% / 94.7%). A first retrain heard heartbeats in pure noise (14-17%); with 40% beat-free training windows: 0% on simulated people with no heart, 2.4% with people walking nearby (rules 16-40%).
+- **Breathing check on real breathing** (`docs/REAL_BREATHING.md`). CEBS respiration belts (20 people) played through the simulated phone. It called only 67% of healthy 10-second checks regular; real breaths' notches were counted as extra breaths. Ignoring wobbles under a quarter of the biggest swing: 85% regular, false "Start CPR" 33% → 15%. Gasping, none and very slow are still never called regular.
+- **CPR pace from the accelerometer** (user's pick). `sensors/compressions.ts` + `cpr/pace.ts` + `cpr/usePaceSensor.ts`. During CPR (and in Practice, phone on the cushion) the phone feels the pushes; the hands-only coaching slot says "Faster. Push on every click.", "A little slower. Push on every click." or "Keep pushing. Don't stop." only after it has clearly felt compressions; "Your pace 108 · good" under the timer. Scored on five real resuscitations (CPRDAT, `docs/CPR_SENSOR.md`): felt 100% of compressions down to 1% of the chest's motion reaching the phone, rate within 5/min 90% of the time.
+- **Hearing gasps** (user's pick). `sensors/sounds.ts` + `mic.ts`, browser only. Listens during the 10-second check; real non-gasp sounds (ESC-50, `docs/SOUND_CHECK.md`) showed a single loud breath, snore or sneeze sounds like a gasp (28-43%), so it only backs up a "not normal" the chest already gave: "I heard gasping. Gasping is not breathing."
+- Engine panel: Compressions section, and what the microphone heard.
+- New voice lines rendered (pace and gasp lines). Tests: compressions, pace coach, sounds; real-data reports on request (`REAL_BREATH=1`, `CPR_REPORT=1`, `SOUND_REPORT=1`). Data in `data/` (git-ignored; scripts `tools/heart_ml/`, `tools/cpr_data.py`, `tools/sound_data.py`).
+
+### Next
+- **Test on yourself** (`research/sensor-breathing.md`, steps 1-8): the breathing check, Practice with the phone on the cushion (and on the floor beside it: how much motion reaches the phone is the number nobody has published), and a faked gasp.
+- Tell PhysioNet about the CEBS duplicate files.
+
 ## Status on Wednesday October 21
 
 ### Done today

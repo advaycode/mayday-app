@@ -1,4 +1,4 @@
-import { StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 import Svg, { Circle, G, Line, Path, Rect } from 'react-native-svg';
 
 import { Text } from '@/design/Text';
@@ -16,7 +16,9 @@ const MAGNIFY = 40;
 /** Inside this, both ways, counts as level. */
 const LEVEL_DEG = 0.1;
 
-const signed = (v: number, digits = 2) => `${v >= 0 ? '+' : '−'}${Math.abs(v).toFixed(digits)}°`;
+/** Degrees as 00.00: two digits each side of the point, so the reading never changes width as the chest moves. */
+const deg = (v: number) => `${Math.abs(v).toFixed(2).padStart(5, '0')}°`;
+const signed = (v: number) => `${v >= 0 ? '+' : '−'}${deg(v)}`;
 
 /**
  * Two circles, like the iPhone's Level lying flat: one fixed, one that moves
@@ -48,7 +50,7 @@ export function LevelDial({ level, size = 248, active }: { level: Level | null; 
       </Svg>
       <View style={[StyleSheet.absoluteFill, styles.dialText]} pointerEvents="none">
         <Text style={[styles.degrees, { color: isLevel ? LEVEL : color.ink }]} tabular>
-          {level?.ref ? signed(p) : level ? `${Math.abs(level.pitch).toFixed(1)}°` : '—'}
+          {level?.ref ? signed(p) : level ? deg(level.pitch) : '—'}
         </Text>
         <Text variant="mono" tone="muted" tabular>
           {level?.ref ? `side ${signed(q)}` : 'resting angle'}
@@ -86,7 +88,7 @@ export function TiltTrace({ reading, width, height = 112, accent, window }: { re
       </Svg>
       <View style={styles.traceLabels} pointerEvents="none">
         <Text variant="mono" tone="faint">
-          ±{scale.toFixed(2)}°
+          ±{deg(scale)}
         </Text>
         <Text variant="mono" tone="faint">
           {Math.round(window)} s
@@ -130,7 +132,7 @@ export function BreathStats({ breath, lab }: { breath: BreathReading | null; lab
   return (
     <View style={styles.stats}>
       <Stat label="Breaths" value={b?.perMin ? `${Math.round(b.perMin)}` : '—'} unit="a minute" />
-      <Stat label="Tilt per breath" value={b?.depthDeg ? `${b.depthDeg.toFixed(2)}°` : '—'} unit={b?.depthMm ? `≈${b.depthMm.toFixed(1)} mm` : undefined} />
+      <Stat label="Tilt per breath" value={b?.depthDeg ? deg(b.depthDeg) : '—'} unit={b?.depthMm ? `≈${b.depthMm.toFixed(1)} mm` : undefined} />
       <Stat label="Rhythm" value={b ? RHYTHM[b.status] : '—'} />
       {lab && <Stat label="Chest & belly" value={b?.sync == null ? '—' : Math.abs(b.sync) < 0.3 ? 'see-saw' : 'together'} />}
     </View>
@@ -141,8 +143,12 @@ export function BreathStats({ breath, lab }: { breath: BreathReading | null; lab
  * EXPERIMENTAL heartbeat: rate, how sure, and each beat-to-beat interval as
  * a bar, so you can see the rhythm speed up as you breathe in.
  */
-export function HeartPanel({ heart, width }: { heart: HeartReading | null; width: number }) {
+export function HeartPanel({ heart, width, method, onSwitch }: { heart: HeartReading | null; width: number; method?: 'model' | 'rules'; onSwitch?: () => void }) {
   const h = heart;
+  const inner = width - 2 * space[4];
+  const tr = h?.trace ?? [];
+  const line = tr.length > 1 ? tr.map((v, i) => `${i ? 'L' : 'M'}${((i / (tr.length - 1)) * inner).toFixed(1)},${(38 - v * 34).toFixed(1)}`).join('') : '';
+  const from = !h?.source ? '' : h.source === 'both' ? 'accelerometer + gyroscope' : h.source === 'rotation' ? 'gyroscope' : 'accelerometer';
   const bars = (h?.intervalsMs ?? []).slice(-14);
   const maxMs = Math.max(1200, ...bars);
   const bw = bars.length ? (width - 2 * space[4]) / 14 : 0;
@@ -153,9 +159,13 @@ export function HeartPanel({ heart, width }: { heart: HeartReading | null; width
         <Text variant="caption" tone="muted">
           Heartbeat · experimental
         </Text>
-        <Text variant="mono" tone="faint">
-          sure {Math.round((h?.confidence ?? 0) * 100)}%
-        </Text>
+        {onSwitch ? (
+          <Pressable onPress={onSwitch} accessibilityRole="button" accessibilityLabel={`Using ${method === 'rules' ? 'the rules' : 'the BeatNet model'}. Tap to switch.`} hitSlop={8} style={styles.methodChip}>
+            <Text variant="caption" style={{ color: method === 'rules' ? color.ink : LEVEL }}>
+              {method === 'rules' ? 'Rules' : 'BeatNet model'}
+            </Text>
+          </Pressable>
+        ) : null}
       </View>
       <View style={{ flexDirection: 'row', alignItems: 'baseline', gap: space[2] }}>
         <Text style={styles.heartValue} tabular>
@@ -167,14 +177,23 @@ export function HeartPanel({ heart, width }: { heart: HeartReading | null; width
           </Text>
         )}
       </View>
-      <Svg width={width - 2 * space[4]} height={44}>
+      {line ? (
+        <Svg width={inner} height={42} accessibilityLabel="The model's beat probability over the last 10 seconds">
+          <Line x1={0} x2={inner} y1={38 - 0.5 * 34} y2={38 - 0.5 * 34} stroke={color.hairline} strokeDasharray="3 4" />
+          <Path d={line} stroke={LEVEL} strokeWidth={1.5} fill="none" />
+        </Svg>
+      ) : null}
+      <Text variant="mono" tone="faint">
+        {from ? `${from} · ` : ''}sure {Math.round((h?.confidence ?? 0) * 100)}%
+      </Text>
+      <Svg width={inner} height={44}>
         {bars.map((ms, i) => {
           const hgt = (ms / maxMs) * 40;
           return <Rect key={i} x={i * bw + 1} y={44 - hgt} width={Math.max(2, bw - 3)} height={hgt} rx={2} fill={h?.status === 'found' ? tint.cpr.hue : color.inkFaint} />;
         })}
       </Svg>
       <Text variant="caption" tone="faint">
-        Each bar is one beat-to-beat interval. Not a pulse check: never use it to decide on CPR.
+        {line ? 'The line is the model\'s chance of a beat at each moment; dashes mark 50%. ' : ''}Each bar is one beat-to-beat interval. Not a pulse check: never use it to decide on CPR.
       </Text>
     </View>
   );
@@ -202,13 +221,15 @@ export function Placement({ width, accent }: { width: number; accent: string }) 
 
 const styles = StyleSheet.create({
   dialText: { alignItems: 'center', justifyContent: 'center', gap: 2 },
-  degrees: { fontFamily: font.monoMedium, fontSize: 40, lineHeight: 46, letterSpacing: -1 },
+  // Seven characters (+00.25°) inside the inner circle.
+  degrees: { fontFamily: font.monoMedium, fontSize: 28, lineHeight: 34, letterSpacing: -1 },
   traceLabels: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, flexDirection: 'row', justifyContent: 'space-between', padding: space[2] },
   stats: { flexDirection: 'row', flexWrap: 'wrap', gap: space[2], alignSelf: 'stretch' },
   stat: { flexGrow: 1, flexBasis: '46%', backgroundColor: color.sunken, borderRadius: radius.md, borderWidth: StyleSheet.hairlineWidth, borderColor: color.hairline, paddingHorizontal: space[3], paddingVertical: space[2], gap: 2 },
   statRow: { flexDirection: 'row', alignItems: 'baseline', gap: space[2] },
   statValue: { fontFamily: font.monoMedium, fontSize: 20, lineHeight: 26, color: color.ink },
   heart: { backgroundColor: color.sunken, borderRadius: radius.md, borderWidth: StyleSheet.hairlineWidth, borderColor: color.hairline, padding: space[4], gap: space[2] },
-  heartHead: { flexDirection: 'row', justifyContent: 'space-between' },
+  heartHead: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  methodChip: { paddingHorizontal: space[2], paddingVertical: 2, borderRadius: radius.pill, borderWidth: StyleSheet.hairlineWidth, borderColor: color.hairlineStrong },
   heartValue: { fontFamily: font.monoMedium, fontSize: 28, lineHeight: 34, color: color.ink },
 });

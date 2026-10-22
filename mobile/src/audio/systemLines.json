@@ -54,7 +54,12 @@
     "sensorLetGo": "Let go of the phone.",
     "sensorNone": "No normal breathing seen. Start CPR.",
     "sensorMoving": "The chest is moving. Is it normal breathing, or gasping?",
-    "sensorUnsure": "I couldn't measure. Watch the chest."
+    "sensorUnsure": "I couldn't measure. Watch the chest.",
+    "paceFaster": "Faster. Push on every click.",
+    "paceSlower": "A little slower. Push on every click.",
+    "paceKeep": "Keep pushing. Don't stop.",
+    "soundGasp": "I heard gasping.",
+    "soundGaspNot": "Gasping is not breathing."
   },
   "confirm": {
     "cpr_adult": "Not breathing. We'll do this together.",

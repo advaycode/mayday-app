@@ -17,10 +17,19 @@ export type Source = {
   stop(): void;
 };
 
-type MotionEvent = { accelerationIncludingGravity: { x: number | null; y: number | null; z: number | null } | null; timeStamp: number };
+type MotionEvent = {
+  accelerationIncludingGravity: { x: number | null; y: number | null; z: number | null } | null;
+  rotationRate: { alpha: number | null; beta: number | null; gamma: number | null } | null;
+  timeStamp: number;
+};
 type MotionPermission = { requestPermission?: () => Promise<'granted' | 'denied'> };
 
-/** The browser's motion events (the iPhone home-screen app and Safari). */
+/**
+ * The browser's motion events (the iPhone home-screen app and Safari): the
+ * accelerometer and, in the same event, the gyroscope's rotation rates in
+ * degrees a second. Browsers disagree on which of alpha, beta and gamma is
+ * which axis; the analysis works that out from the data (`alignGyro`).
+ */
 function webSource(): Source {
   let handler: ((e: MotionEvent) => void) | null = null;
   return {
@@ -46,7 +55,9 @@ function webSource(): Source {
             got = true;
             resolve(true);
           }
-          onSample({ t: e.timeStamp / 1000, x: a.x, y: a.y, z: a.z });
+          const r = e.rotationRate;
+          const rot: [number, number, number] | undefined = r && r.alpha != null && r.beta != null && r.gamma != null ? [r.alpha, r.beta, r.gamma] : undefined;
+          onSample({ t: e.timeStamp / 1000, x: a.x, y: a.y, z: a.z, rot });
         };
         window.addEventListener('devicemotion', handler as unknown as EventListener);
         setTimeout(() => {
@@ -65,7 +76,11 @@ function webSource(): Source {
   };
 }
 
-/** expo-sensors on iPhone and Android: 100 samples a second, in g. */
+/**
+ * expo-sensors on iPhone and Android, 100 samples a second. DeviceMotion gives
+ * the accelerometer and the gyroscope together, on one clock; a phone without
+ * a gyroscope falls back to the accelerometer alone.
+ */
 function nativeSource(): Source {
   let sub: { remove(): void } | null = null;
   return {
@@ -73,7 +88,17 @@ function nativeSource(): Source {
     async start(onSample) {
       try {
         // eslint-disable-next-line @typescript-eslint/no-require-imports
-        const { Accelerometer } = require('expo-sensors') as typeof import('expo-sensors');
+        const { Accelerometer, DeviceMotion } = require('expo-sensors') as typeof import('expo-sensors');
+        if (await DeviceMotion.isAvailableAsync()) {
+          DeviceMotion.setUpdateInterval(10);
+          sub = DeviceMotion.addListener((m) => {
+            const a = m.accelerationIncludingGravity;
+            const r = m.rotationRate;
+            const t = a.timestamp ?? performance.now() / 1000;
+            onSample({ t, x: a.x, y: a.y, z: a.z, rot: r ? [r.alpha, r.beta, r.gamma] : undefined });
+          });
+          return true;
+        }
         if (!(await Accelerometer.isAvailableAsync())) return false;
         Accelerometer.setUpdateInterval(10);
         sub = Accelerometer.addListener((m) => onSample({ t: m.timestamp, x: m.x * G, y: m.y * G, z: m.z * G }));

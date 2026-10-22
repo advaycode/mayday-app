@@ -15,6 +15,15 @@ import { analyzeHeart, type HeartReading } from './heart';
  *   pitch = atan2(y, z)     head-to-foot tilt (the breathing signal)
  *   roll  = atan2(x, z)     side-to-side tilt
  *
+ * With a gyroscope the tilt gets better. The gyroscope measures how fast the
+ * phone turns; added up over time that is the change in angle, with far less
+ * noise than the accelerometer at breathing speeds, but it drifts. So the two
+ * are blended (a complementary filter): the accelerometer for slow changes
+ * below 0.08 Hz, the gyroscope above. Platforms disagree on which rotation
+ * axis is which (even Expo's own docs contradict each other), so the phone
+ * works out its own: whichever gyroscope channel moves with the level's
+ * pitch is pitch (`alignGyro`).
+ *
  * Published basis: Landreani et al. (CinC 2017) put iPhones on the sternum
  * and on the belly of supine volunteers and recovered breathing rate from the
  * longitudinal (Y) axis within 2%, after a 0.5 Hz low-pass. See
@@ -27,8 +36,27 @@ import { analyzeHeart, type HeartReading } from './heart';
 
 export const G = 9.80665;
 
-/** One accelerometer reading, gravity included, in the phone's own frame. */
-export type Sample = { t: number; x: number; y: number; z: number }; // seconds; m/s²
+/**
+ * One reading in the phone's own frame: acceleration with gravity (m/s²) and,
+ * if there is a gyroscope, its rotation rates (degrees a second), in whatever
+ * order the platform reports them.
+ */
+export type Sample = { t: number; x: number; y: number; z: number; rot?: [number, number, number] };
+
+export type GyroInfo = {
+  /** True when a gyroscope channel was matched to the level's pitch. */
+  locked: boolean;
+  /** True when the blended tilt was quieter than the accelerometer's, so it was used. */
+  blended: boolean;
+  /** Which channel is pitch and roll, and how closely the pitch channel follows the level (0-1). */
+  pitchAxis: number;
+  rollAxis: number;
+  match: number;
+  /** Breathing-band noise of the accelerometer alone, degrees (compare Reading.noiseDeg). */
+  accelNoiseDeg: number;
+  /** Rotation shake at hand-tremor frequencies, degrees a second. */
+  shakeDps: number;
+};
 
 export type AgeGroup = 'adult' | 'child' | 'infant';
 
@@ -63,13 +91,14 @@ export type Reading = {
   /** Latest absolute angles, degrees. */
   pitch: number;
   roll: number;
-  motion: { moving: boolean; tremorMg: number; noiseMg: number; bump: boolean };
+  motion: { moving: boolean; tremorMg: number; noiseMg: number; bump: boolean; shakeDps: number };
   /** The breathing-band noise floor, degrees. */
   noiseDeg: number;
   /** Breathing tilt relative to the start of the window (filtered), for the trace. */
   trace: { t: number[]; deg: number[] };
   breath: BreathReading;
   heart: HeartReading | null;
+  gyro: GyroInfo | null;
 };
 
 /** Distance between where the two ends of the phone rest, mm. A 150 mm phone, less its rounded corners. */
@@ -82,12 +111,28 @@ const RATE_BAND: Record<AgeGroup, [number, number]> = { adult: [8, 30], child: [
 const TREMOR_MG = 1.5;
 /** A jolt bigger than this anywhere in the window spoils it. */
 const BUMP_MG = 60;
+/** Rotation shake at tremor frequencies above this, and well above the gyroscope's own noise, also means a hand. */
+const SHAKE_DPS = 0.4;
+/** Below this the accelerometer leads the blended tilt; above it, the gyroscope. */
+const FUSE_HZ = 0.08;
+/** Swings smaller than this share of the biggest one are wobbles within a breath, not breaths. */
+const WOBBLE_SHARE = 0.25;
 
 export function angles(s: { x: number; y: number; z: number }) {
   return { pitch: (Math.atan2(s.y, s.z) * 180) / Math.PI, roll: (Math.atan2(s.x, s.z) * 180) / Math.PI };
 }
 
-type Prepared = { fs: number; t0: number; x: Float64Array; y: Float64Array; z: Float64Array; pitch: Float64Array; roll: Float64Array; mag: Float64Array };
+type Prepared = {
+  fs: number;
+  t0: number;
+  x: Float64Array;
+  y: Float64Array;
+  z: Float64Array;
+  pitch: Float64Array;
+  roll: Float64Array;
+  mag: Float64Array;
+  rot: [Float64Array, Float64Array, Float64Array] | null;
+};
 
 /** Regular clock, gravity pointing out of the screen, angles and magnitude. */
 export function prepare(samples: Sample[]): Prepared | null {
@@ -110,7 +155,79 @@ export function prepare(samples: Sample[]): Prepared | null {
     roll[i] = (Math.atan2(x[i], z[i]) * 180) / Math.PI;
     mag[i] = Math.hypot(x[i], y[i], z[i]);
   }
-  return { fs, t0: t[0], x, y, z, pitch, roll, mag };
+  // The gyroscope, if most samples have it; a missing reading repeats the last one.
+  let rot: Prepared['rot'] = null;
+  const first = samples.find((s) => s.rot)?.rot;
+  if (first && samples.filter((s) => s.rot).length >= 0.8 * samples.length) {
+    let last = first;
+    const filled = samples.map((s) => (last = s.rot ?? last));
+    rot = [0, 1, 2].map((k) => resample(t, filled.map((r) => r[k]), fs)) as Prepared['rot'];
+  }
+  return { fs, t0: t[0], x, y, z, pitch, roll, mag, rot };
+}
+
+export type Alignment = { locked: boolean; pitchAxis: number; pitchSign: number; rollAxis: number; rollSign: number; scale: number; match: number };
+
+/**
+ * Which gyroscope channel is which. The level gives pitch and roll; their
+ * rates of change must equal the gyroscope's rotation about those axes. So
+ * correlate every channel with both, take the best match and its sign, and
+ * its units (a slope near 57 means the platform sent radians a second).
+ * Uses the whole buffer, which includes the phone being laid down, so there
+ * is usually plenty of rotation to match. Locks only on a clear match.
+ */
+export function alignGyro(p: Prepared): Alignment | null {
+  if (!p.rot) return null;
+  const fs = p.fs;
+  const rateOf = (x: Float64Array) => {
+    const l = lowpass(x, 2, fs);
+    const d = new Float64Array(l.length);
+    for (let i = 1; i < l.length - 1; i++) d[i] = ((l[i + 1] - l[i - 1]) * fs) / 2;
+    return d;
+  };
+  const dp = rateOf(p.pitch);
+  const dr = rateOf(p.roll);
+  const ch = p.rot.map((c) => lowpass(c, 2, fs));
+  const edge = Math.min(Math.round(fs / 2), Math.floor(dp.length / 4));
+  const fit = (target: Float64Array, skip: number) => {
+    let best = { k: skip === 0 ? 1 : 0, corr: 0, gain: 1 };
+    ch.forEach((c, k) => {
+      if (k === skip) return;
+      const mc = mean(c, edge, c.length - edge);
+      const mt = mean(target, edge, target.length - edge);
+      let sct = 0;
+      let scc = 0;
+      let stt = 0;
+      for (let i = edge; i < c.length - edge; i++) {
+        sct += (c[i] - mc) * (target[i] - mt);
+        scc += (c[i] - mc) ** 2;
+        stt += (target[i] - mt) ** 2;
+      }
+      const corr = scc > 0 && stt > 0 ? sct / Math.sqrt(scc * stt) : 0;
+      if (Math.abs(corr) > Math.abs(best.corr)) best = { k, corr, gain: scc > 0 ? sct / scc : 1 };
+    });
+    return best;
+  };
+  const pf = fit(dp, -1);
+  const rf = fit(dr, pf.k);
+  return {
+    locked: Math.abs(pf.corr) >= 0.6,
+    pitchAxis: pf.k,
+    pitchSign: Math.sign(pf.corr) || 1,
+    rollAxis: rf.k,
+    rollSign: Math.sign(rf.corr) || 1,
+    scale: Math.abs(pf.gain) > 20 ? 180 / Math.PI : 1,
+    match: Math.abs(pf.corr),
+  };
+}
+
+/** Rotation rate (degrees a second) added up into an angle, then blended with the accelerometer's angle. */
+function blend(acc: number[], rate: ArrayLike<number>, fs: number): number[] {
+  const theta = new Float64Array(rate.length);
+  for (let i = 1; i < rate.length; i++) theta[i] = theta[i - 1] + (rate[i - 1] + rate[i]) / (2 * fs);
+  const slowAcc = lowpass(acc, FUSE_HZ, fs);
+  const slowGyro = lowpass(theta, FUSE_HZ, fs);
+  return acc.map((_, i) => slowAcc[i] + theta[i] - slowGyro[i]);
 }
 
 /**
@@ -123,7 +240,7 @@ export function prepare(samples: Sample[]): Prepared | null {
  * permanently "held" (the simulator caught this at 4 times the noise), and
  * reference bands below the tremor picked up the hand's own sway.
  */
-export function motionOf(p: Prepared, from: number, to: number) {
+export function motionOf(p: Prepared, from: number, to: number, gyroScale = 1) {
   const hi = Math.min(12, p.fs * 0.45);
   const xs = p.x.slice(from, to);
   const ys = p.y.slice(from, to);
@@ -147,7 +264,25 @@ export function motionOf(p: Prepared, from: number, to: number) {
   let bump = false;
   for (let i = from; i < to; i++) if (Math.abs(p.mag[i] - m) > (BUMP_MG / 1000) * G) bump = true;
   const shaking = tremorMg > TREMOR_MG && tremorMg > 3 * noiseMg;
-  return { moving: shaking || bump, tremorMg, noiseMg, bump };
+
+  // The gyroscope feels a hand as rotation shake, even when the accelerometer is too noisy to.
+  let shakeDps = 0;
+  let twisting = false;
+  if (p.rot) {
+    const part = (c: Float64Array) => Array.from(c.slice(from, to), (v) => v * gyroScale);
+    const g = p.rot.map((c) => bandpass(part(c), 6, hi, p.fs));
+    const gn = p.rot.map((c) => bandpass(part(c), 0.6 * nyq, 0.9 * nyq, p.fs));
+    let worstG = 0;
+    const floorsG: number[] = [];
+    for (let i = 0; i + step <= g[0].length; i += Math.round(step / 2)) {
+      worstG = Math.max(worstG, Math.hypot(...g.map((c) => rms(c, i, i + step))));
+      floorsG.push(Math.hypot(...gn.map((c) => rms(c, i, i + step))));
+    }
+    shakeDps = worstG;
+    const noiseDps = floorsG.length ? median(floorsG) * Math.sqrt((hi - 6) / (0.3 * nyq)) : 0;
+    twisting = shakeDps > SHAKE_DPS && shakeDps > 4 * noiseDps;
+  }
+  return { moving: shaking || twisting || bump, tremorMg, noiseMg, bump, shakeDps };
 }
 
 /**
@@ -156,7 +291,10 @@ export function motionOf(p: Prepared, from: number, to: number) {
  * `sync` adds the experimental chest-belly sync, which depends on the
  * accelerometer's offset (see `syncOf`); the emergency check leaves it off.
  */
-export function analyze(samples: Sample[], opts: { age?: AgeGroup; window?: number; heart?: boolean; heartWindow?: number; sync?: boolean } = {}): Reading | null {
+export function analyze(
+  samples: Sample[],
+  opts: { age?: AgeGroup; window?: number; heart?: boolean; heartWindow?: number; sync?: boolean; heartMethod?: 'model' | 'rules' } = {},
+): Reading | null {
   const p = prepare(samples);
   if (!p) return null;
   const age = opts.age ?? 'adult';
@@ -168,20 +306,44 @@ export function analyze(samples: Sample[], opts: { age?: AgeGroup; window?: numb
   const pitch = mean(p.pitch, last, n);
   const roll = mean(p.roll, last, n);
   const faceUp = mean(p.z, last, n) > 0.7 * G;
-  const motion = motionOf(p, from, n);
+  const al = alignGyro(p);
+  const motion = motionOf(p, from, n, al?.scale ?? 1);
 
   // --- Breathing band: below 1 Hz (1.5 for babies, who breathe faster) -------------------
   // Filter with up to 1.5 s of what came before the window, so its start is settled.
   const fc = age === 'infant' ? 1.5 : 1;
   const ctx = Math.max(0, from - Math.round(1.5 * p.fs));
-  const pw = Array.from(p.pitch.slice(ctx));
-  const rw = Array.from(p.roll.slice(ctx));
+  const accP = Array.from(p.pitch.slice(ctx));
+  const accR = Array.from(p.roll.slice(ctx));
+  // Noise floor: the tilt's wobble at 2-6 Hz (no breath and little heartbeat there),
+  // as a density, scaled to the breathing band. Measured higher up it would read low:
+  // putting jittery samples on a regular clock smooths the top of the spectrum.
+  const accDensity = std(bandpass(accP, 2, 6, p.fs).slice(from - ctx)) / 2;
+  const accelNoiseDeg = accDensity * Math.sqrt(fc);
+
+  // With a matched gyroscope: blend. The blend's noise is the accelerometer's
+  // below the crossover plus the gyroscope's, added up, above it (white rate
+  // noise of density d becomes angle noise of d / 2πf). The heart's own twist
+  // makes the gyroscope's noise read high, so this errs on the safe side; the
+  // blend is used only when it comes out quieter than the accelerometer alone.
+  let pw = accP;
+  let rw = accR;
+  let noiseDeg = accelNoiseDeg;
+  let blended = false;
+  if (al?.locked && p.rot) {
+    const pr = Float64Array.from(p.rot[al.pitchAxis].slice(ctx), (v) => al.pitchSign * al.scale * v);
+    const rr = Float64Array.from(p.rot[al.rollAxis].slice(ctx), (v) => al.rollSign * al.scale * v);
+    const gyroDensity = std(bandpass(pr, 2, 6, p.fs).slice(from - ctx)) / 2;
+    const blendNoise = Math.hypot(accDensity * Math.sqrt(FUSE_HZ), (gyroDensity / (2 * Math.PI)) * Math.sqrt(1 / FUSE_HZ - 1 / fc));
+    if (blendNoise < accelNoiseDeg) {
+      pw = blend(accP, pr, p.fs);
+      rw = blend(accR, rr, p.fs);
+      noiseDeg = blendNoise;
+      blended = true;
+    }
+  }
   const pl = lowpass(pw, fc, p.fs).slice(from - ctx);
   const rl = lowpass(rw, fc, p.fs).slice(from - ctx);
-  // Noise floor: the tilt's wobble at 2-6 Hz (no breath and little heartbeat there),
-  // scaled to the breathing band's width. Measured higher up it would read low:
-  // putting jittery samples on a regular clock smooths the top of the spectrum.
-  const noiseDeg = std(bandpass(pw, 2, 6, p.fs).slice(from - ctx)) * Math.sqrt(fc / 4);
 
   // The phone may lie along the body or across it: follow whichever way it tips most.
   const pd = detrend(pl);
@@ -208,9 +370,14 @@ export function analyze(samples: Sample[], opts: { age?: AgeGroup; window?: numb
   }
 
   const breath = readBreathing(tilt, p, from, { age, noiseDeg, fc, seconds, motion, faceUp, alongBody: alongBody && !!opts.sync, sign: ca >= 0 ? 1 : -1 });
-  const heart = opts.heart ? analyzeHeart(p.z.slice(Math.max(0, n - Math.round((opts.heartWindow ?? 10) * p.fs))), p.fs, motion.moving) : null;
+  const hw = Math.max(0, n - Math.round((opts.heartWindow ?? 10) * p.fs));
+  const heartRot = p.rot && al ? p.rot.map((c) => Float64Array.from(c.slice(hw), (v) => v * al.scale)) : null;
+  const heart = opts.heart ? analyzeHeart(p.z.slice(hw), p.fs, motion.moving, heartRot, opts.heartMethod ?? 'model') : null;
+  const gyro: GyroInfo | null = al
+    ? { locked: al.locked, blended, pitchAxis: al.pitchAxis, rollAxis: al.rollAxis, match: al.match, accelNoiseDeg, shakeDps: motion.shakeDps }
+    : null;
 
-  return { rate: p.fs, seconds, faceUp, pitch, roll, motion, noiseDeg, trace, breath, heart };
+  return { rate: p.fs, seconds, faceUp, pitch, roll, motion, noiseDeg, trace, breath, heart, gyro };
 }
 
 function readBreathing(
@@ -225,7 +392,16 @@ function readBreathing(
   if (!c.faceUp) return { ...blank, why: 'The phone is not lying face up' };
   if (c.motion.moving) return { ...blank, status: 'moving', why: c.motion.bump ? 'The phone was bumped' : 'A hand is on the phone' };
 
-  const ext = extrema(tilt, thresholdDeg);
+  // Turning points over the noise; then again, ignoring wobbles under a
+  // quarter of the biggest swing. Real breaths have notches and shoulders
+  // (CEBS belts, docs/REAL_BREATHING.md) that were counted as extra breaths,
+  // doubling the rate and making the timing look uneven. A gasp is one big
+  // swing and stillness, so this leaves it as it is.
+  let ext = extrema(tilt, thresholdDeg);
+  if (ext.length >= 3) {
+    const biggest = Math.max(...ext.slice(1).map((e, k) => Math.abs(e.v - ext[k].v)));
+    ext = extrema(tilt, Math.max(thresholdDeg, WOBBLE_SHARE * biggest));
+  }
   const turns = ext.length;
   const peaks = ext.filter((e) => e.kind === 'max').map((e) => e.i / fs - c.seconds);
   if (turns === 0) return { ...blank, status: 'none', why: `No chest movement over ${thresholdDeg.toFixed(2)}° in ${Math.round(c.seconds)} s` };

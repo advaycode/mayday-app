@@ -9,6 +9,7 @@ import { getSettings } from '@/settings/store';
 import { trace } from '@/voice/trace';
 import { adaptLine, say, voiceContext } from '@/voice/voice';
 
+import { PACE_LINES } from './pace';
 import { LookaheadScheduler } from './scheduler';
 import { BACK_LINE, positionAt, swapLine, type CprMode, type CprPlan, type TimelineEvent } from './timeline';
 
@@ -33,6 +34,8 @@ type Options = {
   swapEveryS: number;
   onStart?: (atMs: number) => void;
   onSwap?: () => void;
+  /** Asked at each hands-only coaching slot: a pace line (pace.ts) to say instead of the reminder, or null. */
+  paceLine?: () => string | null;
 };
 
 /**
@@ -77,6 +80,7 @@ export function useCprCoach(opts: Options) {
           ...COUNTS,
           ...plan.reminders,
           ...plan.breathsSay,
+          ...Object.values(PACE_LINES),
           BACK_LINE,
           ...Array.from({ length: 10 }, (_, i) => swapLine((i + 1) * 2, alone)),
         ];
@@ -91,7 +95,9 @@ export function useCprCoach(opts: Options) {
             a.playClick(e.at, e.count === 1);
             if (voice && e.count !== null) a.playLineAt(COUNTS[e.count - 1], e.at);
           } else if (e.kind === 'line' && voice) {
-            a.playLineAt(e.text, e.at);
+            // The usual "Push hard. Push fast." slot carries the pace line when the phone feels one is due.
+            const pace = e.role === 'reminder' ? optsRef.current.paceLine?.() : null;
+            a.playLineAt(pace ?? e.text, e.at);
           }
         };
         const scheduler = new LookaheadScheduler(plan, t0, { now }, emit);

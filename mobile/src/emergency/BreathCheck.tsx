@@ -32,35 +32,39 @@ export function BreathCheck({ incident, step, monitor, onClose }: { incident: In
   const { width, height } = useWindowDimensions();
   const insets = useDeviceInsets();
   const tone = emergencyFor(incident.state.engine?.protocolId).tint;
-  const { phase, level, reading, final, secondsLeft, retries, kind, scenario } = monitor;
+  const { phase, level, reading, final, secondsLeft, retries, kind, scenario, sound, listening } = monitor;
   const abnormal = step.choices.find((c) => c.value === 'abnormal');
   const b = final?.breath ?? null;
   const verdict = phase === 'done' && b ? (suggestAnswer(b) === 'abnormal' ? 'start-cpr' : b.status === 'regular' ? 'moving' : 'unsure') : null;
+  // What the microphone heard only backs up a "not normal" the chest's movement already gave
+  // (irregular, like gasps). On its own a single loud breath, snore or sneeze sounds like a gasp
+  // too (docs/SOUND_CHECK.md), so it never speaks when the chest moves steadily.
+  const gasps = phase === 'done' && sound?.status === 'gasps' && b?.status === 'irregular';
 
   // Say each stage once.
   const said = useRef('');
   useEffect(() => {
-    const key = `${phase}:${verdict}:${retries}`;
+    const key = `${phase}:${verdict}:${retries}:${gasps}`;
     if (said.current === key) return;
     said.current = key;
     const L = systemLines.lines;
     if (phase === 'place') audio()?.speak(retries ? [L.sensorLetGo] : [L.sensorPlace, L.sensorHow]);
     if (phase === 'measuring') audio()?.speak([L.sensorMeasuring]);
     if (verdict === 'start-cpr') {
-      audio()?.speak([L.sensorNone]);
+      audio()?.speak(gasps ? [L.soundGasp, L.soundGaspNot, L.sensorNone] : [L.sensorNone]);
       haptic('attention');
     }
     if (verdict === 'moving') audio()?.speak([L.sensorMoving]);
     if (verdict === 'unsure' || phase === 'unavailable') audio()?.speak([L.sensorUnsure]);
-  }, [phase, verdict, retries]);
+  }, [phase, verdict, retries, gasps]);
 
   // Log what the phone saw, once.
   const logged = useRef(false);
   useEffect(() => {
     if (phase !== 'done' || !b || logged.current) return;
     logged.current = true;
-    incident.log(`Phone check (${kind === 'simulated' ? 'simulated' : 'sensor'}): ${b.why}`);
-  }, [phase, b, kind, incident]);
+    incident.log(`Phone check (${kind === 'simulated' ? 'simulated' : 'sensor'}): ${b.why}${sound && sound.status !== 'unavailable' ? `; heard: ${sound.why}` : ''}`);
+  }, [phase, b, kind, incident, sound]);
 
   const close = () => {
     monitor.stop();
@@ -86,9 +90,9 @@ export function BreathCheck({ incident, step, monitor, onClose }: { incident: In
   const sub =
     phase === 'place' ? 'Top on the chest. Bottom on the belly.'
     : phase === 'leveling' ? 'Hold still'
-    : phase === 'measuring' ? "Don't touch it"
+    : phase === 'measuring' ? (listening ? "Don't touch it · listening" : "Don't touch it")
     : phase === 'unavailable' ? 'Watch the chest yourself.'
-    : verdict === 'start-cpr' ? b?.why ?? ''
+    : verdict === 'start-cpr' ? `${gasps ? 'Heard gasping. ' : ''}${b?.why ?? ''}`
     : verdict === 'moving' ? `${Math.round(b!.perMin!)} a minute. Normal breathing, or gasping?`
     : verdict === 'unsure' ? 'Watch the chest yourself.'
     : '';

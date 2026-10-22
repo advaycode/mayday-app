@@ -19,13 +19,15 @@ export type TrialResult = {
   truthHeart: number | null;
   heart: number | null;
   heartFound: boolean;
+  /** Why the analysis said what it said. */
+  why: string;
 };
 
-export function trial(scenario: Scenario, seed: number, mode: 'check' | 'lab', sensor: Partial<SimOptions> = {}): TrialResult {
+export function trial(scenario: Scenario, seed: number, mode: 'check' | 'lab', sensor: Partial<SimOptions> = {}, heartMethod: 'model' | 'rules' = 'model'): TrialResult {
   const meta = SCENARIOS.find((s) => s.id === scenario)!;
   const seconds = mode === 'check' ? 11.5 : 32;
   const { samples, truth } = simulate({ scenario, seconds, seed, jitterMs: 2, dropRate: 0.01, ...sensor });
-  const r = analyze(samples, { age: meta.age, window: mode === 'check' ? 10 : 30, heart: mode === 'lab', heartWindow: 10, sync: mode === 'lab' });
+  const r = analyze(samples, { age: meta.age, window: mode === 'check' ? 10 : 30, heart: mode === 'lab', heartWindow: 10, sync: mode === 'lab', heartMethod });
   const status = r?.breath.status ?? 'unknown';
   return {
     scenario,
@@ -37,6 +39,7 @@ export function trial(scenario: Scenario, seed: number, mode: 'check' | 'lab', s
     truthHeart: truth.heartPerMin,
     heart: r?.heart?.perMin ?? null,
     heartFound: r?.heart?.status === 'found',
+    why: r?.breath.why ?? '',
   };
 }
 
@@ -61,9 +64,9 @@ export type ScenarioStats = {
   heartMae: number | null;
 };
 
-export function evaluate(mode: 'check' | 'lab', trials: number, sensor: Partial<SimOptions> = {}, seed0 = 1): ScenarioStats[] {
+export function evaluate(mode: 'check' | 'lab', trials: number, sensor: Partial<SimOptions> = {}, seed0 = 1, heartMethod: 'model' | 'rules' = 'model'): ScenarioStats[] {
   return SCENARIOS.map((sc) => {
-    const results = Array.from({ length: trials }, (_, k) => trial(sc.id, seed0 + k * 7919, mode, sensor));
+    const results = Array.from({ length: trials }, (_, k) => trial(sc.id, seed0 + k * 7919, mode, sensor, heartMethod));
     const counts: Partial<Record<BreathStatus, number>> = {};
     for (const r of results) counts[r.status] = (counts[r.status] ?? 0) + 1;
     const rated = results.filter((r) => r.status === 'regular' && r.rate !== null && r.truthRate !== null);

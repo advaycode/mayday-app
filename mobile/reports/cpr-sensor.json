@@ -1,0 +1,169 @@
+{
+  "generated": "2026-10-22T14:30:13.307Z",
+  "rows": [
+    {
+      "fs": 100,
+      "transfer": 1,
+      "sensitivity": 1,
+      "specificity": 0.8125,
+      "windowsOn": 593,
+      "windowsOff": 320,
+      "rateErrorMedian": 0.3440301668758323,
+      "rateWithin5": 0.8983050847457628,
+      "sizeMg": 1000
+    },
+    {
+      "fs": 100,
+      "transfer": 0.3,
+      "sensitivity": 1,
+      "specificity": 0.84375,
+      "windowsOn": 593,
+      "windowsOff": 320,
+      "rateErrorMedian": 0.344423982286159,
+      "rateWithin5": 0.8983050847457628,
+      "sizeMg": 300
+    },
+    {
+      "fs": 100,
+      "transfer": 0.1,
+      "sensitivity": 1,
+      "specificity": 0.85625,
+      "windowsOn": 593,
+      "windowsOff": 320,
+      "rateErrorMedian": 0.34479453563719886,
+      "rateWithin5": 0.8983050847457628,
+      "sizeMg": 100
+    },
+    {
+      "fs": 100,
+      "transfer": 0.03,
+      "sensitivity": 1,
+      "specificity": 0.878125,
+      "windowsOn": 593,
+      "windowsOff": 320,
+      "rateErrorMedian": 0.34916431198944053,
+      "rateWithin5": 0.8983050847457628,
+      "sizeMg": 30
+    },
+    {
+      "fs": 100,
+      "transfer": 0.01,
+      "sensitivity": 1,
+      "specificity": 0.990625,
+      "windowsOn": 593,
+      "windowsOff": 320,
+      "rateErrorMedian": 0.3643904635523896,
+      "rateWithin5": 0.8983050847457628,
+      "sizeMg": 10
+    },
+    {
+      "fs": 100,
+      "transfer": 0.003,
+      "sensitivity": 0.8684654300168634,
+      "specificity": 1,
+      "windowsOn": 593,
+      "windowsOff": 320,
+      "rateErrorMedian": 0.3291533397553792,
+      "rateWithin5": 0.8830409356725146,
+      "sizeMg": 3
+    },
+    {
+      "fs": 60,
+      "transfer": 1,
+      "sensitivity": 1,
+      "specificity": 0.815625,
+      "windowsOn": 593,
+      "windowsOff": 320,
+      "rateErrorMedian": 0.34683179051994983,
+      "rateWithin5": 0.8983050847457628,
+      "sizeMg": 1000
+    },
+    {
+      "fs": 60,
+      "transfer": 0.3,
+      "sensitivity": 1,
+      "specificity": 0.85625,
+      "windowsOn": 593,
+      "windowsOff": 320,
+      "rateErrorMedian": 0.3463457162916228,
+      "rateWithin5": 0.8983050847457628,
+      "sizeMg": 300
+    },
+    {
+      "fs": 60,
+      "transfer": 0.1,
+      "sensitivity": 1,
+      "specificity": 0.8625,
+      "windowsOn": 593,
+      "windowsOff": 320,
+      "rateErrorMedian": 0.3523440914409832,
+      "rateWithin5": 0.8983050847457628,
+      "sizeMg": 100
+    },
+    {
+      "fs": 60,
+      "transfer": 0.03,
+      "sensitivity": 1,
+      "specificity": 0.88125,
+      "windowsOn": 593,
+      "windowsOff": 320,
+      "rateErrorMedian": 0.3527056546433869,
+      "rateWithin5": 0.8983050847457628,
+      "sizeMg": 30
+    },
+    {
+      "fs": 60,
+      "transfer": 0.01,
+      "sensitivity": 1,
+      "specificity": 0.996875,
+      "windowsOn": 593,
+      "windowsOff": 320,
+      "rateErrorMedian": 0.35301325773290415,
+      "rateWithin5": 0.8983050847457628,
+      "sizeMg": 10
+    },
+    {
+      "fs": 60,
+      "transfer": 0.003,
+      "sensitivity": 0.8178752107925801,
+      "specificity": 1,
+      "windowsOn": 593,
+      "windowsOff": 320,
+      "rateErrorMedian": 0.2871528076542944,
+      "rateWithin5": 0.8819875776397516,
+      "sizeMg": 3
+    }
+  ],
+  "byCase": {
+    "case_1": {
+      "on": 233,
+      "felt": 233,
+      "off": 66,
+      "falseFelt": 33
+    },
+    "case_2": {
+      "on": 16,
+      "felt": 16,
+      "off": 136,
+      "falseFelt": 12
+    },
+    "case_3": {
+      "on": 245,
+      "felt": 245,
+      "off": 35,
+      "falseFelt": 1
+    },
+    "case_4": {
+      "on": 61,
+      "felt": 61,
+      "off": 4,
+      "falseFelt": 0
+    },
+    "case_5": {
+      "on": 38,
+      "felt": 38,
+      "off": 79,
+      "falseFelt": 0
+    }
+  }
+}

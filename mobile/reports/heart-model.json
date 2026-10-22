@@ -1,0 +1,299 @@
+{
+  "generated": "2026-10-22 10:11",
+  "window_s": 10,
+  "tolerance_ms": 100,
+  "data": {
+    "records": [
+      "b001",
+      "m001",
+      "m002",
+      "m003",
+      "m004",
+      "m005",
+      "m006",
+      "m007",
+      "m008",
+      "m009",
+      "m010",
+      "m011",
+      "m012",
+      "m013",
+      "m014",
+      "m015",
+      "m016",
+      "m017",
+      "m018",
+      "m019",
+      "m020",
+      "p001",
+      "p002",
+      "p003",
+      "p004",
+      "p005",
+      "p006",
+      "p007",
+      "p008",
+      "p009",
+      "p010",
+      "p011",
+      "p012",
+      "p013",
+      "p014",
+      "p015",
+      "p016",
+      "p017",
+      "p018",
+      "p019",
+      "p020"
+    ],
+    "dropped": {
+      "b002": "annotations agree with the ECG for 4% of beats",
+      "b003": "annotations agree with the ECG for 7% of beats",
+      "b004": "annotations agree with the ECG for 4% of beats",
+      "b005": "annotations agree with the ECG for 4% of beats",
+      "b006": "annotations agree with the ECG for 6% of beats",
+      "b007": "annotations agree with the ECG for 4% of beats",
+      "b008": "annotations agree with the ECG for 5% of beats",
+      "b009": "annotations agree with the ECG for 3% of beats",
+      "b010": "annotations agree with the ECG for 4% of beats",
+      "b011": "annotations agree with the ECG for 6% of beats",
+      "b012": "annotations agree with the ECG for 6% of beats",
+      "b013": "annotations agree with the ECG for 4% of beats",
+      "b014": "annotations agree with the ECG for 8% of beats",
+      "b015": "annotations agree with the ECG for 7% of beats",
+      "b016": "annotations agree with the ECG for 7% of beats",
+      "b017": "annotations agree with the ECG for 5% of beats",
+      "b018": "annotations agree with the ECG for 6% of beats",
+      "b019": "annotations agree with the ECG for 5% of beats",
+      "b020": "annotations agree with the ECG for 7% of beats"
+    },
+    "people": 20,
+    "minutes": 1099,
+    "beats": 76945,
+    "annotationAgreement": 1.0
+  },
+  "real_cebs_cross_validated": {
+    "noise_0x": {
+      "model": {
+        "windows": 2566,
+        "found": 0.901,
+        "hrErrorPerMin": 1.56,
+        "sensitivity": 0.937,
+        "precision": 0.969,
+        "intervalErrorMs": 10.9
+      },
+      "both": {
+        "windows": 2566,
+        "found": 0.952,
+        "hrErrorPerMin": 1.48,
+        "sensitivity": 0.964,
+        "precision": 0.966,
+        "intervalErrorMs": 11.9
+      },
+      "rules": {
+        "windows": 2566,
+        "found": 0.946,
+        "hrErrorPerMin": 0.92,
+        "sensitivity": 0.952,
+        "precision": 0.947,
+        "intervalErrorMs": 9.2
+      }
+    },
+    "noise_1x": {
+      "model": {
+        "windows": 2566,
+        "found": 0.882,
+        "hrErrorPerMin": 1.27,
+        "sensitivity": 0.927,
+        "precision": 0.971,
+        "intervalErrorMs": 12.4
+      },
+      "both": {
+        "windows": 2566,
+        "found": 0.918,
+        "hrErrorPerMin": 1.3,
+        "sensitivity": 0.946,
+        "precision": 0.965,
+        "intervalErrorMs": 12.7
+      },
+      "rules": {
+        "windows": 2566,
+        "found": 0.935,
+        "hrErrorPerMin": 0.97,
+        "sensitivity": 0.95,
+        "precision": 0.941,
+        "intervalErrorMs": 11.3
+      }
+    },
+    "noise_4x": {
+      "model": {
+        "windows": 2566,
+        "found": 0.552,
+        "hrErrorPerMin": 1.54,
+        "sensitivity": 0.694,
+        "precision": 0.92,
+        "intervalErrorMs": 20.7
+      },
+      "both": {
+        "windows": 2566,
+        "found": 0.534,
+        "hrErrorPerMin": 1.7,
+        "sensitivity": 0.688,
+        "precision": 0.905,
+        "intervalErrorMs": 19.6
+      },
+      "rules": {
+        "windows": 2566,
+        "found": 0.513,
+        "hrErrorPerMin": 1.12,
+        "sensitivity": 0.85,
+        "precision": 0.767,
+        "intervalErrorMs": 24.7
+      }
+    },
+    "beat_free": {
+      "model": {
+        "windows": 750,
+        "found": 0.012,
+        "hrErrorPerMin": null,
+        "sensitivity": null,
+        "precision": 0.0,
+        "intervalErrorMs": null
+      },
+      "both": {
+        "windows": 750,
+        "found": 0.007,
+        "hrErrorPerMin": null,
+        "sensitivity": null,
+        "precision": 0.0,
+        "intervalErrorMs": null
+      },
+      "rules": {
+        "windows": 750,
+        "found": 0.0,
+        "hrErrorPerMin": null,
+        "sensitivity": null,
+        "precision": 0.0,
+        "intervalErrorMs": null
+      }
+    }
+  },
+  "simulated_held_out": {
+    "both": {
+      "heartbeat": {
+        "model": {
+          "windows": 285,
+          "found": 0.94,
+          "hrErrorPerMin": 0.49,
+          "sensitivity": 0.961,
+          "precision": 0.979,
+          "intervalErrorMs": 6.6
+        },
+        "rules": {
+          "windows": 285,
+          "found": 0.961,
+          "hrErrorPerMin": 0.9,
+          "sensitivity": 0.967,
+          "precision": 0.981,
+          "intervalErrorMs": 8.2
+        }
+      },
+      "no heartbeat": {
+        "model": {
+          "windows": 110,
+          "found": 0.0,
+          "hrErrorPerMin": null,
+          "sensitivity": null,
+          "precision": 0.0,
+          "intervalErrorMs": null
+        },
+        "rules": {
+          "windows": 110,
+          "found": 0.009,
+          "hrErrorPerMin": null,
+          "sensitivity": null,
+          "precision": 0.0,
+          "intervalErrorMs": null
+        }
+      },
+      "people walking, no heartbeat": {
+        "model": {
+          "windows": 125,
+          "found": 0.024,
+          "hrErrorPerMin": null,
+          "sensitivity": null,
+          "precision": 0.0,
+          "intervalErrorMs": null
+        },
+        "rules": {
+          "windows": 125,
+          "found": 0.4,
+          "hrErrorPerMin": null,
+          "sensitivity": null,
+          "precision": 0.0,
+          "intervalErrorMs": null
+        }
+      }
+    },
+    "vibration": {
+      "heartbeat": {
+        "model": {
+          "windows": 285,
+          "found": 0.389,
+          "hrErrorPerMin": 2.04,
+          "sensitivity": 0.492,
+          "precision": 0.914,
+          "intervalErrorMs": 23.1
+        },
+        "rules": {
+          "windows": 285,
+          "found": 0.484,
+          "hrErrorPerMin": 0.75,
+          "sensitivity": 0.771,
+          "precision": 0.753,
+          "intervalErrorMs": 18.2
+        }
+      },
+      "no heartbeat": {
+        "model": {
+          "windows": 110,
+          "found": 0.0,
+          "hrErrorPerMin": null,
+          "sensitivity": null,
+          "precision": 0.0,
+          "intervalErrorMs": null
+        },
+        "rules": {
+          "windows": 110,
+          "found": 0.0,
+          "hrErrorPerMin": null,
+          "sensitivity": null,
+          "precision": 0.0,
+          "intervalErrorMs": null
+        }
+      },
+      "people walking, no heartbeat": {
+        "model": {
+          "windows": 125,
+          "found": 0.024,
+          "hrErrorPerMin": null,
+          "sensitivity": null,
+          "precision": 0.0,
+          "intervalErrorMs": null
+        },
+        "rules": {
+          "windows": 125,
+          "found": 0.16,
+          "hrErrorPerMin": null,
+          "sensitivity": null,
+          "precision": 0.0,
+          "intervalErrorMs": null
+        }
+      }
+    }
+  },
+  "params": {
+    "vibration": 4057,
+    "both": 4165
+  }
+}

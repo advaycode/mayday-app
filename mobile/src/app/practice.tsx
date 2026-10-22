@@ -6,12 +6,14 @@ import { Pressable, StyleSheet, View } from 'react-native';
 
 import { unlockAudio } from '@/audio/engine';
 import systemLines from '@/audio/systemLines.json';
+import { usePaceSensor } from '@/cpr/usePaceSensor';
 import { useCprCoach } from '@/cpr/useCprCoach';
 import { Button } from '@/design/Button';
 import { Glass } from '@/design/Glass';
 import { useDeviceInsets } from '@/design/insets';
 import { Text } from '@/design/Text';
 import { color, radius, space } from '@/design/tokens';
+import { PaceLine } from '@/emergency/CprView';
 import { PulseRing } from '@/emergency/parts';
 import { elapsed } from '@/incident/log';
 import { protocols } from '@/protocols';
@@ -32,6 +34,8 @@ export default function Practice() {
 
   useEffect(() => () => setActive(false), []);
 
+  // With the phone lying on the cushion, it feels the pushes and corrects the pace.
+  const pace = usePaceSensor(active);
   const coach = useCprCoach({
     active,
     mode,
@@ -40,7 +44,9 @@ export default function Practice() {
     breathsSay: step.kind === 'cpr' ? step.breathsSay : [],
     swapEveryS: 120,
     onSwap: () => setTimeout(() => setActive(false), 3500),
+    paceLine: pace.paceLine,
   });
+  pace.phase.current = coach.phase;
 
   const big = !active ? 'Ready' : coach.phase === 'intro' ? 'Ready' : coach.phase === 'breaths' ? 'Breathe' : coach.count !== null ? String(coach.count) : '';
   const isNumber = active && coach.phase === 'compress' && coach.count !== null;
@@ -79,6 +85,13 @@ export default function Practice() {
             {elapsed(coach.elapsed * 1000)}
           </Text>
         )}
+        {active ? (
+          <PaceLine pace={pace} />
+        ) : (
+          <Text variant="caption" tone="faint" style={{ textAlign: 'center', marginTop: space[2] }}>
+            Lay the phone on the cushion and it feels your pace.
+          </Text>
+        )}
       </View>
 
       <View style={styles.actions}>
@@ -95,6 +108,8 @@ export default function Practice() {
           label={active ? 'Stop' : 'Start'}
           onPress={() => {
             unlockAudio();
+            // Inside the tap: Safari on iPhone shares motion only from one.
+            if (!active) void pace.startFromTap();
             setActive((a) => !a);
           }}
         />

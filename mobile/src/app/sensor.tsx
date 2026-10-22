@@ -83,9 +83,10 @@ export default function Sensor() {
             {m.reading?.breath.why ? (
               <Text variant="mono" tone="faint" style={styles.center}>
                 {m.reading.breath.why} · noise {m.reading.noiseDeg.toFixed(3)}° · {m.reading.rate}/s
+                {m.reading.gyro ? ` · gyro ${m.reading.gyro.locked ? `matched ${m.reading.gyro.match.toFixed(2)}${m.reading.gyro.blended ? ', blended' : ''}` : 'not matched yet'}` : ' · no gyro'}
               </Text>
             ) : null}
-            <HeartPanel heart={m.reading?.heart ?? null} width={inner} />
+            <HeartPanel heart={m.reading?.heart ?? null} width={inner} method={m.heartMethod} onSwitch={() => m.setHeartMethod(m.heartMethod === 'model' ? 'rules' : 'model')} />
           </>
         )}
 

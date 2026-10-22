@@ -1,7 +1,8 @@
 import { Ambulance, Lightning } from 'phosphor-react-native';
 import { useMemo } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 
+import { usePaceSensor } from '@/cpr/usePaceSensor';
 import { useCprCoach } from '@/cpr/useCprCoach';
 import { Button } from '@/design/Button';
 import { emergencyFor } from '@/design/emergencies';
@@ -30,6 +31,8 @@ export function CprView({ incident, step }: { incident: Incident; step: StepOf<'
     [reentry, step.id],
   );
 
+  // The phone feeling the compressions: pace lines in the coaching slot, and a line on screen.
+  const pace = usePaceSensor(true);
   const coach = useCprCoach({
     active: true,
     mode,
@@ -39,7 +42,9 @@ export function CprView({ incident, step }: { incident: Incident; step: StepOf<'
     swapEveryS: step.swapEveryS,
     onStart: (at) => log(reentry ? 'Compressions resumed' : `Compressions started (${mode === '30:2' ? '30:2 with breaths' : 'hands only'})`, at),
     onSwap: () => log('Rescuer swap prompted'),
+    paceLine: pace.paceLine,
   });
+  pace.phase.current = coach.phase;
 
   const big =
     coach.phase === 'intro' ? 'Ready' : coach.phase === 'breaths' ? 'Breathe' : coach.count !== null ? String(coach.count) : '';
@@ -73,6 +78,7 @@ export function CprView({ incident, step }: { incident: Incident; step: StepOf<'
             </Text>
           )}
         </View>
+        <PaceLine pace={pace} />
       </View>
 
       <View style={styles.actions}>
@@ -83,6 +89,34 @@ export function CprView({ incident, step }: { incident: Incident; step: StepOf<'
   );
 }
 
+/** One quiet line under the timer: the pace the phone feels, or nothing at all where it cannot feel it. */
+export function PaceLine({ pace }: { pace: ReturnType<typeof usePaceSensor> }) {
+  if (pace.status === 'needs-tap') {
+    return (
+      <Pressable onPress={() => void pace.startFromTap()} accessibilityRole="button" accessibilityLabel="Let the phone feel your compressions" hitSlop={10} style={styles.paceChip}>
+        <Text variant="caption" tone="muted">
+          Check my pace
+        </Text>
+      </Pressable>
+    );
+  }
+  if (pace.status !== 'on') return null;
+  const { trusted, perMin, advice } = pace.summary;
+  if (!trusted || perMin === null) {
+    return (
+      <Text variant="caption" tone="faint" accessibilityLiveRegion="polite">
+        {advice === 'keep' ? 'Keep pushing' : 'Feeling for your pushes'}
+      </Text>
+    );
+  }
+  const note = advice === 'faster' ? 'faster' : advice === 'slower' ? 'a little slower' : 'good';
+  return (
+    <Text variant="caption" tone={advice ? 'ink' : 'muted'} tabular accessibilityLiveRegion="polite" accessibilityLabel={`Your pace ${Math.round(perMin)} a minute, ${note}`}>
+      Your pace {Math.round(perMin)} · {note}
+    </Text>
+  );
+}
+
 const styles = StyleSheet.create({
   wrap: { flex: 1, paddingHorizontal: space[5], paddingBottom: space[3] },
   center: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: space[2] },
@@ -90,6 +124,7 @@ const styles = StyleSheet.create({
   count: { color: color.ink, textAlign: 'center' },
   instruction: { textAlign: 'center' },
   meta: { flexDirection: 'row', alignItems: 'center', gap: space[3], marginTop: space[4] },
+  paceChip: { paddingHorizontal: space[3], paddingVertical: space[1], borderRadius: 999, borderWidth: StyleSheet.hairlineWidth, borderColor: color.hairlineStrong },
   // Full width, one above the other: side by side the words were cut off.
   actions: { gap: space[2] },
 });
