@@ -20,6 +20,8 @@ import { EMERGENCIES, emergencyFor } from '@/design/emergencies';
 import { useDeviceInsets } from '@/design/insets';
 import { color } from '@/design/tokens';
 import { protocols } from '@/protocols';
+import { setPhoneCheck } from '@/sensors/live';
+import { motionNeedsTap } from '@/sensors/source';
 import { useMonitor } from '@/sensors/useMonitor';
 import { capabilities, online } from '@/ai/proxy';
 import { createListener, type ListenState } from '@/voice/listen';
@@ -138,6 +140,23 @@ export default function Emergency() {
     incident.setQuiet(true);
     setSheet('breath');
   };
+  // The voice assistant can open it too ("check his breathing", "is she breathing?").
+  const phoneCheckRef = useRef(phoneCheck);
+  phoneCheckRef.current = phoneCheck;
+  const canCheck = !!breathStep;
+  useEffect(() => {
+    if (!canCheck) {
+      setPhoneCheck(null);
+      return;
+    }
+    setPhoneCheck(() => {
+      // Safari on iPhone shares motion only from inside a tap.
+      if (motionNeedsTap()) return 'needs-tap';
+      phoneCheckRef.current();
+      return 'started';
+    });
+    return () => setPhoneCheck(null);
+  }, [canCheck]);
   const index = step ? steps.findIndex((s) => s.id === step.id) : -1;
   const fraction = steps.length > 1 && index >= 0 ? (index + 1) / steps.length : 0;
 

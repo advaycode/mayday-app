@@ -114,6 +114,18 @@ function nativeSource(): Source {
   };
 }
 
+/**
+ * Safari on iPhone and iPad shares motion only after asking from inside a
+ * tap. Chrome defines the same asking function but does not need the tap, so
+ * this checks for the device, not just the function.
+ */
+export function motionNeedsTap(): boolean {
+  if (Platform.OS !== 'web' || typeof window === 'undefined' || typeof navigator === 'undefined') return false;
+  const ask = (window as unknown as { DeviceMotionEvent?: { requestPermission?: unknown } }).DeviceMotionEvent?.requestPermission;
+  const ios = /iPhone|iPad|iPod/.test(navigator.userAgent) || (/Macintosh/.test(navigator.userAgent) && navigator.maxTouchPoints > 1);
+  return typeof ask === 'function' && ios;
+}
+
 export function phoneSource(): Source {
   return Platform.OS === 'web' ? webSource() : nativeSource();
 }

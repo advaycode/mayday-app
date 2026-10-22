@@ -3,6 +3,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { trace } from '@/voice/trace';
 
 import { analyze, angles, type AgeGroup, type Reading, type Sample } from './analyze';
+import { setBreath } from './live';
 import { mic, type Mic } from './mic';
 import { hearBreathing, type SoundFrame, type SoundReading } from './sounds';
 import type { Scenario } from './sim';
@@ -185,14 +186,17 @@ export function useMonitor(opts: { mode: 'check' | 'lab'; age?: AgeGroup; checkS
             setFinal(f);
             trace('sensor-result', { status: f?.breath.status, why: f?.breath.why, perMin: f?.breath.perMin, depthDeg: f?.breath.depthDeg, turns: f?.breath.turns, thresholdDeg: f?.breath.thresholdDeg });
             source.current?.stop();
+            let h: SoundReading | null = null;
             if (ear.current) {
-              const h = hearBreathing(heard.current);
+              h = hearBreathing(heard.current);
               setSound(h);
               trace('sound', { status: h.status, why: h.why, floorDb: h.floorDb, events: h.events.map((e) => ({ s: +(e.end - e.start).toFixed(2), db: Math.round(e.peakDb), swells: e.swells, kind: e.kind })) });
               ear.current.stop();
               ear.current = null;
               setListening(false);
             }
+            // For the voice assistant: "what did the phone see?"
+            if (f) setBreath(f.breath, h);
             go('done', now);
           }
         }

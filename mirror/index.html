@@ -461,6 +461,11 @@
     'pace-said'(m) {
       log('pace', `said: ${m.line}`, m.t);
     },
+    // The voice assistant answering from the sensors.
+    'sensor-talk'(m) {
+      flash('route');
+      log('sensor', `asked (${m.ask}): ${m.why}${m.opened ? ` · phone check ${m.opened}` : ''}${m.lines && m.lines.length ? ` → “${m.lines.join(' ')}”` : ''}`, m.t);
+    },
   };
   const sensor = { source: '', phase: '', last: null, result: null, sound: null };
   const deg = (v, d = 2) => (typeof v === 'number' ? `${v >= 0 ? '+' : '−'}${Math.abs(v).toFixed(d)}°` : '—');

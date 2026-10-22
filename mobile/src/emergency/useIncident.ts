@@ -9,9 +9,11 @@ import { canGoBack, currentStep, reduce, type Effect, type EngineEvent, type Eng
 import { protocols } from '@/protocols';
 import type { Intent, Step } from '@/protocols/schema';
 import { askModel, online } from '@/ai/proxy';
+import { getLive, resetLive } from '@/sensors/live';
 import { ANSWER_THRESHOLD, answer, isQuestion, passagesFor, rank } from '@/voice/answer';
 import { echoOverlap, isEcho } from '@/voice/echo';
 import { routeWithModel } from '@/voice/llmRouter';
+import { afterOpen, sensorAsk, sensorReply } from '@/voice/sensorTalk';
 import { normalizeUtterance, route } from '@/voice/router';
 import { assess, currentState, NUDGE_SUFFIX, personalConfirm, voiceRate } from '@/voice/adapt';
 import { since, trace } from '@/voice/trace';
@@ -63,6 +65,7 @@ function recentlySaid(): string[] {
 export function useIncident() {
   const [state, setState] = useState<IncidentState>(() => {
     resetVoice();
+    resetLive();
     return {
     startedAt: Date.now(),
     phase: 'intake',
@@ -246,6 +249,26 @@ export function useIncident() {
         say(['Switch with someone if you can. Keep going.']);
         log('Rescuer tired');
         return;
+      }
+      // The phone's sensors: "check his breathing", "what did the phone see?", "how am I doing?".
+      if (!r.intent || r.intent === 'next' || r.intent === 'repeat' || r.intent === 'what_now') {
+        const cur = s.engine ? currentStep(s.engine) : null;
+        const where = { stepKind: cur?.kind ?? null, breathingStep: cur?.kind === 'ask' && cur.slot === 'breathing' };
+        const ask = sensorAsk(text, where);
+        const reply = ask ? sensorReply(ask, getLive(), where) : null;
+        if (ask && reply) {
+          ack();
+          let lines = reply.lines;
+          let opened: string | null = null;
+          if (reply.openCheck) {
+            opened = getLive().phoneCheck?.() ?? 'unavailable';
+            lines = afterOpen(opened as 'started' | 'needs-tap' | 'unavailable');
+          }
+          trace('sensor-talk', { ask, why: reply.why, opened, lines });
+          log(`Asked the phone: "${text}" (${reply.why}${opened ? `, check ${opened}` : ''})`);
+          if (lines.length) say(lines);
+          return;
+        }
       }
       // Lost ("what?", "I don't understand"): the same step again, slower.
       const intent = r.intent ?? (voiceContext().state === 'confused' && voiceContext().stateAt > Date.now() - 1000 ? 'repeat' : null);

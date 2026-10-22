@@ -72,11 +72,36 @@ const has = (t: string, re: RegExp) => re.test(t);
 // choking, is not in cardiac arrest. It is handled by the choking rules.
 const NEG = '(not|no|never|stopped|barely|hardly|without)';
 
+/**
+ * Asking about breathing, or not being sure, is not an answer: "is he
+ * breathing?", "how do I know if she's breathing", "I can't tell if he's
+ * breathing", "check his breathing". These used to set breathing to normal,
+ * and the middle two even answered "yes, breathing normally" at the
+ * breathing question: the one mistake Mayday must never make. They now say
+ * nothing about breathing, and the assistant offers the phone check instead
+ * (voice/sensorTalk.ts).
+ */
+export function unsureAboutBreathing(t: string): boolean {
+  return (
+    has(t, /\b(if|whether)( \w+){0,3} breath\w*/) ||
+    has(t, /^(is|are|does|do) (he|she|they|it|the (person|patient|man|woman|baby|child|kid)|my \w+) (still |really |even )?breath\w*/) ||
+    has(t, /\b(not sure|do not know|dunno|cannot tell|can not tell|hard to tell|how (do|can|would|will|should) i (know|tell|check))\b/) ||
+    has(t, /\b(check|checking|measure|test)( \w+){0,2} breath\w*/)
+  );
+}
+
+/** Doubt phrases that contain "not": taken out before looking for "not breathing". */
+const DOUBT = /\b(not sure|do not know|cannot tell|can not tell|hard to tell)\b/g;
+
 function breathing(t: string): RouterSlots['breathing'] {
   if (has(t, /\b(gasp\w*|agonal|snoring weird|blue lips|lips are blue)\b/)) return 'abnormal';
-  if (has(t, /\bturning blue\b/) && !has(t, /\bchok\w*/)) return 'abnormal';
-  if (has(t, new RegExp(`\\b${NEG}( \\w+){0,2} breath\\w*`))) return 'abnormal';
-  if (has(t, /\bbreath\w* (is )?(weird|funny|strange|wrong|shallow|slow|gurgl\w*)\b/)) return 'abnormal';
+  // "I'm not sure what to do, he's not breathing" is still not breathing.
+  const plain = t.replace(DOUBT, ' ');
+  if (has(plain, /\bturning blue\b/) && !has(plain, /\bchok\w*/)) return 'abnormal';
+  if (has(plain, new RegExp(`\\b${NEG}( \\w+){0,2} breath\\w*`))) return 'abnormal';
+  if (has(plain, /\bbreath\w* (is )?(weird|funny|strange|wrong|shallow|slow|gurgl\w*)\b/)) return 'abnormal';
+  // Doubt only ever withholds the reassuring answer.
+  if (unsureAboutBreathing(t)) return undefined;
   if (has(t, /\bbreathing\b/) && !has(t, /\bcannot breathe\b/)) return 'normal';
   return undefined;
 }
@@ -237,8 +262,10 @@ export function route(raw: string, ctx: RouteContext = {}): RouterOutput {
     // yes or no, then the generic next/repeat/what-now.
     const generic: Intent[] = ['next', 'repeat', 'what_now'];
     const short = t.split(' ').length <= 4;
+    // A question or a doubt about breathing never answers "yes, breathing".
+    const unsure = unsureAboutBreathing(t);
     intent =
-      INTENTS.find(([name, re]) => !generic.includes(name) && re.test(t))?.[0] ??
+      INTENTS.find(([name, re]) => !generic.includes(name) && !(unsure && name === 'breathing') && re.test(t))?.[0] ??
       (YES.test(t) && short ? 'yes' : NO.test(t) && short ? 'no' : null) ??
       INTENTS.find(([name, re]) => generic.includes(name) && re.test(t))?.[0] ??
       null;

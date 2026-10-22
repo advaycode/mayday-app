@@ -2,7 +2,8 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 import type { Sample } from '@/sensors/analyze';
 import { readCompressions, type CompressionReading } from '@/sensors/compressions';
-import { phoneSource, type Source } from '@/sensors/source';
+import { clearPace, setPace } from '@/sensors/live';
+import { motionNeedsTap, phoneSource, type Source } from '@/sensors/source';
 import { trace } from '@/voice/trace';
 
 import { PACE_LINES, PaceCoach, type PaceSummary } from './pace';
@@ -48,11 +49,13 @@ export function usePaceSensor(active: boolean) {
     if (ok) {
       source.current = src;
       setStatus('on');
+      setPace('on', latest.current);
       trace('pace-source', { source: 'phone accelerometer' });
     } else {
       // Asked without a tap and refused: on iPhone Safari a tap will work.
-      const askable = typeof window !== 'undefined' && typeof (window as unknown as { DeviceMotionEvent?: { requestPermission?: unknown } }).DeviceMotionEvent?.requestPermission === 'function';
+      const askable = motionNeedsTap();
       setStatus(!fromTap && askable ? 'needs-tap' : 'off');
+      setPace(!fromTap && askable ? 'needs-tap' : 'off', latest.current);
       trace('pace-source', { source: askable && !fromTap ? 'waiting for a tap' : 'no accelerometer' });
     }
     starting.current = false;
@@ -71,6 +74,8 @@ export function usePaceSensor(active: boolean) {
       latest.current = s;
       setReading(r);
       setSummary(s);
+      // For the voice assistant: "how am I doing?"
+      setPace('on', s);
       trace('pace', { status: r.status, perMin: r.perMin, confidence: r.confidence, sizeMg: r.sizeMg, noiseMg: r.noiseMg, rate: r.rate, why: r.why, trusted: s.trusted, medianPerMin: s.perMin, advice: s.advice, phase: phaseRef.current });
     }, 500);
     return () => {
@@ -80,6 +85,7 @@ export function usePaceSensor(active: boolean) {
       buf.current = [];
       coach.current = new PaceCoach();
       setStatus('off');
+      clearPace();
     };
   }, [active, begin]);
 

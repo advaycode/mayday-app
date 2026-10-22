@@ -59,7 +59,11 @@
     "paceSlower": "A little slower. Push on every click.",
     "paceKeep": "Keep pushing. Don't stop.",
     "soundGasp": "I heard gasping.",
-    "soundGaspNot": "Gasping is not breathing."
+    "soundGaspNot": "Gasping is not breathing.",
+    "paceGood": "Good pace. Keep going.",
+    "paceUnfelt": "I can't feel your pushes from here. Follow the clicks.",
+    "sensorTap": "Tap Check with the phone.",
+    "sensorDoubt": "If you're not sure, treat it as not breathing."
   },
   "confirm": {
     "cpr_adult": "Not breathing. We'll do this together.",
