@@ -50,6 +50,6 @@ describe('answer cards', () => {
   });
 
   it('says to keep going and ask the dispatcher when it does not know, during CPR', () => {
-    expect(answer('is he going to die', 'cpr_adult', true).lines).toEqual(['Keep doing compressions. Tell the dispatcher that.']);
+    expect(answer('is he going to die', 'cpr_adult', true).lines).toEqual(["I don't know. Keep doing compressions."]);
   });
 });

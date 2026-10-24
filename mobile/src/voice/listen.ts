@@ -20,7 +20,8 @@ export type ListenState = 'off' | 'starting' | 'listening' | 'unavailable' | 'de
 
 type Handlers = {
   onPartial?: (text: string) => void;
-  onFinal: (text: string) => void;
+  /** The recognizer's best guess, and its runners-up (accents often land the right words in second or third place). */
+  onFinal: (text: string, alternatives: string[]) => void;
   /** Microphone level, 0..1. */
   onLevel?: (level: number) => void;
   onState?: (state: ListenState) => void;
@@ -69,6 +70,7 @@ export function createListener(h: Handlers) {
         lang: 'en-US',
         interimResults: true,
         continuous: true,
+        maxAlternatives: 5,
         addsPunctuation: false,
         contextualStrings: HINTS,
         requiresOnDeviceRecognition: onDevice,
@@ -86,9 +88,10 @@ export function createListener(h: Handlers) {
     subs = [
       mod.addListener('start', () => setState('listening')),
       mod.addListener('result', (e: { isFinal: boolean; results: { transcript: string }[] }) => {
-        const text = e.results?.[0]?.transcript?.trim() ?? '';
+        const guesses = (e.results ?? []).map((r) => r.transcript?.trim() ?? '').filter(Boolean);
+        const text = guesses[0] ?? '';
         if (!text) return;
-        if (e.isFinal) h.onFinal(text);
+        if (e.isFinal) h.onFinal(text, guesses.slice(1));
         else h.onPartial?.(text);
       }),
       mod.addListener('volumechange', (e: { value: number }) => h.onLevel?.(Math.max(0, Math.min(1, (e.value + 2) / 12)))),

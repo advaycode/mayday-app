@@ -10,7 +10,7 @@ import { radius, space, spring } from './tokens';
  * A bottom sheet of liquid glass. It rises on a spring and leaves faster
  * than it arrived (180 ms out, spring in). Tap outside to close.
  */
-export function Sheet({ open, onClose, children }: { open: boolean; onClose: () => void; children: ReactNode }) {
+export function Sheet({ open, onClose, children, above = 0 }: { open: boolean; onClose: () => void; children: ReactNode; /** Extra room at the bottom, e.g. for a tab bar the sheet must sit above. */ above?: number }) {
   const insets = useDeviceInsets();
   const [mounted, setMounted] = useState(open);
   const y = useSharedValue(600);
@@ -39,7 +39,7 @@ export function Sheet({ open, onClose, children }: { open: boolean; onClose: () 
       <Animated.View style={[StyleSheet.absoluteFill, styles.backdrop, backdrop]}>
         <Pressable style={StyleSheet.absoluteFill} onPress={onClose} accessibilityLabel="Close" accessibilityRole="button" />
       </Animated.View>
-      <Animated.View style={[styles.anchor, { paddingBottom: insets.bottom + space[2] }, panel]}>
+      <Animated.View style={[styles.anchor, { paddingBottom: insets.bottom + space[2] + above }, panel]}>
         <Glass radius={radius.lg + 10} variant="thick">
           <View style={styles.content}>{children}</View>
         </Glass>
@@ -49,7 +49,7 @@ export function Sheet({ open, onClose, children }: { open: boolean; onClose: () 
 }
 
 const styles = StyleSheet.create({
-  backdrop: { backgroundColor: 'rgba(5,5,5,0.55)' },
+  backdrop: { backgroundColor: 'rgba(5,5,5,0.68)' },
   anchor: { position: 'absolute', left: space[3], right: space[3], bottom: 0 },
   content: { padding: space[5], gap: space[3] },
 });

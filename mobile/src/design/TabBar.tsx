@@ -1,5 +1,5 @@
 import { TabList, TabTrigger, type TabListProps, type TabTriggerSlotProps } from 'expo-router/ui';
-import { BookOpen, House, IdentificationCard, MapTrifold } from 'phosphor-react-native';
+import { BookOpen, House, IdentificationCard, MapTrifold, WaveSine } from 'phosphor-react-native';
 import { forwardRef, type ComponentRef, type ComponentType } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import Animated, { useAnimatedStyle, withSpring } from 'react-native-reanimated';
@@ -12,8 +12,9 @@ import { color, radius, space, spring } from './tokens';
 
 type IconType = ComponentType<{ size?: number; color?: string; weight?: 'regular' | 'fill' }>;
 
-const TABS: { name: string; href: '/' | '/learn' | '/map' | '/me'; Icon: IconType; label: string; hint: string }[] = [
+const TABS: { name: string; href: '/' | '/breathe' | '/learn' | '/map' | '/me'; Icon: IconType; label: string; hint: string }[] = [
   { name: 'index', href: '/', Icon: House, label: 'Help', hint: 'Start help for an emergency' },
+  { name: 'breathe', href: '/breathe', Icon: WaveSine, label: 'Breathe', hint: 'Check breathing with the phone on the chest' },
   { name: 'learn', href: '/learn', Icon: BookOpen, label: 'Learn', hint: 'Practice CPR and read every step' },
   { name: 'map', href: '/map', Icon: MapTrifold, label: 'Map', hint: 'Nearest emergency rooms' },
   { name: 'me', href: '/me', Icon: IdentificationCard, label: 'Me', hint: 'Medical ID and settings' },
@@ -50,7 +51,7 @@ const TabButton = forwardRef<ComponentRef<typeof View>, TabButtonProps>(({ isFoc
 TabButton.displayName = 'TabButton';
 
 /**
- * Floating glass tab bar, iOS 26 style: four tabs, each an icon and a word.
+ * Floating glass tab bar, iOS 26 style: five tabs, each an icon and a word.
  */
 export function TabBar(props: TabListProps) {
   const insets = useDeviceInsets();
@@ -90,11 +91,11 @@ const styles = StyleSheet.create({
   },
   capsule: { height: 68 },
   row: { flexDirection: 'row', alignItems: 'center', height: 68, paddingHorizontal: space[2] },
-  tab: { width: 76, height: 68, alignItems: 'center', justifyContent: 'center', gap: 2 },
+  tab: { width: 66, height: 68, alignItems: 'center', justifyContent: 'center', gap: 2 },
   label: { fontSize: 12, lineHeight: 15 },
   selection: {
     position: 'absolute',
-    width: 68,
+    width: 60,
     height: 56,
     borderRadius: radius.pill,
     backgroundColor: 'rgba(242, 239, 232, 0.10)',

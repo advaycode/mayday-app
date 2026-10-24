@@ -1,6 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useSyncExternalStore } from 'react';
 
+import type { RegionId } from '@/region/regions';
+
 /**
  * Settings and the optional Medical ID. Stored only on this phone, never
  * sent anywhere. A tiny store: one object, saved whole on every change.
@@ -19,6 +21,8 @@ export type Settings = {
   haptics: boolean;
   disclaimerSeen: boolean;
   medical: MedicalId;
+  /** Chosen on the map; null means from the phone's location. */
+  region: RegionId | null;
 };
 
 const KEY = 'mayday.settings.v1';
@@ -26,6 +30,7 @@ const DEFAULTS: Settings = {
   voice: true,
   haptics: true,
   disclaimerSeen: false,
+  region: null,
   medical: { name: '', born: '', conditions: '', medications: '', allergies: '', contact: '' },
 };
 

@@ -99,6 +99,51 @@
       "method": "direct-fetch",
       "localCopy": "research/data/ohsu_narcan_ifu.txt",
       "note": "Device steps for the nasal spray. The decision to give naloxone comes from aha-arc-2024-fa and aha2025-highlights."
+    },
+    {
+      "id": "cdc-seizure-first-aid",
+      "title": "First Aid for Seizures",
+      "publisher": "Centers for Disease Control and Prevention (CDC)",
+      "citation": "CDC. First Aid for Seizures. Epilepsy.",
+      "url": "https://www.cdc.gov/epilepsy/first-aid-for-seizures/index.html",
+      "retrieved": "2026-10-23",
+      "method": "direct-fetch"
+    },
+    {
+      "id": "medlineplus-anaphylaxis",
+      "title": "Anaphylaxis",
+      "publisher": "MedlinePlus, U.S. National Library of Medicine (NIH)",
+      "citation": "MedlinePlus Medical Encyclopedia: Anaphylaxis. National Library of Medicine.",
+      "url": "https://medlineplus.gov/ency/article/000844.htm",
+      "retrieved": "2026-10-23",
+      "method": "direct-fetch"
+    },
+    {
+      "id": "medlineplus-heat",
+      "title": "Heat emergencies",
+      "publisher": "MedlinePlus, U.S. National Library of Medicine (NIH)",
+      "citation": "MedlinePlus Medical Encyclopedia: Heat emergencies. National Library of Medicine.",
+      "url": "https://medlineplus.gov/ency/article/000056.htm",
+      "retrieved": "2026-10-23",
+      "method": "direct-fetch"
+    },
+    {
+      "id": "medlineplus-heart-attack",
+      "title": "Heart attack first aid",
+      "publisher": "MedlinePlus, U.S. National Library of Medicine (NIH)",
+      "citation": "MedlinePlus Medical Encyclopedia: Heart attack first aid. National Library of Medicine.",
+      "url": "https://medlineplus.gov/ency/article/000063.htm",
+      "retrieved": "2026-10-23",
+      "method": "direct-fetch"
+    },
+    {
+      "id": "medlineplus-low-sugar",
+      "title": "Low blood sugar",
+      "publisher": "MedlinePlus, U.S. National Library of Medicine (NIH)",
+      "citation": "MedlinePlus Medical Encyclopedia: Low blood sugar. National Library of Medicine.",
+      "url": "https://medlineplus.gov/ency/article/000386.htm",
+      "retrieved": "2026-10-23",
+      "method": "direct-fetch"
     }
   ]
 }

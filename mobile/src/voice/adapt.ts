@@ -43,6 +43,15 @@ const RELATIONS: [RegExp, string, Pronoun][] = [
   [/\bsister\b/, 'sister', 'she'],
   [/\buncle\b/, 'uncle', 'he'],
   [/\baunt\b/, 'aunt', 'she'],
+  // Not family: "they" until a he or she is heard.
+  [/\b(friend|buddy)\b/, 'friend', 'they'],
+  [/\broommate\b/, 'roommate', 'they'],
+  [/\bneighbou?r\b/, 'neighbor', 'they'],
+  [/\bco ?worker\b/, 'coworker', 'they'],
+  [/\bpartner\b/, 'partner', 'they'],
+  [/\bteammate\b/, 'teammate', 'they'],
+  [/\bcoach\b/, 'coach', 'they'],
+  [/\bteacher\b/, 'teacher', 'they'],
 ];
 
 export const RELATION_NAMES = [...new Set(RELATIONS.map(([, name]) => name))];

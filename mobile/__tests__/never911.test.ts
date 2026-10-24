@@ -30,14 +30,26 @@ describe('Mayday never calls 911', () => {
     expect(offenders).toEqual([]);
   });
 
+  it('does not even install a module that can place a call or send a text', () => {
+    const pkg = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'package.json'), 'utf8'));
+    const deps = Object.keys({ ...pkg.dependencies, ...pkg.devDependencies });
+    expect(deps.filter((d) => /(phone-call|communications|expo-sms|sms|callkit|telephony)/i.test(d))).toEqual([]);
+  });
+
   it('only opens web pages with Linking', () => {
     for (const f of FILES) {
       const src = fs.readFileSync(f, 'utf8');
       for (const m of src.matchAll(/Linking\.openURL\(([^)]*)\)/g)) {
-        // Allowed: map directions (the maps app or a https page) and photo credit pages.
-        expect([f, m[1]]).toEqual([f, expect.stringMatching(/^(url|credit\.source|`https:\/\/[^`]*`)$/)]);
+        // Allowed: map directions (the maps app or a https page), photo credit pages, and the sources of the map's region figures.
+        expect([f, m[1]]).toEqual([f, expect.stringMatching(/^(url|credit\.source|s\.source\.url|`https:\/\/[^`]*`)$/)]);
       }
     }
+  });
+
+  it('links each region figure to a web page, nothing else', () => {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { REGIONS } = require('@/region/regions') as typeof import('@/region/regions');
+    for (const r of REGIONS) for (const s of r.why?.stats ?? []) expect(s.source.url).toMatch(/^https:\/\//);
   });
 
   it('has no code that places a call at all', () => {

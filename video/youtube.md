@@ -18,7 +18,7 @@ Built with: TypeScript, React Native, Expo, Python, Skia (SkSL), Claude, Groq
 Code: [REPO LINK]
 
 Statistics: CARES registry, 2024 Metrics Summary.
-AI disclosure: we used Claude Code to help write code and documentation and Piper to record the app's voice. Details in the repository.
+AI disclosure: we used Claude Code to help write code and documentation and the open-source Kokoro voice model to record the app's voice. Details in the repository.
 
 This is a demonstration. No 911 call was placed for this video, and the app cannot place one. Mayday guides you while help is on the way. Always call 911.
 

@@ -1,3 +1,4 @@
+import systemLines from '@/audio/systemLines.json';
 import { sources } from '@/protocols';
 
 import data from './answers.json';
@@ -14,8 +15,8 @@ import { normalizeUtterance } from './router';
  * can't match "take the tourniquet off". A card only applies inside the
  * protocols it names, so "how deep" gets the child answer during child CPR.
  *
- * If nothing clearly matches, we do not improvise. We say "Keep doing
- * compressions. Tell the dispatcher that." The online path (proxy /ask) can
+ * If nothing clearly matches, we do not improvise. We say "I don't know.
+ * Keep doing compressions." The online path (proxy /ask) can
  * rephrase, but only from the cards this file selects.
  */
 
@@ -28,6 +29,12 @@ export type Card = {
   quote: string | null;
   verified: boolean;
   note?: string;
+  /**
+   * Quick guidance for an emergency with no protocol of its own (a seizure, an
+   * allergic reaction): offered from Talk to Mayday before any protocol starts,
+   * never as an answer in the middle of one.
+   */
+  intakeOnly?: boolean;
 };
 
 export const cards = data.cards as Card[];
@@ -74,17 +81,31 @@ function similarity(q: Set<string>, a: Set<string>): number {
 }
 
 const inScope = (card: Card, protocolId: string | null) =>
-  card.protocols.length === 0 || (protocolId !== null && card.protocols.some((p) => protocolId.startsWith(p)));
+  card.intakeOnly ? protocolId === null : card.protocols.length === 0 || (protocolId !== null && card.protocols.some((p) => protocolId.startsWith(p)));
+
+/** Quick guidance for something with no protocol ("he's having a seizure"), or null. */
+export function guideFor(text: string): Card | null {
+  const [best] = rank(text, null);
+  return best && best.card.intakeOnly && best.score >= ANSWER_THRESHOLD ? best.card : null;
+}
 
 /** Cards that fit this question, best first. */
 export function rank(question: string, protocolId: string | null) {
   const q = new Set(terms(question));
   if (!q.size) return [];
+  // A tie goes to the card asked the same way: "what is an AED" and "should I
+  // get the AED" share every word that counts; "what" and "should" do not.
+  const lead = (s: string) => normalizeUtterance(s).split(' ')[0] ?? '';
+  const asked = lead(question);
   return cards
     .filter((c) => inScope(c, protocolId))
-    .map((card) => ({ card, score: Math.max(...card.ask.map((a) => similarity(q, new Set(terms(a))))) }))
+    .map((card) => {
+      const scored = card.ask.map((a) => ({ score: similarity(q, new Set(terms(a))), same: lead(a) === asked }));
+      const score = Math.max(...scored.map((s) => s.score));
+      return { card, score, same: scored.some((s) => s.score === score && s.same) };
+    })
     .filter((r) => r.score > 0)
-    .sort((a, b) => b.score - a.score);
+    .sort((a, b) => b.score - a.score || Number(b.same) - Number(a.same));
 }
 
 export const ANSWER_THRESHOLD = 0.6;
@@ -106,7 +127,7 @@ export function answer(question: string, protocolId: string | null, inCompressio
   }
   return {
     kind: 'fallback',
-    lines: [inCompressions ? 'Keep doing compressions. Tell the dispatcher that.' : "I'm not sure. Tell the dispatcher that."],
+    lines: [inCompressions ? systemLines.lines.groundFallback : systemLines.lines.groundFallbackGeneral],
     score: best?.score ?? 0,
   };
 }

@@ -11,7 +11,7 @@ import { BreathCheck } from '@/emergency/BreathCheck';
 import { CprView } from '@/emergency/CprView';
 import { Handoff } from '@/emergency/Handoff';
 import { Intake } from '@/emergency/Intake';
-import { Dock, Progress, TopBar, Understood } from '@/emergency/parts';
+import { Dock, Progress, ReplyCaption, TopBar, Understood } from '@/emergency/parts';
 import { DispatcherSheet, MoreSheet } from '@/emergency/sheets';
 import { ScanSheet } from '@/emergency/ScanSheet';
 import { StepView } from '@/emergency/StepView';
@@ -23,6 +23,7 @@ import { protocols } from '@/protocols';
 import { setPhoneCheck } from '@/sensors/live';
 import { motionNeedsTap } from '@/sensors/source';
 import { useMonitor } from '@/sensors/useMonitor';
+import { SeveritySheet } from '@/triage/ui';
 import { capabilities, online } from '@/ai/proxy';
 import { createListener, type ListenState } from '@/voice/listen';
 import { trace } from '@/voice/trace';
@@ -45,7 +46,7 @@ export default function Emergency() {
   const params = useLocalSearchParams<{ talk?: string; tile?: string }>();
   const incident = useIncident();
   const { state, step } = incident;
-  const [sheet, setSheet] = useState<'dispatch' | 'more' | 'scan' | 'breath' | null>(null);
+  const [sheet, setSheet] = useState<'dispatch' | 'more' | 'scan' | 'breath' | 'severity' | null>(null);
   const [listen, setListen] = useState<ListenState>('off');
   const [showLog, setShowLog] = useState(false);
   const level = useSharedValue(0);
@@ -59,7 +60,7 @@ export default function Emergency() {
   useEffect(() => {
     unlockAudio();
     const l = createListener({
-      onFinal: (t) => hear.current(t),
+      onFinal: (t, alternatives) => hear.current(t, alternatives),
       onPartial: (t) => partial.current(t),
       onLevel: (v) => (level.value = withTiming(v, { duration: 120 })),
       onState: (s) => {
@@ -109,7 +110,7 @@ export default function Emergency() {
     if (Platform.OS !== 'web' || !DEMO_MODE) return;
     const w = window as unknown as { __mayday?: object };
     w.__mayday = {
-      hear: (t: string) => hear.current(t),
+      hear: (t: string, alternatives: string[] = []) => hear.current(t, alternatives),
       audio: () => {
         const a = audio();
         return a ? { state: a.state, time: a.now(), speaking: a.isSpeaking(), said: a.lastSpoken } : null;
@@ -157,6 +158,19 @@ export default function Emergency() {
     });
     return () => setPhoneCheck(null);
   }, [canCheck]);
+  // Answered another way (by voice, or the step moved on): the phone check closes.
+  useEffect(() => {
+    if (sheet !== 'breath' || breathStep) return;
+    monitor.stop();
+    incident.setQuiet(false);
+    setSheet(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sheet, breathStep]);
+  // "What do I tell 911?": the 911 card opens while Mayday reads it out.
+  const show911 = state.show911;
+  useEffect(() => {
+    if (show911) setSheet('dispatch');
+  }, [show911]);
   const index = step ? steps.findIndex((s) => s.id === step.id) : -1;
   const fraction = steps.length > 1 && index >= 0 ? (index + 1) / steps.length : 0;
 
@@ -187,9 +201,19 @@ export default function Emergency() {
       <View style={{ flex: 1 }}>
         {phase === 'intake' && <Intake incident={incident} level={level} listening={listening} />}
         {phase === 'protocol' && step && step.kind === 'cpr' && <CprView key={stepKey} incident={incident} step={step} />}
-        {phase === 'protocol' && step && step.kind !== 'cpr' && <StepView key={stepKey} incident={incident} step={step} onPhoneCheck={breathStep ? phoneCheck : undefined} />}
+        {phase === 'protocol' && step && step.kind !== 'cpr' && (
+          <StepView
+            key={stepKey}
+            incident={incident}
+            step={step}
+            onPhoneCheck={breathStep ? phoneCheck : undefined}
+            severity={incident.severity}
+            onSeverity={() => setSheet('severity')}
+          />
+        )}
       </View>
 
+      <ReplyCaption reply={state.reply} tone={tone.hue} />
       <Understood understood={state.understood} />
       <Dock
         canBack={incident.canBack}
@@ -204,6 +228,7 @@ export default function Emergency() {
       <DispatcherSheet incident={incident} open={sheet === 'dispatch'} onClose={() => setSheet(null)} />
       <MoreSheet incident={incident} open={sheet === 'more'} onClose={() => setSheet(null)} onScan={() => setSheet('scan')} />
       <ScanSheet incident={incident} open={sheet === 'scan'} onClose={() => setSheet(null)} />
+      <SeveritySheet grade={incident.severity} open={sheet === 'severity'} onClose={() => setSheet(null)} onObserve={incident.observe} />
       {sheet === 'breath' && breathStep && (
         <BreathCheck
           incident={incident}

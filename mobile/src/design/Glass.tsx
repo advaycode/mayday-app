@@ -67,7 +67,7 @@ export function Glass({
           StyleSheet.absoluteFill,
           {
             borderRadius: radius,
-            backgroundColor: tint ?? (variant === 'thick' ? 'rgba(22, 21, 19, 0.78)' : 'rgba(242, 239, 232, 0.06)'),
+            backgroundColor: tint ?? (variant === 'thick' ? 'rgba(22, 21, 19, 0.88)' : 'rgba(242, 239, 232, 0.06)'),
             borderWidth: StyleSheet.hairlineWidth,
             borderColor: color.hairlineStrong,
           },

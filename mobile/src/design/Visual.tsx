@@ -19,10 +19,11 @@ import {
   Wind,
 } from 'phosphor-react-native';
 import { Image } from 'expo-image';
-import type { ComponentType } from 'react';
-import { View } from 'react-native';
+import { useState, type ComponentType, type ReactNode } from 'react';
+import { StyleSheet, View } from 'react-native';
 import Svg, { Circle, G, Line, Path, Rect } from 'react-native-svg';
 
+import { Motion, hasMotion } from './Motion';
 import { stepImages } from './stepImages';
 import { color } from './tokens';
 
@@ -249,6 +250,56 @@ export function Visual({ id, size = 180, tone }: { id?: string; size?: number; t
   return (
     <View style={[card, { backgroundColor: deep, alignItems: 'center', justifyContent: 'center' }]} accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
       <Icon size={size * 0.5} color={tone?.hue ?? color.ink} weight="regular" />
+    </View>
+  );
+}
+
+/**
+ * The step picture as a card that fills the room it is given: the same width
+ * on every step, its height whatever is left after the instruction and the
+ * answers, so nothing floats in an empty band. The picture is drawn as large
+ * as the card's shorter side; anything layered on top (the severity badge)
+ * goes in as children.
+ */
+export function VisualCard({
+  id,
+  tone,
+  fallback,
+  children,
+}: {
+  id?: string;
+  tone?: { hue: string; deep: string };
+  /** Drawn when the step has no picture of its own: the emergency's icon, so the card is never empty. */
+  fallback?: ComponentType<{ size?: number; color?: string; weight?: 'regular' | 'fill' | 'bold' }>;
+  children?: ReactNode;
+}) {
+  const [box, setBox] = useState({ w: 0, h: 0 });
+  const photo = id ? stepImages[id] : undefined;
+  const Diagram = id ? DIAGRAMS[id] : undefined;
+  const Icon = (id ? ICONS[id] : undefined) ?? fallback;
+  const s = Math.min(box.w, box.h);
+  return (
+    <View
+      style={{ flex: 1, minHeight: 140, borderRadius: 28, overflow: 'hidden', alignItems: 'center', justifyContent: 'center', backgroundColor: photo && !hasMotion(id) ? color.card : (tone?.deep ?? color.raised) }}
+      onLayout={(e) => setBox({ w: e.nativeEvent.layout.width, h: e.nativeEvent.layout.height })}
+      accessibilityElementsHidden
+      importantForAccessibility="no-hide-descendants">
+      {/* A procedure you copy moves (Motion.tsx); everything else is a picture. */}
+      {s > 0 && hasMotion(id) && <Motion id={id} size={s * 0.92} tone={tone} />}
+      {s > 0 && !hasMotion(id) && photo && (
+        <>
+          {/* The whole picture, never cropped, over a soft blurred copy of itself that fills the card's edges. */}
+          <Image source={photo.src} style={StyleSheet.absoluteFill} contentFit="cover" blurRadius={28} accessible={false} />
+          <Image source={photo.src} style={{ width: box.w, height: box.h }} contentFit="contain" accessibilityIgnoresInvertColors accessible={false} />
+        </>
+      )}
+      {s > 0 && !hasMotion(id) && !photo && Diagram && (
+        <Svg width={s * 0.86} height={s * 0.86} viewBox="0 0 200 200">
+          <Diagram />
+        </Svg>
+      )}
+      {s > 0 && !hasMotion(id) && !photo && !Diagram && Icon && <Icon size={s * 0.42} color={tone?.hue ?? color.ink} weight="regular" />}
+      {children}
     </View>
   );
 }

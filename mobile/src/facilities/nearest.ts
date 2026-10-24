@@ -2,12 +2,20 @@ import { Linking, Platform } from 'react-native';
 
 import type { Care } from '@/protocols/schema';
 
+import { getRegion } from '@/region/store';
+
 import data from './fl_facilities.json';
 
 export type Facility = {
   id: string;
   name: string;
-  kind: 'er' | 'trauma' | 'urgent';
+  /**
+   * er/trauma/urgent: U.S. (CMS, state trauma lists, OpenStreetMap).
+   * referral/phc/hospital: places where no official list exists (Lagos): a
+   * public general or teaching hospital, a primary health centre, or any
+   * other hospital or clinic whose emergency care is not confirmed.
+   */
+  kind: 'er' | 'trauma' | 'urgent' | 'referral' | 'phc' | 'hospital';
   traumaLevel: string | null;
   address: string | null;
   city: string | null;
@@ -41,8 +49,8 @@ export function driveMinutes(distanceMiles: number): number {
   return Math.max(1, Math.round(((distanceMiles * 1.35) / 35) * 60));
 }
 
-export function nearest(from: { lat: number; lon: number }, kinds: Facility['kind'][], n = 3) {
-  return facilities
+export function nearest(from: { lat: number; lon: number }, kinds: Facility['kind'][], n = 3, list: Facility[] = getRegion().facilities) {
+  return list
     .filter((f) => kinds.includes(f.kind))
     .map((f) => ({ f, d: miles(from, f) }))
     .sort((a, b) => a.d - b.d)
@@ -55,7 +63,15 @@ export const ER_KINDS: Facility['kind'][] = ['er', 'trauma'];
 export function describe(f: Facility): string {
   if (f.kind === 'trauma') return `Trauma center, Level ${f.traumaLevel}`.replace('Level Pediatric', 'pediatric');
   if (f.kind === 'urgent') return 'Urgent care. Not for emergencies.';
+  if (f.kind === 'referral') return 'Public general or teaching hospital';
+  if (f.kind === 'phc') return 'Primary health centre. Not for emergencies.';
+  if (f.kind === 'hospital') return 'Hospital or clinic. Emergency care not confirmed.';
   return 'Emergency room';
+}
+
+/** "2.4 mi" or "3.9 km", for the region in use. */
+export function distanceText(distanceMiles: number, units: 'mi' | 'km' = getRegion().units): string {
+  return units === 'km' ? `${(distanceMiles * 1.609344).toFixed(1)} km` : `${distanceMiles.toFixed(1)} mi`;
 }
 
 /**
@@ -65,7 +81,7 @@ export function describe(f: Facility): string {
  * they are likely to use so the family knows where to go.
  */
 export function careAdvice(care: Care | null, slots: Record<string, string | undefined>, at: { lat: number; lon: number }) {
-  const er = nearest(at, ER_KINDS, 1)[0];
+  const er = nearest(at, getRegion().emergencyKinds, 1)[0];
   const trauma = nearest(at, ['trauma'], 1)[0];
   if (care === 'by_severity' && slots.burn_severity === 'minor') {
     const uc = nearest(at, ['urgent'], 1)[0];

@@ -4,6 +4,36 @@ Read this at the start of every session; update it at the end.
 
 **Deadline:** 12:00 pm Eastern, Monday October 26 2026. **Our deadline:** submit by 9:00 am that morning.
 
+## Status on Friday October 23
+
+### Done today
+- **The voice assistant, finished.** Tested with 11 things a panicking person says; 6 failed, all fixed:
+  - "he's not breathing" right after "Gasping is not breathing. Is he breathing normally?" was thrown away as our own echo (every word was ours). The echo guard now looks at word order, against one stretch of up to three lines of our speech (`voice/echo.ts`): our line word for word is echo; our words rearranged is "suspect", which may only push toward more care (anything reassuring is stripped).
+  - The listening screen showed "tell" (a fragment of our own "Tell me what's happening"): partials made only of our words are hidden.
+  - "what's an AED?" repeated the step ("what" read as confusion): a question with a cited answer is now answered, then the step's question is asked again. New card `aed_what`.
+  - "I'm scared, I don't know what to do": silence, or it opened the breathing check. Now "I'm right here with you." and the step again.
+  - "what do I tell 911?", "where am I?", "call 911": new `voice/dispatchTalk.ts`. Reads the address and what happened, opens the 911 card; "I can't call. Call 911 on your phone." Nothing is ever dialed.
+  - "my friend collapsed" → "Collapsed." Now "Your friend collapsed." (friend, roommate, neighbor, coworker, partner, teammate, coach, teacher; they until he or she is heard).
+  - Unknown questions: "I don't know that one. Ask the 911 dispatcher."
+- **Severity grading** for choking, bleeding, burns, stroke and overdose (`triage/`, `docs/SEVERITY.md`): level 1 Mild / 2 Serious / 3 Critical, and a burn's depth (1st, 2nd, 3rd degree). From the answers, what is said ("it's blistering", "it's spurting", "his lips are blue"), taps on "What do you see?", and the photo check. A badge on the step picture; tap for the card (scale, what to do, why). Spoken when it rises. Never goes down, never says 911 isn't needed, stroke and overdose never mild (tested). Engine panel has a Severity section.
+- **Step screens re-spaced**: one full-width picture card that takes the height left over, then the instruction, then the answers, same gaps on every step (no more floating headline and empty bands). Photos are shown whole over a blurred copy of themselves. Sheets more opaque.
+- **Breathe tab**: the breathing check as its own tab, liquid glass: a glass lens over a glowing orb with a glass bubble that moves with each breath (40× magnified), the head-to-foot and side angles live to 00.00°, breaths a minute, the wave. Simulated person on a computer.
+- **Understanding accents and dialects** (later on the 23rd). The recognizer is the phone's own (Apple's or Google's) and cannot be retrained by us; what we control is what Mayday does with what it hears:
+  - The recognizer's top 5 guesses are used, not only the first (`voice/understand.ts`): a runner-up wins only if it answers what is on screen and the best guess does not, and never if it reassures.
+  - Dialect forms and common mishearings (`DIALECT` in `voice/router.ts`): ain't, -in', nah/naw/nae/aye/ja/mhm, yeah nah (no) and nah yeah (yes), Scots -nae, fillers (um, lah, innit), keeled over/blacked out/flaked out, gone blue, "not breeding", chalking, fentanol, OD'd.
+  - Safety bug found by it and fixed: "he's just gasping", "he's gone blue", "yes he's gasping" and "he is breathing very strange" answered "Yes" at "Breathing normally?" (anything starting "he is" was a yes). Pronoun yeses must now be the whole reply, and an abnormal fact overrides a yes.
+  - A fact answers the question on screen ("he's out cold" at "Do they respond?").
+  - Scores (`__tests__/dialects*.test.ts`, `DIALECT_REPORT=1`): tuning set 24/45 → 45/45; held-out set written afterwards 14/20 → 16/20, then 17/20 after the post-hoc "breathing very strange" safety fix.
+  - Never silent: clear speech with nothing to act on gets "Sorry, I didn't catch that." and the question again (at most every 9 s, never during CPR counting).
+  - Quick answers: "no", "not breathing", "done" are acted on 450 ms after they settle, without waiting for the recognizer to close the sentence; "yes" always waits.
+- **More useful AI**: quick sourced guidance from Talk to Mayday for emergencies with no protocol (seizure, allergic reaction, low blood sugar, heat stroke, chest pain; CDC and MedlinePlus, fetched 2026-10-23, awaiting review); answers are now also shown as a caption over the picture for 10 s.
+- **Procedure animations** (`design/Motion.tsx`): compressions at 110/min, back blows, belly thrusts, direct pressure, cool water, Narcan spray, arm drift, tap and shout. Still with Reduce Motion.
+- **Engine console hidden**: the desktop mirror no longer shows it; Ctrl+Shift+E (click outside the phone first) or `?engine` opens it. It was never part of the app or the iPhone build.
+- **iPhone build** rebuilt (`python tools/build_iphone.py`, 30 MB) and crawled at `/mayday/`: every tab, every emergency, Talk; no console; service worker on; with the network cut, Home and CPR still work (only the street-address lookup fails, as expected). Not deployed (needs `gh auth login`).
+- **Regions: Lagos, Nigeria** (`src/region/`), the first place where Mayday helps most. Map chip switches region (or Automatic from the phone's location). Lagos: 514 hospitals and health centres from OpenStreetMap (`tools/build_facilities_lagos.py`; only 2 marked with an emergency department, 15 public general/teaching hospitals, 93 health centres "not for emergencies", 404 others "emergency care not confirmed"), distances in km, no drive-time guess. A "why here" card with three sourced figures (DOIs checked on Europe PMC): 8.7% of Africans covered by any EMS (Mould-Millman 2017), 53% of Lagos road-crash calls unanswered and 17 min average response (Venkatraman 2020), bystander CPR doubles survival (Song 2018). The emergency number follows the region everywhere: Home "Call 112 first", the dock, the 911 card ("or 767 in Lagos State"), step text, and the voice (44 lines recorded with "one one two"). A region chosen away from the phone uses a labelled demo location there. Never dials (safety test extended to the figures' source links).
+- **CAC rubric check**: `submission/RUBRIC_CHECK.md`. Script, YouTube text and AI disclosure updated (354 tests, Kokoro voice, Lagos beat, Engine panel shortcut).
+- **New voice**: Kokoro-82M `af_heart` (warmer, much less robotic than Piper lessac), offline. `tools/voice_engine.py` is shared by `render_voice.py` (now parallel, `--jobs`) and `tts_server.py`; run both with `~/tools/kokoro_venv/Scripts/python`. Samples to compare in `voice-samples/`. `--engine piper` brings the old voice back.
+
 ## Status on Thursday October 22
 
 ### Done today (the sensors meet real data)

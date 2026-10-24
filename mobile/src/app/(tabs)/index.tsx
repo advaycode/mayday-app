@@ -9,6 +9,7 @@ import { useDeviceInsets } from '@/design/insets';
 import { TalkButton } from '@/design/TalkButton';
 import { Text } from '@/design/Text';
 import { color, space } from '@/design/tokens';
+import { useRegion } from '@/region/store';
 
 /**
  * Home is the emergency screen. The biggest thing on it is Talk to Mayday;
@@ -17,6 +18,7 @@ import { color, space } from '@/design/tokens';
  */
 export default function Home() {
   const insets = useDeviceInsets();
+  const region = useRegion();
 
   const talk = () => {
     unlockAudio();
@@ -39,10 +41,10 @@ export default function Home() {
         <Text variant="title" accessibilityRole="header">
           Mayday
         </Text>
-        <View style={styles.call} accessible accessibilityLabel="Call 911 first. Mayday does not call for you.">
+        <View style={styles.call} accessible accessibilityLabel={`Call ${region.number} first. Mayday does not call for you.`}>
           <Phone size={16} color={color.signal} weight="fill" />
           <Text variant="bodyStrong" style={{ color: color.ink }}>
-            Call 911 first
+            Call {region.number} first
           </Text>
         </View>
       </View>

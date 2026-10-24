@@ -197,7 +197,8 @@
     <span id="spec"></span>
     <button id="scaleBtn" type="button"></button>
     <button id="reload" type="button" aria-label="Reload app">Reload</button>
-    <button id="engineBtn" type="button" aria-pressed="true">Engine</button>
+    <!-- The engine console stays hidden: Ctrl+Shift+E (or ?engine in the address) opens it. -->
+    <button id="engineBtn" type="button" aria-pressed="false" hidden>Engine</button>
   </div>
 </div>
 
@@ -213,6 +214,7 @@
   <section><h3>Understanding <span class="ms" id="routeMs"></span></h3><div id="route"><p class="empty">Keyword router and slot filler, offline.</p></div></section>
   <section><h3>Rescuer model</h3><div id="rescuer"><p class="empty">Weighted signals for distress and confusion.</p></div></section>
   <section><h3>Protocol</h3><div id="step"><p class="empty">No protocol yet.</p></div></section>
+  <section><h3>Severity</h3><div id="severity"><p class="empty">Choking, bleeding, burns, stroke, overdose: graded 1-3 from the answers, what was said and tapped, and the photo check. Only ever moves toward more care.</p></div></section>
   <section><h3>Motion sensor <span class="ms" id="sensorMs"></span></h3><div id="sensor"><p class="empty">Phone on the chest: tilt, breathing, heartbeat. Opens from "Breathing normally?" or Learn.</p></div></section>
   <section><h3>Compressions <span class="ms" id="paceMs"></span></h3><div id="pace"><p class="empty">During CPR the phone feels the pushes (accelerometer) and corrects the pace in the coaching slot.</p></div></section>
   <section><h3>Voice out</h3><div id="say"><p class="empty">Every line, as written and as spoken.</p></div></section>
@@ -303,17 +305,25 @@
   const num = (v, d = 2) => (typeof v === 'number' ? v.toFixed(d) : '—');
   const bar = (v, cls = '') => `<span class="bar ${cls}"><i style="width:${Math.round(Math.max(0, Math.min(1, v || 0)) * 100)}%"></i></span>${num(v)}`;
   let events = 0;
-  let engineOn = localStorageGet('mirror.engine') !== 'off';
+  // The engine console is a backstage view, hidden unless asked for: Ctrl+Shift+E
+  // toggles it, ?engine opens it. Its button only shows while it is open.
+  let engineOn = params.has('engine');
   const engineBtn = $('engineBtn');
   function setEngine(on) {
     engineOn = on;
     document.body.classList.toggle('with-engine', on);
+    engineBtn.hidden = !on;
     engineBtn.setAttribute('aria-pressed', String(on));
-    engineBtn.textContent = on ? 'Hide engine' : 'Engine';
-    localStorageSet('mirror.engine', on ? 'on' : 'off');
+    engineBtn.textContent = 'Hide engine';
     fit();
   }
-  engineBtn.addEventListener('click', () => setEngine(!engineOn));
+  engineBtn.addEventListener('click', () => setEngine(false));
+  addEventListener('keydown', (e) => {
+    if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'e') {
+      e.preventDefault();
+      setEngine(!engineOn);
+    }
+  });
   setEngine(engineOn);
 
   function flash(...stages) {
@@ -457,6 +467,22 @@
         <dt>pace</dt><dd>${m.medianPerMin ? Math.round(m.medianPerMin) + '/min over 8 s' : '—'} ${m.trusted ? '' : '<span class="faint">· not yet trusted (needs 4 s felt)</span>'}</dd>
         <dt>next slot</dt><dd class="q">${m.advice ? esc(m.advice) : 'usual reminder'} <span class="faint">· coach phase ${esc(m.phase)}</span></dd>
       </dl>`;
+    },
+    severity(m) {
+      flash('route');
+      const hue = { 1: '#5BD9A2', 2: '#F5B942', 3: '#FF5F52' }[m.level];
+      const degree = m.degree ? ['', 'first', 'second', 'third'][m.degree] + ' degree burn · ' : '';
+      $('severity').innerHTML = `<dl class="kv"><dt>emergency</dt><dd>${esc(m.category)}</dd>
+        <dt>grade</dt><dd><b style="color:${hue}">level ${m.level} · ${esc(m.name)}</b>${m.guess ? ' <span class="faint">starting guess, no evidence yet</span>' : ''}</dd>
+        ${degree ? `<dt>depth</dt><dd>${esc(degree)}</dd>` : ''}
+        <dt>action</dt><dd class="q">${esc(m.action)}</dd>
+        ${m.said && m.said.length ? `<dt>said</dt><dd class="q">“${esc(m.said.join(' '))}”</dd>` : ''}</dl>
+        ${(m.signals || []).length ? `<dl class="kv" style="margin-top:8px">${m.signals.map((x) => `<dt style="color:${{ 1: '#5BD9A2', 2: '#F5B942', 3: '#FF5F52' }[x.level]}">L${x.level}${x.degree ? ' · ' + x.degree + '°' : ''}</dt><dd>${esc(x.name)} <span class="faint">${esc(x.evidence)}</span></dd>`).join('')}</dl>` : ''}`;
+      log('severity', `${m.category}: level ${m.level}${m.degree ? ', ' + ['', '1st', '2nd', '3rd'][m.degree] + ' degree' : ''}${m.guess ? ' (guess)' : ''}`, m.t);
+    },
+    'dispatch-talk'(m) {
+      flash('route');
+      log('911', `${m.ask}: “${(m.lines || []).join(' ')}”`, m.t);
     },
     'pace-said'(m) {
       log('pace', `said: ${m.line}`, m.t);

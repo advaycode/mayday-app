@@ -178,7 +178,7 @@ export function Glass({ children, style, radius = radii.lg, variant = 'regular',
           WebkitBackdropFilter: `blur(${blur}px) saturate(1.7)`,
           background:
             tint ??
-            (variant === 'clear' ? 'rgba(242,239,232,0.025)' : variant === 'thick' ? 'rgba(22,21,19,0.88)' : 'rgba(242,239,232,0.06)'),
+            (variant === 'clear' ? 'rgba(242,239,232,0.025)' : variant === 'thick' ? 'rgba(22,21,19,0.95)' : 'rgba(242,239,232,0.06)'),
           // Rim light: a bright hairline on top where light hits the curve,
           // a fainter one underneath, and a soft shadow that lifts the glass.
           boxShadow: [

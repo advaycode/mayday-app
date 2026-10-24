@@ -49,7 +49,7 @@ Team member on camera for the first sentence, then animation and real code.
 **1:50** Remotion animation of the architecture (from `docs/ARCHITECTURE.md`): voice → offline rules → protocol engine → voice and screen; a dotted side path to the AI through our proxy, with a schema check on the way back.
 **Voice:** "What you say goes first to rules that run on the phone in a few milliseconds. Anything that sounds like a life threat starts the protocol immediately. The AI only helps when the rules are unsure, and its answer has to match a strict format or we throw it away."
 
-**1:56** Screen recording of the desktop phone window with the **Engine** panel open (`docs/screens/engine.png`). Say *"Oh my god, please help, my dad collapsed, he is not, he is not breathing."* The panel fills in: cpr_adult at 0.97, distress 0.85 from "oh my god" and the repeated "he is not", state panicked, voice ×0.92, two questions skipped as already known.
+**1:56** Screen recording of the desktop phone window with the **Engine** panel open (hidden by default: click beside the phone, then Ctrl+Shift+E; `docs/screens/engine.png`). Say *"Oh my god, please help, my dad collapsed, he is not, he is not breathing."* The panel fills in: cpr_adult at 0.97, distress 0.85 from "oh my god" and the repeated "he is not", state panicked, voice ×0.92, two questions skipped as already known.
 **Voice:** "It also listens to how you sound. Panic slows the voice down and adds one calming line. This panel is the app's real reasoning, live, not an animation."
 
 **2:02** Code snippet 1 on screen, `mobile/src/protocols/corpus/cpr_adult.json`, the `aed_pads` step with its `quote` highlighted.
@@ -58,17 +58,18 @@ Team member on camera for the first sentence, then animation and real code.
 **2:10** Code snippet 2, `mobile/src/cpr/timeline.ts`, the line `const start = t0 + index * baseCycle + ...` highlighted, then `scheduler.ts`.
 **Voice:** "JavaScript timers drift: a normal metronome is two seconds late after ten minutes. We schedule every beat on the phone's audio hardware clock. Our test runs ten minutes with a bad timer, and all 1,100 beats land on time."
 
-**2:20** Numbers card: **184 tests** · **85% on sentences it had never heard** · **0 ms drift** · **[NOVICE TIME] seconds** from "your friend collapsed" to first compression, someone who had never seen the app.
+**2:20** Numbers card: **354 tests** · **85% on sentences it had never heard** · **0 ms drift** · **[NOVICE TIME] seconds** from "your friend collapsed" to first compression, someone who had never seen the app.
 
 ## 2:30 to 2:55 · Impact and learning
 
 **Picture:** team on camera, then the app's home screen.
 **Voice:**
 - "Mayday is for anyone standing next to someone who just collapsed, especially people who've never taken a CPR class ✓."
+- *(Optional, 6 s, Impact row)* Map tab: the region chip switches to **Lagos, Nigeria**; the card reads "Here, the bystander is the ambulance": **8.7%** of Africans covered by any ambulance service, **53%** of Lagos road-crash calls with no ambulance response, **2×** survival with bystander CPR. "And where no ambulance is coming, the bystander is the only help. Mayday says 112 there, works offline, and understands many accents."
 - "We built it with TypeScript, React Native and Expo, Python for our data and voice tools, Skia's shader language for the light, and Claude and Groq for the AI features ✓."
 - "The hardest part was `[YOU: the one challenge from your written answer]`."
 - "What we learned: `[YOU]`."
-- On screen, 4 seconds: **AI disclosure**: "We used Claude Code to help write code and documentation, and Piper to record the voice. Full disclosure in our repository."
+- On screen, 4 seconds: **AI disclosure**: "We used Claude Code to help write code and documentation, and the open-source Kokoro voice model to record the voice. Full disclosure in our repository."
 - Last frame: the home screen, Talk to Mayday. "Mayday. Always call 911."
 
 ---

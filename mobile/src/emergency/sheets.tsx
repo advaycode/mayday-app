@@ -11,7 +11,8 @@ import { Text } from '@/design/Text';
 import { color, space } from '@/design/tokens';
 import { summaryLine } from '@/incident/log';
 import { formatCoords } from '@/location/location';
-import { careAdvice, miles } from '@/facilities/nearest';
+import { careAdvice, distanceText, miles } from '@/facilities/nearest';
+import { useRegion } from '@/region/store';
 import { protocols } from '@/protocols';
 
 import type { Incident } from './useIncident';
@@ -23,6 +24,7 @@ import type { Incident } from './useIncident';
  */
 export function DispatcherSheet({ incident, open, onClose }: { incident: Incident; open: boolean; onClose: () => void }) {
   const { state, slots } = incident;
+  const region = useRegion();
   const fix = state.fix;
   const summary = summaryLine(state.log, slots, state.engine?.protocolId ?? null);
   const where = fix?.address ?? (fix ? 'Address unavailable' : 'Finding location');
@@ -36,9 +38,14 @@ export function DispatcherSheet({ incident, open, onClose }: { incident: Inciden
           <Phone size={22} color={color.onSignal} weight="fill" />
         </View>
         <Text variant="title" style={{ flex: 1 }}>
-          Call 911 on your phone
+          Call {region.number} on your phone
         </Text>
       </View>
+      {region.alsoCall ? (
+        <Text variant="caption" tone="muted">
+          Or {region.alsoCall}
+        </Text>
+      ) : null}
       <Text variant="caption" tone="muted">
         Tell them
       </Text>
@@ -58,7 +65,7 @@ export function DispatcherSheet({ incident, open, onClose }: { incident: Inciden
       </Text>
       {fix && advice && advice.likely && (
         <Text variant="caption" tone="muted">
-          Nearest ER: {advice.likely.f.name}, {miles(fix, advice.likely.f).toFixed(1)} mi
+          Nearest {region.id === 'us-fl' ? 'ER' : 'hospital'}: {advice.likely.f.name}, {distanceText(miles(fix, advice.likely.f))}
         </Text>
       )}
       <Button label="Done" kind="primary" onPress={onClose} />

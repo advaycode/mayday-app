@@ -98,11 +98,21 @@
     {
       "id": "aed_use",
       "protocols": ["cpr"],
-      "ask": ["how do i use the aed", "how do i use a defibrillator", "should i go get the aed", "do i need to know how to use it", "what is an aed"],
+      "ask": ["how do i use the aed", "how do i use a defibrillator", "should i go get the aed", "do i need to know how to use it"],
       "say": ["Turn it on. It talks you through every step.", "Don't stop pushing to go look for one."],
       "source": "aha2025-highlights",
       "quote": "Early high-quality CPR and prompt defibrillation are the most important interventions associated with improved outcomes in adult cardiac arrest.",
       "verified": true
+    },
+    {
+      "id": "aed_what",
+      "protocols": [],
+      "ask": ["what is an aed", "what is a defibrillator", "what does an aed do", "what is a defib", "what does the aed look like", "where do i find an aed"],
+      "say": ["An AED is a box that shocks the heart back into rhythm.", "Look for a heart with a lightning bolt.", "Turn it on. It talks you through it."],
+      "source": "aha2025-highlights",
+      "quote": "Early high-quality CPR and prompt defibrillation are the most important interventions associated with improved outcomes in adult cardiac arrest.",
+      "verified": false,
+      "note": "Plain-language definition of an AED and its sign (ILCOR heart-and-lightning symbol). Confirm the wording."
     },
     {
       "id": "aed_bra",
@@ -211,6 +221,61 @@
       "source": "ohsu-narcan",
       "quote": "If you think someone is having an overdose, use Narcan right away -- even if you don't know what drugs they took. Narcan only works for opioids, but there is no harm if they took a different drug.",
       "verified": true
+    },
+    {
+      "id": "guide_seizure",
+      "protocols": [],
+      "intakeOnly": true,
+      "ask": ["he is having a seizure", "she is having a seizure", "having a seizure", "seizure", "he is shaking all over", "she is convulsing", "jerking and shaking on the floor"],
+      "say": ["Move hard things away. Don't hold them down.", "Nothing in their mouth. Time it.", "Call 911 if it lasts over five minutes.", "When it stops, roll them onto their side."],
+      "source": "cdc-seizure-first-aid",
+      "quote": "Time the seizure to track if it lasts more than 5 minutes. If it does, seek immediate medical attention or call 911.",
+      "verified": false,
+      "note": "Quick guidance for an emergency Mayday has no step-by-step protocol for; spoken from Talk to Mayday. Quote from an automated fetch on 2026-10-23: confirm on the page."
+    },
+    {
+      "id": "guide_allergy",
+      "protocols": [],
+      "intakeOnly": true,
+      "ask": ["allergic reaction", "she is having an allergic reaction", "his throat is swelling", "her face is swelling up", "he is allergic to peanuts", "anaphylaxis", "she needs her epipen", "stung by a bee and allergic"],
+      "say": ["Call 911 now.", "If they have an epinephrine pen, help them use it.", "Nothing to eat or drink if breathing is hard."],
+      "source": "medlineplus-anaphylaxis",
+      "quote": "An epinephrine injector or intranasal epinephrine should be used immediately if it is available.",
+      "verified": false,
+      "note": "Quick guidance for an emergency Mayday has no step-by-step protocol for; spoken from Talk to Mayday. Quote from an automated fetch on 2026-10-23: confirm on the page."
+    },
+    {
+      "id": "guide_low_sugar",
+      "protocols": [],
+      "intakeOnly": true,
+      "ask": ["low blood sugar", "his sugar is low", "she is diabetic and acting strange", "he is diabetic and confused", "hypoglycemia", "diabetic emergency"],
+      "say": ["If they're awake and can swallow, give sugar.", "Juice, regular soda, or glucose tablets.", "If they can't wake up, call 911."],
+      "source": "medlineplus-low-sugar",
+      "quote": "Drinking juice or other sugar containing beverage",
+      "verified": false,
+      "note": "Quick guidance for an emergency Mayday has no step-by-step protocol for; spoken from Talk to Mayday. Quote from an automated fetch on 2026-10-23: confirm on the page."
+    },
+    {
+      "id": "guide_heat",
+      "protocols": [],
+      "intakeOnly": true,
+      "ask": ["heat stroke", "he is overheating", "she is too hot and confused", "heat exhaustion", "he got too hot outside"],
+      "say": ["Call 911. Get them somewhere cool.", "Wet their skin with cool water and fan them.", "Cold packs on the neck, armpits and groin."],
+      "source": "medlineplus-heat",
+      "quote": "Place cold compresses on the person's neck, groin, and armpits.",
+      "verified": false,
+      "note": "Quick guidance for an emergency Mayday has no step-by-step protocol for; spoken from Talk to Mayday. Quote from an automated fetch on 2026-10-23: confirm on the page."
+    },
+    {
+      "id": "guide_chest_pain",
+      "protocols": [],
+      "intakeOnly": true,
+      "ask": ["chest pain", "heart attack", "his chest hurts", "she has chest pain", "pain in his chest and arm", "i think he is having a heart attack"],
+      "say": ["Call 911 first.", "Have them sit down and rest.", "If 911 says so, they can chew an aspirin."],
+      "source": "medlineplus-heart-attack",
+      "quote": "Don't delay calling 911 to take an aspirin. Call for help first.",
+      "verified": false,
+      "note": "Quick guidance for an emergency Mayday has no step-by-step protocol for; spoken from Talk to Mayday. Quote from an automated fetch on 2026-10-23: confirm on the page."
     }
   ]
 }

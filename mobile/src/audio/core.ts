@@ -53,6 +53,9 @@ export interface VoiceEngine {
   recentlySaid(seconds?: number): string[];
 }
 
+/** How long past its turn a live-voiced line may keep everyone waiting before the system voice takes it. */
+const LIVE_GRACE_MS = 1200;
+
 export class AudioCore implements VoiceEngine {
   private buffers = new Map<string, Buf>();
   private loading = new Map<string, Promise<Buf | null>>();
@@ -66,6 +69,8 @@ export class AudioCore implements VoiceEngine {
   lastSpoken: string[] = [];
   /** Everything said lately, with when it ends on the audio clock, for the echo guard. */
   private spokenLog: { text: string; end: number }[] = [];
+  /** Bumped by every speak() and stopSpeech(), so a newer one cancels lines still waiting to load. */
+  private generation = 0;
 
   constructor(
     readonly ctx: Ctx,
@@ -183,15 +188,26 @@ export class AudioCore implements VoiceEngine {
   /**
    * Say several lines back to back, starting now. Missing clips use the
    * system voice. Returns when, on the audio clock, the speech will end.
+   *
+   * Recorded lines start at once; a line voiced live by the voice server
+   * (an address, an AI rewrite) plays when it is ready, and if it is still
+   * not ready a moment after its turn, the system voice says it instead, so
+   * nothing waits on a slow server.
    */
   async speak(lines: string[], opts: { rate?: number; gap?: number } = {}): Promise<SpeakResult> {
     const rate = opts.rate ?? 1;
     const gap = (opts.gap ?? 0.28) / rate;
     this.stopSpeech();
-    await Promise.all(lines.map((l) => this.buffer(l)));
+    const gen = this.generation;
+    const loads = lines.map((l) => this.buffer(l));
     const start = this.ctx.currentTime + 0.05;
     let t = start;
-    for (const line of lines) {
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
+      const waitMs = Math.max(0, (t - this.ctx.currentTime) * 1000) + LIVE_GRACE_MS;
+      await Promise.race([loads[i], new Promise((r) => setTimeout(r, waitMs))]);
+      if (gen !== this.generation) return { start, end: t };
+      t = Math.max(t, this.ctx.currentTime + 0.02);
       const d = this.playLineAt(line, t, rate);
       if (d === null) {
         // Not pre-rendered: hand it to the system voice and estimate its length.
@@ -225,6 +241,7 @@ export class AudioCore implements VoiceEngine {
 
   /** Barge-in: the person started talking, so we stop. */
   stopSpeech() {
+    this.generation++;
     for (const s of this.voiceSources) {
       try {
         s.stop();

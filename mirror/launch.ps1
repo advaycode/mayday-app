@@ -31,7 +31,10 @@ if (-not $Dev -and -not (Test-Path (Join-Path $root 'mobile\dist\index.html'))) 
 # model through Ollama if one is installed; otherwise the app adapts its
 # wording on its own, offline. None of this is needed for the app to work.
 if (-not (Test-Port 8743)) {
-    Start-Process -WindowStyle Hidden -FilePath 'python' -ArgumentList "`"$root\tools\tts_server.py`""
+    # The Kokoro voice lives in its own venv; without it the server falls back to Piper.
+    $py = Join-Path $env:USERPROFILE 'tools\kokoro_venv\Scripts\python.exe'
+    if (-not (Test-Path $py)) { $py = 'python' }
+    Start-Process -WindowStyle Hidden -FilePath $py -ArgumentList "`"$root\tools\tts_server.py`""
 }
 $ollama = Join-Path $env:LOCALAPPDATA 'Programs\Ollama\ollama.exe'
 if (-not (Test-Port 11434) -and (Test-Path $ollama)) {

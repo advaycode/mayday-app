@@ -5,7 +5,7 @@ import { PanResponder, Pressable, StyleSheet, View, type LayoutChangeEvent } fro
 import { Text } from '@/design/Text';
 import { color } from '@/design/tokens';
 
-import type { Facility } from './nearest';
+import { describe, type Facility } from './nearest';
 
 /**
  * A small, dependency-free slippy map: dark raster tiles plus our own
@@ -92,8 +92,8 @@ export function TileMap({ center, zoom, onCenterChange, facilities, user, select
     return { x: p.x - left, y: p.y - top };
   };
 
-  // Draw urgent care first, then ERs, then trauma centers on top, then the selection.
-  const order = { urgent: 0, er: 1, trauma: 2 } as const;
+  // Draw the least urgent first, emergency departments and trauma centers on top, then the selection.
+  const order = { phc: 0, urgent: 0, hospital: 1, referral: 2, er: 3, trauma: 4 } as const;
   const visible = facilities
     .map((f) => ({ f, ...toScreen(f.lat, f.lon) }))
     .filter((m) => m.x > -30 && m.y > -30 && m.x < size.w + 30 && m.y < size.h + 30)
@@ -145,14 +145,16 @@ export function TileMap({ center, zoom, onCenterChange, facilities, user, select
             onPress={() => onSelect(f)}
             hitSlop={10}
             accessibilityRole="button"
-            accessibilityLabel={`${f.name}. ${f.kind === 'trauma' ? `Trauma center level ${f.traumaLevel}` : f.kind === 'er' ? 'Emergency room' : 'Urgent care, not for emergencies'}`}
+            accessibilityLabel={`${f.name}. ${describe(f)}`}
             style={{ position: 'absolute', left: x - 14, top: y - 14, width: 28, height: 28, alignItems: 'center', justifyContent: 'center' }}>
             {f.kind === 'trauma' ? (
               <View style={[styles.trauma, selected && styles.selected]}>
                 <Text style={styles.traumaText}>{f.traumaLevel?.startsWith('Pediatric') ? 'P' : f.traumaLevel?.split(' ')[0]}</Text>
               </View>
-            ) : f.kind === 'er' ? (
+            ) : f.kind === 'er' || f.kind === 'referral' ? (
               <View style={[styles.er, selected && styles.selected]} />
+            ) : f.kind === 'phc' ? (
+              <View style={[styles.phc, selected && styles.selected]} />
             ) : (
               <View style={[styles.urgent, selected && styles.selected]} />
             )}
@@ -182,6 +184,7 @@ const styles = StyleSheet.create({
   },
   traumaText: { fontFamily: 'Geist_600SemiBold', fontSize: 11, lineHeight: 13, color: color.void },
   urgent: { width: 11, height: 11, borderRadius: 6, borderWidth: 2, borderColor: color.inkMuted, backgroundColor: 'transparent' },
+  phc: { width: 8, height: 8, borderRadius: 4, borderWidth: 1.5, borderColor: color.inkFaint, backgroundColor: 'transparent' },
   selected: { transform: [{ scale: 1.45 }], borderColor: color.accent },
   userHalo: { position: 'absolute', width: 36, height: 36, borderRadius: 18, backgroundColor: 'rgba(210,190,148,0.22)', alignItems: 'center', justifyContent: 'center' },
   userDot: { width: 14, height: 14, borderRadius: 7, backgroundColor: color.accent, borderWidth: 2, borderColor: color.void },

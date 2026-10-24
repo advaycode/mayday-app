@@ -22,9 +22,59 @@ const NUMBER_WORDS: Record<string, number> = {
   eighteen: 18, nineteen: 19, twenty: 20,
 };
 
+/**
+ * English as it is spoken, and as recognizers mishear it, mapped onto the
+ * words the rules know. Applied after punctuation is gone, in this order
+ * (multi-word answers before the single words inside them). Tested on
+ * __tests__/dialects.test.ts.
+ */
+const DIALECT: [RegExp, string][] = [
+  // Yes and no, the many ways. "Yeah nah" is no and "nah yeah" is yes (Australia, New Zealand).
+  [/\byeah nah( nah)?\b/g, 'no'],
+  [/\bnah yeah( yeah)?\b/g, 'yes'],
+  [/\b(uh huh|mm hmm|mmhmm|mhm+|yessir|yes sir|yes maam|aye|ja|yah|yea)\b/g, 'yes'],
+  [/\b(nuh uh|naw|nae|nay|nope)\b/g, 'no'],
+  // Scots negatives.
+  [/\b(cannae|canna)\b/g, 'cannot'],
+  [/\b(isnae)\b/g, 'is not'],
+  [/\b(disnae|doesnae)\b/g, 'does not'],
+  [/\b(dinnae|dinna)\b/g, 'do not'],
+  [/\b(wasnae)\b/g, 'was not'],
+  [/\b(didnae)\b/g, 'did not'],
+  [/\b(willnae|winnae)\b/g, 'will not'],
+  // Fillers carry nothing ("um uh he is not breathing"; Singapore "lah", "leh", "lor").
+  [/\b(um+|uh+|er+|erm+|hmm+|ah+|lah|leh|lor|innit|you know)\b/g, ' '],
+  // Spelling as heard.
+  [/\b(wat|wot|whut)\b/g, 'what'],
+  [/\bgonna\b/g, 'going to'],
+  [/\bwanna\b/g, 'want to'],
+  [/\bme (own|mate|mum|dad|brother|sister|son|daughter|wife|husband)\b/g, 'my $1'],
+  [/\bon my own\b/g, 'alone'],
+  // Words recognizers often get wrong in an emergency.
+  [/\b(breathin|breathen|brething|breating|breathe in)\b/g, 'breathing'],
+  // "Breeding" may be breathing or bleeding; only "not breeding" is safe to read (as not breathing).
+  [/\bnot breeding\b/g, 'not breathing'],
+  [/\b(bleedin|bleading)\b/g, 'bleeding'],
+  [/\b(chalking|chocking|choaking|chokin|choke in)\b/g, 'choking'],
+  [/\b(fentanol|fentanil|fentanel|fenta nil)\b/g, 'fentanyl'],
+  [/\b(narkan|nar can|nark an|nar kin)\b/g, 'narcan'],
+  [/\b(od|o d|oded|od d|overdoes)\b/g, 'overdosed'],
+  [/\b(tourney kit|tourney cat|turnicut|tournicut|tourniquette|turnicate)\b/g, 'tourniquet'],
+  [/\b(defibulator|defibrilator)\b/g, 'defibrillator'],
+  [/\b(epi pen|eppy pen)\b/g, 'epipen'],
+  [/\b(c p r|see pee are)\b/g, 'cpr'],
+  [/\b(hymlick|heimlick|himlick)\b/g, 'heimlich'],
+  [/\b(having a fit|is fitting|are fitting|in a fit|seizing|seizin)\b/g, 'having a seizure'],
+  // -in' spoken endings with the apostrophe already gone: "talkin funny", "droopin", "movin".
+  [/\b(talk|mov|respond|wak|gasp|shak|droop|slurr|bleed|burn|chok|turn|go)in\b/g, '$1ing'],
+];
+
 export function normalizeUtterance(raw: string): string {
   let t = ` ${raw.toLowerCase().replace(/[‘’`]/g, "'")} `;
   t = t
+    .replace(/\bain'?t\b/g, 'is not')
+    .replace(/\bod'?d\b/g, 'overdosed')
+    .replace(/\b(\w+)in'(?=\s|$)/g, '$1ing')
     .replace(/\bcan't\b/g, 'cannot')
     .replace(/\bcant\b/g, 'cannot')
     .replace(/\bcan not\b/g, 'cannot')
@@ -41,8 +91,9 @@ export function normalizeUtterance(raw: string): string {
     .replace(/\ba e d\b/g, 'aed')
     .replace(/\b9[ -]?1[ -]?1\b/g, 'nine one one')
     .replace(/[^a-z0-9\s]/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
+    .replace(/\s+/g, ' ');
+  for (const [re, to] of DIALECT) t = t.replace(re, to);
+  t = t.replace(/\s+/g, ' ').trim();
 
   // Collapse stutters and repeated phrases: "he is not he is not breathing" -> "he is not breathing".
   let words = t.split(' ');
@@ -85,7 +136,8 @@ export function unsureAboutBreathing(t: string): boolean {
   return (
     has(t, /\b(if|whether)( \w+){0,3} breath\w*/) ||
     has(t, /^(is|are|does|do) (he|she|they|it|the (person|patient|man|woman|baby|child|kid)|my \w+) (still |really |even )?breath\w*/) ||
-    has(t, /\b(not sure|do not know|dunno|cannot tell|can not tell|hard to tell|how (do|can|would|will|should) i (know|tell|check))\b/) ||
+    // "I don't know what to do" is about the rescuer, not the breathing.
+    has(t.replace(/\b(do not know|dunno|not sure) what to do\b/g, ' '), /\b(not sure|do not know|dunno|cannot tell|can not tell|hard to tell|how (do|can|would|will|should) i (know|tell|check))\b/) ||
     has(t, /\b(check|checking|measure|test)( \w+){0,2} breath\w*/)
   );
 }
@@ -97,9 +149,11 @@ function breathing(t: string): RouterSlots['breathing'] {
   if (has(t, /\b(gasp\w*|agonal|snoring weird|blue lips|lips are blue)\b/)) return 'abnormal';
   // "I'm not sure what to do, he's not breathing" is still not breathing.
   const plain = t.replace(DOUBT, ' ');
-  if (has(plain, /\bturning blue\b/) && !has(plain, /\bchok\w*/)) return 'abnormal';
+  if (has(plain, /\b(turning|turned|gone|going|went) blue\b/) && !has(plain, /\bchok\w*/)) return 'abnormal';
   if (has(plain, new RegExp(`\\b${NEG}( \\w+){0,2} breath\\w*`))) return 'abnormal';
-  if (has(plain, /\bbreath\w* (is )?(weird|funny|strange|wrong|shallow|slow|gurgl\w*)\b/)) return 'abnormal';
+  // "Breathing weird", "breathing very strange", "breathing is kind of off".
+  if (has(plain, /\bbreath\w*( \w+){0,3} (weird\w*|funny|strange\w*|wrong|shallow|slow|gurgl\w*|odd\w*|off|bad|noisy|irregular|struggl\w*|labou?red)\b/)) return 'abnormal';
+  if (has(plain, /\b(weird|funny|strange|odd|shallow|noisy|irregular|struggling|labou?red) breath\w*/)) return 'abnormal';
   // Doubt only ever withholds the reassuring answer.
   if (unsureAboutBreathing(t)) return undefined;
   if (has(t, /\bbreathing\b/) && !has(t, /\bcannot breathe\b/)) return 'normal';
@@ -108,7 +162,7 @@ function breathing(t: string): RouterSlots['breathing'] {
 
 function conscious(t: string): RouterSlots['conscious'] {
   if (
-    has(t, /\b(unconscious|unresponsive|passed out|collapsed|collapse|fainted|went limp|limp|out cold|knocked out|went down|dropped)\b/) ||
+    has(t, /\b(unconscious|unresponsive|passed out|passing out|collapsed|collapse|collapsing|fainted|fainting|went limp|limp|out cold|knocked out|blacked out|flaked out|conked out|keeled over|went down|dropped)\b/) ||
     has(t, /\b(not|will not|cannot|wont) (respond\w*|wake\w*|move\w*|answer\w*)\b/) ||
     // "Can't talk" means unresponsive, unless something is stuck in their throat.
     (has(t, /\b(not|will not|cannot|wont) talk\w*\b/) && !has(t, /\b(chok\w*|stuck|throat|swallow\w*)\b/)) ||
@@ -219,15 +273,16 @@ const INTENTS: [Intent, RegExp][] = [
   ['pregnant', /\b(pregnant|too big|cannot reach around)\b/],
   ['not_breathing', new RegExp(`\\b${NEG}( \\w+){0,2} breath\\w*`)],
   ['breathing', /\b(is|are|started|starting) breathing\b|\bbreathing (again|now|on (his|her|their) own)\b/],
-  ['unresponsive', /\b(passed out|unconscious|collapsed|went limp|not responding|stopped responding|will not wake)\b/],
+  ['unresponsive', /\b(passed out|unconscious|collapsed|went limp|not responding|stopped responding|will not wake|not waking|no wake|out cold|blacked out|keeled over)\b/],
   ['responsive', /\b(woke up|waking up|is awake|are awake|talking|opened (his|her|their) eyes|moving|responding)\b/],
   ['coughing', /\b(cough\w*)\b/],
-  ['what_now', /\b(what (do|should) i do|what now|what next|help me|now what)\b/],
+  ['what_now', /\b(what (do|should) i do|what now|what next|help me|now what|(do not|dont) know what to do|what am i supposed to do)\b/],
   ['repeat', /\b(repeat|again|say that again|what did you say|didn t hear|did not hear|pardon|huh)\b/],
-  ['next', /\b(next|done|ok|okay|ready|got it|did it|continue|go on|finished|it is on|they are on|turned it on)\b/],
+  ['next', /\b(next|done|ok|okay|ready|got it|did it|continue|go on|finished|it is on|they are on|turned it on|sorted|alright|all right|can already|(gone|went|going|ran) (to get|for) (it|one|the aed|the defibrillator)|is getting (it|one))\b/],
 ];
 
-const YES = /^(yes|yeah|yep|yup|ya|uh huh|correct|right|affirmative|he is|she is|they are|it is|i am|i can|i do|i have|sure)\b/;
+// "He is" alone is a yes; "he is gasping" or "he's gone blue" is not, so pronoun answers must be the whole reply.
+const YES = /^(yes|yeah|yep|yup|ya|uh huh|correct|right|affirmative|i am|i can|i do|i have|sure)\b|^(yes |yeah )?(he|she|they|it) (is|are|does|do)( yes| yeah)?$/;
 const NO = /^(no|nope|nah|negative|he is not|she is not|they are not|it is not|i cannot|i do not|i am not)\b/;
 
 export type RouteContext = {
@@ -269,6 +324,10 @@ export function route(raw: string, ctx: RouteContext = {}): RouterOutput {
       (YES.test(t) && short ? 'yes' : NO.test(t) && short ? 'no' : null) ??
       INTENTS.find(([name, re]) => generic.includes(name) && re.test(t))?.[0] ??
       null;
+    // The words win over the form: "yes, he's gasping" or "he is breathing weird" is
+    // not "yes, breathing normally". The fact (abnormal, unresponsive) answers instead.
+    const worse = slots.breathing === 'abnormal' || slots.conscious === 'false';
+    if (worse && (intent === 'yes' || intent === 'breathing' || intent === 'responsive')) intent = null;
   }
 
   const merged = { ...ctx.known, ...slots };

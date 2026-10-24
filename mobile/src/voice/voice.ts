@@ -2,6 +2,7 @@ import * as Speech from 'expo-speech';
 
 import { audio } from '@/audio/engine';
 import { adaptLines as requestAdaptation, capabilities } from '@/ai/proxy';
+import { localize } from '@/region/store';
 import { getSettings } from '@/settings/store';
 
 import { checkRewrite, currentState, initialContext, learn, personalize, preface, voiceRate, type VoiceContext } from './adapt';
@@ -52,8 +53,9 @@ export const sinceHeard = () => Date.now() - lastHeardAt;
 /** The form of a line to speak right now. */
 export function adaptLine(line: string): string {
   const ai = rewrites.get(line);
-  if (ai && audio()?.ready(ai)) return ai;
-  return personalize(line, ctx.pronoun);
+  if (ai && audio()?.ready(ai)) return localize(ai);
+  // Then the region's emergency number in place of 911 (each has its own recording).
+  return localize(personalize(line, ctx.pronoun));
 }
 
 export function say(lines: string[], opts: { calm?: boolean } = {}) {

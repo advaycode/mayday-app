@@ -1,6 +1,6 @@
 # Medical sources
 
-Generated 2026-10-18 by `tools/medical_sources.py` from `mobile/src/protocols/corpus/`. Do not edit by hand.
+Generated 2026-10-23 by `tools/medical_sources.py` from `mobile/src/protocols/corpus/`. Do not edit by hand.
 
 **78 protocol steps. 64 are quoted word for word from a retrieved source. 14 are awaiting review** (marked ⚠ below): the content is long-standing first-aid teaching, but the exact 2025 sentence could not be downloaded (ahajournals.org, cpr.heart.org and redcross.org block automated access). A CPR-certified reviewer should open each source in a browser, confirm or correct the step, and set `verified: true` with the quote.
 
@@ -25,6 +25,11 @@ Generated 2026-10-18 by `tools/medical_sources.py` from `mobile/src/protocols/co
 | `medlineplus-unconscious` | Unconsciousness: first aid. MedlinePlus, U.S. National Library of Medicine (NIH). https://medlineplus.gov/ency/article/000022.htm | Fetched directly |
 | `medlineplus-stroke` | Stroke. MedlinePlus, U.S. National Library of Medicine (NIH). https://medlineplus.gov/ency/article/000726.htm | Fetched directly |
 | `ohsu-narcan` | How to use Narcan nasal spray. OHSU Hospital (Oregon Health & Science University). https://www.ohsu.edu/sites/default/files/2024-04/How-to-use-Narcan-nasal-spray.pdf | Fetched directly |
+| `cdc-seizure-first-aid` | First Aid for Seizures. Centers for Disease Control and Prevention (CDC). https://www.cdc.gov/epilepsy/first-aid-for-seizures/index.html | Fetched directly |
+| `medlineplus-anaphylaxis` | Anaphylaxis. MedlinePlus, U.S. National Library of Medicine (NIH). https://medlineplus.gov/ency/article/000844.htm | Fetched directly |
+| `medlineplus-heat` | Heat emergencies. MedlinePlus, U.S. National Library of Medicine (NIH). https://medlineplus.gov/ency/article/000056.htm | Fetched directly |
+| `medlineplus-heart-attack` | Heart attack first aid. MedlinePlus, U.S. National Library of Medicine (NIH). https://medlineplus.gov/ency/article/000063.htm | Fetched directly |
+| `medlineplus-low-sugar` | Low blood sugar. MedlinePlus, U.S. National Library of Medicine (NIH). https://medlineplus.gov/ency/article/000386.htm | Fetched directly |
 
 ## CPR (adult) · v2025.3.0
 
@@ -171,6 +176,7 @@ Spoken when someone asks a question mid-emergency (`mobile/src/voice/answers.jso
 | `cpr_breaths_adult` (cpr_adult) | do i do mouth to mouth? | If you're not trained, hands only is fine.<br>Just keep pushing. | `aha2025-highlights` | "they are to guide lay rescuers to use Hands-Only CPR for adults and conventional CPR, including breaths, for children." |
 | ⚠ `cpr_stop` (cpr) | when do i stop? | Keep going until they breathe normally or paramedics take over.<br>Swap with someone every two minutes if you can. | `aha2025-part7` | _Continue until EMS takes over or signs of life; switch compressors about every 2 minutes. Confirm the 2025 Part 7 wording._ |
 | `aed_use` (cpr) | how do i use the aed? | Turn it on. It talks you through every step.<br>Don't stop pushing to go look for one. | `aha2025-highlights` | "Early high-quality CPR and prompt defibrillation are the most important interventions associated with improved outcomes in adult cardiac arrest." |
+| ⚠ `aed_what` (any) | what is an aed? | An AED is a box that shocks the heart back into rhythm.<br>Look for a heart with a lightning bolt.<br>Turn it on. It talks you through it. | `aha2025-highlights` | "Early high-quality CPR and prompt defibrillation are the most important interventions associated with improved outcomes in adult cardiac arrest." |
 | `aed_bra` (cpr) | she is wearing a bra? | You can move a bra aside.<br>No need to remove it. | `aha2025-highlights` | "When placing pads for defibrillation for an adult in cardiac arrest, it might be reasonable to adjust the position of a bra instead of removing it." |
 | `choking_can_cough` (choking) | they can still cough? | If they can cough hard, let them cough.<br>Stay close and watch. | `aha2025-highlights` | "Encourage cough. Continue to check for signs of severe FBAO." |
 | `choking_pregnant` (choking) | she is pregnant? | Use chest thrusts instead of belly thrusts. | `aha2025-highlights` | "For patients in the late stages of pregnancy, or when the rescuer is unable to encircle the patient's abdomen, 5 chest thrusts should be used instead." |
@@ -183,19 +189,20 @@ Spoken when someone asks a question mid-emergency (`mobile/src/voice/answers.jso
 | `stroke_time` (stroke) | why does time matter? | Note when they last seemed normal.<br>Tell 911. Treatment depends on that time. | `medlineplus-stroke` | "TIME: If a person shows any of these symptoms, time is essential. Call 911 or the local emergency number." |
 | `naloxone_second` (opioid_overdose) | when do i give another dose? | No change in two to three minutes?<br>New spray, other nostril. | `ohsu-narcan` | "If they don't within 2-3 minutes, give a 2nd dose in the other nostril. You will need a new nasal spray for the 2nd dose." |
 | `naloxone_harm` (opioid_overdose) | what if it is not opioids? | Narcan won't hurt them if it isn't opioids.<br>Use it anyway. | `ohsu-narcan` | "If you think someone is having an overdose, use Narcan right away -- even if you don't know what drugs they took. Narcan only works for opioids, but there is no harm if they took a different drug." |
+| ⚠ `guide_seizure` (any) | he is having a seizure? | Move hard things away. Don't hold them down.<br>Nothing in their mouth. Time it.<br>Call 911 if it lasts over five minutes.<br>When it stops, roll them onto their side. | `cdc-seizure-first-aid` | "Time the seizure to track if it lasts more than 5 minutes. If it does, seek immediate medical attention or call 911." |
+| ⚠ `guide_allergy` (any) | allergic reaction? | Call 911 now.<br>If they have an epinephrine pen, help them use it.<br>Nothing to eat or drink if breathing is hard. | `medlineplus-anaphylaxis` | "An epinephrine injector or intranasal epinephrine should be used immediately if it is available." |
+| ⚠ `guide_low_sugar` (any) | low blood sugar? | If they're awake and can swallow, give sugar.<br>Juice, regular soda, or glucose tablets.<br>If they can't wake up, call 911. | `medlineplus-low-sugar` | "Drinking juice or other sugar containing beverage" |
+| ⚠ `guide_heat` (any) | heat stroke? | Call 911. Get them somewhere cool.<br>Wet their skin with cool water and fan them.<br>Cold packs on the neck, armpits and groin. | `medlineplus-heat` | "Place cold compresses on the person's neck, groin, and armpits." |
+| ⚠ `guide_chest_pain` (any) | chest pain? | Call 911 first.<br>Have them sit down and rest.<br>If 911 says so, they can chew an aspirin. | `medlineplus-heart-attack` | "Don't delay calling 911 to take an aspirin. Call for help first." |
 
 ## App lines (not medical instructions)
 
 Spoken outside protocol steps: confirmations, questions and status. None gives a medical instruction.
 
 - `intake`: Tell me what's happening.
-- `calling`: Calling nine one one.
-- `speaker`: Put the call on speaker.
-- `callCancelled`: Okay. Not calling.
-- `someoneCalling`: Good. Keep them on the line.
 - `micLost`: I can't hear you during the call. Tap the screen instead.
 - `notUnderstood`: Tap what you see.
-- `groundFallback`: Keep doing compressions. Tell the dispatcher that.
+- `groundFallback`: I don't know. Keep doing compressions.
 - `emsHere`: Paramedics are here. Show them this screen.
 - `askAge`: Adult, child, or baby?
 - `askWhat`: Not breathing, choking, or bleeding?
@@ -204,9 +211,35 @@ Spoken outside protocol steps: confirmations, questions and status. None gives a
 - `offline`: No signal. I still have everything I need.
 - `scanLooking`: Looking.
 - `scanUnsure`: I can't tell from the photo. Tell me what you see.
-- `groundFallbackGeneral`: I'm not sure. Tell the dispatcher that.
+- `groundFallbackGeneral`: I don't know that one. Ask the 911 dispatcher.
 - `answerFrom`: Here's what the guidelines say.
 - `voiceBack`: I can hear you again.
+- `sensorPlace`: Lay the phone on their chest.
+- `sensorHow`: Top on the chest. Bottom on the belly. Let go.
+- `sensorMeasuring`: Measuring. Don't touch it.
+- `sensorLetGo`: Let go of the phone.
+- `sensorNone`: No normal breathing seen. Start CPR.
+- `sensorMoving`: The chest is moving. Is it normal breathing, or gasping?
+- `sensorUnsure`: I couldn't measure. Watch the chest.
+- `paceFaster`: Faster. Push on every click.
+- `paceSlower`: A little slower. Push on every click.
+- `paceKeep`: Keep pushing. Don't stop.
+- `soundGasp`: I heard gasping.
+- `soundGaspNot`: Gasping is not breathing.
+- `paceGood`: Good pace. Keep going.
+- `paceUnfelt`: I can't feel your pushes from here. Follow the clicks.
+- `sensorTap`: Tap Check with the phone.
+- `sensorDoubt`: If you're not sure, treat it as not breathing.
+- `tellThem`: Tell the dispatcher this.
+- `cantCall`: I can't call. Call 911 on your phone.
+- `noAddress`: I don't have your address. Look for a street sign or a house number.
+- `sevDegree1`: Sounds like a first degree burn.
+- `sevDegree2`: Sounds like a second degree burn.
+- `sevDegree3`: Sounds like a third degree burn. Call 911.
+- `sevCritical`: This is serious. Make sure 911 is called.
+- `notCaught`: Sorry, I didn't catch that.
+- `sayOrTap`: Say your answer, or tap it.
+- `sayDone`: Say done when it's done.
 - `cpr_adult`: Not breathing. We'll do this together.
 - `cpr_child`: A child, not breathing. We'll do this together.
 - `cpr_infant`: A baby, not breathing. We'll do this together.

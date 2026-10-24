@@ -2,6 +2,9 @@ import * as Location from 'expo-location';
 import { Platform } from 'react-native';
 
 import { DEMO_MODE } from '@/config';
+import { km, regionById } from '@/region/regions';
+import { detectRegion, getRegion } from '@/region/store';
+import { getSettings } from '@/settings/store';
 
 /**
  * Where the person is, in the form a 911 dispatcher wants it: a street
@@ -17,8 +20,12 @@ export type Fix = {
   source: 'gps' | 'last-known' | 'demo';
 };
 
-/** Used only in DEMO_MODE when the device cannot give a location (e.g. a desktop browser). Clearly labelled. */
-const DEMO_FIX = { lat: 28.1866, lon: -82.3473 };
+/**
+ * Used only in DEMO_MODE, clearly labelled: when the device cannot give a
+ * location (a desktop browser), or when a region was chosen on the map that
+ * this phone is not in (showing Lagos from Florida). The region's own point.
+ */
+const demoFix = () => getRegion().demo;
 
 const withTimeout = <T,>(p: Promise<T>, ms: number) =>
   Promise.race([p, new Promise<null>((r) => setTimeout(() => r(null), ms))]);
@@ -61,14 +68,18 @@ export async function getFix(): Promise<Fix | null> {
         (await Location.getLastKnownPositionAsync().catch(() => null));
       if (pos) {
         const { latitude: lat, longitude: lon, accuracy } = pos.coords;
-        return { lat, lon, accuracy: accuracy ?? null, address: await reverse(lat, lon), at: Date.now(), source: 'gps' };
+        detectRegion({ lat, lon });
+        const chosen = getSettings().region;
+        const away = chosen !== null && km({ lat, lon }, regionById(chosen).center) > 150;
+        if (!(DEMO_MODE && away)) return { lat, lon, accuracy: accuracy ?? null, address: await reverse(lat, lon), at: Date.now(), source: 'gps' };
       }
     }
   } catch {
     // fall through
   }
   if (DEMO_MODE) {
-    return { ...DEMO_FIX, accuracy: null, address: await reverse(DEMO_FIX.lat, DEMO_FIX.lon), at: Date.now(), source: 'demo' };
+    const d = demoFix();
+    return { ...d, accuracy: null, address: await reverse(d.lat, d.lon), at: Date.now(), source: 'demo' };
   }
   return null;
 }

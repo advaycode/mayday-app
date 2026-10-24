@@ -4,10 +4,12 @@ Pre-render every line Mayday can speak into audio files.
 Why: during a protocol the app must speak instantly, offline, and put each
 count exactly on its beat. On-device text-to-speech has a startup delay that
 varies by phone, and network voices need signal. So every spoken line is
-rendered once, here, with the Piper neural voice, and shipped inside the app.
+rendered once, here, with a neural voice (tools/voice_engine.py: Kokoro af_heart,
+or Piper as a fallback), and shipped inside the app.
 
-    python tools/render_voice.py            # render anything missing
-    python tools/render_voice.py --force    # re-render everything
+    ~/tools/kokoro_venv/Scripts/python tools/render_voice.py            # render anything missing
+    ~/tools/kokoro_venv/Scripts/python tools/render_voice.py --force    # re-render everything
+    python tools/render_voice.py --engine piper                         # the original voice
 
 Reads:   mobile/src/protocols/corpus/*.json   (every say / reminder / breath line)
          mobile/src/audio/systemLines.json    (counts and app lines)
@@ -15,23 +17,27 @@ Reads:   mobile/src/protocols/corpus/*.json   (every say / reminder / breath lin
 Writes:  mobile/assets/voice/en/<key>.wav|mp3
          mobile/src/audio/voiceManifest.ts    (key -> require(...) for Metro)
 
-Needs:   pip install piper-tts numpy, ffmpeg on PATH, and the voice model at
-         ~/.piper/models/en_US-lessac-medium.onnx
+Needs:   ffmpeg on PATH, and either Kokoro (pip install kokoro-onnx soundfile in
+         ~/tools/kokoro_venv, model files in ~/tools/kokoro) or Piper (pip install
+         piper-tts, model at ~/.piper/models/en_US-lessac-medium.onnx). Changing the
+         voice re-renders every clip (the voice's name is kept in assets/voice/en/.voice).
 """
 
 from __future__ import annotations
 
 import argparse
-import io
 import json
+import os
 import re
 import subprocess
 import sys
 import wave
+from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 
 import numpy as np
-from piper import PiperVoice, SynthesisConfig
+
+from voice_engine import Voice
 
 ROOT = Path(__file__).resolve().parents[1]
 MOBILE = ROOT / "mobile"
@@ -41,12 +47,14 @@ ANSWERS = MOBILE / "src" / "voice" / "answers.json"
 ADAPTED = MOBILE / "src" / "voice" / "adaptedLines.json"  # written by mobile/__tests__/adapt.test.ts
 OUT = MOBILE / "assets" / "voice" / "en"
 MANIFEST = MOBILE / "src" / "audio" / "voiceManifest.ts"
-MODEL = Path.home() / ".piper" / "models" / "en_US-lessac-medium.onnx"
 
 # A count has to fit inside one beat at 110 per minute (545 ms) with room for
 # the click, so counts are spoken briskly and squeezed to at most this long.
 MAX_COUNT_S = 0.40
 TARGET_RMS_DB = -18.0
+
+# Emergency numbers other than 911, from mobile/src/region/regions.ts.
+REGION_NUMBERS = ["112"]
 
 # Mirrors src/cpr/timeline.ts. __tests__/voice.test.ts fails if these drift apart.
 MINUTE_WORDS = ["Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten",
@@ -97,27 +105,13 @@ def collect_lines() -> tuple[list[str], list[str]]:
     if ADAPTED.exists():
         lines += json.loads(ADAPTED.read_text(encoding="utf-8"))["lines"]
     counts = system["counts"]
+    # A line that says 911 is also recorded with each other region's number
+    # (mobile/src/region/regions.ts), so the voice can say "one one two" in Lagos.
+    lines += [l.replace("911", n) for l in list(lines) if "911" in l for n in REGION_NUMBERS]
     # De-duplicate while keeping order.
     seen: set[str] = set()
     unique = [l for l in lines if not (clip_key(l) in seen or seen.add(clip_key(l)))]
     return unique, counts
-
-
-def spoken(text: str) -> str:
-    """How a line should sound: the voice would read 911 as "nine hundred eleven"."""
-    return re.sub(r"\b911\b", "nine one one", text)
-
-
-def synth(voice: PiperVoice, text: str, length_scale: float) -> tuple[np.ndarray, int]:
-    text = spoken(text)
-    buf = io.BytesIO()
-    with wave.open(buf, "wb") as wav:
-        voice.synthesize_wav(text, wav, SynthesisConfig(length_scale=length_scale, noise_scale=0.55, noise_w_scale=0.7))
-    buf.seek(0)
-    with wave.open(buf, "rb") as wav:
-        rate = wav.getframerate()
-        pcm = np.frombuffer(wav.readframes(wav.getnframes()), dtype=np.int16).astype(np.float32) / 32768.0
-    return pcm, rate
 
 
 def trim(pcm: np.ndarray, rate: int, threshold_db: float = -42.0, pad_s: float = 0.012) -> np.ndarray:
@@ -158,16 +152,42 @@ def ffmpeg(*args: str) -> None:
     subprocess.run(["ffmpeg", "-hide_banner", "-loglevel", "error", "-y", *args], check=True)
 
 
+# Lines render in several processes side by side, each with its own voice.
+_worker_voice: Voice | None = None
+
+
+def _start_worker(engine: str, threads: int) -> None:
+    global _worker_voice
+    _worker_voice = Voice(engine, threads)
+
+
+def _render_line(job: tuple[str, str]) -> str:
+    text, path = job
+    assert _worker_voice is not None
+    # A touch slower than normal: calm, and clear over a noisy room.
+    pcm, rate = _worker_voice.synth(text, speed=0.94)
+    pcm = level(trim(pcm, rate, pad_s=0.03))
+    tmp = Path(path).with_suffix(".tmp.wav")
+    write_wav(tmp, pcm, rate)
+    ffmpeg("-i", str(tmp), "-ac", "1", "-ar", "24000", "-codec:a", "libmp3lame", "-q:a", "5", path)
+    tmp.unlink()
+    return path
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--force", action="store_true")
+    ap.add_argument("--engine", choices=["kokoro", "piper"], default=None, help="default: kokoro when installed")
+    ap.add_argument("--jobs", type=int, default=4, help="lines rendered side by side")
     args = ap.parse_args()
 
-    if not MODEL.exists():
-        print(f"Voice model not found at {MODEL}", file=sys.stderr)
-        return 1
     OUT.mkdir(parents=True, exist_ok=True)
-    voice = PiperVoice.load(str(MODEL))
+    voice = Voice(args.engine)
+    # A different voice than the clips on disk: every clip is rendered again, so none mix.
+    stamp = OUT / ".voice"
+    if not stamp.exists() or stamp.read_text(encoding="utf-8").strip() != voice.name:
+        args.force = True
+    print(f"Voice: {voice.name}{' (rendering every clip)' if args.force else ''}", flush=True)
     lines, counts = collect_lines()
 
     entries: list[tuple[str, str, str, float]] = []  # key, file, text, duration
@@ -176,7 +196,7 @@ def main() -> int:
         key = clip_key(text)
         path = OUT / f"{key}.wav"
         if args.force or not path.exists():
-            pcm, rate = synth(voice, text, length_scale=0.78)
+            pcm, rate = voice.synth(text, speed=1.28)
             pcm = level(trim(pcm, rate))
             write_wav(path, pcm, rate)
             dur = len(pcm) / rate
@@ -189,24 +209,27 @@ def main() -> int:
         with wave.open(str(path), "rb") as w:
             entries.append((key, path.name, text, w.getnframes() / w.getframerate()))
 
+    todo = [(text, str(OUT / f"{clip_key(text)}.mp3")) for text in lines if args.force or not (OUT / f"{clip_key(text)}.mp3").exists()]
+    if todo:
+        jobs = max(1, min(args.jobs, len(todo)))
+        threads = max(1, (os.cpu_count() or 4) // jobs)
+        with ProcessPoolExecutor(jobs, initializer=_start_worker, initargs=(voice.engine, threads)) as pool:
+            for i, _ in enumerate(pool.map(_render_line, todo, chunksize=2), 1):
+                if i % 25 == 0 or i == len(todo):
+                    print(f"  {i}/{len(todo)} lines", flush=True)
+
     for text in lines:
         key = clip_key(text)
         path = OUT / f"{key}.mp3"
-        if args.force or not path.exists():
-            pcm, rate = synth(voice, text, length_scale=1.06)
-            pcm = level(trim(pcm, rate, pad_s=0.03))
-            tmp = OUT / f"{key}.tmp.wav"
-            write_wav(tmp, pcm, rate)
-            ffmpeg("-i", str(tmp), "-ac", "1", "-ar", "22050", "-codec:a", "libmp3lame", "-q:a", "5", str(path))
-            tmp.unlink()
         probe = subprocess.run(
             ["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", str(path)],
             capture_output=True, text=True, check=True,
         )
         entries.append((key, path.name, text, float(probe.stdout.strip())))
 
+    stamp.write_text(voice.name, encoding="utf-8")
     # Remove clips for lines that no longer exist.
-    keep = {e[1] for e in entries}
+    keep = {e[1] for e in entries} | {stamp.name}
     for f in OUT.iterdir():
         if f.name not in keep:
             f.unlink()

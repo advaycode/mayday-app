@@ -10,6 +10,7 @@ import { haptic } from '@/design/haptics';
 import { TalkButton } from '@/design/TalkButton';
 import { Text } from '@/design/Text';
 import { color, radius, space } from '@/design/tokens';
+import { useRegion } from '@/region/store';
 
 /** A beat you can see: a ring that swells on every compression. */
 export function PulseRing({ size, pulse, tone = color.ink }: { size: number; pulse: SharedValue<number>; tone?: string }) {
@@ -119,6 +120,8 @@ export function Dock({
   on911: () => void;
   bottomInset: number;
 }) {
+  // The region's number (911, 112): shown, never dialed.
+  const { number } = useRegion();
   return (
     <View style={[styles.dock, { paddingBottom: Math.max(bottomInset, space[3]) }]}>
       <Pressable
@@ -147,13 +150,13 @@ export function Dock({
           on911();
         }}
         accessibilityRole="button"
-        accessibilityLabel="Call 911. Shows your address and what to tell them. Mayday does not dial."
+        accessibilityLabel={`Call ${number}. Shows your address and what to tell them. Mayday does not dial.`}
         style={({ pressed }) => [styles.side, pressed && { opacity: 0.8 }]}>
         <View style={[styles.sideCircle, { backgroundColor: color.signal }]}>
           <Phone size={24} color={color.onSignal} weight="fill" />
         </View>
         <Text variant="caption" style={{ color: color.ink }}>
-          911
+          {number}
         </Text>
       </Pressable>
     </View>
@@ -183,7 +186,45 @@ export function Understood({ understood }: { understood: { text: string; at: num
   );
 }
 
+/**
+ * What Mayday just answered, as a caption over the picture for ten seconds:
+ * a loud room can drown the voice, and a scared person may not take in a
+ * spoken answer the first time. Tap to dismiss.
+ */
+export function ReplyCaption({ reply, tone }: { reply: { lines: string[]; source: string | null; at: number } | null; tone: string }) {
+  const [shown, setShown] = useState<typeof reply>(null);
+  useEffect(() => {
+    if (!reply) return;
+    setShown(reply);
+    const t = setTimeout(() => setShown(null), 10_000);
+    return () => clearTimeout(t);
+  }, [reply]);
+  if (!shown) return null;
+  return (
+    <Animated.View entering={FadeIn.duration(180)} exiting={FadeOut.duration(220)} style={styles.replyWrap} accessibilityLiveRegion="polite">
+      <Pressable onPress={() => setShown(null)} accessibilityRole="button" accessibilityLabel={`Mayday said: ${shown.lines.join(' ')}. Tap to close.`}>
+        <Glass radius={radius.lg} variant="thick">
+          <View style={styles.reply}>
+            <View style={[styles.replyBar, { backgroundColor: tone }]} />
+            <View style={{ flex: 1, gap: 2 }}>
+              <Text variant="bodyStrong">{shown.lines.join(' ')}</Text>
+              {shown.source ? (
+                <Text variant="caption" tone="faint" numberOfLines={1}>
+                  {shown.source}
+                </Text>
+              ) : null}
+            </View>
+          </View>
+        </Glass>
+      </Pressable>
+    </Animated.View>
+  );
+}
+
 const styles = StyleSheet.create({
+  replyWrap: { position: 'absolute', left: space[4], right: space[4], top: 72 },
+  reply: { flexDirection: 'row', gap: space[3], padding: space[4] },
+  replyBar: { width: 3, borderRadius: 2 },
   top: {
     height: 60,
     paddingHorizontal: space[4],

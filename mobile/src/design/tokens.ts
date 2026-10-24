@@ -64,6 +64,13 @@ export const tint = {
 } as const;
 export type TintName = keyof typeof tint;
 
+/** Severity levels 1-3 (src/triage/severity.ts): calm green, amber, red. Each hue is 7:1 or better on its deep. */
+export const severityTint = {
+  1: { hue: '#5BD9A2', deep: '#0E2B20' },
+  2: { hue: '#F5B942', deep: '#33250A' },
+  3: { hue: '#FF5F52', deep: '#3A100C' },
+} as const;
+
 /** 4pt base grid. Anything not on this scale is a bug. */
 export const space = {
   0: 0,

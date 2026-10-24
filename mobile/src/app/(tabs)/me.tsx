@@ -7,6 +7,7 @@ import { stepImages } from '@/design/stepImages';
 import { Text } from '@/design/Text';
 import { color, font, radius, space } from '@/design/tokens';
 import { protocols } from '@/protocols';
+import { useRegion } from '@/region/store';
 import { setSettings, useSettings, type MedicalId } from '@/settings/store';
 
 const FIELDS: { key: keyof MedicalId; label: string; placeholder: string }[] = [
@@ -25,6 +26,7 @@ const FIELDS: { key: keyof MedicalId; label: string; placeholder: string }[] = [
 export default function Me() {
   const insets = useDeviceInsets();
   const settings = useSettings();
+  const region = useRegion();
   const stepCount = Object.values(protocols).reduce((n, p) => n + p.steps.length, 0);
   const verified = Object.values(protocols).reduce((n, p) => n + p.steps.filter((s) => s.verified).length, 0);
 
@@ -69,7 +71,7 @@ export default function Me() {
       {DEMO_MODE && (
         <View style={styles.demo}>
           <Text variant="bodyStrong" style={{ color: color.void }}>
-            Mayday never calls 911. Call it yourself.
+            Mayday never calls {region.number}. Call it yourself.
           </Text>
         </View>
       )}
@@ -78,7 +80,7 @@ export default function Me() {
         About
       </Text>
       <View style={[styles.group, { padding: space[4], gap: space[2] }]}>
-        <Text variant="body">Guides you until help arrives. Always call 911.</Text>
+        <Text variant="body">Guides you until help arrives. Always call {region.number}.</Text>
         <Text variant="caption" tone="faint">
           {verified} of {stepCount} steps quoted from their source.
         </Text>
