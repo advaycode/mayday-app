@@ -22,3 +22,10 @@ mobile/dist-iphone/
 .pages/
 research/images/candidates-color/**/*.jpg
 data/
+
+# Web page build: re-create with tools/build_site.py
+site/dist/
+
+# Contest drafts and video production, kept on this computer only
+submission/
+video/

@@ -4,6 +4,8 @@
 
 Congressional App Challenge 2026. Expo (React Native, TypeScript) for iPhone and Android, with a web build that runs inside a life-size iPhone frame on any computer.
 
+**Try it in your browser: https://advaycode.github.io/mayday/** (the real app in a phone frame). The **Developer only** switch opens BeatNet, the heartbeat model, running live in the page on a simulated person, next to the voice engine's own reasoning. Built by `tools/build_site.py` from `site/`.
+
 <p>
 <img src="docs/screens/home.png" width="200" alt="Home: a large Talk to Mayday button and a colored tile for each emergency">
 <img src="docs/screens/step.png" width="200" alt="A choking step: one picture, the question, two large answers, and Back, Talk and 911 at the bottom">
@@ -64,7 +66,9 @@ ERs: CMS Provider Data Catalog, Hospital General Information. Trauma centers: Fl
 
 ## AI disclosure
 
-AI tools were used in building Mayday, and the app uses AI models at runtime. Full list of what each tool did: **[submission/ai-disclosure.md](submission/ai-disclosure.md)**.
+**Building it:** we used Claude Code (Anthropic, Claude Opus 5.5) a lot. It wrote most first drafts of the code (screens, protocol engine, CPR scheduler, keyword router, simulator, proxy, Python tools) and of the docs, and helped with research. We set the rules it builds on (AI never writes medical instructions; Mayday never dials 911), came up with the phone-on-the-chest breathing check and testing it in simulation, chose the protocols and checked them against the guidelines, directed the design, and tested and fixed it. Kokoro-82M (open source, Apache 2.0) recorded the voice from lines we wrote.
+
+**While it runs (all optional, behind `proxy/`):** a Groq model (`llama-3.1-8b-instant`) may suggest a protocol when the keyword rules are unsure, and its answer must match a zod schema or it is thrown away. Claude (or, on the demo laptop, a local Qwen2.5 through Ollama) may reword lines for the patient and rescuer; every line must pass `checkRewrite()`, which rejects any change to a medical word, number or negation. BeatNet, the heartbeat model, is the one model we trained (PyTorch), and it is lab only. With no AI at all, everything that keeps someone alive still works.
 
 ## Limitations
 
@@ -77,7 +81,8 @@ Read [docs/PROGRESS.md](docs/PROGRESS.md#known-limitations-say-them-dont-hide-th
 ```
 mobile/      the app (Expo, TypeScript)          proxy/     model proxy (Cloudflare Worker)
 mirror/      phone frame + launcher               tools/     Python: voice, map data, sources doc, icons
+site/        the web page (phone frame + developer panel), published to GitHub Pages
 docs/        architecture, progress, sources      design/    design system
-research/    findings and raw notes               submission/, video/   drafts for the team to rewrite
+research/    findings and raw notes
 app/         the August 2026 Flutter prototype (superseded; its research and protocol content carried over)
 ```

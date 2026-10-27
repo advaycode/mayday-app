@@ -1073,7 +1073,7 @@ A phone can't run a large language model fast enough for an emergency, so Mayday
 
 ### 29.5 AI used to build Mayday
 
-Disclosed in full in `submission/ai-disclosure.md`, as the CAC rules require: Claude Code helped write code and documentation; Kokoro-82M (and earlier Piper) recorded the voice. The team designed, decided, tested and rewrote; the disclosure lists what each tool did.
+Disclosed in full in the README's AI disclosure section, as the CAC rules require: Claude Code helped write code and documentation; Kokoro-82M (and earlier Piper) recorded the voice. The team designed, decided, tested and rewrote; the disclosure lists what each tool did.
 
 ---
 

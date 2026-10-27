@@ -1,0 +1,683 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Mayday</title>
+<meta name="description" content="Mayday talks a bystander through a medical emergency, out loud and step by step. The real app, running in a phone frame. Open source." />
+<link rel="icon" href="app/icon-192.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  /*
+   * Mayday on the web: the real web build (app/) inside a frame that is
+   * exactly an iPhone's screen in points, like the desktop mirror
+   * (mirror/index.html). The page only draws the hardware around the app
+   * and a developer panel beside it. Built by tools/build_site.py.
+   */
+  :root {
+    --desk: #0d0d0c;
+    --desk-ink: #a8a39a;
+    --desk-faint: #6f6b64;
+    --frame-a: #3a3936;
+    --frame-b: #1c1b19;
+    --bezel: #050505;
+    --panel: 480px;
+    --ok: #4ED8A8;
+    --no: #FF7A66;
+    --accent: #D2BE94;
+    --line: rgba(242,239,232,0.09);
+    --mono: 'Geist Mono', ui-monospace, monospace;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: var(--desk); overflow: hidden; }
+  body {
+    font-family: Geist, system-ui, sans-serif;
+    color: var(--desk-ink);
+    display: grid;
+    place-items: center;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; }
+
+  /* ---- Top bar ---------------------------------------------------------------- */
+  .top {
+    position: fixed; z-index: 5; top: 0; left: 0; right: 0;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 16px 22px; pointer-events: none;
+  }
+  body.with-dev .top { right: var(--panel); }
+  .top > * { pointer-events: auto; }
+  .brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+  .brand img { width: 32px; height: 32px; border-radius: 8px; flex: none; }
+  .brand b { display: block; color: #f2efe8; font-weight: 600; font-size: 15px; letter-spacing: -0.1px; }
+  .brand span { display: block; font-size: 12.5px; color: var(--desk-faint); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .actions { display: flex; align-items: center; gap: 8px; flex: none; }
+  .pill {
+    display: inline-flex; align-items: center; gap: 8px; height: 34px; padding: 0 13px;
+    font: inherit; font-size: 13px; color: var(--desk-ink); text-decoration: none;
+    background: #161513; border: 1px solid rgba(242,239,232,0.12); border-radius: 999px; cursor: pointer;
+    transition: border-color 160ms ease, color 160ms ease;
+  }
+  .pill:hover { border-color: rgba(242,239,232,0.28); color: #f2efe8; }
+  .pill:focus-visible, .caption button:focus-visible, .caption select:focus-visible, .seg button:focus-visible, #dev select:focus-visible, #dev button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .pill svg { flex: none; }
+  /* The developer switch: a small toggle, amber when on. */
+  .switch { width: 26px; height: 15px; border-radius: 8px; background: #2a2926; position: relative; transition: background 160ms ease; }
+  .switch::after { content: ''; position: absolute; top: 2px; left: 2px; width: 11px; height: 11px; border-radius: 50%; background: #8a867e; transition: transform 200ms cubic-bezier(0.16,1,0.3,1), background 160ms ease; }
+  #devBtn[aria-pressed="true"] { border-color: rgba(210,190,148,0.45); color: var(--accent); }
+  #devBtn[aria-pressed="true"] .switch { background: rgba(210,190,148,0.3); }
+  #devBtn[aria-pressed="true"] .switch::after { transform: translateX(11px); background: var(--accent); }
+
+  /* ---- The phone ---------------------------------------------------------------- */
+  #stage { position: relative; transform-origin: center center; }
+  body.with-dev { padding-right: var(--panel); }
+  .phone {
+    position: relative;
+    padding: 4px;
+    border-radius: calc(var(--r) + 16px);
+    background: linear-gradient(145deg, var(--frame-a), var(--frame-b) 45%, #2b2a27 80%, var(--frame-a));
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.06) inset, 0 40px 80px rgba(0,0,0,0.55), 0 12px 24px rgba(0,0,0,0.4);
+  }
+  .bezel { padding: 12px; border-radius: calc(var(--r) + 12px); background: var(--bezel); }
+  .screen { position: relative; width: var(--w); height: var(--h); border-radius: var(--r); overflow: hidden; background: #121110; isolation: isolate; }
+  iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; background: #121110; }
+  .island { position: absolute; z-index: 3; pointer-events: none; top: 11px; left: 50%; transform: translateX(-50%); width: 125px; height: 37px; border-radius: 19px; background: #000; }
+  .status {
+    position: absolute; z-index: 2; pointer-events: none; top: 0; left: 0; right: 0; height: 54px;
+    display: flex; align-items: center; justify-content: space-between; padding: 6px 30px 0 46px;
+    color: #f2efe8; font-weight: 600; font-size: 17px; letter-spacing: -0.2px; font-variant-numeric: tabular-nums;
+  }
+  .status .right { display: flex; gap: 7px; align-items: center; }
+  .home { position: absolute; z-index: 2; pointer-events: none; bottom: 8px; left: 50%; transform: translateX(-50%); width: 139px; height: 5px; border-radius: 3px; background: rgba(242,239,232,0.85); }
+  .btn { position: absolute; background: linear-gradient(90deg, #2b2a27, #45433f); border-radius: 2px; }
+  .btn.left { left: -3px; width: 4px; }
+  .btn.right { right: -3px; width: 4px; }
+  /* Haptics made visible: the phone twitches the way it would buzz in your hand. */
+  @keyframes tick { 0%{transform:translate(0,0)} 30%{transform:translate(-1.2px,0)} 60%{transform:translate(1.2px,0)} 100%{transform:translate(0,0)} }
+  @keyframes thud { 0%{transform:translate(0,0)} 20%{transform:translate(-3px,1px)} 45%{transform:translate(3px,-1px)} 70%{transform:translate(-1.5px,0)} 100%{transform:translate(0,0)} }
+  .buzz-tick { animation: tick 90ms linear; }
+  .buzz-thud { animation: thud 220ms ease-out; }
+  .caption {
+    position: absolute; left: 50%; transform: translateX(-50%); top: calc(100% + 18px);
+    display: flex; justify-content: center; gap: 12px; align-items: center;
+    font-size: 13px; color: var(--desk-faint); white-space: nowrap;
+  }
+  .caption select, .caption button {
+    font: inherit; color: var(--desk-ink); background: #1b1a18; border: 1px solid rgba(242,239,232,0.12);
+    border-radius: 8px; padding: 4px 10px; cursor: pointer;
+  }
+  .caption button:hover, .caption select:hover { border-color: rgba(242,239,232,0.25); }
+
+  /* ---- Developer panel ---------------------------------------------------------- */
+  #dev {
+    display: none; position: fixed; z-index: 6; top: 0; right: 0; bottom: 0; width: var(--panel);
+    background: #0a0a09; border-left: 1px solid var(--line); overflow-y: auto; overscroll-behavior: contain;
+    font-size: 13px; line-height: 1.5; color: #d9d5cc; scrollbar-width: thin; scrollbar-color: #2a2926 transparent;
+  }
+  body.with-dev #dev { display: block; }
+  #dev header { position: sticky; top: 0; z-index: 2; background: #0a0a09; padding: 16px 22px 0; border-bottom: 1px solid var(--line); }
+  .devtop { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .badge { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.8px; text-transform: uppercase; color: var(--accent); border: 1px solid rgba(210,190,148,0.4); border-radius: 4px; padding: 2px 7px; }
+  #devClose { font: inherit; font-size: 12px; color: #8a867e; background: none; border: 0; cursor: pointer; padding: 4px 2px; }
+  #devClose:hover { color: #f2efe8; }
+  .tabs { display: flex; gap: 18px; margin-top: 12px; }
+  .tabs button { font: inherit; font-size: 13px; color: #8a867e; background: none; border: 0; padding: 8px 0 10px; cursor: pointer; border-bottom: 2px solid transparent; }
+  .tabs button[aria-selected="true"] { color: #f2efe8; border-bottom-color: var(--accent); }
+  .tab[hidden] { display: none; }
+  #dev section { padding: 14px 22px; border-bottom: 1px solid var(--line); }
+  #dev h2 { margin: 0; font-size: 15px; font-weight: 600; color: #f2efe8; letter-spacing: -0.1px; }
+  #dev h3 { margin: 0 0 8px; font-size: 11px; font-weight: 500; letter-spacing: 0.6px; text-transform: uppercase; color: #8a867e; display: flex; justify-content: space-between; gap: 10px; }
+  #dev h3 .ms { font-family: var(--mono); letter-spacing: 0; text-transform: none; color: var(--accent); }
+  .caps { margin-top: 3px; font-family: var(--mono); font-size: 11px; color: #8a867e; }
+  .kv { display: grid; grid-template-columns: 104px 1fr; gap: 3px 10px; align-items: baseline; margin: 0; }
+  .kv dt { color: #77736b; font-size: 12px; }
+  .kv dd { margin: 0; font-family: var(--mono); font-size: 12px; color: #e8e4dc; word-break: break-word; }
+  .q { color: #f2efe8; }
+  .faint { color: #66625b; }
+  .empty { color: #55524c; margin: 0; }
+  .ok { color: var(--ok); }
+  .no { color: var(--no); }
+  .bar { display: inline-block; vertical-align: middle; width: 120px; height: 6px; border-radius: 3px; background: #1d1c1a; margin-right: 8px; overflow: hidden; }
+  .bar i { display: block; height: 100%; border-radius: 3px; background: var(--accent); transition: width 400ms cubic-bezier(0.16,1,0.3,1); }
+  .bar.hot i { background: var(--no); }
+  .bar.cool i { background: #6CB8FF; }
+
+  /* Heartbeat lab */
+  .readout { display: grid; grid-template-columns: auto 1fr; gap: 6px 18px; align-items: center; }
+  .heart { width: 46px; height: 46px; color: #3a3936; transition: color 300ms ease; }
+  .heart.found { color: var(--no); }
+  @keyframes beat { 0%{transform:scale(1)} 18%{transform:scale(1.22)} 40%{transform:scale(0.96)} 100%{transform:scale(1)} }
+  .heart.beat { animation: beat 420ms cubic-bezier(0.16,1,0.3,1); }
+  .bpm { font-family: var(--mono); font-size: 40px; line-height: 1; color: #f2efe8; font-variant-numeric: tabular-nums; letter-spacing: -1px; }
+  .bpm small { font-size: 13px; letter-spacing: 0; color: #8a867e; margin-left: 6px; }
+  .verdict { font-size: 12.5px; color: #a8a39a; margin-top: 4px; }
+  canvas { display: block; width: 100%; height: 92px; }
+  canvas#cProb { height: 112px; }
+  .plot { margin-top: 4px; }
+  .plotlab { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 10.5px; color: #66625b; margin-top: 3px; }
+  .legend { display: flex; gap: 14px; font-size: 11.5px; color: #8a867e; margin-top: 8px; flex-wrap: wrap; }
+  .legend i { display: inline-block; vertical-align: middle; margin-right: 6px; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--ok); }
+  .tickm { width: 1.5px; height: 10px; background: #8a867e; }
+  .dash { width: 14px; height: 0; border-top: 1.5px dashed #6f6b64; }
+  .controls { display: grid; gap: 10px; }
+  .controls label { display: grid; grid-template-columns: 104px 1fr; gap: 10px; align-items: center; font-size: 12px; color: #77736b; }
+  #dev select { font: inherit; font-size: 12.5px; color: #e8e4dc; background: #151413; border: 1px solid rgba(242,239,232,0.12); border-radius: 8px; padding: 6px 8px; width: 100%; }
+  .seg { display: inline-flex; background: #151413; border: 1px solid rgba(242,239,232,0.12); border-radius: 8px; padding: 2px; width: 100%; }
+  .seg button { flex: 1; font: inherit; font-size: 12px; color: #8a867e; background: none; border: 0; border-radius: 6px; padding: 5px 6px; cursor: pointer; }
+  .seg button[aria-pressed="true"] { background: #262522; color: #f2efe8; }
+  .ghost { font: inherit; font-size: 12px; color: #d9d5cc; background: none; border: 1px solid rgba(242,239,232,0.14); border-radius: 8px; padding: 6px 10px; cursor: pointer; justify-self: start; }
+  .ghost:hover { border-color: rgba(242,239,232,0.3); }
+  .layers { font-family: var(--mono); font-size: 11.5px; color: #a8a39a; margin: 6px 0 0; padding: 0; list-style: none; }
+  .layers li { display: grid; grid-template-columns: 22px 1fr; }
+  .note { font-size: 12px; color: #8a867e; margin: 0; }
+
+  /* Voice engine (the app's own trace events, as in the desktop mirror) */
+  .pipe { display: flex; gap: 4px; margin: 10px 0 0; padding: 0; list-style: none; }
+  .pipe li { flex: 1; text-align: center; font-size: 10.5px; padding: 6px 0; border-radius: 6px; background: #151413; color: #77736b; transition: background 600ms, color 600ms; }
+  .pipe li.on { background: var(--accent); color: #0a0a09; transition: none; }
+  .sig { display: grid; grid-template-columns: 14px 108px 44px 1fr; gap: 6px; font-family: var(--mono); font-size: 11.5px; color: #66625b; }
+  .sig.hit { color: #e8e4dc; }
+  .sig .w { text-align: right; }
+  .sig.hit .w { color: var(--accent); }
+  .say { margin: 0 0 8px; }
+  .say .line { color: #f2efe8; }
+  .say .from { font-size: 11.5px; color: #66625b; text-decoration: line-through; text-decoration-color: rgba(255,122,102,0.6); }
+  .tag { display: inline-block; font-family: var(--mono); font-size: 10.5px; padding: 1px 6px; border-radius: 4px; background: #1d1c1a; color: #a8a39a; margin-left: 6px; }
+  .tag.p { background: rgba(210,190,148,0.14); color: var(--accent); }
+  #trace { list-style: none; margin: 0; padding: 0; font-family: var(--mono); font-size: 11px; max-height: 260px; overflow-y: auto; }
+  #trace li { display: grid; grid-template-columns: 82px 64px 1fr; gap: 6px; padding: 2px 0; color: #8a867e; border-bottom: 1px solid rgba(242,239,232,0.04); }
+  #trace li b { font-weight: 500; color: var(--accent); }
+  #trace li span:last-child { color: #c9c5bc; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  /* Phones and narrow windows: the panel covers the page instead of sitting beside it. */
+  @media (max-width: 900px) {
+    body.with-dev { padding-right: 0; }
+    body.with-dev .top { right: 0; }
+    #dev { width: 100%; border-left: 0; }
+    .brand span { display: none; }
+    .pill .long { display: none; }
+  }
+  @media (max-width: 520px) {
+    .top { padding: 12px 14px; }
+    .brand div, .srcLabel { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .buzz-tick, .buzz-thud, .heart.beat { animation: none; }
+    .pipe li, .bar i, .switch::after { transition: none; }
+  }
+</style>
+</head>
+<body>
+<div class="top">
+  <div class="brand">
+    <img src="app/icon-192.png" alt="" />
+    <div><b>Mayday</b><span>Talks you through a medical emergency, out loud, step by step. Congressional App Challenge 2026.</span></div>
+  </div>
+  <div class="actions">
+    <a class="pill" href="https://github.com/advaycode/mayday-app" target="_blank" rel="noopener">
+      <svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+      <span class="srcLabel">Source<span class="long"> code</span></span>
+    </a>
+    <button class="pill" id="devBtn" type="button" aria-pressed="false" aria-controls="dev"><span class="switch" aria-hidden="true"></span>Developer only</button>
+  </div>
+</div>
+
+<div id="stage">
+  <div class="phone" id="phone">
+    <span class="btn left" style="top:150px;height:32px"></span>
+    <span class="btn left" style="top:215px;height:62px"></span>
+    <span class="btn left" style="top:290px;height:62px"></span>
+    <span class="btn right" style="top:240px;height:96px"></span>
+    <div class="bezel">
+      <div class="screen" id="screen">
+        <iframe id="app" title="Mayday" allow="microphone; geolocation; camera; autoplay"></iframe>
+        <div class="status">
+          <span id="clock">9:41</span>
+          <span class="right" aria-hidden="true">
+            <svg width="19" height="12" viewBox="0 0 19 12"><rect x="0" y="8" width="3.2" height="4" rx="1" fill="currentColor"/><rect x="5" y="5.5" width="3.2" height="6.5" rx="1" fill="currentColor"/><rect x="10" y="3" width="3.2" height="9" rx="1" fill="currentColor"/><rect x="15" y="0" width="3.2" height="12" rx="1" fill="currentColor"/></svg>
+            <svg width="17" height="12" viewBox="0 0 17 12"><path d="M8.5 2.3c2.4 0 4.6.9 6.2 2.4l1.2-1.2C13.9 1.6 11.3.5 8.5.5S3.1 1.6 1.1 3.5l1.2 1.2C3.9 3.2 6.1 2.3 8.5 2.3Zm0 3.6c1.4 0 2.7.5 3.7 1.4l1.2-1.2C12.1 4.9 10.4 4.1 8.5 4.1S4.9 4.9 3.6 6.1l1.2 1.2c1-.9 2.3-1.4 3.7-1.4Zm0 3.6c.5 0 .9.2 1.2.5L8.5 11.2 7.3 10c.3-.3.7-.5 1.2-.5Z" fill="currentColor"/></svg>
+            <svg width="27" height="13" viewBox="0 0 27 13"><rect x="0.5" y="0.5" width="23" height="12" rx="3.8" stroke="currentColor" stroke-opacity="0.4" fill="none"/><rect x="2" y="2" width="17" height="9" rx="2.5" fill="currentColor"/><path d="M25 4.5v4c.8-.3 1.3-1.1 1.3-2s-.5-1.7-1.3-2Z" fill="currentColor" fill-opacity="0.45"/></svg>
+          </span>
+        </div>
+        <div class="island"></div>
+        <div class="home"></div>
+      </div>
+    </div>
+  </div>
+  <div class="caption">
+    <select id="device" aria-label="Device"></select>
+    <button id="reload" type="button">Reload</button>
+    <span>A demo. It never calls 911.</span>
+  </div>
+</div>
+
+<aside id="dev" aria-label="Developer panel">
+  <header>
+    <div class="devtop">
+      <span class="badge">Developer only</span>
+      <button id="devClose" type="button">Close</button>
+    </div>
+    <div class="tabs" role="tablist">
+      <button role="tab" id="tabHeart" aria-selected="true" aria-controls="paneHeart">Heartbeat model</button>
+      <button role="tab" id="tabEngine" aria-selected="false" aria-controls="paneEngine">Voice engine</button>
+    </div>
+  </header>
+
+  <!-- BeatNet, live, on a simulated person: the real model, simulated input. -->
+  <div class="tab" id="paneHeart" role="tabpanel" aria-labelledby="tabHeart">
+    <section>
+      <h2>BeatNet, live</h2>
+      <div class="caps" id="hCaps">loading the model</div>
+    </section>
+    <section>
+      <div class="readout">
+        <svg class="heart" id="heart" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 21s-7.5-4.6-9.6-9.3C.9 8.3 3 4.5 6.7 4.5c2.1 0 3.6 1.2 4.4 2.5h1.8c.8-1.3 2.3-2.5 4.4-2.5 3.7 0 5.8 3.8 4.3 7.2C19.5 16.4 12 21 12 21Z"/></svg>
+        <div>
+          <div class="bpm" id="bpm">--<small>/min</small></div>
+          <div class="verdict" id="verdict">Waiting for the first 8 seconds.</div>
+        </div>
+      </div>
+    </section>
+    <section>
+      <h3>Chest vibration <span class="ms">simulated phone · 5-25 Hz</span></h3>
+      <div class="plot"><canvas id="cVib" aria-label="Chest vibration, last 6 seconds"></canvas></div>
+      <h3 style="margin-top:14px">Beat probability <span class="ms" id="hRun">BeatNet output</span></h3>
+      <div class="plot"><canvas id="cProb" aria-label="BeatNet beat probability, last 6 seconds"></canvas></div>
+      <div class="plotlab"><span>-6 s</span><span>-3 s</span><span>now</span></div>
+      <div class="legend">
+        <span><i class="dot"></i>beat the model counted</span>
+        <span><i class="tickm"></i>true beat (simulator)</span>
+        <span><i class="dash"></i>threshold</span>
+      </div>
+    </section>
+    <section>
+      <h3>Simulated person</h3>
+      <div class="controls">
+        <label>Under the phone<select id="hScenario"></select></label>
+        <label>Sensors
+          <span class="seg" role="group" aria-label="Sensors">
+            <button type="button" id="hBoth" aria-pressed="true">Accel + gyro</button>
+            <button type="button" id="hVib" aria-pressed="false">Accel only</button>
+          </span>
+        </label>
+        <label><span></span><button class="ghost" id="hNew" type="button">New person</button></label>
+      </div>
+    </section>
+    <section>
+      <h3>This run</h3>
+      <dl class="kv" id="hKv"></dl>
+    </section>
+    <section>
+      <h3>The model</h3>
+      <dl class="kv" id="hModel"></dl>
+      <ul class="layers" id="hLayers"></ul>
+    </section>
+    <section>
+      <p class="note">The person is simulated: chest and belly motion, a heartbeat's two vibrations, footsteps, a hand, and a phone-class sensor's noise (mobile/src/sensors/sim.ts). The model is the real one, the same TypeScript the app runs, checked against the trained PyTorch model. Experimental and lab only: Mayday never uses a heartbeat to decide anything in an emergency, the same way lay rescuers are taught not to check for a pulse.</p>
+    </section>
+  </div>
+
+  <!-- The app's own reasoning, from the trace events it posts while it runs (mobile/src/voice/trace.ts). -->
+  <div class="tab" id="paneEngine" role="tabpanel" aria-labelledby="tabEngine" hidden>
+    <section>
+      <h2>Adaptive engine</h2>
+      <div class="caps" id="caps">waiting for the app</div>
+      <ol class="pipe" aria-hidden="true">
+        <li data-s="hear">Hear</li><li data-s="clean">Clean</li><li data-s="route">Understand</li><li data-s="rescuer">Read rescuer</li><li data-s="adapt">Adapt</li><li data-s="speak">Speak</li>
+      </ol>
+    </section>
+    <section><h3>Heard</h3><div id="heard"><p class="empty">Tap Talk to Mayday and speak, or tap an emergency.</p></div></section>
+    <section><h3>Understanding <span class="ms" id="routeMs"></span></h3><div id="route"><p class="empty">Keyword router and slot filler, offline.</p></div></section>
+    <section><h3>Rescuer model</h3><div id="rescuer"><p class="empty">Weighted signals for distress and confusion.</p></div></section>
+    <section><h3>Protocol</h3><div id="step"><p class="empty">No protocol yet.</p></div></section>
+    <section><h3>Severity</h3><div id="severity"><p class="empty">Graded 1 to 3 from the answers. Only ever moves toward more care.</p></div></section>
+    <section><h3>Voice out</h3><div id="say"><p class="empty">Every line, as written and as spoken.</p></div></section>
+    <section><h3>Trace <span class="ms" id="count">0 events</span></h3><ol id="trace"></ol></section>
+  </div>
+</aside>
+
+<script>
+  // ---- The phone: the same sizes and hardware as the desktop mirror -------------------
+  const DEVICES = {
+    'iphone-17-pro':     { name: 'iPhone 17 Pro',     w: 402, h: 874, r: 62, top: 62, bottom: 34 },
+    'iphone-17-pro-max': { name: 'iPhone 17 Pro Max', w: 440, h: 956, r: 66, top: 62, bottom: 34 },
+    'iphone-air':        { name: 'iPhone Air',        w: 420, h: 912, r: 64, top: 62, bottom: 34 },
+  };
+  const params = new URLSearchParams(location.search);
+  const store = {
+    get(k) { try { return localStorage.getItem(k); } catch { return null; } },
+    set(k, v) { try { localStorage.setItem(k, v); } catch {} },
+  };
+  let deviceId = DEVICES[store.get('site.device')] ? store.get('site.device') : 'iphone-17-pro';
+  const $ = (id) => document.getElementById(id);
+  const stage = $('stage'), screen = $('screen'), iframe = $('app'), select = $('device');
+
+  for (const [id, d] of Object.entries(DEVICES)) {
+    const o = document.createElement('option');
+    o.value = id; o.textContent = d.name;
+    select.appendChild(o);
+  }
+  function load() {
+    const d = DEVICES[deviceId];
+    select.value = deviceId;
+    screen.style.setProperty('--w', d.w + 'px');
+    screen.style.setProperty('--h', d.h + 'px');
+    screen.style.setProperty('--r', d.r + 'px');
+    $('phone').style.setProperty('--r', d.r + 'px');
+    iframe.src = `app/?insets=${d.top},0,${d.bottom},0`;
+    fit();
+  }
+  function fit() {
+    const devOn = document.body.classList.contains('with-dev') && innerWidth > 900;
+    const room = { w: innerWidth - (devOn ? 480 : 0) - 32, h: innerHeight - 76 - 64 };
+    const s = Math.min(1, room.w / stage.offsetWidth, room.h / stage.offsetHeight);
+    stage.style.transform = `translateY(8px) scale(${s})`;
+  }
+  select.addEventListener('change', () => { deviceId = select.value; store.set('site.device', deviceId); load(); });
+  $('reload').addEventListener('click', load);
+  addEventListener('resize', fit);
+  function tickClock() {
+    const now = new Date();
+    $('clock').textContent = `${now.getHours() % 12 || 12}:${String(now.getMinutes()).padStart(2, '0')}`;
+  }
+  tickClock(); setInterval(tickClock, 5000);
+
+  // The app tells its parent when it would vibrate.
+  addEventListener('message', (e) => {
+    const m = e.data;
+    if (!m || m.type !== 'mayday:haptic') return;
+    const phone = $('phone');
+    phone.classList.remove('buzz-tick', 'buzz-thud');
+    void phone.offsetWidth;
+    phone.classList.add(['start', 'swap', 'attention', 'countdown'].includes(m.event) ? 'buzz-thud' : 'buzz-tick');
+  });
+
+  // ---- Developer panel: the switch, the tabs --------------------------------------------
+  const devBtn = $('devBtn');
+  function setDev(on) {
+    document.body.classList.toggle('with-dev', on);
+    devBtn.setAttribute('aria-pressed', String(on));
+    fit();
+    window.dispatchEvent(new CustomEvent('mayday:dev', { detail: { on, tab: currentTab } }));
+  }
+  let currentTab = 'heart';
+  function setTab(tab) {
+    currentTab = tab;
+    $('tabHeart').setAttribute('aria-selected', String(tab === 'heart'));
+    $('tabEngine').setAttribute('aria-selected', String(tab === 'engine'));
+    $('paneHeart').hidden = tab !== 'heart';
+    $('paneEngine').hidden = tab !== 'engine';
+    window.dispatchEvent(new CustomEvent('mayday:dev', { detail: { on: document.body.classList.contains('with-dev'), tab } }));
+  }
+  devBtn.addEventListener('click', () => setDev(!document.body.classList.contains('with-dev')));
+  $('devClose').addEventListener('click', () => setDev(false));
+  $('tabHeart').addEventListener('click', () => setTab('heart'));
+  $('tabEngine').addEventListener('click', () => setTab('engine'));
+  addEventListener('keydown', (e) => {
+    if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'e') { e.preventDefault(); setDev(!document.body.classList.contains('with-dev')); }
+    if (e.key === 'Escape' && document.body.classList.contains('with-dev')) setDev(false);
+  });
+
+  // ---- Voice engine: draws the app's trace events (as mirror/index.html does) --------------
+  const esc = (v) => String(v ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+  const num = (v, d = 2) => (typeof v === 'number' ? v.toFixed(d) : '-');
+  const bar = (v, cls = '') => `<span class="bar ${cls}"><i style="width:${Math.round(Math.max(0, Math.min(1, v || 0)) * 100)}%"></i></span>${num(v)}`;
+  let events = 0;
+  function flash(...stages) {
+    for (const st of stages) {
+      const li = document.querySelector(`.pipe li[data-s="${st}"]`);
+      if (!li) continue;
+      li.classList.add('on');
+      setTimeout(() => li.classList.remove('on'), 700);
+    }
+  }
+  function log(kind, text, t) {
+    const d = new Date(t || Date.now());
+    const stamp = `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}:${String(d.getSeconds()).padStart(2, '0')}.${String(d.getMilliseconds()).padStart(3, '0')}`;
+    const li = document.createElement('li');
+    li.innerHTML = `<span>${stamp}</span><b>${esc(kind)}</b><span title="${esc(text)}">${esc(text)}</span>`;
+    $('trace').prepend(li);
+    while ($('trace').children.length > 120) $('trace').lastChild.remove();
+    $('count').textContent = `${++events} events`;
+  }
+  const slots = (o) => Object.entries(o || {}).map(([k, v]) => `${esc(k)}=${esc(v)}`).join('  ') || '<span class="faint">none</span>';
+  const signals = (list) => (list || []).map((g) => `<div class="sig ${g.evidence ? 'hit' : ''}"><span>${g.evidence ? '✓' : '·'}</span><span>${esc(g.name)}</span><span class="w">+${num(g.weight)}</span><span>${g.evidence ? '“' + esc(g.evidence) + '”' : ''}</span></div>`).join('');
+  const draw = {
+    boot(m) {
+      $('caps').textContent = [m.proxy ? 'proxy on' : 'offline, no AI server', m.listener, m.voice].filter(Boolean).join('  ·  ');
+      log('boot', $('caps').textContent, m.t);
+    },
+    heard(m) {
+      flash('hear', 'clean');
+      $('heard').innerHTML = `<dl class="kv"><dt>raw</dt><dd class="q">“${esc(m.raw)}”</dd><dt>cleaned</dt><dd>${esc(m.clean)}</dd><dt>echo check</dt><dd>${bar(m.echo, m.dropped ? 'hot' : '')} ${m.dropped ? '<span class="no">own voice, ignored</span>' : ''}</dd></dl>`;
+      log('heard', `${m.dropped ? '(echo) ' : ''}${m.raw}`, m.t);
+    },
+    route(m) {
+      flash('route');
+      $('routeMs').textContent = `${m.ms} ms`;
+      $('route').innerHTML = `<dl class="kv"><dt>protocol</dt><dd>${esc(m.protocol || '-')}</dd><dt>intent</dt><dd>${esc(m.intent || '-')}</dd><dt>facts</dt><dd>${slots(m.slots)}</dd><dt>confidence</dt><dd>${bar(m.confidence)}${m.urgent ? ' <span class="no">life threat</span>' : ''}</dd><dt>context</dt><dd>${m.inProtocol ? 'inside a protocol' : 'intake'}${m.next ? ' · next question: ' + esc(m.next) : ''}</dd></dl>`;
+      log('route', `${m.protocol || m.intent || 'nothing'}  conf ${num(m.confidence)}  ${m.ms} ms`, m.t);
+    },
+    rescuer(m) {
+      flash('rescuer');
+      $('rescuer').innerHTML = `<dl class="kv"><dt>distress</dt><dd>${bar(m.distress, 'hot')}</dd></dl>${signals(m.distressSignals)}
+        <dl class="kv" style="margin-top:8px"><dt>confusion</dt><dd>${bar(m.confusion, 'cool')}</dd></dl>${signals(m.confusionSignals)}
+        <dl class="kv" style="margin-top:8px"><dt>state</dt><dd>${esc(m.state)}</dd><dt>patient</dt><dd>${m.relation ? 'your ' + esc(m.relation) + ' · ' : ''}${esc(m.pronoun)}</dd><dt>alone</dt><dd>${m.alone ? 'yes' : 'no'}</dd><dt>voice rate</dt><dd>×${num(m.rate)}</dd></dl>`;
+      log('rescuer', `${m.state}  distress ${num(m.distress)}  confusion ${num(m.confusion)}`, m.t);
+    },
+    step(m) {
+      flash('route');
+      $('step').innerHTML = `<dl class="kv"><dt>protocol</dt><dd>${esc(m.protocol)}</dd><dt>step</dt><dd>${esc(m.step)} <span class="faint">(${esc(m.stepKind)})</span></dd><dt>on screen</dt><dd class="q">${esc(m.text)}</dd>${m.skipped && m.skipped.length ? `<dt>skipped</dt><dd>${m.skipped.map(esc).join('<br>')}</dd>` : ''}</dl>`;
+      log('step', `${m.protocol}#${m.step}`, m.t);
+    },
+    say(m) {
+      flash('adapt', 'speak');
+      $('say').innerHTML = (m.lines || []).map((l) => `<div class="say"><div class="line">“${esc(l.spoken)}”<span class="tag ${l.how === 'personalized' || l.how === 'calming line' ? 'p' : ''}">${esc(l.how)}</span></div>${l.original ? `<div class="from">${esc(l.original)}</div>` : ''}</div>`).join('') + `<div class="faint" style="font-size:11.5px">rate ×${num(m.rate)}${m.calm ? ' · calming line first' : ''}</div>`;
+      log('say', (m.lines || []).map((l) => l.spoken).join(' / '), m.t);
+    },
+    severity(m) {
+      flash('route');
+      const hue = { 1: '#5BD9A2', 2: '#F5B942', 3: '#FF5F52' }[m.level];
+      $('severity').innerHTML = `<dl class="kv"><dt>emergency</dt><dd>${esc(m.category)}</dd><dt>grade</dt><dd><b style="color:${hue}">level ${m.level} · ${esc(m.name)}</b>${m.guess ? ' <span class="faint">starting guess</span>' : ''}</dd><dt>action</dt><dd class="q">${esc(m.action)}</dd></dl>`;
+      log('severity', `${m.category}: level ${m.level}`, m.t);
+    },
+    cpr(m) { log('cpr', `${m.bpm}/min ${m.mode} · ${m.clock} · lookahead ${m.lookaheadMs} ms`, m.t); },
+    'dispatch-talk'(m) { flash('route'); log('911', `${m.ask}: “${(m.lines || []).join(' ')}”`, m.t); },
+  };
+  addEventListener('message', (e) => {
+    const m = e.data;
+    if (!m || m.type !== 'mayday:trace') return;
+    if (draw[m.kind]) draw[m.kind](m);
+    else log(m.kind, Object.entries(m).filter(([k]) => !['type', 'kind', 't'].includes(k)).map(([k, v]) => `${k}=${typeof v === 'object' ? JSON.stringify(v) : v}`).join(' ').slice(0, 160), m.t);
+  });
+
+  load();
+  if (params.has('dev')) setDev(true);
+</script>
+
+<script type="module">
+  // ---- Heartbeat lab: BeatNet on a simulated person, live --------------------------------
+  // The model runs every 0.25 s on the last 8 s of the simulated phone's sensors, in this tab.
+  const FS = 100, WIN = 8, VIEW = 6, LEN = 90, EVERY_MS = 250;
+  const $ = (id) => document.getElementById(id);
+  const H = { lab: null, on: false, scenario: 'normal', gyro: true, seed: 1 + Math.floor(Math.random() * 1e6), rec: null, prob: null, beats: [], t0: 0, cursor: WIN, timer: 0, raf: 0, pulsed: -1, reading: null, ms: 0 };
+
+  async function ensureLab() {
+    if (H.lab) return H.lab;
+    H.lab = await import('./heartlab.js');
+    const sel = $('hScenario');
+    for (const s of H.lab.SCENARIOS) {
+      const o = document.createElement('option');
+      o.value = s.id; o.textContent = s.heart ? s.label : `${s.label} (no heartbeat)`;
+      sel.appendChild(o);
+    }
+    sel.value = H.scenario;
+    return H.lab;
+  }
+
+  function makePerson() {
+    const L = H.lab;
+    const { samples, truth } = L.simulate({ scenario: H.scenario, seconds: LEN, seed: H.seed, fs: FS, gyro: H.gyro });
+    const z = Float64Array.from(samples, (s) => s.z);
+    const rot = H.gyro ? [0, 1, 2].map((k) => Float64Array.from(samples, (s) => s.rot[k])) : null;
+    const vib = L.bandpass(z, 5, 25, FS).map((v) => (v / L.G) * 1000);
+    H.rec = { z, rot, vib, truth };
+    H.prob = new Float32Array(z.length).fill(NaN);
+    H.beats = []; H.pulsed = -1; H.reading = null; H.t0 = performance.now(); H.cursor = WIN;
+    drawModelCard();
+    $('verdict').textContent = 'Waiting for the first 8 seconds.';
+  }
+
+  function step() {
+    const L = H.lab, R = H.rec;
+    const i1 = Math.floor(H.cursor * FS), i0 = i1 - WIN * FS;
+    const net = H.gyro ? L.NETS.both : L.NETS.vibration;
+    const t = performance.now();
+    const r = L.modelHeart(R.z.subarray(i0, i1), FS, R.rot && R.rot.map((c) => c.subarray(i0, i1)));
+    H.ms = performance.now() - t;
+    for (let k = 0; k < r.prob.length; k++) H.prob[i0 + k] = r.prob[k];
+    // Beats count once the rhythm checks pass, and not in the last 0.35 s, where the model
+    // has not yet seen what comes after (it looks 0.6 s either side of every moment).
+    if (r.status === 'found') {
+      for (const k of L.pickBeats(net, r.prob)) {
+        const b = i0 + k;
+        if (b > i1 - 0.35 * FS || H.beats.some((x) => Math.abs(x - b) < 25)) continue;
+        H.beats.push(b);
+      }
+    }
+    H.beats = H.beats.filter((b) => b > i1 - (VIEW + 2) * FS);
+    const newest = H.beats.length ? Math.max(...H.beats) : -1;
+    if (newest > H.pulsed) { H.pulsed = newest; pulse(); }
+    H.reading = r;
+    readout();
+  }
+
+  function pulse() {
+    const h = $('heart');
+    h.classList.remove('beat'); void h.getBoundingClientRect(); h.classList.add('beat');
+  }
+
+  function readout() {
+    const r = H.reading, T = H.rec.truth;
+    const found = r.status === 'found';
+    $('heart').classList.toggle('found', found);
+    $('bpm').innerHTML = `${found ? Math.round(r.perMin) : '--'}<small>/min</small>`;
+    $('verdict').innerHTML = found
+      ? `Heartbeat found · sure ${r.confidence.toFixed(2)}${r.rmssdMs ? ` · varies ${Math.round(r.rmssdMs)} ms` : ''}`
+      : `No heartbeat found <span class="faint">(${r.status === 'moving' ? 'phone moving' : 'no steady beat in the last 8 s'})</span>`;
+    $('hRun').textContent = `BeatNet output · ${H.ms.toFixed(1)} ms a run`;
+    $('hKv').innerHTML = `
+      <dt>simulator truth</dt><dd>${T.heartPerMin ? Math.round(T.heartPerMin) + '/min heart' : '<span class="no">no heartbeat</span>'}${T.breathsPerMin ? ` · ${Math.round(T.breathsPerMin)} breaths/min` : ''}</dd>
+      <dt>model says</dt><dd>${found ? Math.round(r.perMin) + '/min' : 'none'} <span class="faint">from ${r.beats.length} beats in 8 s</span></dd>
+      <dt>input</dt><dd>${H.gyro ? 'accelerometer + gyroscope' : 'accelerometer'} · 8 s · 100/s</dd>
+      <dt>compute</dt><dd>${H.ms.toFixed(1)} ms per run, in this tab</dd>`;
+  }
+
+  function drawModelCard() {
+    const L = H.lab, net = H.gyro ? L.NETS.both : L.NETS.vibration;
+    const reach = net.layers.reduce((s, l) => s + (l.k - 1) * l.dilation, 0) + 1;
+    $('hCaps').textContent = `${net.params.toLocaleString()} parameters · runs in your browser · simulated input`;
+    $('hModel').innerHTML = `
+      <dt>name</dt><dd>BeatNet (${net.name === 'both' ? 'accelerometer + gyroscope' : 'accelerometer only'})</dd>
+      <dt>sees</dt><dd>${(reach / net.fs).toFixed(2)} s around each moment, ${net.fs} samples/s</dd>
+      <dt>counts a beat</dt><dd>probability over ${net.threshold} · beats ${net.minGapS} s apart or more</dd>
+      <dt>trained on</dt><dd>${net.trainedOn}</dd>
+      <dt>trained with</dt><dd>PyTorch (tools/heart_ml/train.py), run here in TypeScript</dd>`;
+    $('hLayers').innerHTML = net.layers.map((l, i) => `<li><span class="faint">${i + 1}</span><span>conv ${l.k}×1 · dilation ${l.dilation} · ${l.in} → ${l.out}${l.relu ? ' · ReLU' : ' · sigmoid'}</span></li>`).join('');
+  }
+
+  // ---- Drawing ---------------------------------------------------------------------------
+  function sizeCanvas(c) {
+    const dpr = Math.min(2, devicePixelRatio || 1);
+    const w = c.clientWidth, h = c.clientHeight;
+    if (c.width !== Math.round(w * dpr)) { c.width = Math.round(w * dpr); c.height = Math.round(h * dpr); }
+    const g = c.getContext('2d');
+    g.setTransform(dpr, 0, 0, dpr, 0, 0);
+    g.clearRect(0, 0, w, h);
+    return { g, w, h };
+  }
+  let vibScale = 15;
+  function frame() {
+    if (!H.on) return;
+    const now = performance.now();
+    const span = LEN - WIN;
+    const cur = WIN + (((now - H.t0) / 1000) % span);
+    if (cur < H.cursor) { H.prob.fill(NaN); H.beats = []; H.pulsed = -1; } // the recording looped
+    H.cursor = cur;
+    const R = H.rec, a = Math.floor((cur - VIEW) * FS), b = Math.floor(cur * FS);
+    const xAt = (i, w) => ((i - a) / (b - a)) * w;
+
+    // Chest vibration, auto-scaled (smoothly) to what is on screen.
+    { const { g, w, h } = sizeCanvas($('cVib'));
+      let peak = 1;
+      for (let i = a; i < b; i++) peak = Math.max(peak, Math.abs(R.vib[i]));
+      vibScale += (peak * 1.15 - vibScale) * 0.06;
+      g.strokeStyle = 'rgba(242,239,232,0.06)'; g.lineWidth = 1;
+      g.beginPath(); g.moveTo(0, h / 2); g.lineTo(w, h / 2); g.stroke();
+      g.strokeStyle = '#a8a39a'; g.lineWidth = 1.2; g.beginPath();
+      for (let i = a; i < b; i++) { const x = xAt(i, w), y = h / 2 - (R.vib[i] / vibScale) * (h / 2 - 4); i === a ? g.moveTo(x, y) : g.lineTo(x, y); }
+      g.stroke();
+      g.fillStyle = '#66625b'; g.font = '10.5px "Geist Mono", monospace';
+      g.fillText(`±${vibScale.toFixed(0)} mg`, 4, 12);
+    }
+
+    // Beat probability: what each run wrote, the threshold, the counted beats, the true beats.
+    { const net = H.gyro ? H.lab.NETS.both : H.lab.NETS.vibration;
+      const { g, w, h } = sizeCanvas($('cProb'));
+      const top = 6, bot = h - 16, yAt = (p) => bot - p * (bot - top);
+      g.setLineDash([4, 4]); g.strokeStyle = '#6f6b64'; g.lineWidth = 1;
+      g.beginPath(); g.moveTo(0, yAt(net.threshold)); g.lineTo(w, yAt(net.threshold)); g.stroke(); g.setLineDash([]);
+      g.strokeStyle = 'rgba(242,239,232,0.06)'; g.beginPath(); g.moveTo(0, bot); g.lineTo(w, bot); g.stroke();
+      g.beginPath(); let pen = false;
+      for (let i = a; i < b; i++) {
+        const p = H.prob[i];
+        if (Number.isNaN(p)) { pen = false; continue; }
+        const x = xAt(i, w), y = yAt(p);
+        pen ? g.lineTo(x, y) : g.moveTo(x, y); pen = true;
+      }
+      g.strokeStyle = '#D2BE94'; g.lineWidth = 1.5; g.stroke();
+      // True beats from the simulator, along the bottom.
+      g.fillStyle = '#8a867e';
+      for (const t of R.truth.beats) { const i = t * FS; if (i >= a && i < b) g.fillRect(xAt(i, w) - 0.75, h - 11, 1.5, 10); }
+      // Counted beats.
+      g.fillStyle = '#4ED8A8';
+      for (const i of H.beats) if (i >= a && i < b) { g.beginPath(); g.arc(xAt(i, w), yAt(Number.isNaN(H.prob[i]) ? 1 : H.prob[i]), 3.5, 0, Math.PI * 2); g.fill(); }
+      // Now.
+      g.strokeStyle = 'rgba(210,190,148,0.5)'; g.beginPath(); g.moveTo(w - 0.5, top); g.lineTo(w - 0.5, bot); g.stroke();
+    }
+    H.raf = requestAnimationFrame(frame);
+  }
+
+  async function start() {
+    if (H.on) return;
+    H.on = true;
+    await ensureLab();
+    if (!H.rec) makePerson();
+    H.t0 = performance.now() - (H.cursor - WIN) * 1000;
+    H.timer = setInterval(step, EVERY_MS);
+    H.raf = requestAnimationFrame(frame);
+  }
+  function stop() {
+    H.on = false;
+    clearInterval(H.timer); cancelAnimationFrame(H.raf);
+  }
+  function restart() { stop(); H.rec = null; start(); }
+
+  addEventListener('mayday:dev', (e) => (e.detail.on && e.detail.tab === 'heart' ? start() : stop()));
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) stop();
+    else if (document.body.classList.contains('with-dev') && !$('paneHeart').hidden) start();
+  });
+  $('hScenario').addEventListener('change', (e) => { H.scenario = e.target.value; restart(); });
+  $('hNew').addEventListener('click', () => { H.seed += 1; restart(); });
+  const setGyro = (on) => { H.gyro = on; $('hBoth').setAttribute('aria-pressed', String(on)); $('hVib').setAttribute('aria-pressed', String(!on)); restart(); };
+  $('hBoth').addEventListener('click', () => setGyro(true));
+  $('hVib').addEventListener('click', () => setGyro(false));
+  if (document.body.classList.contains('with-dev') && !$('paneHeart').hidden) start();
+</script>
+</body>
+</html>
