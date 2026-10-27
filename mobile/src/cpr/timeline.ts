@@ -46,10 +46,15 @@ export const BACK_OFFSET_S = 6.0;
 /** Extra seconds added to a breath window that also carries the swap line. */
 export const SWAP_EXTRA_S = 2.4;
 const MINUTE_WORDS = ['Zero', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen', 'Twenty'];
+/** Said at the two-minute mark in place of that mark's switch line. */
+export const PULSE_LINE = 'Two minutes. Check the pulse.';
 /** "Four minutes. Switch with someone if you can." Pre-rendered for every value up to twenty. */
 /** The 2-minute line. Alone, there is nobody to switch with, so it only marks the time. */
 export function swapLine(minutes: number, alone = false): string {
   const m = Math.max(1, Math.round(minutes));
+  // The team's choice (Oct 26, 2026): the first two-minute mark prompts a pulse check. Not an AHA
+  // step for untrained bystanders, who are told to keep pushing; swap this line back to revert.
+  if (m === 2) return PULSE_LINE;
   const tail = alone ? 'Keep going.' : 'Switch with someone if you can.';
   if (m > 20) return alone ? 'Keep going. Help is coming.' : 'Keep going. Switch with someone if you can.';
   return `${MINUTE_WORDS[m]} minute${m === 1 ? '' : 's'}. ${tail}`;

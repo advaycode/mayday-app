@@ -59,8 +59,12 @@ class Voice:
             self._p = PiperVoice.load(str(PIPER_MODEL))
             self.name = "piper-en_US-lessac-medium"
 
-    def synth(self, text: str, speed: float = 1.0) -> tuple[np.ndarray, int]:
-        """Mono float32 samples in -1..1, and the sample rate."""
+    def synth(self, text: str, speed: float = 1.0, lang: str = "en") -> tuple[np.ndarray, int]:
+        """Mono float32 samples in -1..1, and the sample rate. `lang`: "en", or "es" / "hi" (Kokoro only)."""
+        if lang != "en":
+            voice, code = {"es": ("ef_dora", "es"), "hi": ("hf_alpha", "hi")}[lang]
+            pcm, rate = self._k.create(text, voice=voice, speed=speed, lang=code)
+            return np.asarray(pcm, dtype=np.float32), rate
         text = spoken(text)
         if self.engine == "kokoro":
             pcm, rate = self._k.create(text, voice=KOKORO_VOICE, speed=speed, lang="en-us")

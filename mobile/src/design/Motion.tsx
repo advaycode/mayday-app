@@ -209,29 +209,40 @@ function CoolWater({ s, ink, hue, faint }: Kit) {
   );
 }
 
-/** Narcan: the tip in one nostril, press the plunger. */
+/**
+ * Narcan: lying on their back, head tilted back, the nozzle in one nostril.
+ * Two fingers under the flange, the thumb presses the plunger.
+ */
 function NasalSpray({ s, ink, hue, faint }: Kit) {
   const t = useLoop(1600);
   const k = s / 200;
-  const bottle = useAnimatedStyle(() => ({ transform: [{ translateY: -push(t.value) * 5 * k }] }));
+  const plunger = useAnimatedStyle(() => ({ transform: [{ translateY: push(t.value) * 5 * k }] }));
   const puff = useAnimatedStyle(() => {
     const p = t.value < 0.3 ? 0 : (t.value - 0.3) / 0.7;
-    return { opacity: t.value < 0.3 ? 0 : 0.9 - 0.9 * p, transform: grow(k, 118, 88, 0.6 + p) };
+    return { opacity: t.value < 0.3 ? 0 : 0.9 - 0.9 * p, transform: grow(k, 108.5, 60, 0.6 + p) };
   });
   return (
     <>
-      <Layer s={s}>
-        {/* A face in profile, looking up. */}
-        <Path d="M40 180 C40 120 50 70 90 52 C104 46 112 50 116 60 L124 84 C126 92 120 96 112 96 L114 112 C114 120 106 124 98 124 L100 150 C100 168 104 180 110 190" stroke={ink} strokeWidth={W} strokeLinecap="round" strokeLinejoin="round" fill="none" />
-        <Circle cx={88} cy={74} r={3} fill={faint} />
-      </Layer>
       <Layer s={s} style={puff}>
-        <Circle cx={118} cy={88} r={10} stroke={hue} strokeWidth={2} fill="none" opacity={0.7} />
+        <Circle cx={108.5} cy={60} r={10} stroke={hue} strokeWidth={2} fill="none" />
       </Layer>
-      <Layer s={s} style={bottle}>
-        <Rect x={112} y={96} width={14} height={18} rx={4} fill={hue} />
-        <Rect x={104} y={114} width={30} height={14} rx={5} fill={hue} opacity={0.8} />
-        <Path d="M106 128 L106 134 M132 128 L132 134" stroke={hue} strokeWidth={W} strokeLinecap="round" />
+      <Layer s={s}>
+        {/* The nozzle, the flange, and two fingers under it. */}
+        <Rect x={104} y={40} width={9} height={24} rx={4.5} fill={hue} />
+        <Rect x={89} y={34} width={39} height={8} rx={4} fill={hue} />
+        <Path d="M95 47 C95 43 99 41 101 43 M116 43 C118 41 122 43 122 47" stroke={ink} strokeWidth={W} strokeLinecap="round" fill="none" />
+      </Layer>
+      <Layer s={s} style={plunger}>
+        <Rect x={100} y={12} width={17} height={22} rx={5} fill={hue} opacity={0.82} />
+        <Rect x={99} y={3} width={19} height={9} rx={4.5} stroke={ink} strokeWidth={W} fill="none" />
+        <Path d="M118 7 C136 4 152 10 168 24" stroke={ink} strokeWidth={W} strokeLinecap="round" fill="none" />
+      </Layer>
+      <Layer s={s}>
+        <Line x1={8} y1={180} x2={192} y2={180} stroke={faint} strokeWidth={W} strokeLinecap="round" />
+        {/* The head in profile, tilted back, chin up; the nose drawn over the nozzle's tip. */}
+        <Path d="M46 178 C20 168 10 138 20 110 C28 90 46 80 66 78 C76 77 84 76 90 72 L103 53 C106 48 112 50 111 55 C110 60 112 64 116 64 C121 64 123 68 127 68 C131 68 133 66 136 66 C140 66 142 60 147 59 C153 58 156 72 162 86 C168 97 176 102 192 102" stroke={ink} strokeWidth={W} strokeLinecap="round" strokeLinejoin="round" fill="none" />
+        <Path d="M58 118 C67 112 76 120 72 130 C70 135 63 136 60 132" stroke={ink} strokeWidth={2.5} strokeLinecap="round" fill="none" />
+        <Path d="M74 90 C78 94 84 94 88 91" stroke={ink} strokeWidth={2.5} strokeLinecap="round" fill="none" />
       </Layer>
     </>
   );

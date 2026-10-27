@@ -6,6 +6,7 @@ import { localize } from '@/region/store';
 import { getSettings } from '@/settings/store';
 
 import { checkRewrite, currentState, initialContext, learn, personalize, preface, voiceRate, type VoiceContext } from './adapt';
+import { getLang, setLang, tr } from './lang';
 import { trace } from './trace';
 
 /**
@@ -32,6 +33,7 @@ export function resetVoice() {
   rewrites.clear();
   requested.clear();
   lastHeardAt = Date.now();
+  setLang('en');
 }
 
 /** Learn from something the rescuer said. Returns true if who we are helping changed. */
@@ -52,6 +54,11 @@ export const sinceHeard = () => Date.now() - lastHeardAt;
 
 /** The form of a line to speak right now. */
 export function adaptLine(line: string): string {
+  // Spanish or Hindi: the translation (English AI rewrites do not apply), else the English line.
+  if (getLang() !== 'en') {
+    const t = tr(line);
+    return localize(t === line ? personalize(line, ctx.pronoun) : t);
+  }
   const ai = rewrites.get(line);
   if (ai && audio()?.ready(ai)) return localize(ai);
   // Then the region's emergency number in place of 911 (each has its own recording).
@@ -62,7 +69,7 @@ export function say(lines: string[], opts: { calm?: boolean } = {}) {
   if (!getSettings().voice || !lines.length) return Promise.resolve({ start: 0, end: 0 });
   const now = Date.now();
   // The calming line once per panic, not before every step.
-  const calm = opts.calm !== false && ctx.stateAt !== calmedFor ? preface(ctx, now) : [];
+  const calm = opts.calm !== false && ctx.stateAt !== calmedFor ? preface(ctx, now).map((l) => tr(l)) : [];
   if (calm.length) calmedFor = ctx.stateAt;
   const spoken = [...calm, ...lines.map(adaptLine)];
   const rate = voiceRate(ctx, now);
@@ -83,7 +90,8 @@ export function say(lines: string[], opts: { calm?: boolean } = {}) {
   if (a) return a.speak(spoken, { rate });
   // Expo Go (no audio engine): the system voice, one line after another.
   Speech.stop();
-  spoken.forEach((l) => Speech.speak(l, { rate: 0.95 * rate, pitch: 0.95 }));
+  const language = { en: 'en-US', es: 'es-US', hi: 'hi-IN' }[getLang()];
+  spoken.forEach((l) => Speech.speak(l, { rate: 0.95 * rate, pitch: 0.95, language }));
   return Promise.resolve({ start: 0, end: 0 });
 }
 

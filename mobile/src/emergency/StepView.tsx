@@ -14,6 +14,7 @@ import { localize } from '@/region/store';
 import type { Grade } from '@/triage/severity';
 import { SeverityBadge } from '@/triage/ui';
 import { personalize } from '@/voice/adapt';
+import { tr } from '@/voice/lang';
 import { say, voiceContext } from '@/voice/voice';
 
 import type { Incident } from './useIncident';
@@ -76,8 +77,8 @@ export function StepView({
           style={styles.instruction}
           accessibilityRole="header"
           accessibilityLiveRegion="assertive"
-          accessibilityHint={step.sub ? localize(step.sub) : undefined}>
-          {localize(personalize(step.text, voiceContext().pronoun))}
+          accessibilityHint={step.sub ? localize(tr(step.sub)) : undefined}>
+          {tr(step.text) !== step.text ? tr(step.text) : localize(personalize(step.text, voiceContext().pronoun))}
         </Text>
         {timer !== null && (
           <Text variant="countdown" tabular style={styles.instruction} accessibilityLabel={`${Math.ceil(timer / 60)} minutes left`}>
@@ -90,9 +91,9 @@ export function StepView({
         {step.kind === 'do' && (
           <>
             {step.alts.map((c) => (
-              <Button key={c.id} size="emergency" label={c.label} onPress={() => dispatch({ type: 'choose', choiceId: c.id, at: at() })} />
+              <Button key={c.id} size="emergency" label={tr(c.label)} onPress={() => dispatch({ type: 'choose', choiceId: c.id, at: at() })} />
             ))}
-            <Button size="emergency" kind="tint" tint={tone.hue} label={step.action} onPress={() => dispatch({ type: 'advance', at: at() })} />
+            <Button size="emergency" kind="tint" tint={tone.hue} label={tr(step.action)} onPress={() => dispatch({ type: 'advance', at: at() })} />
           </>
         )}
         {step.kind === 'ask' && (
@@ -102,7 +103,7 @@ export function StepView({
               <Button
                 key={c.id}
                 size="emergency"
-                label={c.label}
+                label={tr(c.label)}
                 onPress={() => dispatch({ type: 'choose', choiceId: c.id, at: at() })}
                 style={pairable(step.choices) ? { flex: 1 } : undefined}
               />
@@ -111,12 +112,12 @@ export function StepView({
         )}
         {step.kind === 'ask' && onPhoneCheck && <Button icon={DeviceMobile} label="Check with the phone" onPress={onPhoneCheck} accessibilityHint="Lay the phone on their chest; it measures the chest's movement for 10 seconds" />}
         {step.kind === 'timer' && (
-          <Button size="emergency" kind="tint" tint={tone.hue} label={step.action} onPress={() => dispatch({ type: 'advance', at: at() })} />
+          <Button size="emergency" kind="tint" tint={tone.hue} label={tr(step.action)} onPress={() => dispatch({ type: 'advance', at: at() })} />
         )}
         {(step.kind === 'hold' || step.kind === 'end') && (
           <>
             {step.choices.map((c) => (
-              <Button key={c.id} size="emergency" label={c.label} onPress={() => dispatch({ type: 'choose', choiceId: c.id, at: at() })} />
+              <Button key={c.id} size="emergency" label={tr(c.label)} onPress={() => dispatch({ type: 'choose', choiceId: c.id, at: at() })} />
             ))}
             <Button size="emergency" icon={Ambulance} label="Paramedics here" onPress={handoff} />
           </>

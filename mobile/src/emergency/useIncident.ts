@@ -20,6 +20,7 @@ import { assess, currentState, NUDGE_SUFFIX, personalConfirm, personalize, voice
 import { since, trace } from '@/voice/trace';
 import { choicesOf, pickHeard, quickAnswer } from '@/voice/understand';
 import { announcement, categoryOf, cuesIn, grade, type Level, type Observation } from '@/triage/severity';
+import { detectLang, gloss, setLang } from '@/voice/lang';
 import { hearRescuer, prepare, resetVoice, say, sinceHeard, voiceContext } from '@/voice/voice';
 import type { ProtocolId, QuestionId, RouterSlots } from '@/voice/routerSchema';
 
@@ -279,8 +280,10 @@ export function useIncident() {
       if (early && Date.now() - early.at < 4000 && normalizeUtterance(top).startsWith(early.text)) return;
       const t0 = performance.now();
       const recent = recentlySaid();
-      const overlap = echoOverlap(top, recent);
-      const kind = echoKind(top, recent);
+      // The echo check compares English words; Hindi has none, so it is compared as written.
+      const devanagari = detectLang(top) === 'hi';
+      const overlap = devanagari ? (recent.some((l) => l.includes(top.trim())) ? 1 : 0) : echoOverlap(top, recent);
+      const kind = devanagari ? (overlap ? 'echo' : 'clear') : echoKind(top, recent);
       if (kind === 'echo') {
         trace('heard', { raw: top, clean: normalizeUtterance(top), echo: overlap, dropped: true });
         return;
@@ -307,13 +310,17 @@ export function useIncident() {
         if (pending.current.length) speak([]);
       }
       function act() {
-      hearRescuer(text);
+      // Spanish or Hindi: the conversation switches language, and the router hears the English gloss.
+      const lang = detectLang(text);
+      if (lang !== 'en') setLang(lang);
+      const en = gloss(text, lang);
+      hearRescuer(en);
       update((s) => ({ ...s, heard: { text, final: true } }));
       const ack = () => update((x) => ({ ...x, understood: { text, at: Date.now() } }));
       const s = ref.current;
       const inProtocol = s.phase === 'protocol' && !!s.engine;
       const known = s.engine?.slots ?? s.slots;
-      const routed = route(text, { inProtocol, known: known as RouterSlots });
+      const routed = route(en, { inProtocol, known: known as RouterSlots });
       const r = suspect ? withoutReassurance(routed) : routed;
       trace('heard', { raw: text, clean: normalizeUtterance(text), echo: overlap, dropped: false, suspect, alternatives, picked: picked.index });
       trace('route', { protocol: r.protocol_id, intent: r.intent, slots: r.slots, confidence: r.confidence, urgent: r.urgent, next: r.next_question, inProtocol, ms: since(t0) });
@@ -437,7 +444,7 @@ export function useIncident() {
         if (!effects.some((e) => e.type === 'unhandled')) return ack();
       }
       // "No, he's not responding" to "Is he breathing normally?": the leading word answers the question.
-      const lead = normalizeUtterance(text).match(/^(no|nope|nah|yes|yeah|yep|yup)\b/);
+      const lead = normalizeUtterance(en).match(/^(no|nope|nah|yes|yeah|yep|yup)\b/);
       if (lead && intent !== 'yes' && intent !== 'no' && !(suspect && lead[1].startsWith('y'))) {
         const effects = dispatch({ type: 'intent', intent: lead[1].startsWith('n') ? 'no' : 'yes', at: Date.now() });
         if (!effects.some((e) => e.type === 'unhandled')) return ack();
@@ -477,7 +484,7 @@ export function useIncident() {
       }
       // Nothing to act on. If it told us how bad it is (severity) or a fact, that was enough;
       // otherwise say we did not catch it, rather than going quiet.
-      const told = Object.keys(r.slots).length > 0 || (!!categoryOf(s.engine?.protocolId) && cuesIn(categoryOf(s.engine?.protocolId)!, text));
+      const told = Object.keys(r.slots).length > 0 || (!!categoryOf(s.engine?.protocolId) && cuesIn(categoryOf(s.engine?.protocolId)!, en));
       if (kind === 'clear' && !told && !pending.current.length) notCaught();
       }
     },

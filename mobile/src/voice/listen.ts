@@ -1,5 +1,7 @@
 import { Platform } from 'react-native';
 
+import { recognizerLang } from './lang';
+
 /**
  * Speech recognition, wrapped so the rest of the app never has to care
  * which engine is underneath:
@@ -67,7 +69,7 @@ export function createListener(h: Handlers) {
     }
     try {
       mod.start({
-        lang: 'en-US',
+        lang: recognizerLang(),
         interimResults: true,
         continuous: true,
         maxAlternatives: 5,

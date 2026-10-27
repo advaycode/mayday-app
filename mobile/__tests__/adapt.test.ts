@@ -159,8 +159,9 @@ describe('alone', () => {
     const c = learn(initialContext, "I'm alone, there's nobody else here");
     expect(c.alone).toBe(true);
     expect(learn(c, 'my brother is here now').alone).toBe(false);
-    expect(swapLine(2, true)).toBe('Two minutes. Keep going.');
-    expect(swapLine(2)).toBe('Two minutes. Switch with someone if you can.');
+    expect(swapLine(2, true)).toBe('Two minutes. Check the pulse.');
+    expect(swapLine(4, true)).toBe('Four minutes. Keep going.');
+    expect(swapLine(4)).toBe('Four minutes. Switch with someone if you can.');
   });
 });
 

@@ -45,6 +45,7 @@ CORPUS = MOBILE / "src" / "protocols" / "corpus"
 SYSTEM = MOBILE / "src" / "audio" / "systemLines.json"
 ANSWERS = MOBILE / "src" / "voice" / "answers.json"
 ADAPTED = MOBILE / "src" / "voice" / "adaptedLines.json"  # written by mobile/__tests__/adapt.test.ts
+TRANSLATIONS = MOBILE / "src" / "voice" / "translations.json"  # Spanish and Hindi, adult CPR
 OUT = MOBILE / "assets" / "voice" / "en"
 MANIFEST = MOBILE / "src" / "audio" / "voiceManifest.ts"
 
@@ -60,7 +61,8 @@ REGION_NUMBERS = ["112"]
 MINUTE_WORDS = ["Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten",
                 "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen",
                 "Nineteen", "Twenty"]
-TIMELINE_LINES = ["Back to compressions.", "Keep going. Switch with someone if you can.", "Keep going. Help is coming."] + [
+TIMELINE_LINES = ["Back to compressions.", "Keep going. Switch with someone if you can.", "Keep going. Help is coming.",
+                  "Two minutes. Check the pulse."] + [  # PULSE_LINE in src/cpr/timeline.ts
     f"{MINUTE_WORDS[m]} minute{'' if m == 1 else 's'}. {tail}"
     for m in range(1, 21)
     for tail in ("Switch with someone if you can.", "Keep going.")  # with a helper / alone
@@ -161,11 +163,24 @@ def _start_worker(engine: str, threads: int) -> None:
     _worker_voice = Voice(engine, threads)
 
 
-def _render_line(job: tuple[str, str]) -> str:
-    text, path = job
+def translated_lines() -> dict[str, str]:
+    """Spanish and Hindi lines -> their language. Mirrors tr() in src/voice/lang.ts, openers included."""
+    t = json.loads(TRANSLATIONS.read_text(encoding="utf-8"))
+    out: dict[str, str] = {}
+    for lang in ("es", "hi"):
+        for v in t[lang].values():
+            out[v] = lang
+    for es, hi, g in t["relations"].values():
+        out[f"Tu {es} no respira. Lo haremos juntos."] = "es"
+        out[f"{'आपकी' if g == 'f' else 'आपके'} {hi} साँस नहीं {'ले रहीं' if g == 'f' else 'ले रहे'}। हम साथ मिलकर करेंगे।"] = "hi"
+    return out
+
+
+def _render_line(job: tuple[str, str, str]) -> str:
+    text, path, lang = job
     assert _worker_voice is not None
     # A touch slower than normal: calm, and clear over a noisy room.
-    pcm, rate = _worker_voice.synth(text, speed=0.94)
+    pcm, rate = _worker_voice.synth(text, speed=0.94, lang=lang)
     pcm = level(trim(pcm, rate, pad_s=0.03))
     tmp = Path(path).with_suffix(".tmp.wav")
     write_wav(tmp, pcm, rate)
@@ -209,7 +224,11 @@ def main() -> int:
         with wave.open(str(path), "rb") as w:
             entries.append((key, path.name, text, w.getnframes() / w.getframerate()))
 
-    todo = [(text, str(OUT / f"{clip_key(text)}.mp3")) for text in lines if args.force or not (OUT / f"{clip_key(text)}.mp3").exists()]
+    # A translation that is also an English line ("No") keeps the English recording.
+    english = {clip_key(l) for l in lines}
+    langs = {l: lang for l, lang in translated_lines().items() if clip_key(l) not in english}
+    lines += list(langs)
+    todo = [(text, str(OUT / f"{clip_key(text)}.mp3"), langs.get(text, "en")) for text in lines if args.force or not (OUT / f"{clip_key(text)}.mp3").exists()]
     if todo:
         jobs = max(1, min(args.jobs, len(todo)))
         threads = max(1, (os.cpu_count() or 4) // jobs)
