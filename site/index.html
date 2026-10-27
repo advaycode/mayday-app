@@ -72,8 +72,8 @@
   #devBtn[aria-pressed="true"] .switch::after { transform: translateX(11px); background: var(--accent); }
 
   /* ---- The phone ---------------------------------------------------------------- */
-  #stage { position: relative; transform-origin: center center; }
-  body.with-dev { padding-right: var(--panel); }
+  /* Placed and scaled by fit(): centered in the space left by the top bar and the panel. */
+  #stage { position: absolute; left: 50%; top: 50%; transform-origin: center center; }
   .phone {
     position: relative;
     padding: 4px;
@@ -195,7 +195,6 @@
 
   /* Phones and narrow windows: the panel covers the page instead of sitting beside it. */
   @media (max-width: 900px) {
-    body.with-dev { padding-right: 0; }
     body.with-dev .top { right: 0; }
     #dev { width: 100%; border-left: 0; }
     .brand span { display: none; }
@@ -371,11 +370,17 @@
     iframe.src = `app/?insets=${d.top},0,${d.bottom},0`;
     fit();
   }
+  // The whole phone and the controls under it always fit: centered in the space below the
+  // top bar and beside the panel, scaled down when the window is smaller than the phone.
   function fit() {
     const devOn = document.body.classList.contains('with-dev') && innerWidth > 900;
-    const room = { w: innerWidth - (devOn ? 480 : 0) - 32, h: innerHeight - 76 - 64 };
-    const s = Math.min(1, room.w / stage.offsetWidth, room.h / stage.offsetHeight);
-    stage.style.transform = `translateY(8px) scale(${s})`;
+    const top = document.querySelector('.top').offsetHeight;
+    const below = 48; // the device picker under the phone
+    const area = { w: innerWidth - (devOn ? 480 : 0), h: innerHeight - top };
+    const s = Math.min(1, (area.w - 24) / stage.offsetWidth, (area.h - 16) / (stage.offsetHeight + below));
+    stage.style.left = `${area.w / 2}px`;
+    stage.style.top = `${top + (area.h - below * s) / 2}px`;
+    stage.style.transform = `translate(-50%, -50%) scale(${s})`;
   }
   select.addEventListener('change', () => { deviceId = select.value; store.set('site.device', deviceId); load(); });
   $('reload').addEventListener('click', load);
